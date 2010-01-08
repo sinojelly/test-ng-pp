@@ -32,6 +32,8 @@ class TestTestSuiteRunner: public CxxTest::TestSuite
       {}
 
       void run() {}
+      void setUp() {}
+      void tearDown() {}
    };
 
 private:
@@ -62,37 +64,40 @@ public:
       testCases[1][0] = new MyTestCase("testCase0", "TestNothing1", "TestNothing1.h", 1);
       testCases[1][1] = new MyTestCase("testCase1", "TestNothing1", "TestNothing1.h", 11);
 
-      desc[0] = new TestFixtureDesc("TestNothing0" , "TestNothing0.h", &fixture, testCases[0] , 2);
-      desc[1] = new TestFixtureDesc("TestNothing1" , "TestNothing1.h", &fixture, testCases[1] , 2);
+      desc[0] = new TestFixtureDesc("TestNothing0" , "TestNothing0.h", testCases[0] , 2);
+      desc[1] = new TestFixtureDesc("TestNothing1" , "TestNothing1.h", testCases[1] , 2);
 
 		suiteDesc = new TestSuiteDesc("TestNothingSuite", desc, 2);
 
       std::string file("TestNothing");
 
-      filter.METHOD(TestFilter::isFixtureMatch).defaults().will(returnValue(true));
-      suiteLoader.METHOD(TestSuiteLoader::load)
-                 .defaults()
-                 .with(endWith(file))
-                 .will(returnValue(suiteDesc));
+      MOCK_METHOD(filter, isFixtureMatch)
+           .defaults()
+           .will(returnValue(true));
 
-      suiteLoader.METHOD(TestSuiteLoader::unload)
-                 .defaults();
+      MOCK_METHOD(suiteLoader, load)
+           .defaults()
+           .with(endWith(file))
+           .will(returnValue(suiteDesc));
 
-      fixtureRunner.METHOD(TestFixtureRunner::run)
-                 .defaults()
-                 .with(eq(desc[0]), eq((TestFixtureResultCollector*)collector));
+      MOCK_METHOD(suiteLoader, unload)
+           .defaults();
 
-      fixtureRunner.METHOD(TestFixtureRunner::run)
-                 .defaults()
-                 .with(eq(desc[1]), eq((TestFixtureResultCollector*)collector));
+      MOCK_METHOD(fixtureRunner, run)
+           .defaults()
+           .with(eq(desc[0]), eq((TestFixtureResultCollector*)collector));
 
-      collector.METHOD(TestSuiteResultCollector::startTestSuite)
-               .defaults()
-               .with(eq((TestSuiteInfoReader*)suiteDesc));
+      MOCK_METHOD(fixtureRunner, run)
+           .defaults()
+           .with(eq(desc[1]), eq((TestFixtureResultCollector*)collector));
 
-      collector.METHOD(TestSuiteResultCollector::endTestSuite)
-               .defaults()
-               .with(eq((TestSuiteInfoReader*)suiteDesc));
+      MOCK_METHOD(collector, startTestSuite)
+           .defaults()
+           .with(eq((TestSuiteInfoReader*)suiteDesc));
+
+      MOCK_METHOD(collector, endTestSuite)
+           .defaults()
+           .with(eq((TestSuiteInfoReader*)suiteDesc));
    }
 
    void tearDown()
@@ -110,14 +115,7 @@ public:
       delete testCases[1][0];
       delete testCases[1][1];
 
-      try{
-        TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
-      }
-      catch(Exception& e)
-      {
-         std::cerr << e.what() << std::endl;
-         throw;
-      }
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void verify()
@@ -133,31 +131,31 @@ public:
 
       std::string file("TestNothing");
 
-      suiteLoader.METHOD(TestSuiteLoader::load)
-                 .expects(once())
-                 .with(endWith(file))
-                 .will(returnValue(suiteDesc));
+      MOCK_METHOD(suiteLoader, load)
+           .expects(once())
+           .with(endWith(file))
+           .will(returnValue(suiteDesc));
 
-      suiteLoader.METHOD(TestSuiteLoader::unload)
-                 .expects(once());
+      MOCK_METHOD(suiteLoader, unload)
+           .expects(once());
 
-      fixtureRunner.METHOD(TestFixtureRunner::run)
-                 .expects(once())
-                 .with(eq(desc[0]), eq((TestFixtureResultCollector*)collector));
+      MOCK_METHOD(fixtureRunner, run)
+           .expects(once())
+           .with(eq(desc[0]), eq((TestFixtureResultCollector*)collector));
 
-      fixtureRunner.METHOD(TestFixtureRunner::run)
-                 .expects(once())
-                 .with(eq(desc[1]), eq((TestFixtureResultCollector*)collector));
+      MOCK_METHOD(fixtureRunner, run)
+           .expects(once())
+           .with(eq(desc[1]), eq((TestFixtureResultCollector*)collector));
 
-      collector.METHOD(TestSuiteResultCollector::startTestSuite)
-               .expects(once())
-               .with(eq((TestSuiteInfoReader*)suiteDesc))
-               .id("start");
+      MOCK_METHOD(collector, startTestSuite)
+           .expects(once())
+           .with(eq((TestSuiteInfoReader*)suiteDesc))
+           .id("start");
 
-      collector.METHOD(TestSuiteResultCollector::endTestSuite)
-               .expects(once())
-               .with(eq((TestSuiteInfoReader*)suiteDesc))
-               .after("start");
+      MOCK_METHOD(collector, endTestSuite)
+           .expects(once())
+           .with(eq((TestSuiteInfoReader*)suiteDesc))
+           .after("start");
 
       ////////////////////////////////////////////////////
       TestSuiteRunner runner(suiteLoader, fixtureRunner);
@@ -172,17 +170,17 @@ public:
    {
       std::string file("TestNothing");
 
-      suiteLoader.METHOD(TestSuiteLoader::load)
-                 .expects(once())
-                 .with(endWith(file))
-                 .will(throws(Error("File Not Found")));
+      MOCK_METHOD(suiteLoader, load)
+           .expects(once())
+           .with(endWith(file))
+           .will(throws(Error("File Not Found")));
 
-      collector.METHOD(TestResultCollector::addError)
-               .expects(once())
-               .with(contains("File Not Found"));
+      MOCK_METHOD(collector, addError)
+           .expects(once())
+           .with(contains("File Not Found"));
 
-      fixtureRunner.METHOD(TestFixtureRunner::run)
-                 .expects(never());
+      MOCK_METHOD(fixtureRunner, run)
+           .expects(never());
 
       ////////////////////////////////////////////////////
       TestSuiteRunner runner(suiteLoader, fixtureRunner);

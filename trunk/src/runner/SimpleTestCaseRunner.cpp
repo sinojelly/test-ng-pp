@@ -31,12 +31,12 @@ void SimpleTestCaseRunner::run(TestFixtureDesc* desc
    collector->startTestCase(testcase);
 
    __RUN({
-      desc->getFixture()->setUp();
+      testcase->setUp();
       testcase->run();
    });
 
    __RUN({
-      desc->getFixture()->tearDown();
+      testcase->tearDown();
    });
 
    collector->endTestCase(testcase);

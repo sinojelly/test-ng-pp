@@ -23,6 +23,8 @@ class TestTestSuiteDesc: public CxxTest::TestSuite
       {}
 
       void run() {}
+      void setUp() {}
+      void tearDown() {}
    };
 
 private:
@@ -31,8 +33,6 @@ private:
    TestFixtureDesc* desc[2];
 
    TestCase* testCases[2][2];
-
-   TestFixture fixture;
 
 public:
 
@@ -46,8 +46,8 @@ public:
       testCases[1][0] = new MyTestCase("testCase0", "TestNothing1", "TestNothing1.h", 1);
       testCases[1][1] = new MyTestCase("testCase1", "TestNothing1", "TestNothing1.h", 11);
 
-      desc[0] = new TestFixtureDesc("TestNothing0" , "TestNothing0.h" , &fixture, testCases[0] , 2);
-      desc[1] = new TestFixtureDesc("TestNothing1" , "TestNothing1.h" , &fixture, testCases[1] , 2);
+      desc[0] = new TestFixtureDesc("TestNothing0" , "TestNothing0.h" , testCases[0] , 2);
+      desc[1] = new TestFixtureDesc("TestNothing1" , "TestNothing1.h" , testCases[1] , 2);
 
    }
 

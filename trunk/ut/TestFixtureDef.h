@@ -44,6 +44,17 @@ struct MyTestCase : public TestCase
 	  : TestCase(name, "MyTestFixture", "MyTestFixture.h", line)
    {}
 
+   MyTestFixture myTestFixture;
+
+   void setUp()
+   {
+      myTestFixture.setUp();
+   }
+
+   void tearDown()
+   {
+      myTestFixture.tearDown();
+   }
 };
 
 static struct MyTestCase1 : public MyTestCase
@@ -81,5 +92,5 @@ myTestCase3;
 
 static TestCase* myTestCases[] = { &myTestCase1, &myTestCase2, &myTestCase3 };
 
-static TestFixtureDesc myTestFixtureDesc("MyTestFixture", "MyTestFixture.h", &myTestFixture, myTestCases, 3);
+static TestFixtureDesc myTestFixtureDesc("MyTestFixture", "MyTestFixture.h", myTestCases, 3);
 

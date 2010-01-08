@@ -21,6 +21,8 @@ class TestTestCase: public CxxTest::TestSuite
       {}
 
       void run() {}
+      void setUp() {}
+      void tearDown() {}
    };
 
 private:
