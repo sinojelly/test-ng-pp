@@ -10,154 +10,117 @@
 #include <testngpp/runner/SimpleTestCaseRunner.h>
 #include <testngpp/runner/TestCaseResultCollector.h>
 
+#include <FTestFixture1.h>
+
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
 class TestSimpleTestCaseRunner: public CxxTest::TestSuite
 {
-   struct MyTestCase : public TestCase
-   {
-      MyTestCase(TestFixture* fixture
-           , const std::string& nameOfCase
-           , const std::string& nameOfFixture
-           , const std::string& file
-           , unsigned int line)
-           : m_fixture(fixture)
-           , TestCase(nameOfCase, nameOfFixture, file, line)
-      {}
-
-      void run() {}
-      void setUp()
-      {
-         m_fixture->setUp();
-      }
-      void tearDown()
-      {
-         m_fixture->tearDown();
-      }
-     
-      TestFixture* m_fixture;
-   };
 
 private:
    TESTNGPP_RCP checkpoint;
 
-   TestFixtureDesc* desc;
-   TestCase* testcase[1];
+   FTestFixture1 f;
 
-   MockObject<TestFixture> fixture;
-   MockObject<TestCaseResultCollector> collector;
+   TestCaseInfoReader* testcase;
+
 public:
 
    void setUp()
    {
       checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
-		testcase[0] = new MyTestCase(fixture, "testCase1", "TestNothing", "TestNothing.h", 11);
-      desc = new TestFixtureDesc("TestNothing", "TestNothing.h", testcase, 1);
+      f.setUp();
 
-      MOCK_METHOD(collector, startTestCase)
+      testcase = f.testcase[0];
+
+      MOCK_METHOD(f.collector, startTestCase)
          .defaults()
-         .with(eq((TestCaseInfoReader*)testcase[0]));
+         .with(eq(testcase));
 
-      MOCK_METHOD(collector, endTestCase)
+      MOCK_METHOD(f.collector, endTestCase)
          .defaults()
-         .with(eq((TestCaseInfoReader*)testcase[0]));
+         .with(eq(testcase));
 
-      MOCK_METHOD(collector, startTestCase)
+      MOCK_METHOD(f.collector, startTestCase)
          .expects(once())
-         .before(fixture, "setUp")
-         .with(eq((TestCaseInfoReader*)testcase[0]))
+         .before(f.fixture, "setUp")
+         .with(eq(testcase))
          .id("startTestCase");
 
-      MOCK_METHOD(fixture, tearDown)
+      MOCK_METHOD(f.fixture, tearDown)
          .expects(once())
          .after("setUp")
          .id("tearDown");
 
-      MOCK_METHOD(collector, endTestCase)
+      MOCK_METHOD(f.collector, endTestCase)
          .expects(once())
-         .with(eq((TestCaseInfoReader*)testcase[0]))
-         .after(fixture, "tearDown");
+         .with(eq(testcase))
+         .after(f.fixture, "tearDown");
    }
 
    void tearDown()
    {
-      delete testcase[0];
-      delete desc;
-
-      fixture.reset();
-      collector.reset();
+      f.tearDown();
 
       TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
+   void run()
+   {
+      SimpleTestCaseRunner runner;
+
+      runner.run(f.desc, f.testcase[0], f.collector);
+
+      f.verify();
+   }
+
    void testShouldBeAbleToReportStartAndEndEvent()
    {
-      MOCK_METHOD(fixture, setUp)
+      MOCK_METHOD(f.fixture, setUp)
          .expects(once())
          .id("setUp");
 
-      ////////////////////////////////////////////////////////
-      SimpleTestCaseRunner runner;
-
-      runner.run(desc, testcase[0], collector);
-
-      fixture.verify();
-      collector.verify();
+      run();
    }
 
    void testShouldBeAbleToReportAssertionEvent()
    {
-      MOCK_METHOD(fixture, setUp)
+      MOCK_METHOD(f.fixture, setUp)
          .expects(once())
          .will(throws(AssertionFailure("TestNothing.h", 13, "Assertion Failed")))
          .id("setUp");
 
-      MOCK_METHOD(collector, addCaseFailure)
+      MOCK_METHOD(f.collector, addCaseFailure)
          .expects(once());
 
-      ////////////////////////////////////////////////////////
-      SimpleTestCaseRunner runner;
-
-      runner.run(desc, testcase[0], collector);
-
-      fixture.verify();
+      run();
    }
 
    void testShouldBeAbleToReportStdError()
    {
-      MOCK_METHOD(fixture, setUp)
+      MOCK_METHOD(f.fixture, setUp)
          .expects(once())
          .will(throws(Exception(13, "TestNothing.h", "Exception")))
          .id("setUp");
 
-      MOCK_METHOD(collector, addCaseError)
+      MOCK_METHOD(f.collector, addCaseError)
          .expects(once())
          .with(any(), contains("Exception"));
 
-      ////////////////////////////////////////////////////////
-      SimpleTestCaseRunner runner;
-
-      runner.run(desc, testcase[0], collector);
-
-      fixture.verify();
+      run();
    }
 
    void testShouldBeAbleToReportUnknownError()
    {
-      MOCK_METHOD(fixture, setUp)
+      MOCK_METHOD(f.fixture, setUp)
          .expects(once())
          .will(throws(1))
          .id("setUp");
 
-      MOCK_METHOD(collector, addCaseError)
+      MOCK_METHOD(f.collector, addCaseError)
          .expects(once());
 
-      ////////////////////////////////////////////////////////
-      SimpleTestCaseRunner runner;
-
-      runner.run(desc, testcase[0], collector);
-
-      fixture.verify();
+      run();
    }
 };
