@@ -1,12 +1,12 @@
 
 #include <ltdl.h>
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/runner/LTTestSuiteLoader.h>
-#include <testcpp/runner/TestSuiteDescEntryNameGetter.h>
+#include <testngpp/runner/LTTestSuiteLoader.h>
+#include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct LTTestSuiteLoaderImpl
 {
@@ -73,5 +73,5 @@ void LTTestSuiteLoader::unload()
 
 /////////////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

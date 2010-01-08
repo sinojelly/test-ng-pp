@@ -5,14 +5,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/runner/Sandbox.h>
-#include <testcpp/runner/EnvironmentCleaner.h>
-#include <testcpp/runner/SandboxHandler.h>
-#include <testcpp/runner/SandboxProcessor.h>
+#include <testngpp/runner/Sandbox.h>
+#include <testngpp/runner/EnvironmentCleaner.h>
+#include <testngpp/runner/SandboxHandler.h>
+#include <testngpp/runner/SandboxProcessor.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 struct SandboxImpl
@@ -116,5 +116,5 @@ Sandbox::createInstance(EnvironmentCleaner* cleaner, SandboxHandler* childHandle
    return sandbox;
 }
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

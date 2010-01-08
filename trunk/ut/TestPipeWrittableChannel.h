@@ -1,19 +1,19 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <mockcpp.hpp>
 
 #include <PipeWrittableChannel.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestPipeWrittableChannel: public CxxTest::TestSuite
 {
 private:
 
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
    int sockets[2];
 
@@ -21,7 +21,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
       int result = ::socketpair(AF_UNIX, SOCK_STREAM, 0, sockets);
       TS_ASSERT(result == 0);
@@ -32,7 +32,7 @@ public:
       ::close(sockets[0]);
       ::close(sockets[1]);
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToWriteByte()

@@ -1,12 +1,12 @@
 
-TESTCPP_INCLUDE_PATH = $(top_builddir)/include/testcpp
+TESTNGPP_INCLUDE_PATH = $(top_builddir)/include/testngpp
 
 AM_CPPFLAGS = -I$(top_builddir)/include 
 AM_LDFLAGS = -export-dynamic -no-undefined 
 
-lib_LTLIBRARIES = libtestcpp.la
+lib_LTLIBRARIES = libtestngpp.la
 
-libtestcpp_la_SOURCES = \
+libtestngpp_la_SOURCES = \
   AssertionFailure.cpp \
   TestSuiteDesc.cpp \
   ResourceCheckPoint.cpp \
@@ -16,29 +16,29 @@ libtestcpp_la_SOURCES = \
   StringToOptions.cpp 
 
 pkginclude_HEADERS = \
-  $(TESTCPP_INCLUDE_PATH)/testcpp.hpp \
-  $(TESTCPP_INCLUDE_PATH)/testcpp.h \
-  $(TESTCPP_INCLUDE_PATH)/Asserter.h \
-  $(TESTCPP_INCLUDE_PATH)/Error.h \
-  $(TESTCPP_INCLUDE_PATH)/AssertionFailure.h \
-  $(TESTCPP_INCLUDE_PATH)/TestFixture.h \
-  $(TESTCPP_INCLUDE_PATH)/ResourceCheckPoint.h 
+  $(TESTNGPP_INCLUDE_PATH)/testngpp.hpp \
+  $(TESTNGPP_INCLUDE_PATH)/testngpp.h \
+  $(TESTNGPP_INCLUDE_PATH)/Asserter.h \
+  $(TESTNGPP_INCLUDE_PATH)/Error.h \
+  $(TESTNGPP_INCLUDE_PATH)/AssertionFailure.h \
+  $(TESTNGPP_INCLUDE_PATH)/TestFixture.h \
+  $(TESTNGPP_INCLUDE_PATH)/ResourceCheckPoint.h 
 
 
 internaldir = $(pkgincludedir)/internal
 
 internal_HEADERS = \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestCase.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestFixtureDesc.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestSuiteDesc.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestCaseInfoReader.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestSuiteInfoReader.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestFixtureInfoReader.h
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestCase.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestFixtureDesc.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestSuiteDesc.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestCaseInfoReader.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestSuiteInfoReader.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestFixtureInfoReader.h
 
 utilsdir = $(pkgincludedir)/utils
 
 utils_HEADERS = \
-  $(TESTCPP_INCLUDE_PATH)/utils/TypeString.h \
-  $(TESTCPP_INCLUDE_PATH)/utils/Formatter.h  \
-  $(TESTCPP_INCLUDE_PATH)/utils/OptionList.h  
+  $(TESTNGPP_INCLUDE_PATH)/utils/TypeString.h \
+  $(TESTNGPP_INCLUDE_PATH)/utils/Formatter.h  \
+  $(TESTNGPP_INCLUDE_PATH)/utils/OptionList.h  
 

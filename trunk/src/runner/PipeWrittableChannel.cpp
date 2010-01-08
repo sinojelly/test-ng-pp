@@ -4,13 +4,13 @@
 #include <string.h>
 #include <signal.h>
 
-#include <testcpp/comm/PipeWrittableChannel.h>
+#include <testngpp/comm/PipeWrittableChannel.h>
 
 #ifdef __CYGWIN__
 typedef _sig_func_ptr sig_t;
 #endif
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////
 PipeWrittableChannel::PipeWrittableChannel(int channelFd)
@@ -69,5 +69,5 @@ void PipeWrittableChannel::close()
 
 //////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

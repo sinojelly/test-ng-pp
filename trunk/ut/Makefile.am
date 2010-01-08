@@ -3,10 +3,10 @@ CXXTEST_ROOT = $(top_builddir)/3rdparty/cxxtest
 
 AM_CPPFLAGS = \
   -I$(top_builddir)/include \
-  -I$(top_builddir)/include/testcpp \
-  -I$(top_builddir)/include/testcpp/internal \
-  -I$(top_builddir)/include/testcpp/runner \
-  -I$(top_builddir)/include/testcpp/comm \
+  -I$(top_builddir)/include/testngpp \
+  -I$(top_builddir)/include/testngpp/internal \
+  -I$(top_builddir)/include/testngpp/runner \
+  -I$(top_builddir)/include/testngpp/comm \
   -I$(top_builddir)/3rdparty \
   -I$(top_builddir)/3rdparty/mockcpp/3rdparty \
   -I$(top_builddir)/3rdparty/mockcpp/include \
@@ -17,35 +17,35 @@ AM_CPPFLAGS = \
 AM_LDFLAGS = \
   $(top_builddir)/libs/libcxxtest.la \
   $(top_srcdir)/3rdparty/mockcpp/src/libmockcpp.la \
-  $(top_builddir)/src/libtestcpp.la \
-  $(top_builddir)/src/runner/libtestcpprunner.la \
+  $(top_builddir)/src/libtestngpp.la \
+  $(top_builddir)/src/runner/libtestngpprunner.la \
   $(LIBLTDL) 
 
 
-UT1_SOURCE = testcpp-ut1.cpp
-UT2_SOURCE = testcpp-ut2.cpp
-UT3_SOURCE = testcpp-ut3.cpp
-UT4_SOURCE = testcpp-ut4.cpp
-UT5_SOURCE = testcpp-ut5.cpp
-UT6_SOURCE = testcpp-ut6.cpp
+UT1_SOURCE = testngpp-ut1.cpp
+UT2_SOURCE = testngpp-ut2.cpp
+UT3_SOURCE = testngpp-ut3.cpp
+UT4_SOURCE = testngpp-ut4.cpp
+UT5_SOURCE = testngpp-ut5.cpp
+UT6_SOURCE = testngpp-ut6.cpp
 
 noinst_PROGRAMS = \
-  testcpp-ut1 \
-  testcpp-ut2 \
-  testcpp-ut3 \
-  testcpp-ut4 \
-  testcpp-ut5 \
-  testcpp-ut6
+  testngpp-ut1 \
+  testngpp-ut2 \
+  testngpp-ut3 \
+  testngpp-ut4 \
+  testngpp-ut5 \
+  testngpp-ut6
 
-testcpp_ut1_SOURCES = $(UT1_SOURCE)
-testcpp_ut2_SOURCES = $(UT2_SOURCE)
-testcpp_ut3_SOURCES = $(UT3_SOURCE)
-testcpp_ut4_SOURCES = $(UT4_SOURCE)
-testcpp_ut5_SOURCES = $(UT5_SOURCE)
-testcpp_ut6_SOURCES = $(UT6_SOURCE)
+testngpp_ut1_SOURCES = $(UT1_SOURCE)
+testngpp_ut2_SOURCES = $(UT2_SOURCE)
+testngpp_ut3_SOURCES = $(UT3_SOURCE)
+testngpp_ut4_SOURCES = $(UT4_SOURCE)
+testngpp_ut5_SOURCES = $(UT5_SOURCE)
+testngpp_ut6_SOURCES = $(UT6_SOURCE)
 
-testcpp_ut6_LDADD = \
-  $(top_builddir)/src/listeners/libtestcppxmllistener.la
+testngpp_ut6_LDADD = \
+  $(top_builddir)/src/listeners/libtestngppxmllistener.la
 
 CLEANFILES = \
   $(UT1_SOURCE) \

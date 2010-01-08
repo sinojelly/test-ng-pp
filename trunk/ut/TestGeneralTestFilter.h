@@ -3,7 +3,7 @@
 
 #include <mockcpp.hpp>
 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <GeneralTestFilter.h>
 #include <NameMatcher.h>
@@ -11,13 +11,13 @@
 #include <TestCaseInfoReader.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestGeneralTestFilter: public CxxTest::TestSuite
 {
 private:
 
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
    TestFilter* filter;
 
@@ -30,7 +30,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
       filter = new GeneralTestFilter(fixtureMatcher, caseMatcher);
 
@@ -72,7 +72,7 @@ public:
 
       delete filter;
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToTellIfSpecifiedTestFixtureMatches()

@@ -1,6 +1,6 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -16,13 +16,13 @@
 #include <PipeWrittableChannel.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestTestCaseSandboxResultReporter: public CxxTest::TestSuite
 {
 private:
 
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
    int sockets[2];
 
@@ -35,7 +35,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
       int result = ::socketpair(AF_UNIX, SOCK_STREAM, 0, sockets);
       TS_ASSERT(result == 0);
@@ -47,7 +47,7 @@ public:
    void tearDown()
    {
       delete rChannel;
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleReportStartEvent()
@@ -98,7 +98,7 @@ class TestTestCaseSandboxResultDecoder: public CxxTest::TestSuite
 {
 private:
 
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
    int sockets[2];
 
@@ -117,7 +117,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
       int result = ::socketpair(AF_UNIX, SOCK_STREAM, 0, sockets);
       TS_ASSERT(result == 0);
@@ -141,7 +141,7 @@ public:
       delete reporter;
       delete decoder;
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToDecodeStartEvent()

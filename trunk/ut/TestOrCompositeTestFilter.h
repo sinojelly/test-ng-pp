@@ -3,18 +3,18 @@
 
 #include <mockcpp.hpp>
 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <OrCompositeTestFilter.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestOrCompositeTestFilter: public CxxTest::TestSuite
 {
 private:
 
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
    MockObject<TestFixtureInfoReader> fixture;
    MockObject<TestCaseInfoReader> testcase;
@@ -28,7 +28,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
       filter1.METHOD(TestFilter::isFixtureMatch)
          .defaults().will(returnValue(false));
@@ -63,7 +63,7 @@ public:
       filter2.reset();
       filter3.reset();
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldMatchesAFixutreIfAnyOfAddedFiltersMatchesIt()

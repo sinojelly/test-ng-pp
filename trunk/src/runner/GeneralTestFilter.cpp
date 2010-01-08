@@ -1,13 +1,13 @@
 
 #include <fnmatch.h>
 
-#include <testcpp/runner/TestFilter.h>
-#include <testcpp/runner/NameMatcher.h>
-#include <testcpp/runner/GeneralTestFilter.h>
-#include <testcpp/internal/TestFixtureInfoReader.h>
-#include <testcpp/internal/TestCaseInfoReader.h>
+#include <testngpp/runner/TestFilter.h>
+#include <testngpp/runner/NameMatcher.h>
+#include <testngpp/runner/GeneralTestFilter.h>
+#include <testngpp/internal/TestFixtureInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct GeneralTestFilterImpl
 {
@@ -59,4 +59,4 @@ isCaseMatch(const TestCaseInfoReader* testcase) const
 
 ////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

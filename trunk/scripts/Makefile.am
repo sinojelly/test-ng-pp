@@ -1,11 +1,11 @@
 
-TESTCPPGEN = testcppgen
+TESTNGPPGEN = testngppgen
 
-pkgdata_SCRIPTS=$(top_builddir)/scripts/testcppgen.py
+pkgdata_SCRIPTS=$(top_builddir)/scripts/testngppgen.py
 
-bin_SCRIPTS = $(TESTCPPGEN)
-CLEANFILES = $(TESTCPPGEN)
+bin_SCRIPTS = $(TESTNGPPGEN)
+CLEANFILES = $(TESTNGPPGEN)
 
-$(TESTCPPGEN) : 
+$(TESTNGPPGEN) : 
 	@echo '#!/bin/sh' > $@
-	@echo '$(PYTHON) $(pkgdatadir)/testcppgen.py $$*' >> $@
+	@echo '$(PYTHON) $(pkgdatadir)/testngppgen.py $$*' >> $@

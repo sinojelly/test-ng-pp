@@ -16,15 +16,15 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef __TESTCPP_XML_BUILDER_H
-#define __TESTCPP_XML_BUILDER_H
+#ifndef __TESTNGPP_XML_BUILDER_H
+#define __TESTNGPP_XML_BUILDER_H
 
-#include <testcpp/testcpp.h>
+#include <testngpp/testngpp.h>
 
 #include <string>
 #include <ostream>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 class XMLBuilder {
 public:
@@ -39,6 +39,6 @@ public:
 	virtual void write(std::ostream& stream) const = 0;
 };
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 
 #endif

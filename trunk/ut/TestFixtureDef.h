@@ -7,7 +7,7 @@
 #include <Exception.h>
 #include <AssertionFailure.h>
 
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 USING_MOCKCPP_NS
 
 class MyTestFixture : public TestFixture

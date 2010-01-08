@@ -1,15 +1,15 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testcpp/internal/TestCase.h>
-#include <testcpp/internal/TestFixtureDesc.h>
-#include <testcpp/internal/TestSuiteDesc.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/internal/TestSuiteDesc.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestTestSuiteDesc: public CxxTest::TestSuite
 {
@@ -26,7 +26,7 @@ class TestTestSuiteDesc: public CxxTest::TestSuite
    };
 
 private:
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
    TestFixtureDesc* desc[2];
 
@@ -38,7 +38,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
       testCases[0][0] = new MyTestCase("testCase0", "TestNothing0", "TestNothing0.h", 1);
       testCases[0][1] = new MyTestCase("testCase1", "TestNothing0", "TestNothing0.h", 11);
@@ -60,7 +60,7 @@ public:
       delete testCases[1][0];
       delete testCases[1][1];
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToGetNameOfSuite()

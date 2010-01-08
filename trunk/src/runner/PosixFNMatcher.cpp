@@ -1,9 +1,9 @@
 
 #include <fnmatch.h>
 
-#include <testcpp/runner/PosixFNMatcher.h>
+#include <testngpp/runner/PosixFNMatcher.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 PosixFNMatcher::
@@ -32,4 +32,4 @@ matches(const std::string& name) const
 
 ////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

@@ -1,12 +1,12 @@
 
-#include <testcpp/runner/TestCaseSandboxHandler.h>
-#include <testcpp/runner/TestCaseResultCollector.h>
-#include <testcpp/runner/TestCaseSandboxResultReporter.h>
-#include <testcpp/runner/TestCaseRunner.h>
-#include <testcpp/internal/TestCase.h>
-#include <testcpp/comm/PipeWrittableChannel.h>
+#include <testngpp/runner/TestCaseSandboxHandler.h>
+#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/runner/TestCaseSandboxResultReporter.h>
+#include <testngpp/runner/TestCaseRunner.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/comm/PipeWrittableChannel.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////
 struct TestCaseSandboxHandlerImpl
@@ -67,5 +67,5 @@ TestCaseSandboxHandler::handle(ChannelId channelId)
 
 //////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

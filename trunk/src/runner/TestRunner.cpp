@@ -1,22 +1,22 @@
 
 #include <iostream>
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/runner/TestSuiteRunner.h>
-#include <testcpp/runner/LTTestSuiteLoader.h>
-#include <testcpp/runner/LTTestListenerLoader.h>
-#include <testcpp/runner/SimpleTestResultDispatcher.h>
-#include <testcpp/runner/SimpleTestResultReporter.h>
-#include <testcpp/runner/SimpleTestCaseResultReporter.h>
-#include <testcpp/runner/SimpleTestSuiteResultReporter.h>
-#include <testcpp/runner/TestFixtureRunnerFactory.h>
-#include <testcpp/runner/InternalError.h>
-#include <testcpp/runner/TestRunner.h>
-#include <testcpp/runner/TestFilter.h>
-#include <testcpp/runner/TestFilterFactory.h>
+#include <testngpp/runner/TestSuiteRunner.h>
+#include <testngpp/runner/LTTestSuiteLoader.h>
+#include <testngpp/runner/LTTestListenerLoader.h>
+#include <testngpp/runner/SimpleTestResultDispatcher.h>
+#include <testngpp/runner/SimpleTestResultReporter.h>
+#include <testngpp/runner/SimpleTestCaseResultReporter.h>
+#include <testngpp/runner/SimpleTestSuiteResultReporter.h>
+#include <testngpp/runner/TestFixtureRunnerFactory.h>
+#include <testngpp/runner/InternalError.h>
+#include <testngpp/runner/TestRunner.h>
+#include <testngpp/runner/TestFilter.h>
+#include <testngpp/runner/TestFilterFactory.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct TestRunnerImpl
 {
@@ -168,7 +168,7 @@ void TestRunnerImpl::runTestSuite
    }
    catch(...)
    {
-      std::cerr << TESTCPP_INTERNAL_ERROR(5001) << std::endl;
+      std::cerr << TESTNGPP_INTERNAL_ERROR(5001) << std::endl;
       hasFailures = true;
    }
 }
@@ -257,5 +257,5 @@ TestRunner::runTests( bool useSandbox
 
 ///////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

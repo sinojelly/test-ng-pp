@@ -6,19 +6,19 @@
 #include <algorithm>
 #include <string.h>
 
-#include <testcpp/internal/TestFixtureDesc.h>
-#include <testcpp/internal/TestCase.h>
+#include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/internal/TestCase.h>
 
-#include <testcpp/runner/TestFixtureSandboxRunner.h>
-#include <testcpp/runner/TestCaseRunner.h>
-#include <testcpp/runner/TestCaseSandboxResultReporter.h>
-#include <testcpp/runner/TestCaseSandboxResultDecoder.h>
-#include <testcpp/runner/TestFixtureResultCollector.h>
-#include <testcpp/runner/TestCaseSandbox.h>
-#include <testcpp/runner/EnvironmentCleaner.h>
-#include <testcpp/runner/TestCaseFilter.h>
+#include <testngpp/runner/TestFixtureSandboxRunner.h>
+#include <testngpp/runner/TestCaseRunner.h>
+#include <testngpp/runner/TestCaseSandboxResultReporter.h>
+#include <testngpp/runner/TestCaseSandboxResultDecoder.h>
+#include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/TestCaseSandbox.h>
+#include <testngpp/runner/EnvironmentCleaner.h>
+#include <testngpp/runner/TestCaseFilter.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ///////////////////////////////////////////////////////
 struct TestFixtureSandboxRunnerImpl : public EnvironmentCleaner
@@ -245,5 +245,5 @@ TestFixtureSandboxRunner::run(TestFixtureDesc* fixture
 
 ///////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

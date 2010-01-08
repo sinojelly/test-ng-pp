@@ -1,17 +1,17 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testcpp/internal/TestCase.h>
-#include <testcpp/TestFixture.h>
-#include <testcpp/internal/TestFixtureDesc.h>
-#include <testcpp/runner/SimpleTestCaseRunner.h>
-#include <testcpp/runner/TestCaseResultCollector.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/TestFixture.h>
+#include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/runner/SimpleTestCaseRunner.h>
+#include <testngpp/runner/TestCaseResultCollector.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestSimpleTestCaseRunner: public CxxTest::TestSuite
 {
@@ -28,7 +28,7 @@ class TestSimpleTestCaseRunner: public CxxTest::TestSuite
    };
 
 private:
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
    TestFixtureDesc* desc;
    TestCase* testcase[1];
@@ -40,7 +40,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 		testcase[0] = new MyTestCase("testCase1", "TestNothing", "TestNothing.h", 11);
       desc = new TestFixtureDesc("TestNothing", "TestNothing.h", fixture, testcase, 1);
 
@@ -77,7 +77,7 @@ public:
       fixture.reset();
       collector.reset();
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToReportStartAndEndEvent()

@@ -12,7 +12,7 @@ AM_LDFLAGS = \
  @MOCKCPP_LDFLAGS_FOR_DIST@ \
  -rpath /dev/null \
  -no-undefined \
- $(top_builddir)/../../src/libtestcpp.la
+ $(top_builddir)/../../src/libtestngpp.la
 
 noinst_LTLIBRARIES = libmockcpp.la
 

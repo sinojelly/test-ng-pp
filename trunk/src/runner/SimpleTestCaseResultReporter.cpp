@@ -1,12 +1,12 @@
 
 #include <iostream>
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/runner/SimpleTestCaseResultReporter.h>
-#include <testcpp/runner/InternalError.h>
+#include <testngpp/runner/SimpleTestCaseResultReporter.h>
+#include <testngpp/runner/InternalError.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct SimpleTestCaseResultReporterImpl
 {
@@ -97,7 +97,7 @@ startTestCase(TestCaseInfoReader* testcase)
 {
    if(This->testcase != 0 && !This->finished)
    {
-      throw Error(TESTCPP_INTERNAL_ERROR(2001));
+      throw Error(TESTNGPP_INTERNAL_ERROR(2001));
    }
 
    This->testcase = testcase;
@@ -121,4 +121,4 @@ endTestCase(TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

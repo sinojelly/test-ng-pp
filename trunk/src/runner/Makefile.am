@@ -3,14 +3,14 @@ AM_CPPFLAGS = \
   -I$(top_builddir)/include \
   $(LTDLINCL)
 
-lib_LTLIBRARIES = libtestcpprunner.la 
+lib_LTLIBRARIES = libtestngpprunner.la 
 
-libtestcpprunner_la_LDFLAGS = \
+libtestngpprunner_la_LDFLAGS = \
   -no-undefined \
-  $(top_builddir)/src/libtestcpp.la \
+  $(top_builddir)/src/libtestngpp.la \
   $(LIBLTDL)
 
-nodist_libtestcpprunner_la_SOURCES = \
+nodist_libtestngpprunner_la_SOURCES = \
   TestSuiteRunner.cpp \
   TestCaseSandboxResultReporter.cpp \
   TestCaseSandboxResultDecoder.cpp \
@@ -38,13 +38,13 @@ nodist_libtestcpprunner_la_SOURCES = \
   PosixFNMatcher.cpp \
   TestRunner.cpp
 
-bin_PROGRAMS = testcpp-runner
+bin_PROGRAMS = testngpp-runner
 
-testcpp_runner_LDADD = \
-  $(top_builddir)/src/runner/libtestcpprunner.la 
+testngpp_runner_LDADD = \
+  $(top_builddir)/src/runner/libtestngpprunner.la 
 
-testcpp_runner_LDFLAGS = \
+testngpp_runner_LDFLAGS = \
   -export-dynamic
 
-testcpp_runner_SOURCES = \
+testngpp_runner_SOURCES = \
   TestRunnerMain.cpp
