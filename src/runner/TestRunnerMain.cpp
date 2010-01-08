@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include <testcpp/runner/TestRunner.h>
-#include <testcpp/utils/OptionList.h>
+#include <testngpp/runner/TestRunner.h>
+#include <testngpp/utils/OptionList.h>
 
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 ////////////////////////////////////////////////////////////
 void usage(char * program)
@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
 
    if(options.args.size() == 0)
    {
-      usage("testcpp-runner");
+      usage("testngpp-runner");
    }
 
    //showOptions(options);

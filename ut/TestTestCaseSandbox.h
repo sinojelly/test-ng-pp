@@ -1,6 +1,6 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <mockcpp.hpp>
 
@@ -15,7 +15,7 @@
 #include <TestFixtureDesc.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestTestCaseSandbox: public CxxTest::TestSuite
 {
@@ -34,7 +34,7 @@ class TestTestCaseSandbox: public CxxTest::TestSuite
 
 
 private:
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
 public:
    TestFixtureDesc* desc;
@@ -52,7 +52,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
       testcase[0] = new MyTestCase("testCase1", "TestNothing", "TestNothing.h", 11);
       desc = new TestFixtureDesc("TestNothing", "TestNothing.h", fixture, testcase, 1);
 
@@ -76,7 +76,7 @@ public:
       cleaner.reset();
       fixture.reset();
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void verify()

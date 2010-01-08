@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <sstream>
 
-#include <testcpp/comm/PipeReadableChannel.h>
+#include <testngpp/comm/PipeReadableChannel.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
 PipeReadableChannel::PipeReadableChannel(int pipeFd)
@@ -89,5 +89,5 @@ void PipeReadableChannel::close()
 
 //////////////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

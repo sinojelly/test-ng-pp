@@ -5,14 +5,14 @@
 #include <sstream>
 #include <iostream>
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/runner/TestListener.h>
-#include <testcpp/runner/TestRunnerContext.h>
-#include <testcpp/runner/LTTestListenerLoader.h>
-#include <testcpp/utils/StringToOptions.h>
+#include <testngpp/runner/TestListener.h>
+#include <testngpp/runner/TestRunnerContext.h>
+#include <testngpp/runner/LTTestListenerLoader.h>
+#include <testngpp/utils/StringToOptions.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct LTTestListenerLoaderImpl
 {
@@ -244,5 +244,5 @@ load( TestRunnerContext* context
 
 /////////////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

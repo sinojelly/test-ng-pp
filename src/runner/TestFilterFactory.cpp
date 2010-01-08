@@ -1,14 +1,14 @@
 
 #include <string>
 
-#include <testcpp/runner/TestFilter.h>
-#include <testcpp/runner/GeneralTestFilter.h>
-#include <testcpp/runner/WildcardTestFilter.h>
-#include <testcpp/runner/OrCompositeTestFilter.h>
-#include <testcpp/runner/PosixFNMatcher.h>
-#include <testcpp/runner/TestFilterFactory.h>
+#include <testngpp/runner/TestFilter.h>
+#include <testngpp/runner/GeneralTestFilter.h>
+#include <testngpp/runner/WildcardTestFilter.h>
+#include <testngpp/runner/OrCompositeTestFilter.h>
+#include <testngpp/runner/PosixFNMatcher.h>
+#include <testngpp/runner/TestFilterFactory.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 namespace
 {
@@ -70,4 +70,4 @@ returnFilter(const TestFilter* filter)
 
 ////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

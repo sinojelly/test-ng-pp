@@ -6,7 +6,7 @@
 #include <string>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestXMLBuilder: public CxxTest::TestSuite
 {

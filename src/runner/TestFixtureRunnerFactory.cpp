@@ -1,11 +1,11 @@
 
-#include <testcpp/runner/TestFixtureRunnerWrapper.h>
-#include <testcpp/runner/TestFixtureSandboxRunner.h>
-#include <testcpp/runner/SimpleTestFixtureRunner.h>
-#include <testcpp/runner/SimpleTestCaseRunner.h>
-#include <testcpp/runner/TestFixtureRunnerFactory.h>
+#include <testngpp/runner/TestFixtureRunnerWrapper.h>
+#include <testngpp/runner/TestFixtureSandboxRunner.h>
+#include <testngpp/runner/SimpleTestFixtureRunner.h>
+#include <testngpp/runner/SimpleTestCaseRunner.h>
+#include <testngpp/runner/TestFixtureRunnerFactory.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 namespace
@@ -90,4 +90,4 @@ destroyInstance(TestFixtureRunner* instance)
 
 ////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

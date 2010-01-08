@@ -3,11 +3,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <testcpp/runner/EnvironmentCleaner.h>
-#include <testcpp/runner/SandboxHandler.h>
-#include <testcpp/runner/SandboxProcessor.h>
+#include <testngpp/runner/EnvironmentCleaner.h>
+#include <testngpp/runner/SandboxHandler.h>
+#include <testngpp/runner/SandboxProcessor.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 void
 SandboxProcessor::process(ChannelId rChannel, ChannelId wChannel, \
@@ -24,5 +24,5 @@ SandboxProcessor::process(ChannelId rChannel, ChannelId wChannel, \
    ::close(channel);
 }
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

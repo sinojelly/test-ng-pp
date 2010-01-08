@@ -1,13 +1,13 @@
 
-#include <testcpp/internal/TestFixtureDesc.h>
-#include <testcpp/internal/TestCase.h>
+#include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/internal/TestCase.h>
 
-#include <testcpp/runner/SimpleTestFixtureRunner.h>
-#include <testcpp/runner/TestCaseRunner.h>
-#include <testcpp/runner/TestFixtureResultCollector.h>
-#include <testcpp/runner/TestCaseFilter.h>
+#include <testngpp/runner/SimpleTestFixtureRunner.h>
+#include <testngpp/runner/TestCaseRunner.h>
+#include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/TestCaseFilter.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ///////////////////////////////////////////////////////
 struct SimpleTestFixtureRunnerImpl 
@@ -63,5 +63,5 @@ SimpleTestFixtureRunner::run(TestFixtureDesc* fixture
 
 ///////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

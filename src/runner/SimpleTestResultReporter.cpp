@@ -1,12 +1,12 @@
 
 #include <iostream>
 
-#include <testcpp/runner/SimpleTestResultReporter.h>
-#include <testcpp/runner/TestSuiteResultReporter.h>
-#include <testcpp/internal/TestCaseInfoReader.h>
-#include <testcpp/internal/TestSuiteInfoReader.h>
+#include <testngpp/runner/SimpleTestResultReporter.h>
+#include <testngpp/runner/TestSuiteResultReporter.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestSuiteInfoReader.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct SimpleTestResultReporterImpl
 {
@@ -227,4 +227,4 @@ getNumberOfLoadedSuites() const
 
 ///////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

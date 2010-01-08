@@ -1,11 +1,11 @@
 #include <listeners/XMLTestListener.h>
 
-#include <testcpp/internal/TestSuiteInfoReader.h>
-#include <testcpp/internal/TestCaseInfoReader.h>
-#include <testcpp/internal/TestFixtureInfoReader.h>
-#include <testcpp/runner/TestSuiteResultReporter.h>
-#include <testcpp/runner/TestCaseResultReporter.h>
-#include <testcpp/AssertionFailure.h>
+#include <testngpp/internal/TestSuiteInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestFixtureInfoReader.h>
+#include <testngpp/runner/TestSuiteResultReporter.h>
+#include <testngpp/runner/TestCaseResultReporter.h>
+#include <testngpp/AssertionFailure.h>
 
 #include <mockcpp.hpp>
 
@@ -13,7 +13,7 @@
 #include <string>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestXMLTestListener: public CxxTest::TestSuite
 {

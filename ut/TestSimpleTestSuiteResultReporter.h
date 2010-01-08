@@ -1,28 +1,28 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <testcpp/runner/SimpleTestSuiteResultReporter.h>
-#include <testcpp/runner/TestCaseResultReporter.h>
-#include <testcpp/internal/TestSuiteInfoReader.h>
+#include <testngpp/runner/SimpleTestSuiteResultReporter.h>
+#include <testngpp/runner/TestCaseResultReporter.h>
+#include <testngpp/internal/TestSuiteInfoReader.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestSimpleTestSuiteResultReporter: public CxxTest::TestSuite
 {
 private:
 
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
 public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
    }
    void tearDown()
    {
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToReportNumberOfCrashedCases()
@@ -33,7 +33,7 @@ public:
 
       caseReporter.METHOD(TestCaseResultReporter::getTestCaseResult)
                   .stubs()
-                  .will(returnValue((unsigned int)testcpp::TestCaseResultReporter::CRASHED));
+                  .will(returnValue((unsigned int)testngpp::TestCaseResultReporter::CRASHED));
 
       SimpleTestSuiteResultReporter suiteReporter(caseReporter);
 

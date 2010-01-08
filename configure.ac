@@ -1,7 +1,7 @@
 
 AC_PREREQ([2.62])
 
-AC_INIT([testcpp], [0.3], [darwin.yuan@gmail.com])
+AC_INIT([TestNG++], [0.3], [arthur.ii.yuan@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 LT_INIT([dlopen])

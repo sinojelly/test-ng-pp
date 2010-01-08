@@ -3,16 +3,16 @@
 #include <list>
 #include <errno.h>
 
-#include <testcpp/AssertionFailure.h>
+#include <testngpp/AssertionFailure.h>
 
-#include <testcpp/runner/InternalError.h>
-#include <testcpp/runner/TestCaseSandboxResultReporter.h>
-#include <testcpp/runner/TestCaseSandboxResultDecoder.h>
+#include <testngpp/runner/InternalError.h>
+#include <testngpp/runner/TestCaseSandboxResultReporter.h>
+#include <testngpp/runner/TestCaseSandboxResultDecoder.h>
 
-#include <testcpp/comm/WrittableChannel.h>
-#include <testcpp/comm/ReadableChannel.h>
+#include <testngpp/comm/WrittableChannel.h>
+#include <testngpp/comm/ReadableChannel.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct TestCaseSandboxResultDecoderImpl
 {
@@ -70,7 +70,7 @@ TestCaseSandboxResultDecoderImpl::addCaseError(const std::string& msg)
 {
    if(!startReceived || endReceived || crashInformed)
    {
-      throw Error(TESTCPP_INTERNAL_ERROR(1001));
+      throw Error(TESTNGPP_INTERNAL_ERROR(1001));
    }
 
    errors.push_back(msg);
@@ -84,7 +84,7 @@ TestCaseSandboxResultDecoderImpl::addCaseFailure(const AssertionFailure& failure
 {
    if(!startReceived || endReceived || crashInformed)
    {
-      throw Error(TESTCPP_INTERNAL_ERROR(1002));
+      throw Error(TESTNGPP_INTERNAL_ERROR(1002));
    }
 
    failures.push_back(failure);
@@ -202,7 +202,7 @@ TestCaseSandboxResultDecoderImpl::handleError()
 void
 TestCaseSandboxResultDecoderImpl::handleInternalError()
 {
-   const char * err = TESTCPP_INTERNAL_ERROR(1003);
+   const char * err = TESTNGPP_INTERNAL_ERROR(1003);
    addCaseError(err);
    throw Error(err);
 }
@@ -213,7 +213,7 @@ TestCaseSandboxResultDecoderImpl::handleStartCase()
 {
    if(startReceived || endReceived || errorReceived || failureReceived || crashInformed)
    {
-      throw Error(TESTCPP_INTERNAL_ERROR(1004));
+      throw Error(TESTNGPP_INTERNAL_ERROR(1004));
    }
 
    startReceived = true;
@@ -225,7 +225,7 @@ TestCaseSandboxResultDecoderImpl::handleEndCase()
 {
    if(endReceived || !startReceived || crashInformed)
    {
-      throw Error(TESTCPP_INTERNAL_ERROR(1005));
+      throw Error(TESTNGPP_INTERNAL_ERROR(1005));
    }
 
    endReceived = true;
@@ -279,5 +279,5 @@ void TestCaseSandboxResultDecoder::flush(bool crashed)
 /////////////////////////////////////////////////////////////////////////
 
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

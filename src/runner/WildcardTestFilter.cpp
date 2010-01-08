@@ -1,8 +1,8 @@
 
-#include <testcpp/runner/TestFilter.h>
-#include <testcpp/runner/WildcardTestFilter.h>
+#include <testngpp/runner/TestFilter.h>
+#include <testngpp/runner/WildcardTestFilter.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 bool WildcardTestFilter::
@@ -20,4 +20,4 @@ isCaseMatch(const TestCaseInfoReader* testcase) const
 
 ////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

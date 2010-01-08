@@ -2,24 +2,24 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/comm/PipeReadableChannel.h>
+#include <testngpp/comm/PipeReadableChannel.h>
 
-#include <testcpp/internal/TestCaseInfoReader.h>
-#include <testcpp/internal/TestCase.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestCase.h>
 
-#include <testcpp/runner/EOFError.h>
-#include <testcpp/runner/TestCaseRunner.h>
-#include <testcpp/runner/Sandbox.h>
-#include <testcpp/runner/EnvironmentCleaner.h>
-#include <testcpp/runner/TestCaseSandboxHandler.h>
-#include <testcpp/runner/TestCaseSandboxResultDecoder.h>
-#include <testcpp/runner/TestCaseSandbox.h>
-#include <testcpp/runner/TestCaseResultCollector.h>
+#include <testngpp/runner/EOFError.h>
+#include <testngpp/runner/TestCaseRunner.h>
+#include <testngpp/runner/Sandbox.h>
+#include <testngpp/runner/EnvironmentCleaner.h>
+#include <testngpp/runner/TestCaseSandboxHandler.h>
+#include <testngpp/runner/TestCaseSandboxResultDecoder.h>
+#include <testngpp/runner/TestCaseSandbox.h>
+#include <testngpp/runner/TestCaseResultCollector.h>
 
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 struct TestCaseSandboxImpl
@@ -148,5 +148,5 @@ TestCaseSandbox::createInstance(EnvironmentCleaner* cleaner, \
    return tcSandbox;
 }
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

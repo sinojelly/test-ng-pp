@@ -1,14 +1,14 @@
 
 #include <list>
 
-#include <testcpp/runner/SimpleTestResultDispatcher.h>
-#include <testcpp/runner/TestCaseListener.h>
-#include <testcpp/runner/TestSuiteListener.h>
-#include <testcpp/runner/TestListener.h>
-#include <testcpp/internal/TestCaseInfoReader.h>
+#include <testngpp/runner/SimpleTestResultDispatcher.h>
+#include <testngpp/runner/TestCaseListener.h>
+#include <testngpp/runner/TestSuiteListener.h>
+#include <testngpp/runner/TestListener.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ///////////////////////////////////////////////////////////
 struct SimpleTestResultDispatcherImpl
@@ -486,4 +486,4 @@ addError(const std::string& msg)
 
 ///////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

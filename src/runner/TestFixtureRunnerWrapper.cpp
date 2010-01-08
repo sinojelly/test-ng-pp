@@ -1,15 +1,15 @@
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/internal/TestFixtureInfoReader.h>
-#include <testcpp/internal/TestFixtureDesc.h>
+#include <testngpp/internal/TestFixtureInfoReader.h>
+#include <testngpp/internal/TestFixtureDesc.h>
 
-#include <testcpp/runner/TestFixtureRunnerWrapper.h>
-#include <testcpp/runner/TestFixtureRunner.h>
-#include <testcpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/TestFixtureRunnerWrapper.h>
+#include <testngpp/runner/TestFixtureRunner.h>
+#include <testngpp/runner/TestFixtureResultCollector.h>
 
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 /////////////////////////////////////////////////////////////////
 TestFixtureRunnerWrapper::TestFixtureRunnerWrapper(TestFixtureRunner* runner)
@@ -45,5 +45,5 @@ void TestFixtureRunnerWrapper::run(TestFixtureDesc* desc
    collector->endTestFixture(desc);
 }
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

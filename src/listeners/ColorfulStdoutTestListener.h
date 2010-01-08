@@ -16,14 +16,14 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef __TESTCPP_COLORFUL_STDOUT_TEST_LISTENER_H
-#define __TESTCPP_COLORFUL_STDOUT_TEST_LISTENER_H
+#ifndef __TESTNGPP_COLORFUL_STDOUT_TEST_LISTENER_H
+#define __TESTNGPP_COLORFUL_STDOUT_TEST_LISTENER_H
 
-#include <testcpp/testcpp.h>
+#include <testngpp/testngpp.h>
 
-#include <testcpp/runner/TestListener.h>
+#include <testngpp/runner/TestListener.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct TestSuiteInfoReader;
 struct TestResultReporter;
@@ -63,7 +63,7 @@ private:
    ColorfulStdoutTestListenerImpl* This;
 };
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 
 #endif
 

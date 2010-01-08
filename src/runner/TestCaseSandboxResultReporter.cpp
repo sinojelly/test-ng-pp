@@ -2,14 +2,14 @@
 #include <sstream>
 #include <errno.h>
 
-#include <testcpp/AssertionFailure.h>
+#include <testngpp/AssertionFailure.h>
 
-#include <testcpp/runner/TestCaseSandboxResultReporter.h>
+#include <testngpp/runner/TestCaseSandboxResultReporter.h>
 
-#include <testcpp/comm/WrittableChannel.h>
-#include <testcpp/comm/ReadableChannel.h>
+#include <testngpp/comm/WrittableChannel.h>
+#include <testngpp/comm/ReadableChannel.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct TestCaseSandboxResultReporterImpl
 {
@@ -111,5 +111,5 @@ endTestCase(TestCaseInfoReader* testCase)
 }
 
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

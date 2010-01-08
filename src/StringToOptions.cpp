@@ -21,9 +21,9 @@
 #include <iostream>
 #include <cstring>
 
-#include <testcpp/utils/StringToOptions.h>
+#include <testngpp/utils/StringToOptions.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 namespace
 {
@@ -169,4 +169,4 @@ StringToOptions::parse(const std::string& s)
 }
 
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

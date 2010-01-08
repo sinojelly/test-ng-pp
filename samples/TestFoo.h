@@ -4,9 +4,9 @@
 #include <string>
 #include <iostream>
 
-#include <testcpp/testcpp.hpp>
+#include <testngpp/testngpp.hpp>
 
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestFoo : public TestFixture
 {

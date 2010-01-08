@@ -1,14 +1,14 @@
 
-#include <testcpp/runner/SimpleTestCaseRunner.h>
-#include <testcpp/runner/TestCaseResultCollector.h>
-#include <testcpp/internal/TestCase.h>
-#include <testcpp/internal/TestFixtureDesc.h>
-#include <testcpp/TestCaseSuccess.h>
+#include <testngpp/runner/SimpleTestCaseRunner.h>
+#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/TestCaseSuccess.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 #define __RUN(block) try block \
-   catch(TESTCPP_NS::TestCaseSuccess& e) \
+   catch(TESTNGPP_NS::TestCaseSuccess& e) \
    { \
    } \
    catch(AssertionFailure& failure) \
@@ -42,5 +42,5 @@ void SimpleTestCaseRunner::run(TestFixtureDesc* desc
    collector->endTestCase(testcase);
 }
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

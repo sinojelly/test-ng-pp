@@ -1,12 +1,12 @@
 
-#include <testcpp/Error.h>
-#include <testcpp/runner/SimpleTestSuiteResultReporter.h>
-#include <testcpp/runner/SimpleTestCaseResultReporter.h>
-#include <testcpp/runner/InternalError.h>
-#include <testcpp/internal/TestCaseInfoReader.h>
-#include <testcpp/internal/TestSuiteInfoReader.h>
+#include <testngpp/Error.h>
+#include <testngpp/runner/SimpleTestSuiteResultReporter.h>
+#include <testngpp/runner/SimpleTestCaseResultReporter.h>
+#include <testngpp/runner/InternalError.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestSuiteInfoReader.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct SimpleTestSuiteResultReporterImpl
 {
@@ -132,7 +132,7 @@ endTestCase(TestCaseInfoReader* testcase)
       break;
    case TestCaseResultReporter::UNKNOWN:
    default:
-      throw Error(TESTCPP_INTERNAL_ERROR(6003));
+      throw Error(TESTNGPP_INTERNAL_ERROR(6003));
    }
 }
 
@@ -168,7 +168,7 @@ startTestSuite(TestSuiteInfoReader* suite)
 {
    if(This->currentSuite != 0 && (!This->finished))
    {
-      throw Error(TESTCPP_INTERNAL_ERROR(6001));
+      throw Error(TESTNGPP_INTERNAL_ERROR(6001));
    }
 
    This->currentSuite = suite;
@@ -199,7 +199,7 @@ addSuiteError(TestSuiteInfoReader* suite, const std::string& msg)
 {
    if(!This->isThatMe(suite)) 
    {
-      throw Error(TESTCPP_INTERNAL_ERROR(6002));
+      throw Error(TESTNGPP_INTERNAL_ERROR(6002));
    }
 
    This->numberOfSuiteErrors++;
@@ -324,4 +324,4 @@ getNumberOfSuiteErrors(TestSuiteInfoReader* suite) const
 
 ///////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

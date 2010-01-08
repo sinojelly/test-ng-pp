@@ -1,38 +1,38 @@
 /**
-    CxxTestPlus is a practical, easy-to-use C/C++ xUnit framework.
+    TestNG++ is a practical, easy-to-use C/C++ xUnit framework.
     Copyright (C) <2009>  <Arthur Yuan: arthur.ii.yuan@gmail.com>
 
-    CxxTestPlus is free software: you can redistribute it and/or modify
+    TestNG++ is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    CxxTestPlus is distributed in the hope that it will be useful,
+    TestNG++ is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with CxxTestPlus.  If not, see <http://www.gnu.org/licenses/>.
+    along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
 #include <iostream>
 #include <string.h>
 
-#include <testcpp/Error.h>
+#include <testngpp/Error.h>
 
-#include <testcpp/internal/TestCaseInfoReader.h>
-#include <testcpp/internal/TestSuiteInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestSuiteInfoReader.h>
 
-#include <testcpp/runner/TestResultReporter.h>
-#include <testcpp/runner/TestSuiteResultReporter.h>
-#include <testcpp/runner/TestCaseResultReporter.h>
-#include <testcpp/runner/InternalError.h>
+#include <testngpp/runner/TestResultReporter.h>
+#include <testngpp/runner/TestSuiteResultReporter.h>
+#include <testngpp/runner/TestCaseResultReporter.h>
+#include <testngpp/runner/InternalError.h>
 
 #include <StdoutTestListener.h>
 #include <ColorfulStdoutTestListener.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 struct StdoutTestListenerImpl
 {
@@ -136,7 +136,7 @@ endTestCase(TestCaseInfoReader* testcase)
       std::cout << "E"; 
       break;
    case TestCaseResultReporter::UNKNOWN:
-      throw Error(TESTCPP_INTERNAL_ERROR(3001));
+      throw Error(TESTNGPP_INTERNAL_ERROR(3001));
    }
    std::cout.flush();
 }
@@ -406,7 +406,7 @@ endTestCase(TestCaseInfoReader* testcase)
    case TestCaseResultReporter::ERROR:
       break;
    case TestCaseResultReporter::UNKNOWN:
-      throw Error(TESTCPP_INTERNAL_ERROR(3001));
+      throw Error(TESTNGPP_INTERNAL_ERROR(3001));
    }
 }
 
@@ -533,14 +533,14 @@ addError(const std::string& msg)
              << std::endl;
 }
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 
 ///////////////////////////////////////////////////////////
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 ///////////////////////////////////////////////////////////
 extern "C"
 TestListener*
-testcppstdoutlistener_create_instance(
+testngppstdoutlistener_create_instance(
    TestResultReporter* resultReporter,
    TestSuiteResultReporter* suiteReporter,
    TestCaseResultReporter* caseResultReporter,
@@ -555,7 +555,7 @@ testcppstdoutlistener_create_instance(
 ///////////////////////////////////////////////////////////
 extern "C"
 void
-testcppstdoutlistener_destroy_instance(TestListener* instance)
+testngppstdoutlistener_destroy_instance(TestListener* instance)
 {
     delete instance;
 }

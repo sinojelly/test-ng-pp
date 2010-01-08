@@ -12,7 +12,7 @@ libfoo_la_LDFLAGS = \
   -no-undefined \
   -rpath /dev/null 
 
-libfoo_la_LIBADD = $(top_builddir)/src/libtestcpp.la
+libfoo_la_LIBADD = $(top_builddir)/src/libtestngpp.la
 
 TestFoo.cpp : TestFoo.h
-	$(PYTHON) $(top_builddir)/scripts/testcppgen.py -o $@ $<
+	$(PYTHON) $(top_builddir)/scripts/testngppgen.py -o $@ $<

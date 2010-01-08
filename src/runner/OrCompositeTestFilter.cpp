@@ -2,11 +2,11 @@
 #include <list>
 #include <algorithm>
 
-#include <testcpp/runner/OrCompositeTestFilter.h>
-#include <testcpp/internal/TestFixtureInfoReader.h>
-#include <testcpp/internal/TestCaseInfoReader.h>
+#include <testngpp/runner/OrCompositeTestFilter.h>
+#include <testngpp/internal/TestFixtureInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 struct OrCompositeTestFilterImpl
@@ -106,4 +106,4 @@ addFilter(const TestFilter* filter, bool isComposite)
 
 ////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END

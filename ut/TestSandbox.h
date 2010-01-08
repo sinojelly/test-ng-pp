@@ -1,6 +1,6 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <mockcpp.hpp>
 
@@ -9,7 +9,7 @@
 #include <SandboxHandler.h>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestSandbox: public CxxTest::TestSuite
 {
@@ -18,13 +18,13 @@ class TestSandbox: public CxxTest::TestSuite
    MockObject<SandboxHandler> handler;
 
 private:
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
 public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
       cleaner.METHOD(EnvironmentCleaner::cleanUp).stubs();
       handler.METHOD(SandboxHandler::handle).stubs();
@@ -35,7 +35,7 @@ public:
       cleaner.reset();
       handler.reset();
 
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleCreateInstance()

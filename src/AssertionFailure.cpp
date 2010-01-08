@@ -16,9 +16,9 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#include <testcpp/AssertionFailure.h>
+#include <testngpp/AssertionFailure.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////
 AssertionFailure::AssertionFailure(const std::string& file
@@ -57,5 +57,5 @@ const std::string& AssertionFailure::what() const
 
 //////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 

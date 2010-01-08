@@ -4,37 +4,37 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testcpp/ResourceCheckPoint.h>
+#include <testngpp/ResourceCheckPoint.h>
 
-#include <testcpp/utils/StringToOptions.h>
+#include <testngpp/utils/StringToOptions.h>
 
 #include <iostream>
 
 USING_MOCKCPP_NS
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 class TestStringToOptions: public CxxTest::TestSuite
 {
 private:
 
-   TESTCPP_RCP checkpoint;
+   TESTNGPP_RCP checkpoint;
 
 public:
 
    void setUp()
    {
-      checkpoint = TESTCPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
    }
    void tearDown()
    {
       try {
-      TESTCPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
       }
-      catch(TESTCPP_NS::AssertionFailure& e)
+      catch(TESTNGPP_NS::AssertionFailure& e)
       {
          std::cerr << e.what() << std::endl;
       }
-      catch(TESTCPP_NS::Error& e)
+      catch(TESTNGPP_NS::Error& e)
       {
          std::cerr << e.what() << std::endl;
       }

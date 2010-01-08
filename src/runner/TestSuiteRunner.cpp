@@ -1,19 +1,19 @@
 
-#include <testcpp/internal/TestSuiteDesc.h>
+#include <testngpp/internal/TestSuiteDesc.h>
 
-#include <testcpp/runner/TestSuiteRunner.h>
-#include <testcpp/runner/TestFilter.h>
-#include <testcpp/runner/TestSuiteLoader.h>
-#include <testcpp/runner/TestFixtureRunner.h>
-#include <testcpp/runner/TestResultCollector.h>
-#include <testcpp/runner/TestSuiteDescEntryNameGetter.h>
+#include <testngpp/runner/TestSuiteRunner.h>
+#include <testngpp/runner/TestFilter.h>
+#include <testngpp/runner/TestSuiteLoader.h>
+#include <testngpp/runner/TestFixtureRunner.h>
+#include <testngpp/runner/TestResultCollector.h>
+#include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
 
-TESTCPP_NS_START
+TESTNGPP_NS_START
 
 /////////////////////////////////////////////////////////////////
 namespace
 {
-   const std::string testcppTestSuiteDescGetter("___testcpp_test_suite_desc_getter");
+   const std::string testngppTestSuiteDescGetter("___testngpp_test_suite_desc_getter");
 }
 
 /////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ struct TestSuiteRunnerImpl : public TestSuiteDescEntryNameGetter
    		  , const TestFilter* filter);
 
    std::string getDescEntryName() const
-   { return testcppTestSuiteDescGetter; }
+   { return testngppTestSuiteDescGetter; }
 
    TestFixtureRunner* fixtureRunner;
    TestSuiteLoader* suiteLoader;
@@ -122,5 +122,5 @@ TestSuiteRunner::run(const std::string& path
 
 /////////////////////////////////////////////////////////////////
 
-TESTCPP_NS_END
+TESTNGPP_NS_END
 
