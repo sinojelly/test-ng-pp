@@ -25,12 +25,22 @@
 
 #define METHOD(m) method(&m, #m)
 
+MOCKCPP_NS_START
+
+template <class MockObject>
+struct MockObjectTraits
+{
+   typedef typename MockObject::MockedInterface TYPE;
+};
+
+MOCKCPP_NS_END
+
 #  include <boost/typeof/typeof.hpp>
 #define MOCK_METHOD(obj, m) \
-   typedef BOOST_TYPEOF(obj) mockcpp_ ##obj## _MockObjectType; \
-   typedef mockcpp_ ##obj## _MockObjectType::MockedInterface mockcpp_ ##obj## _MockedInterface; \
-   obj.method(&mockcpp_ ##obj## _MockedInterface::m, \
-        (MOCKCPP_NS::TypeString<mockcpp_ ##obj## _MockedInterface>::value() + "::"#m).c_str())
+   obj.method(&MOCKCPP_NS::MockObjectTraits<BOOST_TYPEOF(obj)>::TYPE::m, \
+        (MOCKCPP_NS::TypeString< \
+            MOCKCPP_NS::MockObjectTraits<BOOST_TYPEOF(obj)>::TYPE \
+              >::value() + "::"#m).c_str())
 
 #endif
 

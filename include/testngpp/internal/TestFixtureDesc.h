@@ -35,14 +35,12 @@ struct TestFixtureDesc
 {
    TestFixtureDesc( const std::string& fixtureName
                   , const std::string fileName
-                  , TestFixture* fixture
                   , TestCase** arrayOfTestCases
                   , unsigned int sizeOfArray)
       : nameOfFixture(fixtureName)
       , nameOfFile(fileName)
       , testCases(arrayOfTestCases)
       , numberOfTestCases(sizeOfArray)
-      , testFixture(fixture)
    {}
 
    const std::string& getName() const
@@ -53,9 +51,6 @@ struct TestFixtureDesc
 
    const unsigned int getNumberOfTestCases() const
    { return numberOfTestCases; }
-
-   TestFixture* getFixture() const
-   { return testFixture; }
 
    TestCase* getTestCase(unsigned int index) const
    {
@@ -70,7 +65,6 @@ struct TestFixtureDesc
 private:
    TestCase** testCases;
    unsigned int numberOfTestCases;
-   TestFixture* testFixture;
    std::string nameOfFixture;
    std::string nameOfFile;
 };

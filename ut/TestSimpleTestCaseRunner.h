@@ -17,14 +17,26 @@ class TestSimpleTestCaseRunner: public CxxTest::TestSuite
 {
    struct MyTestCase : public TestCase
    {
-      MyTestCase( const std::string& nameOfCase
+      MyTestCase(TestFixture* fixture
+           , const std::string& nameOfCase
            , const std::string& nameOfFixture
            , const std::string& file
            , unsigned int line)
-           : TestCase(nameOfCase, nameOfFixture, file, line)
+           : m_fixture(fixture)
+           , TestCase(nameOfCase, nameOfFixture, file, line)
       {}
 
       void run() {}
+      void setUp()
+      {
+         m_fixture->setUp();
+      }
+      void tearDown()
+      {
+         m_fixture->tearDown();
+      }
+     
+      TestFixture* m_fixture;
    };
 
 private:
@@ -34,15 +46,14 @@ private:
    TestCase* testcase[1];
 
    MockObject<TestFixture> fixture;
-
    MockObject<TestCaseResultCollector> collector;
 public:
 
    void setUp()
    {
       checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
-		testcase[0] = new MyTestCase("testCase1", "TestNothing", "TestNothing.h", 11);
-      desc = new TestFixtureDesc("TestNothing", "TestNothing.h", fixture, testcase, 1);
+		testcase[0] = new MyTestCase(fixture, "testCase1", "TestNothing", "TestNothing.h", 11);
+      desc = new TestFixtureDesc("TestNothing", "TestNothing.h", testcase, 1);
 
       MOCK_METHOD(collector, startTestCase)
          .defaults()
@@ -71,7 +82,7 @@ public:
 
    void tearDown()
    {
-		delete testcase[0];
+      delete testcase[0];
       delete desc;
 
       fixture.reset();

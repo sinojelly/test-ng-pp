@@ -14,35 +14,22 @@
 #include <TestFixture.h>
 #include <TestFixtureDesc.h>
 
+#include <FTestFixture1.h>
+
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
 class TestTestCaseSandbox: public CxxTest::TestSuite
 {
-   struct MyTestCase : public TestCase
-   {
-      MyTestCase( const std::string& nameOfCase
-           , const std::string& nameOfFixture
-           , const std::string& file
-           , unsigned int line)
-           : TestCase(nameOfCase, nameOfFixture, file, line)
-      {}
-
-      void run() {}
-   };
-
-
-
 private:
    TESTNGPP_RCP checkpoint;
 
-public:
-   TestFixtureDesc* desc;
-   TestCase* testcase[1];
+private:
 
+   FTestFixture1 f;
+
+public:
    MockObject<EnvironmentCleaner> cleaner;
-   MockObject<TestFixture> fixture;
-   MockObject<TestCaseResultCollector> collector;
 
    SimpleTestCaseRunner runner;
 
@@ -53,28 +40,24 @@ public:
    void setUp()
    {
       checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
-      testcase[0] = new MyTestCase("testCase1", "TestNothing", "TestNothing.h", 11);
-      desc = new TestFixtureDesc("TestNothing", "TestNothing.h", fixture, testcase, 1);
 
-      fixture.METHOD(TestFixture::setUp).defaults();
-      fixture.METHOD(TestFixture::tearDown).defaults();
-      cleaner.METHOD(EnvironmentCleaner::cleanUp).defaults();
+      f.setUp();
 
-      collector.METHOD(TestCaseResultCollector::startTestCase)
-               .expects(once());
-      collector.METHOD(TestCaseResultCollector::endTestCase)
-               .expects(once());
+      MOCK_METHOD(f.fixture, setUp).defaults();
+      MOCK_METHOD(f.fixture, tearDown).defaults();
+
+      MOCK_METHOD(cleaner, cleanUp).defaults();
+
+      MOCK_METHOD(f.collector, startTestCase).expects(once());
+      MOCK_METHOD(f.collector, endTestCase).expects(once());
 
    }
 
    void tearDown()
    {
-      delete testcase[0];
-      delete desc;
+      f.tearDown();
 
-      collector.reset();
       cleaner.reset();
-      fixture.reset();
 
       TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
@@ -84,16 +67,15 @@ public:
       sandbox->cleanup();
       delete sandbox;
 
-      fixture.verify();
-      collector.verify();
       cleaner.verify();
+      f.verify();
    }
 
    void testShouldBeAbleToReportStartAndEndEvent()
    {
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          testcase[0], desc, &runner, collector);
+          f.testcase[0], f.desc, &runner, f.collector);
       TS_ASSERT(sandbox != 0);
       ///////////////////////////////////////////////////////////
 
@@ -105,16 +87,20 @@ public:
 
    void TtestShouldBeAbleToReportAssertionFailed()
    {
-      fixture.METHOD(TestFixture::setUp).stubs().will(throws(AssertionFailure("abc.h",1,"assertion failure")));
+      MOCK_METHOD(f.fixture,setUp)
+          .stubs()
+          .will(throws(AssertionFailure("abc.h",1,"assertion failure")));
 
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          testcase[0], desc, &runner, collector);
+          f.testcase[0], f.desc, &runner, f.collector);
+
       TS_ASSERT(sandbox != 0);
+
       ///////////////////////////////////////////////////////////
 
-      collector.METHOD(TestCaseResultCollector::addCaseFailure)
-               .expects(once());
+      MOCK_METHOD(f.collector, addCaseFailure)
+           .expects(once());
 
       ////////////////////////////////////////////////////////////////
 
@@ -127,16 +113,16 @@ public:
 
    void testShouldBeAbleToReportError()
    {
-      fixture.METHOD(TestFixture::setUp).stubs().will(throws(Error("error")));
+      MOCK_METHOD(f.fixture, setUp).stubs().will(throws(Error("error")));
 
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          testcase[0], desc, &runner, collector);
+          f.testcase[0], f.desc, &runner, f.collector);
       TS_ASSERT(sandbox != 0);
       //////////////////////////////////////////////////////////
 
-      collector.METHOD(TestCaseResultCollector::addCaseError)
-               .expects(once());
+      MOCK_METHOD(f.collector, addCaseError)
+           .expects(once());
 
       sandbox->handle(); // start
       sandbox->handle(); // error
@@ -149,7 +135,7 @@ public:
    {
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          testcase[0], desc, &runner, collector);
+          f.testcase[0], f.desc, &runner, f.collector);
       TS_ASSERT(sandbox != 0);
       ///////////////////////////////////////////////////////////
 

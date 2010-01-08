@@ -52,7 +52,9 @@ struct TestCase
 	const unsigned int getLineOfFile() const
 	{ return lineOfFile; }
 
+   virtual void setUp() = 0;
    virtual void run() = 0;
+   virtual void tearDown() = 0;
 
 	virtual ~TestCase() {}
 

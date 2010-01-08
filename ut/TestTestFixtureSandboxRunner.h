@@ -20,14 +20,14 @@ private:
 
    MockObject<TestCaseFilter> filter;
    MockObject<TestFixtureResultCollector> collector;
+
 public:
    void setUp()
    {
       checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
-      filter.METHOD(TestCaseFilter::isCaseMatch)
+      MOCK_METHOD(filter, isCaseMatch)
          .defaults().will(returnValue(true));
-
    }
 
    void tearDown()

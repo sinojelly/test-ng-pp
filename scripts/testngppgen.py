@@ -440,8 +440,15 @@ def generateTestCase(FILE, fixture, testcase):
                  "      : testngpp::TestCase(\"" + testcase['name']+"\",\"" + \
                  fixture['name'] + "\",\"" + fixture['file'] + "\","+ str(testcase['line']) +") \n" + \
                  "      {}\n" + \
+                 "   "+ fixture['name'] + " " + getFixtureDefName(fixture) + ";\n" + \
+                 "   void setUp() {\n" + \
+                 "      " + getFixtureDefName(fixture) + ".setUp();\n" + \
+                 "   }\n" + \
                  "   void run() {\n" + \
                  "      " + getFixtureDefName(fixture) + "." + testcase['name'] + "();\n" + \
+                 "   }\n" + \
+                 "   void tearDown() {\n" + \
+                 "      " + getFixtureDefName(fixture) + ".tearDown();\n" + \
                  "   }\n" + \
                  "}" + getTestCaseDefName(fixture, testcase) + "; \n"
 
@@ -459,10 +466,11 @@ def generateTestCaseArray(FILE, fixture):
 def generateFixtureDesc(FILE, fixture):
    fixtureDescDef = "static testngpp::TestFixtureDesc " + getFixtureDescName(fixture) + "\n" + \
                     "   (\"" + fixture['name'] + "\",\"" + fixture['file'] + "\",\n" + \
-                    "    &" + getFixtureDefName(fixture) + "," + getFixtureCaseArrayName(fixture) + "," + str(len(fixture['tests'])) + ");\n"
+                    getFixtureCaseArrayName(fixture) + "," + str(len(fixture['tests'])) + ");\n"
 
    FILE.writelines(fixtureDescDef)
 
+#                    "    &" + getFixtureDefName(fixture) + "," + \
 ##########################################################
 def generateTestCases(FILE, fixture):
    for testcase in fixture['tests']:
@@ -473,8 +481,8 @@ def generateTestCases(FILE, fixture):
 
 ##########################################################
 def generateFixture(FILE, fixture):
-   fixtureDef = "static " + fixture['name'] + " " + getFixtureDefName(fixture) + ";\n";
-   FILE.writelines(fixtureDef)
+   #fixtureDef = "static " + fixture['name'] + " " + getFixtureDefName(fixture) + ";\n";
+   #FILE.writelines(fixtureDef)
    generateTestCases(FILE, fixture)
 
 ##########################################################
