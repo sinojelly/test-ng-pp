@@ -28,7 +28,7 @@ class TestTestCase: public CxxTest::TestSuite
 private:
    TESTNGPP_RCP checkpoint;
 
-   TestCase * testCase;
+   TestCase* testCase;
 
 
 public:
