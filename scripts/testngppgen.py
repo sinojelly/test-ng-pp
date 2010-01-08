@@ -46,7 +46,7 @@ def getOpt(longOpts):
 allFixtures = []
 fixture_tag_re = re.compile( r'^\s*//\s*@fixture\s*$')
 test_tag_re = re.compile( r'^\s*//\s*@test\s*$')
-fixture_re = re.compile( r'^(?P<fixtureDef>\s*(class|struct)\s*(?P<fixtureName>[A-Za-z_]\w*)\s*:\s*public\s+((testcpp|TESTCPP_NS)\s*::)?\s*TestFixture\w*)' )
+fixture_re = re.compile( r'^(?P<fixtureDef>\s*(class|struct)\s*(?P<fixtureName>[A-Za-z_]\w*)\s*:\s*public\s+((testngpp|TESTNGPP_NS)\s*::)?\s*TestFixture\w*)' )
 bl_re = re.compile( r'^\s*$' )
 sl_re = re.compile( r'^\s*//.*$' )
 msl_re = re.compile( r'^\s*/\*.*\*/\s*(//.*)?$' )
@@ -400,7 +400,7 @@ depHeaders = [
 
 ##########################################################
 def generateHeaders(FILE, fixtureFiles):
-   includeDepHeaders = ["#include <testcpp/" + header + ">\n" for header in depHeaders]
+   includeDepHeaders = ["#include <testngpp/" + header + ">\n" for header in depHeaders]
    includeFixtureFiles = ["#include \"" + header + "\"\n" for header in fixtureFiles]
    FILE.writelines(includeDepHeaders)
    FILE.writelines(includeFixtureFiles)
@@ -435,9 +435,9 @@ def getSuiteDescName(fixture):
 
 ##########################################################
 def generateTestCase(FILE, fixture, testcase):
-   testcaseDef = "static struct " + getTestCaseClassName(fixture, testcase) + " : public testcpp::TestCase {\n" + \
+   testcaseDef = "static struct " + getTestCaseClassName(fixture, testcase) + " : public testngpp::TestCase {\n" + \
                  "   " + getTestCaseClassName(fixture, testcase) + "()\n" + \
-                 "      : testcpp::TestCase(\"" + testcase['name']+"\",\"" + \
+                 "      : testngpp::TestCase(\"" + testcase['name']+"\",\"" + \
                  fixture['name'] + "\",\"" + fixture['file'] + "\","+ str(testcase['line']) +") \n" + \
                  "      {}\n" + \
                  "   void run() {\n" + \
@@ -449,7 +449,7 @@ def generateTestCase(FILE, fixture, testcase):
 
 ##########################################################
 def generateTestCaseArray(FILE, fixture):
-   testcaseArrayDef = "static testcpp::TestCase* " + getFixtureCaseArrayName(fixture) + "[] = {\n"
+   testcaseArrayDef = "static testngpp::TestCase* " + getFixtureCaseArrayName(fixture) + "[] = {\n"
    for testcase in fixture['tests']:
       testcaseArrayDef += "   &" + getTestCaseDefName(fixture, testcase) + ",\n"
    testcaseArrayDef += "};\n"
@@ -457,7 +457,7 @@ def generateTestCaseArray(FILE, fixture):
    
 ##########################################################
 def generateFixtureDesc(FILE, fixture):
-   fixtureDescDef = "static testcpp::TestFixtureDesc " + getFixtureDescName(fixture) + "\n" + \
+   fixtureDescDef = "static testngpp::TestFixtureDesc " + getFixtureDescName(fixture) + "\n" + \
                     "   (\"" + fixture['name'] + "\",\"" + fixture['file'] + "\",\n" + \
                     "    &" + getFixtureDefName(fixture) + "," + getFixtureCaseArrayName(fixture) + "," + str(len(fixture['tests'])) + ");\n"
 
@@ -479,20 +479,20 @@ def generateFixture(FILE, fixture):
 
 ##########################################################
 def generateFixtureArray(FILE, fixtures):
-   fixtureArrayDef = "static testcpp::TestFixtureDesc* " + getFixtureDescArrayName(fixtures[0]) + "[] = {\n" 
+   fixtureArrayDef = "static testngpp::TestFixtureDesc* " + getFixtureDescArrayName(fixtures[0]) + "[] = {\n" 
    for fixture in fixtures:
       fixtureArrayDef += "   &" + getFixtureDescName(fixture) + ",\n"
    fixtureArrayDef += "};\n"
    FILE.writelines(fixtureArrayDef)
 
 def generateSuiteDef(FILE, suiteName, fixtures):
-   suiteDescDef = "static testcpp::TestSuiteDesc " + getSuiteDescName(fixtures[0]) + "(\n" + \
+   suiteDescDef = "static testngpp::TestSuiteDesc " + getSuiteDescName(fixtures[0]) + "(\n" + \
                   "   \"" + suiteName + "\"," + getFixtureDescArrayName(fixtures[0]) + "," + str(len(fixtures)) + ");\n"
 
    FILE.writelines(suiteDescDef)
 
 def generateSuiteDescGetter(FILE, fixtures):
-   suiteDescGetter = "extern \"C\" testcpp::TestSuiteDesc* ___testcpp_test_suite_desc_getter() { \n" + \
+   suiteDescGetter = "extern \"C\" testngpp::TestSuiteDesc* ___testngpp_test_suite_desc_getter() { \n" + \
                      "   return &" + getSuiteDescName(fixtures[0]) + ";\n" + \
                      "} \n"
    FILE.writelines(suiteDescGetter)

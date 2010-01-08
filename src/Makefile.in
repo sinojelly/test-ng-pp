@@ -69,11 +69,11 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(internaldir)" \
 	"$(DESTDIR)$(pkgincludedir)" "$(DESTDIR)$(utilsdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libtestcpp_la_LIBADD =
-am_libtestcpp_la_OBJECTS = AssertionFailure.lo TestSuiteDesc.lo \
+libtestngpp_la_LIBADD =
+am_libtestngpp_la_OBJECTS = AssertionFailure.lo TestSuiteDesc.lo \
 	ResourceCheckPoint.lo TypeString.lo Formatter.lo OptionList.lo \
 	StringToOptions.lo
-libtestcpp_la_OBJECTS = $(am_libtestcpp_la_OBJECTS)
+libtestngpp_la_OBJECTS = $(am_libtestngpp_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -87,8 +87,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libtestcpp_la_SOURCES)
-DIST_SOURCES = $(libtestcpp_la_SOURCES)
+SOURCES = $(libtestngpp_la_SOURCES)
+DIST_SOURCES = $(libtestngpp_la_SOURCES)
 HEADERS = $(internal_HEADERS) $(pkginclude_HEADERS) $(utils_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -235,11 +235,11 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-TESTCPP_INCLUDE_PATH = $(top_builddir)/include/testcpp
+TESTNGPP_INCLUDE_PATH = $(top_builddir)/include/testngpp
 AM_CPPFLAGS = -I$(top_builddir)/include 
 AM_LDFLAGS = -export-dynamic -no-undefined 
-lib_LTLIBRARIES = libtestcpp.la
-libtestcpp_la_SOURCES = \
+lib_LTLIBRARIES = libtestngpp.la
+libtestngpp_la_SOURCES = \
   AssertionFailure.cpp \
   TestSuiteDesc.cpp \
   ResourceCheckPoint.cpp \
@@ -249,28 +249,28 @@ libtestcpp_la_SOURCES = \
   StringToOptions.cpp 
 
 pkginclude_HEADERS = \
-  $(TESTCPP_INCLUDE_PATH)/testcpp.hpp \
-  $(TESTCPP_INCLUDE_PATH)/testcpp.h \
-  $(TESTCPP_INCLUDE_PATH)/Asserter.h \
-  $(TESTCPP_INCLUDE_PATH)/Error.h \
-  $(TESTCPP_INCLUDE_PATH)/AssertionFailure.h \
-  $(TESTCPP_INCLUDE_PATH)/TestFixture.h \
-  $(TESTCPP_INCLUDE_PATH)/ResourceCheckPoint.h 
+  $(TESTNGPP_INCLUDE_PATH)/testngpp.hpp \
+  $(TESTNGPP_INCLUDE_PATH)/testngpp.h \
+  $(TESTNGPP_INCLUDE_PATH)/Asserter.h \
+  $(TESTNGPP_INCLUDE_PATH)/Error.h \
+  $(TESTNGPP_INCLUDE_PATH)/AssertionFailure.h \
+  $(TESTNGPP_INCLUDE_PATH)/TestFixture.h \
+  $(TESTNGPP_INCLUDE_PATH)/ResourceCheckPoint.h 
 
 internaldir = $(pkgincludedir)/internal
 internal_HEADERS = \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestCase.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestFixtureDesc.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestSuiteDesc.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestCaseInfoReader.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestSuiteInfoReader.h \
-  $(TESTCPP_INCLUDE_PATH)/internal/TestFixtureInfoReader.h
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestCase.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestFixtureDesc.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestSuiteDesc.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestCaseInfoReader.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestSuiteInfoReader.h \
+  $(TESTNGPP_INCLUDE_PATH)/internal/TestFixtureInfoReader.h
 
 utilsdir = $(pkgincludedir)/utils
 utils_HEADERS = \
-  $(TESTCPP_INCLUDE_PATH)/utils/TypeString.h \
-  $(TESTCPP_INCLUDE_PATH)/utils/Formatter.h  \
-  $(TESTCPP_INCLUDE_PATH)/utils/OptionList.h  
+  $(TESTNGPP_INCLUDE_PATH)/utils/TypeString.h \
+  $(TESTNGPP_INCLUDE_PATH)/utils/Formatter.h  \
+  $(TESTNGPP_INCLUDE_PATH)/utils/OptionList.h  
 
 all: all-am
 
@@ -337,8 +337,8 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libtestcpp.la: $(libtestcpp_la_OBJECTS) $(libtestcpp_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(libdir) $(libtestcpp_la_OBJECTS) $(libtestcpp_la_LIBADD) $(LIBS)
+libtestngpp.la: $(libtestngpp_la_OBJECTS) $(libtestngpp_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(libdir) $(libtestngpp_la_OBJECTS) $(libtestngpp_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

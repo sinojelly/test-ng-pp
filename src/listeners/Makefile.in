@@ -44,14 +44,15 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libtestcppstdoutlistener_la_LIBADD =
-am_libtestcppstdoutlistener_la_OBJECTS = StdoutTestListener.lo
-libtestcppstdoutlistener_la_OBJECTS =  \
-	$(am_libtestcppstdoutlistener_la_OBJECTS)
-libtestcppxmllistener_la_LIBADD =
-am_libtestcppxmllistener_la_OBJECTS = XMLTestListener.lo XMLBuilder.lo
-libtestcppxmllistener_la_OBJECTS =  \
-	$(am_libtestcppxmllistener_la_OBJECTS)
+libtestngppstdoutlistener_la_LIBADD =
+am_libtestngppstdoutlistener_la_OBJECTS = StdoutTestListener.lo
+libtestngppstdoutlistener_la_OBJECTS =  \
+	$(am_libtestngppstdoutlistener_la_OBJECTS)
+libtestngppxmllistener_la_LIBADD =
+am_libtestngppxmllistener_la_OBJECTS = XMLTestListener.lo \
+	XMLBuilder.lo
+libtestngppxmllistener_la_OBJECTS =  \
+	$(am_libtestngppxmllistener_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -65,10 +66,10 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libtestcppstdoutlistener_la_SOURCES) \
-	$(libtestcppxmllistener_la_SOURCES)
-DIST_SOURCES = $(libtestcppstdoutlistener_la_SOURCES) \
-	$(libtestcppxmllistener_la_SOURCES)
+SOURCES = $(libtestngppstdoutlistener_la_SOURCES) \
+	$(libtestngppxmllistener_la_SOURCES)
+DIST_SOURCES = $(libtestngppstdoutlistener_la_SOURCES) \
+	$(libtestngppxmllistener_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -214,7 +215,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-TESTCPP_INCLUDE_PATH = $(top_builddir)/include/testcpp
+TESTNGPP_INCLUDE_PATH = $(top_builddir)/include/testngpp
 AM_CPPFLAGS = \
   -I$(top_builddir)/include
 
@@ -222,11 +223,11 @@ AM_LDFLAGS = \
   -module \
   -rpath /dev/null \
   -no-undefined \
-  $(top_builddir)/src/libtestcpp.la
+  $(top_builddir)/src/libtestngpp.la
 
-noinst_LTLIBRARIES = libtestcppstdoutlistener.la libtestcppxmllistener.la
-libtestcppstdoutlistener_la_SOURCES = StdoutTestListener.cpp
-libtestcppxmllistener_la_SOURCES = XMLTestListener.cpp XMLBuilder.cpp
+noinst_LTLIBRARIES = libtestngppstdoutlistener.la libtestngppxmllistener.la
+libtestngppstdoutlistener_la_SOURCES = StdoutTestListener.cpp
+libtestngppxmllistener_la_SOURCES = XMLTestListener.cpp XMLBuilder.cpp
 all: all-am
 
 .SUFFIXES:
@@ -270,10 +271,10 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libtestcppstdoutlistener.la: $(libtestcppstdoutlistener_la_OBJECTS) $(libtestcppstdoutlistener_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libtestcppstdoutlistener_la_OBJECTS) $(libtestcppstdoutlistener_la_LIBADD) $(LIBS)
-libtestcppxmllistener.la: $(libtestcppxmllistener_la_OBJECTS) $(libtestcppxmllistener_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libtestcppxmllistener_la_OBJECTS) $(libtestcppxmllistener_la_LIBADD) $(LIBS)
+libtestngppstdoutlistener.la: $(libtestngppstdoutlistener_la_OBJECTS) $(libtestngppstdoutlistener_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libtestngppstdoutlistener_la_OBJECTS) $(libtestngppstdoutlistener_la_LIBADD) $(LIBS)
+libtestngppxmllistener.la: $(libtestngppxmllistener_la_OBJECTS) $(libtestngppxmllistener_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libtestngppxmllistener_la_OBJECTS) $(libtestngppxmllistener_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
