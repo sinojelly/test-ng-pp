@@ -44,7 +44,7 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libfoo_la_DEPENDENCIES = $(top_builddir)/src/libtestcpp.la
+libfoo_la_DEPENDENCIES = $(top_builddir)/src/libtestngpp.la
 am_libfoo_la_OBJECTS = TestFoo.lo
 libfoo_la_OBJECTS = $(am_libfoo_la_OBJECTS)
 libfoo_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -221,7 +221,7 @@ libfoo_la_LDFLAGS = \
   -no-undefined \
   -rpath /dev/null 
 
-libfoo_la_LIBADD = $(top_builddir)/src/libtestcpp.la
+libfoo_la_LIBADD = $(top_builddir)/src/libtestngpp.la
 all: all-am
 
 .SUFFIXES:
@@ -503,7 +503,7 @@ uninstall-am:
 
 
 TestFoo.cpp : TestFoo.h
-	$(PYTHON) $(top_builddir)/scripts/testcppgen.py -o $@ $<
+	$(PYTHON) $(top_builddir)/scripts/testngppgen.py -o $@ $<
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -211,10 +211,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-TESTCPPGEN = testcppgen
-pkgdata_SCRIPTS = $(top_builddir)/scripts/testcppgen.py
-bin_SCRIPTS = $(TESTCPPGEN)
-CLEANFILES = $(TESTCPPGEN)
+TESTNGPPGEN = testngppgen
+pkgdata_SCRIPTS = $(top_builddir)/scripts/testngppgen.py
+bin_SCRIPTS = $(TESTNGPPGEN)
+CLEANFILES = $(TESTNGPPGEN)
 all: all-am
 
 .SUFFIXES:
@@ -474,9 +474,9 @@ uninstall-am: uninstall-binSCRIPTS uninstall-pkgdataSCRIPTS
 	uninstall-pkgdataSCRIPTS
 
 
-$(TESTCPPGEN) : 
+$(TESTNGPPGEN) : 
 	@echo '#!/bin/sh' > $@
-	@echo '$(PYTHON) $(pkgdatadir)/testcppgen.py $$*' >> $@
+	@echo '$(PYTHON) $(pkgdatadir)/testngppgen.py $$*' >> $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
