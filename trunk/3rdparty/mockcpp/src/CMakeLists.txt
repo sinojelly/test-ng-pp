@@ -143,11 +143,11 @@ SET(MOCKCPP_SRCS
     HookMockObject.cpp
     CApiHookKey.cpp)
 
-IF(WIN32)
+IF(MSVC)
    SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} Win32CApiHook.cpp)
-ELSE(WIN32)
+ELSE(MSVC)
    SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} DummyApiHook.cpp)
-ENDIF(WIN32)
+ENDIF(MSVC)
 ######################################################
 SET(MOCKCPP_HEADERS_PATH ${MOCKCPP_SRC_ROOT}/include/mockcpp)
 
