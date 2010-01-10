@@ -2,11 +2,11 @@
 #include <cxxtest/TestSuite.h> 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <Sandbox.h>
-#include <EnvironmentCleaner.h>
-#include <SandboxHandler.h>
+#include <testngpp/runner/Sandbox.h>
+#include <testngpp/runner/EnvironmentCleaner.h>
+#include <testngpp/runner/SandboxHandler.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

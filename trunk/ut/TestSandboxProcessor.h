@@ -1,16 +1,16 @@
 
+#include <unistd.h>
+
 #include <cxxtest/TestSuite.h> 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <unistd.h>
-
-#include <TestCase.h>
-#include <SandboxProcessor.h>
-#include <SandboxHandler.h>
-#include <TestCaseInfoReader.h>
-#include <EnvironmentCleaner.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/runner/SandboxProcessor.h>
+#include <testngpp/runner/SandboxHandler.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/runner/EnvironmentCleaner.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

@@ -1,10 +1,12 @@
 
+#include <sys/socket.h>
+
 #include <cxxtest/TestSuite.h> 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <PipeWrittableChannel.h>
+#include <testngpp/comm/PipeWrittableChannel.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

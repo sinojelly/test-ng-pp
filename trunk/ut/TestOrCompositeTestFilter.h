@@ -1,11 +1,13 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <OrCompositeTestFilter.h>
+#include <testngpp/runner/OrCompositeTestFilter.h>
+#include <testngpp/internal/TestFixtureInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

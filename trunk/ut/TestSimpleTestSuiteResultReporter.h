@@ -1,9 +1,14 @@
 
 #include <cxxtest/TestSuite.h>
 
+#include <mockcpp/mockcpp.hpp>
+
+#include <testngpp/ResourceCheckPoint.h>
+
 #include <testngpp/runner/SimpleTestSuiteResultReporter.h>
 #include <testngpp/runner/TestCaseResultReporter.h>
 #include <testngpp/internal/TestSuiteInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

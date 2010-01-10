@@ -2,13 +2,14 @@
 #include <cxxtest/TestSuite.h> 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <TestFixtureSandboxRunner.h>
 #include <TestFixtureDef.h>
-#include <SimpleTestCaseRunner.h>
-#include <TestFixtureResultCollector.h>
-#include <TestCaseFilter.h>
+
+#include <testngpp/runner/TestFixtureSandboxRunner.h>
+#include <testngpp/runner/SimpleTestCaseRunner.h>
+#include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/TestCaseFilter.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

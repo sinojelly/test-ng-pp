@@ -1,14 +1,14 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <GeneralTestFilter.h>
-#include <NameMatcher.h>
-#include <TestFixtureInfoReader.h>
-#include <TestCaseInfoReader.h>
+#include <testngpp/runner/GeneralTestFilter.h>
+#include <testngpp/runner/NameMatcher.h>
+#include <testngpp/internal/TestFixtureInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

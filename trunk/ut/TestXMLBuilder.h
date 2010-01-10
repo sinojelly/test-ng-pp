@@ -1,9 +1,12 @@
-#include <listeners/XMLBuilder.h>
-
-#include <cxxtest/TestSuite.h>
 #include <string>
 #include <sstream>
 #include <string>
+
+#include <mockcpp/mockcpp.hpp>
+#include <listeners/XMLBuilder.h>
+
+#include <cxxtest/TestSuite.h>
+
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

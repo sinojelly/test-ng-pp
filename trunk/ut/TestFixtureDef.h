@@ -1,11 +1,13 @@
 
-#include <TestFixtureDesc.h>
-#include <TestCase.h>
-#include <TestFixture.h>
 #include <string>
 
-#include <Exception.h>
-#include <AssertionFailure.h>
+#include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/TestFixture.h>
+
+
+#include <mockcpp/Exception.h>
+#include <testngpp/AssertionFailure.h>
 
 USING_TESTNGPP_NS
 USING_MOCKCPP_NS

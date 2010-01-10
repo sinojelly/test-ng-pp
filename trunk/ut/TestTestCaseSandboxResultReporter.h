@@ -7,13 +7,16 @@
 #include <sstream>
 #include <errno.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <TestCaseSandboxResultReporter.h>
-#include <TestCaseSandboxResultDecoder.h>
+#include <testngpp/runner/TestCaseSandboxResultReporter.h>
+#include <testngpp/runner/TestCaseSandboxResultDecoder.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
-#include <PipeReadableChannel.h>
-#include <PipeWrittableChannel.h>
+#include <testngpp/comm/PipeReadableChannel.h>
+#include <testngpp/comm/PipeWrittableChannel.h>
+
+
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
