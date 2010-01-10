@@ -29,12 +29,12 @@ struct Success {};
 #define __TESTNGPP_TRY       try { try { 
 #define __TESTNGPP_CATCH(ex) throw TESTNGPP_NS::Success(); }  catch(ex) { 
 #define __TESTNGPP_FINALLY   throw TESTNGPP_NS::Success(); }} catch(...) { 
-//#define __TESTNGPP_DONE    try {throw;}catch(TESTNGPP_NS::Success&){}} 
+#define __TESTNGPP_DONE      try {throw;}catch(TESTNGPP_NS::Success&){}} 
 
 
 #define __TESTNGPP_DO        try {
 #define __TESTNGPP_CLEANUP   throw TESTNGPP_NS::Success(); } catch(...) {
-#define __TESTNGPP_DONE      try {throw;}catch(TESTNGPP_NS::Success&){}} 
+//#define __TESTNGPP_DONE    try {throw;}catch(TESTNGPP_NS::Success&){}} 
 
 //#define __TESTNGPP_TRY       try { try { 
 //#define __TESTNGPP_CATCH(ex) throw TESTNGPP_NS::Success(); }  catch(ex) { 

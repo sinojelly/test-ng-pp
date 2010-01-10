@@ -1,7 +1,6 @@
 
 #include <testngpp/Error.h>
-
-#include <testngpp/comm/ExceptionKeywords.h>
+#include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestFixtureDesc.h>

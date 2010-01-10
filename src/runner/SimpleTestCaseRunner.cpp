@@ -3,14 +3,10 @@
 #include <testngpp/runner/TestCaseResultCollector.h>
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/internal/TestFixtureDesc.h>
-#include <testngpp/TestCaseSuccess.h>
 
 TESTNGPP_NS_START
 
 #define __RUN(block) try block \
-   catch(TESTNGPP_NS::TestCaseSuccess& e) \
-   { \
-   } \
    catch(AssertionFailure& failure) \
    { \
       collector->addCaseFailure(testcase, failure); \

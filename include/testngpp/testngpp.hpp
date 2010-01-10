@@ -24,10 +24,7 @@
 #include <testngpp/TestFixture.h>
 #include <testngpp/ResourceCheckPoint.h>
 #include <testngpp/TestCaseSuccess.h>
-
-#define __BEGIN_TEST     try {
-#define __CLEANUP        throw TESTNGPP_NS::TestCaseSuccess(); } catch(...) {
-#define __END_TEST       throw; }
+#include <testngpp/comm/ExceptionKeywords.h>
 
 #endif
 

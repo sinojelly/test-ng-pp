@@ -1,5 +1,6 @@
 
-#include <testngpp/comm/ExceptionKeywords.h>
+#include <testngpp/ExceptionKeywords.h>
+
 #include <testngpp/internal/TestSuiteDesc.h>
 
 #include <testngpp/runner/TestSuiteRunner.h>
