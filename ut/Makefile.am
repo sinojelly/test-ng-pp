@@ -62,7 +62,8 @@ TESTSUITES1 = \
   TestAssertionFailure.h \
   TestTestFixtureDesc.h \
   TestTestSuiteDesc.h \
-  TestStringToOptions.h
+  TestStringToOptions.h \
+  TestExceptionKeywords.h
 
 TESTSUITES2 = \
   TestTestFixtureSandboxRunner.h \

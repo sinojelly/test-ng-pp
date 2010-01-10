@@ -11,6 +11,7 @@
 #include <testngpp/runner/TestRunnerContext.h>
 #include <testngpp/runner/LTTestListenerLoader.h>
 #include <testngpp/utils/StringToOptions.h>
+#include <testngpp/comm/ExceptionKeywords.h>
 
 TESTNGPP_NS_START
 
@@ -210,17 +211,15 @@ load( TestRunnerContext* context
     , const std::list<std::string>& searchingPaths)
 {
    const char* origSearchingPath = addSearchingPaths(searchingPaths);
-   try
+   __TESTNGPP_DO
    {
       doLoad(context);
    }
-   catch(...)
+   __TESTNGPP_CLEANUP
    {
       ::lt_dlsetsearchpath(origSearchingPath);
-      throw;
    }
-
-   ::lt_dlsetsearchpath(origSearchingPath);
+   __TESTNGPP_DONE
 }
 /////////////////////////////////////////////////////////////////
 void
@@ -229,15 +228,16 @@ load( TestRunnerContext* context
     , const std::list<std::string>& searchingPaths)
 {
    std::cout << "loading " << This->name << " ... "; std::cout.flush();
-   try
+   __TESTNGPP_TRY
    {
       This->load(context, searchingPaths);
    }
-   catch(Error& e)
+   __TESTNGPP_CATCH(Error& e)
    {
       std::cerr << e.what() << std::endl;
       throw;
    }
+   __TESTNGPP_END_TRY
 
    std::cout << "OK" << std::endl;
 }

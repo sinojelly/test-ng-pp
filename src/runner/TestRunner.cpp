@@ -3,6 +3,8 @@
 
 #include <testngpp/Error.h>
 
+#include <testngpp/comm/ExceptionKeywords.h>
+
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/LTTestSuiteLoader.h>
 #include <testngpp/runner/LTTestListenerLoader.h>
@@ -111,20 +113,21 @@ loadListener( TestRunnerContext* context
             , const TestRunner::StringList& searchingPaths
             , const std::string& listenerName)
 {
-   try
+   __TESTNGPP_TRY
    {
       TestListenerLoader* loader = \
          new LTTestListenerLoader(listenerName);
       loader->load(context, searchingPaths);
       listeners.push_back(loader);
    }
-   catch(Error& e)
+   __TESTNGPP_CATCH(Error& e)
    {
       std::cerr << "error occured while loading listener " 
                 << listenerName 
                 << " : " 
                 << e.what() << std::endl;
    }
+   __TESTNGPP_END_TRY
 }
 
 ///////////////////////////////////////////////////////
@@ -157,20 +160,21 @@ void TestRunnerImpl::runTestSuite
           ( const std::string& suitePath
           , const TestFilter* filter)
 {
-   try
+   __TESTNGPP_TRY
    {
      suiteRunner->run(suitePath, dispatcher, filter);
    }
-   catch(Error& e)
+   __TESTNGPP_CATCH(Error& e)
    {
       std::cerr << e.what() << std::endl;
       hasFailures = true;
    }
-   catch(...)
+   __TESTNGPP_CATCH(...)
    {
       std::cerr << TESTNGPP_INTERNAL_ERROR(5001) << std::endl;
       hasFailures = true;
    }
+   __TESTNGPP_END_TRY
 }
 
 ///////////////////////////////////////////////////////
