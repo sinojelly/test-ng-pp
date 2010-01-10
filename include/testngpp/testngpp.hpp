@@ -23,7 +23,6 @@
 #include <testngpp/Asserter.h>
 #include <testngpp/TestFixture.h>
 #include <testngpp/ResourceCheckPoint.h>
-#include <testngpp/TestCaseSuccess.h>
 #include <testngpp/ExceptionKeywords.h>
 
 #endif

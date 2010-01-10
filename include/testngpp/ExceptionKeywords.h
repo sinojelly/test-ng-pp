@@ -28,6 +28,7 @@ struct Success {};
 
 #define __TESTNGPP_TRY       try { try { 
 #define __TESTNGPP_CATCH(ex) throw TESTNGPP_NS::Success(); }  catch(ex) { 
+#define __TESTNGPP_CATCH_ALL throw TESTNGPP_NS::Success(); }  catch(TESTNGPP_NS::Success&){throw;} catch(...) { 
 #define __TESTNGPP_FINALLY   throw TESTNGPP_NS::Success(); }} catch(...) { 
 #define __TESTNGPP_DONE      try {throw;}catch(TESTNGPP_NS::Success&){}} 
 
@@ -38,7 +39,7 @@ struct Success {};
 
 //#define __TESTNGPP_TRY       try { try { 
 //#define __TESTNGPP_CATCH(ex) throw TESTNGPP_NS::Success(); }  catch(ex) { 
-#define __TESTNGPP_END_TRY     }} catch(TESTNGPP_NS::Success&) {}
+#define __TESTNGPP_END_TRY   throw TESTNGPP_NS::Success(); }} catch(TESTNGPP_NS::Success&) {}
 
 TESTNGPP_NS_END
 

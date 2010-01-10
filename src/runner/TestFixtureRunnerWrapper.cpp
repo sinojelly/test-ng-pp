@@ -8,6 +8,7 @@
 #include <testngpp/runner/TestFixtureRunnerWrapper.h>
 #include <testngpp/runner/TestFixtureRunner.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/InternalError.h>
 
 
 TESTNGPP_NS_START
@@ -39,9 +40,9 @@ void TestFixtureRunnerWrapper::run(TestFixtureDesc* desc
    {
       collector->addFixtureError(desc, e.what());
    }
-   __TESTNGPP_CATCH(...)
+   __TESTNGPP_CATCH_ALL
    {
-      collector->addFixtureError(desc, "Unknow Error");
+      collector->addFixtureError(desc, "Unknown Error");
    }
    __TESTNGPP_END_TRY
 

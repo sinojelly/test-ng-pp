@@ -35,6 +35,14 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@TESTNGPP_USE_DLOPEN_TRUE@am__append_1 = \
+@TESTNGPP_USE_DLOPEN_TRUE@  DLModuleLoader.cpp \
+@TESTNGPP_USE_DLOPEN_TRUE@  DLModuleLoaderFactory.cpp 
+
+@TESTNGPP_USE_DLOPEN_FALSE@am__append_2 = \
+@TESTNGPP_USE_DLOPEN_FALSE@  LTModuleLoader.cpp \
+@TESTNGPP_USE_DLOPEN_FALSE@  LTModuleLoaderFactory.cpp 
+
 bin_PROGRAMS = testngpp-runner$(EXEEXT)
 subdir = src/runner
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
@@ -69,20 +77,24 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libtestngpprunner_la_LIBADD =
+@TESTNGPP_USE_DLOPEN_TRUE@am__objects_1 = DLModuleLoader.lo \
+@TESTNGPP_USE_DLOPEN_TRUE@	DLModuleLoaderFactory.lo
+@TESTNGPP_USE_DLOPEN_FALSE@am__objects_2 = LTModuleLoader.lo \
+@TESTNGPP_USE_DLOPEN_FALSE@	LTModuleLoaderFactory.lo
 nodist_libtestngpprunner_la_OBJECTS = TestSuiteRunner.lo \
 	TestCaseSandboxResultReporter.lo \
 	TestCaseSandboxResultDecoder.lo SimpleTestCaseRunner.lo \
 	Sandbox.lo SandboxProcessor.lo TestCaseSandboxHandler.lo \
 	TestCaseSandbox.lo PipeReadableChannel.lo \
 	PipeWrittableChannel.lo TestFixtureSandboxRunner.lo \
-	TestFixtureRunnerWrapper.lo LTTestSuiteLoader.lo \
+	TestFixtureRunnerWrapper.lo TestSuiteLoader.lo \
 	SimpleTestResultDispatcher.lo SimpleTestResultReporter.lo \
 	SimpleTestCaseResultReporter.lo \
 	SimpleTestSuiteResultReporter.lo TestFixtureRunnerFactory.lo \
-	SimpleTestFixtureRunner.lo LTTestListenerLoader.lo \
+	SimpleTestFixtureRunner.lo TestListenerLoader.lo \
 	WildcardTestFilter.lo OrCompositeTestFilter.lo \
 	GeneralTestFilter.lo TestFilterFactory.lo PosixFNMatcher.lo \
-	TestRunner.lo
+	TestRunner.lo $(am__objects_1) $(am__objects_2)
 libtestngpprunner_la_OBJECTS = $(nodist_libtestngpprunner_la_OBJECTS)
 libtestngpprunner_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -117,7 +129,6 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AR = @AR@
-ARGZ_H = @ARGZ_H@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -143,7 +154,6 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
-INCLTDL = @INCLTDL@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -151,23 +161,12 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
-LIBADD_DL = @LIBADD_DL@
-LIBADD_DLD_LINK = @LIBADD_DLD_LINK@
-LIBADD_DLOPEN = @LIBADD_DLOPEN@
-LIBADD_SHL_LOAD = @LIBADD_SHL_LOAD@
-LIBLTDL = @LIBLTDL@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
-LTDLDEPS = @LTDLDEPS@
-LTDLINCL = @LTDLINCL@
-LTDLOPEN = @LTDLOPEN@
 LTLIBOBJS = @LTLIBOBJS@
-LT_CONFIG_H = @LT_CONFIG_H@
-LT_DLLOADERS = @LT_DLLOADERS@
-LT_DLPREOPEN = @LT_DLPREOPEN@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 NM = @NM@
@@ -233,8 +232,6 @@ libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
 lt_ECHO = @lt_ECHO@
-ltdl_LIBOBJS = @ltdl_LIBOBJS@
-ltdl_LTLIBOBJS = @ltdl_LTLIBOBJS@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -250,7 +247,6 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 subdirs = @subdirs@
-sys_symbol_underscore = @sys_symbol_underscore@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
@@ -266,34 +262,20 @@ libtestngpprunner_la_LDFLAGS = \
   $(top_builddir)/src/libtestngpp.la \
   $(LIBLTDL)
 
-nodist_libtestngpprunner_la_SOURCES = \
-  TestSuiteRunner.cpp \
-  TestCaseSandboxResultReporter.cpp \
-  TestCaseSandboxResultDecoder.cpp \
-  SimpleTestCaseRunner.cpp \
-  Sandbox.cpp \
-  SandboxProcessor.cpp \
-  TestCaseSandboxHandler.cpp \
-  TestCaseSandbox.cpp \
-  PipeReadableChannel.cpp \
-  PipeWrittableChannel.cpp  \
-  TestFixtureSandboxRunner.cpp \
-  TestFixtureRunnerWrapper.cpp \
-  LTTestSuiteLoader.cpp \
-  SimpleTestResultDispatcher.cpp \
-  SimpleTestResultReporter.cpp \
-  SimpleTestCaseResultReporter.cpp \
-  SimpleTestSuiteResultReporter.cpp \
-  TestFixtureRunnerFactory.cpp \
-  SimpleTestFixtureRunner.cpp \
-  LTTestListenerLoader.cpp \
-  WildcardTestFilter.cpp \
-  OrCompositeTestFilter.cpp \
-  GeneralTestFilter.cpp \
-  TestFilterFactory.cpp \
-  PosixFNMatcher.cpp \
-  TestRunner.cpp
-
+nodist_libtestngpprunner_la_SOURCES = TestSuiteRunner.cpp \
+	TestCaseSandboxResultReporter.cpp \
+	TestCaseSandboxResultDecoder.cpp SimpleTestCaseRunner.cpp \
+	Sandbox.cpp SandboxProcessor.cpp TestCaseSandboxHandler.cpp \
+	TestCaseSandbox.cpp PipeReadableChannel.cpp \
+	PipeWrittableChannel.cpp TestFixtureSandboxRunner.cpp \
+	TestFixtureRunnerWrapper.cpp TestSuiteLoader.cpp \
+	SimpleTestResultDispatcher.cpp SimpleTestResultReporter.cpp \
+	SimpleTestCaseResultReporter.cpp \
+	SimpleTestSuiteResultReporter.cpp TestFixtureRunnerFactory.cpp \
+	SimpleTestFixtureRunner.cpp TestListenerLoader.cpp \
+	WildcardTestFilter.cpp OrCompositeTestFilter.cpp \
+	GeneralTestFilter.cpp TestFilterFactory.cpp PosixFNMatcher.cpp \
+	TestRunner.cpp $(am__append_1) $(am__append_2)
 testngpp_runner_LDADD = \
   $(top_builddir)/src/runner/libtestngpprunner.la 
 
@@ -423,9 +405,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DLModuleLoader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DLModuleLoaderFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeneralTestFilter.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LTTestListenerLoader.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LTTestSuiteLoader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LTModuleLoader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LTModuleLoaderFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OrCompositeTestFilter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PipeReadableChannel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PipeWrittableChannel.Plo@am__quote@
@@ -446,8 +430,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestFixtureRunnerFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestFixtureRunnerWrapper.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestFixtureSandboxRunner.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestListenerLoader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestRunner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestRunnerMain.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestSuiteLoader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestSuiteRunner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WildcardTestFilter.Plo@am__quote@
 

@@ -1,5 +1,4 @@
 
-#include <ltdl.h>
 
 #include <string>
 #include <sstream>
@@ -8,17 +7,22 @@
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
+#include <testngpp/utils/StringToOptions.h>
+
 #include <testngpp/runner/TestListener.h>
 #include <testngpp/runner/TestRunnerContext.h>
 #include <testngpp/runner/LTTestListenerLoader.h>
-#include <testngpp/utils/StringToOptions.h>
+#include <testngpp/runner/ModuleLoader.h>
 
 
 TESTNGPP_NS_START
 
 struct LTTestListenerLoaderImpl
 {
-   LTTestListenerLoaderImpl(const std::string& args);
+   LTTestListenerLoaderImpl
+       ( ModuleLoader* moduleLoader
+       , const std::string& args);
+
 	~LTTestListenerLoaderImpl();
 
    void destroyArgs();
@@ -28,14 +32,11 @@ struct LTTestListenerLoaderImpl
    void load( TestRunnerContext* context
             , const std::list<std::string>& searchingPaths);
 
-   const char*
-   addSearchingPaths(const std::list<std::string>& searchingPaths);
-
    std::string name;
    StringToOptions::CArgs args; 
    
-   lt_dlhandle handle;
    TestListener* listener;
+   ModuleLoader* loader;
 };
 
 namespace
@@ -50,8 +51,10 @@ namespace
 
 ///////////////////////////////////////////////////////////////
 LTTestListenerLoaderImpl::
-LTTestListenerLoaderImpl(const std::string& cl)
-   : handle(0)
+LTTestListenerLoaderImpl
+       ( ModuleLoader* moduleLoader
+       , const std::string& cl)
+   : loader(moduleLoader)
    , listener(0)
 {
    args = StringToOptions::parse(cl);
@@ -70,21 +73,26 @@ void
 LTTestListenerLoaderImpl::destroyListener()
 {
    typedef void (*TestListenerDestroy)(TestListener*);
+   TestListenerDestroy destroy = 0;
 
-   TestListenerDestroy destroy = \
-      (TestListenerDestroy) lt_dlsym(handle
-             , getDestroySymbolName(name).c_str());
-   if(destroy == 0)
+   __TESTNGPP_TRY
    {
-      std::cerr << ::lt_dlerror() << std::endl;
+      destroy =  (TestListenerDestroy) \
+         loader->findSymbol(getDestroySymbolName(name));
 
-      delete listener;
-      listener = 0;
-
-      return;
+      destroy(listener);
    }
+   __TESTNGPP_CATCH_ALL
+   {
+      delete listener;
+   }
+   __TESTNGPP_FINALLY
+   {
+      listener = 0;
+      loader->unload();
+   }
+   __TESTNGPP_DONE
 
-   destroy(listener);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -104,36 +112,29 @@ LTTestListenerLoaderImpl::~LTTestListenerLoaderImpl()
 {
    destroyArgs();
 
-   if(handle != 0 && listener != 0)
+   if(listener != 0)
    {
       destroyListener();
    }
 
-   if(handle != 0)
+   if(loader != 0)
    {
-      ::lt_dlclose(handle);
-      handle = 0;
+      loader->unload();
+      delete loader;
    }
-
 }
 
 ///////////////////////////////////////////////////////////////
 LTTestListenerLoader::
-LTTestListenerLoader(const std::string& path)
-   : This(new LTTestListenerLoaderImpl(path))
+LTTestListenerLoader(ModuleLoader* loader, const std::string& path)
+   : This(new LTTestListenerLoaderImpl(loader, path))
 {
-   int result = ::lt_dlinit();
-   if(result != 0)
-   {
-      throw Error(::lt_dlerror());
-   }
 }
 
 ///////////////////////////////////////////////////////////////
 LTTestListenerLoader::~LTTestListenerLoader()
 {
    delete This;
-   ::lt_dlexit();
 }
 
 namespace
@@ -155,73 +156,35 @@ namespace
 
 ///////////////////////////////////////////////////////////////
 void 
-LTTestListenerLoaderImpl::doLoad(TestRunnerContext* context)
+LTTestListenerLoaderImpl::
+load( TestRunnerContext* context
+    , const std::list<std::string>& searchingPaths)
 {
-   handle = ::lt_dlopenext(getListenerSharedObjectName(name).c_str());
-   if(handle == 0)
-   {
-      throw Error(::lt_dlerror());
-   }
+   loader->loadUnderPaths( searchingPaths
+                         , getListenerSharedObjectName(name));
 
    typedef TestListener* (*TestListenerCreater) \
-          (TestResultReporter*, TestSuiteResultReporter*, TestCaseResultReporter*,
-           int, char**);
+                  ( TestResultReporter* \
+						, TestSuiteResultReporter* \
+						, TestCaseResultReporter* \
+						, int, char**);
 
-   TestListenerCreater create = \
-      (TestListenerCreater) lt_dlsym(handle
-             , getCreaterSymbolName(name).c_str());
-   if(create == 0)
-   {
-      throw Error(::lt_dlerror());
-   }
+   TestListenerCreater create = (TestListenerCreater) \
+       loader->findSymbol(getCreaterSymbolName(name));
 
    listener = create( context->getTestResultReporter()
-            , context->getTestSuiteResultReporter()
-            , context->getTestCaseResultReporter()
-            , args.first
-            , args.second);
+                    , context->getTestSuiteResultReporter()
+                    , context->getTestCaseResultReporter()
+                    , args.first
+                    , args.second);
    if(listener == 0)
    {
-      throw Error("Invalid test listener shared object");
+      throw Error("Cannot create listener");
    }
 
    context->registerTestListener(listener);
 }
 
-/////////////////////////////////////////////////////////////////
-const char*
-LTTestListenerLoaderImpl::
-addSearchingPaths(const std::list<std::string>& searchingPaths)
-{
-   const char* origSearchingPath = ::lt_dlgetsearchpath();
-   const char* p = origSearchingPath;
-   std::list<std::string>::const_iterator i = searchingPaths.begin();
-   for(; i != searchingPaths.end(); i++)
-   {
-      ::lt_dlinsertsearchdir(p, (*i).c_str());
-   	p = ::lt_dlgetsearchpath();
-   }
-
-   return origSearchingPath;
-}
-
-/////////////////////////////////////////////////////////////////
-void
-LTTestListenerLoaderImpl::
-load( TestRunnerContext* context
-    , const std::list<std::string>& searchingPaths)
-{
-   const char* origSearchingPath = addSearchingPaths(searchingPaths);
-   __TESTNGPP_DO
-   {
-      doLoad(context);
-   }
-   __TESTNGPP_CLEANUP
-   {
-      ::lt_dlsetsearchpath(origSearchingPath);
-   }
-   __TESTNGPP_DONE
-}
 /////////////////////////////////////////////////////////////////
 void
 LTTestListenerLoader::
@@ -229,6 +192,7 @@ load( TestRunnerContext* context
     , const std::list<std::string>& searchingPaths)
 {
    std::cout << "loading " << This->name << " ... "; std::cout.flush();
+
    __TESTNGPP_TRY
    {
       This->load(context, searchingPaths);
