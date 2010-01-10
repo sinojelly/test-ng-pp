@@ -30,6 +30,8 @@ LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
 ADD_LIBRARY(testngppstdoutlistener MODULE ${STDOUTLISTENER_SRCS})
 ADD_LIBRARY(testngppxmllistener MODULE ${XMLLISTENER_SRCS})
 
+ADD_LIBRARY(testngppxmllistener-fortest STATIC ${XMLLISTENER_SRCS})
+
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include .)
 
 SET_TARGET_PROPERTIES(testngppstdoutlistener testngppxmllistener

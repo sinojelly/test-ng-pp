@@ -1,21 +1,27 @@
 
+#include <iostream>
+
 #include <cxxtest/TestSuite.h> 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <TestFilter.h>
-#include <TestCase.h>
-#include <TestFixture.h>
-#include <TestFixtureDesc.h>
-#include <TestSuiteRunner.h>
-#include <TestSuiteLoader.h>
-#include <TestFixtureRunner.h>
-#include <TestResultCollector.h>
-#include <TestSuiteDesc.h>
-#include <Error.h>
+#include <testngpp/TestFixture.h>
+#include <testngpp/Error.h>
 
-#include <iostream>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/internal/TestSuiteDesc.h>
+
+#include <testngpp/runner/TestSuiteRunner.h>
+#include <testngpp/runner/TestSuiteLoader.h>
+#include <testngpp/runner/TestFixtureRunner.h>
+#include <testngpp/runner/TestFilter.h>
+#include <testngpp/runner/TestResultCollector.h>
+
+
+
+
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

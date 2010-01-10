@@ -2,17 +2,17 @@
 #include <cxxtest/TestSuite.h> 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <TestCase.h>
-#include <TestCaseSandbox.h>
-#include <EnvironmentCleaner.h>
-#include <TestCaseRunner.h>
-#include <SimpleTestCaseRunner.h>
-#include <TestCaseResultCollector.h>
-#include <TestCaseSandboxResultDecoder.h>
-#include <TestFixture.h>
-#include <TestFixtureDesc.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/runner/TestCaseSandbox.h>
+#include <testngpp/runner/EnvironmentCleaner.h>
+#include <testngpp/runner/TestCaseRunner.h>
+#include <testngpp/runner/SimpleTestCaseRunner.h>
+#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/runner/TestCaseSandboxResultDecoder.h>
+#include <testngpp/TestFixture.h>
+#include <testngpp/internal/TestFixtureDesc.h>
 
 #include <FTestFixture1.h>
 

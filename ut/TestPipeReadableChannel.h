@@ -5,9 +5,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
-#include <PipeReadableChannel.h>
+#include <testngpp/comm/PipeReadableChannel.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

@@ -1,11 +1,11 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <PosixFNMatcher.h>
+#include <testngpp/runner/PosixFNMatcher.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

@@ -7,7 +7,7 @@
 #include <testngpp/runner/TestCaseResultReporter.h>
 #include <testngpp/AssertionFailure.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
 #include <cxxtest/TestSuite.h>
 #include <string>

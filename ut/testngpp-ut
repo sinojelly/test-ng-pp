@@ -2,10 +2,10 @@
 
 case `uname` in
   *CYGWIN*)
-    all_tests=`ls testngpp-ut?.exe`
+    all_tests=`ls testngpp-ut-*.exe`
     ;;
   *)
-    all_tests=`ls testngpp-ut?`
+    all_tests=`ls testngpp-ut-*`
     ;;
 esac
 

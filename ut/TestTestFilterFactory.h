@@ -1,12 +1,14 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
 #include <testngpp/ResourceCheckPoint.h>
 
 #include <testngpp/runner/TestFilterFactory.h>
 #include <testngpp/runner/TestFilter.h>
+#include <testngpp/internal/TestFixtureInfoReader.h>
+#include <testngpp/internal/TestCaseInfoReader.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
