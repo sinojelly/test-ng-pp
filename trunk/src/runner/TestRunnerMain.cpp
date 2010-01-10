@@ -9,7 +9,7 @@
 USING_TESTNGPP_NS
 
 ////////////////////////////////////////////////////////////
-void usage(char * program)
+void usage(const char * program)
 {
    std::cerr << "usage: " 
              << program 

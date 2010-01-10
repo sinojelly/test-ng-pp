@@ -50,11 +50,11 @@ SET(UT_CASES
 )
 
 LINK_DIRECTORIES(
-  ${CMAKE_SOURCE_DIR}/libs
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/listeners
-  ${CMAKE_SOURCE_DIR}/src/runner 
-  ${CMAKE_SOURCE_DIR}/3rdparty/mockcpp/src)
+  ${CMAKE_BINARY_DIR}/libs
+  ${CMAKE_BINARY_DIR}/src
+  ${CMAKE_BINARY_DIR}/src/listeners
+  ${CMAKE_BINARY_DIR}/src/runner 
+  ${CMAKE_BINARY_DIR}/3rdparty/mockcpp/src)
 
 INCLUDE_DIRECTORIES(BEFORE 
   .
