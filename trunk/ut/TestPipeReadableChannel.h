@@ -42,7 +42,7 @@ public:
    {
       PipeReadableChannel channel(sockets[0]);      
 
-      char *buf = "abcd";
+      const char *buf = "abcd";
       int result = ::write(sockets[1], buf, ::strlen(buf));
 
       TS_ASSERT(result == ::strlen(buf));
@@ -57,7 +57,7 @@ public:
    {
       PipeReadableChannel channel(sockets[0]);      
 
-      char *buf = "abcd";
+      const char *buf = "abcd";
       int result = ::write(sockets[1], buf, ::strlen(buf));
 
       TS_ASSERT(result == ::strlen(buf));
@@ -95,7 +95,7 @@ public:
    {
       PipeReadableChannel channel(sockets[0]);      
 
-      char *buf = "abcd";
+      const char *buf = "abcd";
       int result = ::write(sockets[1], buf, ::strlen(buf) + 1);
 
       TS_ASSERT(result == ::strlen(buf) + 1);
@@ -111,7 +111,7 @@ public:
       int result = ::write(sockets[1], &value, sizeof(value));
       TS_ASSERT(result == sizeof(value));
 
-      char *buf = "abcd";
+      const char *buf = "abcd";
       result = ::write(sockets[1], buf, ::strlen(buf) + 1);
       TS_ASSERT(result == ::strlen(buf) + 1);
       
