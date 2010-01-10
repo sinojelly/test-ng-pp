@@ -226,7 +226,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = libltdl src 3rdparty/mockcpp scripts src/runner src/listeners libs ut samples
+SUBDIRS = src 3rdparty/mockcpp scripts src/runner src/listeners libs ut samples
 all: all-recursive
 
 .SUFFIXES:

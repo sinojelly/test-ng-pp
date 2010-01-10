@@ -1,21 +1,3 @@
-/**
-    TestNG++ is a practical, easy-to-use C/C++ xUnit framework.
-    Copyright (C) <2009>  <Arthur Yuan: arthur.ii.yuan@gmail.com>
-
-    TestNG++ is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    TestNG++ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
-**/
-
 #include "XMLTestListener.h"
 #include "XMLBuilder.h"
 
@@ -301,9 +283,11 @@ namespace
   std::ofstream xmlFile;
 }
 
+#define LISTENER(name) testngppxmllistener_##name
+
 ///////////////////////////////////////////////////////////
 extern "C"
-TestListener* testngppxmllistener_create_instance(
+TestListener* LISTENER(create_instance)(
       TestResultReporter* resultReporter
     , TestSuiteResultReporter* suiteReporter
     , TestCaseResultReporter* caseResultReporter
@@ -322,7 +306,7 @@ TestListener* testngppxmllistener_create_instance(
 
 ///////////////////////////////////////////////////////////
 extern "C"
-void testngppxmllistener_destroy_instance(TestListener* instance)
+void LISTENER(destroy_instance)(TestListener* instance)
 {
    if(xmlFile.is_open()) xmlFile.close();
 	delete instance;
