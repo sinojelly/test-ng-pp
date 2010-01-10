@@ -1,4 +1,5 @@
 
+#include <testngpp/comm/ExceptionKeywords.h>
 #include <testngpp/internal/TestSuiteDesc.h>
 
 #include <testngpp/runner/TestSuiteRunner.h>
@@ -61,17 +62,15 @@ TestSuiteDesc*
 TestSuiteRunnerImpl::load(const std::string& path
    , TestResultCollector* resultCollector)
 {
-   try {
+   __TESTNGPP_TRY
+   {
      return suiteLoader->load(path, this);
    }
-   catch(std::exception& e)
+   __TESTNGPP_CATCH(std::exception& e)
    {
       resultCollector->addError("test suite \"" + path + "\" can't be loaded : " + e.what());
    }
-   catch(...)
-   {
-      throw;
-   }
+   __TESTNGPP_END_TRY
 
    return 0;
 }

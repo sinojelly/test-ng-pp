@@ -5,6 +5,7 @@
 #include <testngpp/Error.h>
 
 #include <testngpp/comm/PipeReadableChannel.h>
+#include <testngpp/comm/ExceptionKeywords.h>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestCase.h>
@@ -60,7 +61,7 @@ void TestCaseSandboxImpl::handle() throw (EOFError, Error)
       return;
    }
 
-   try
+   __TESTNGPP_TRY
    {
 	   bool result = decoder->decode();
       if(result && !finished)
@@ -69,7 +70,7 @@ void TestCaseSandboxImpl::handle() throw (EOFError, Error)
          decoder->flush(false);
       }
    }
-   catch(EOFError&)
+   __TESTNGPP_CATCH(EOFError&)
    {
       if(!finished)
       {
@@ -79,9 +80,8 @@ void TestCaseSandboxImpl::handle() throw (EOFError, Error)
       sandbox->die();
 
       finished = true;
-
-      return;
    }
+   __TESTNGPP_END_TRY
 }
 
 ////////////////////////////////////////////////////////

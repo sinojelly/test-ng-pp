@@ -1,6 +1,8 @@
 
 #include <testngpp/Error.h>
 
+#include <testngpp/comm/ExceptionKeywords.h>
+
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestFixtureDesc.h>
 
@@ -30,17 +32,19 @@ void TestFixtureRunnerWrapper::run(TestFixtureDesc* desc
 {
    collector->startTestFixture(desc);
 
-   try{
+   __TESTNGPP_TRY
+   {
       fixtureRunner->run(desc, collector, filter);
    }
-   catch(Error& e)
+   __TESTNGPP_CATCH(Error& e)
    {
       collector->addFixtureError(desc, e.what());
    }
-   catch(...)
+   __TESTNGPP_CATCH(...)
    {
       collector->addFixtureError(desc, "Unknow Error");
    }
+   __TESTNGPP_END_TRY
 
    collector->endTestFixture(desc);
 }

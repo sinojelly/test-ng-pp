@@ -154,13 +154,7 @@ namespace
 {
    static void handleSandboxEvent(TestCaseSandbox* sandbox)
    {
-      try{
-         sandbox->handle();
-      }
-      catch(...)
-      {
-         throw;
-      }
+      sandbox->handle();
    }
 }
 ///////////////////////////////////////////////////////
