@@ -30,7 +30,8 @@ LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
 ADD_LIBRARY(testngppstdoutlistener MODULE ${STDOUTLISTENER_SRCS})
 ADD_LIBRARY(testngppxmllistener MODULE ${XMLLISTENER_SRCS})
 
-ADD_LIBRARY(testngppxmllistener-fortest STATIC ${XMLLISTENER_SRCS})
+ADD_LIBRARY(testngppxmllistener-fortest SHARED ${XMLLISTENER_SRCS})
+TARGET_LINK_LIBRARIES(testngppxmllistener-fortest -ltestngpp)
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include .)
 
