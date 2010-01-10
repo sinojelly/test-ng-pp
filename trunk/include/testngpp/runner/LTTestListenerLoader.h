@@ -12,11 +12,12 @@ TESTNGPP_NS_START
 
 struct TestListener;
 struct TestRunnerContext;
+struct ModuleLoader;
 struct LTTestListenerLoaderImpl;
 
 struct LTTestListenerLoader : public TestListenerLoader
 {
-   LTTestListenerLoader(const std::string& name);
+   LTTestListenerLoader(ModuleLoader* loader, const std::string& name);
    ~LTTestListenerLoader();
 
    void load( TestRunnerContext* context

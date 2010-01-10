@@ -64,10 +64,12 @@ TestSuiteRunnerImpl::load(const std::string& path
    , TestResultCollector* resultCollector)
 {
    __TESTNGPP_TRY
+ //  try
    {
      return suiteLoader->load(path, this);
    }
    __TESTNGPP_CATCH(std::exception& e)
+   //catch(std::exception& e)
    {
       resultCollector->addError("test suite \"" + path + "\" can't be loaded : " + e.what());
    }

@@ -23,20 +23,30 @@ nodist_libtestngpprunner_la_SOURCES = \
   PipeWrittableChannel.cpp  \
   TestFixtureSandboxRunner.cpp \
   TestFixtureRunnerWrapper.cpp \
-  LTTestSuiteLoader.cpp \
+  TestSuiteLoader.cpp \
   SimpleTestResultDispatcher.cpp \
   SimpleTestResultReporter.cpp \
   SimpleTestCaseResultReporter.cpp \
   SimpleTestSuiteResultReporter.cpp \
   TestFixtureRunnerFactory.cpp \
   SimpleTestFixtureRunner.cpp \
-  LTTestListenerLoader.cpp \
+  TestListenerLoader.cpp \
   WildcardTestFilter.cpp \
   OrCompositeTestFilter.cpp \
   GeneralTestFilter.cpp \
   TestFilterFactory.cpp \
   PosixFNMatcher.cpp \
   TestRunner.cpp
+
+if TESTNGPP_USE_DLOPEN
+nodist_libtestngpprunner_la_SOURCES += \
+  DLModuleLoader.cpp \
+  DLModuleLoaderFactory.cpp 
+else
+nodist_libtestngpprunner_la_SOURCES += \
+  LTModuleLoader.cpp \
+  LTModuleLoaderFactory.cpp 
+endif
 
 bin_PROGRAMS = testngpp-runner
 

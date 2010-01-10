@@ -16,6 +16,7 @@
 #include <testngpp/runner/TestRunner.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFilterFactory.h>
+#include <testngpp/runner/ModuleLoaderFactory.h>
 
 TESTNGPP_NS_START
 
@@ -29,6 +30,7 @@ struct TestRunnerImpl
    SimpleTestSuiteResultReporter* suiteReporter;
    SimpleTestCaseResultReporter* caseReporter;
    SimpleTestResultDispatcher* dispatcher;
+
    TestSuiteLoader* loader;
    TestFixtureRunner * fixtureRunner;
    TestSuiteRunner * suiteRunner;
@@ -53,6 +55,8 @@ struct TestRunnerImpl
             const TestRunner::StringList& listenerNames);
 
    void clearListeners();
+
+   ModuleLoader* createModuleLoader();
 };
 
 ///////////////////////////////////////////////////////
@@ -106,6 +110,19 @@ TestRunnerImpl::~TestRunnerImpl()
 }
 
 ///////////////////////////////////////////////////////
+ModuleLoader*
+TestRunnerImpl::createModuleLoader()
+{
+   ModuleLoader* moduleLoader = ModuleLoaderFactory::create();
+   if(moduleLoader == 0)
+   {
+      throw Error("cannot create module loader");
+   }
+
+   return moduleLoader;
+}
+
+///////////////////////////////////////////////////////
 void
 TestRunnerImpl::
 loadListener( TestRunnerContext* context
@@ -115,7 +132,7 @@ loadListener( TestRunnerContext* context
    __TESTNGPP_TRY
    {
       TestListenerLoader* loader = \
-         new LTTestListenerLoader(listenerName);
+         new LTTestListenerLoader(createModuleLoader(), listenerName);
       loader->load(context, searchingPaths);
       listeners.push_back(loader);
    }
@@ -168,7 +185,7 @@ void TestRunnerImpl::runTestSuite
       std::cerr << e.what() << std::endl;
       hasFailures = true;
    }
-   __TESTNGPP_CATCH(...)
+   __TESTNGPP_CATCH_ALL
    {
       std::cerr << TESTNGPP_INTERNAL_ERROR(5001) << std::endl;
       hasFailures = true;

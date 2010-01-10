@@ -27,34 +27,34 @@ public:
     // @test
     void case0()
     {
-       __BEGIN_TEST
+       __TESTNGPP_DO
 
        TS_ASSERT(false);
 
        std::cout << "running" << std::endl;
 
-       __CLEANUP
+       __TESTNGPP_CLEANUP
 
        std::cout << "case 0 cleanup" << std::endl;
 
-       __END_TEST
+       __TESTNGPP_DONE
     }
 			
     // @test
     // @timeout=15s
     void case1()
     {
-       __BEGIN_TEST 
+       __TESTNGPP_DO
 
        TS_ASSERT(true);
 
        std::cout << "case 1 running" << std::endl;
 
-       __CLEANUP
+       __TESTNGPP_CLEANUP
 
        std::cout << "case 1 cleanup" << std::endl;
 
-       __END_TEST
+       __TESTNGPP_DONE
     }
 
     // Fail
