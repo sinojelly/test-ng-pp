@@ -24,7 +24,7 @@
 #include <testngpp/TestFixture.h>
 #include <testngpp/ResourceCheckPoint.h>
 #include <testngpp/TestCaseSuccess.h>
-#include <testngpp/comm/ExceptionKeywords.h>
+#include <testngpp/ExceptionKeywords.h>
 
 #endif
 
