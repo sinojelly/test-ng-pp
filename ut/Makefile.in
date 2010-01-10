@@ -34,6 +34,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@TESTNGPP_USE_DLOPEN_TRUE@am__append_1 = -ldl
+@TESTNGPP_USE_DLOPEN_FALSE@am__append_2 = $(LIBLTDL) 
 noinst_PROGRAMS = testngpp-ut1$(EXEEXT) testngpp-ut2$(EXEEXT) \
 	testngpp-ut3$(EXEEXT) testngpp-ut4$(EXEEXT) \
 	testngpp-ut5$(EXEEXT) testngpp-ut6$(EXEEXT)
@@ -234,13 +236,11 @@ AM_CPPFLAGS = \
   -I$(CXXTEST_ROOT) \
   -I$(top_builddir)/src
 
-AM_LDFLAGS = \
-  $(top_builddir)/libs/libcxxtest.la \
-  $(top_srcdir)/3rdparty/mockcpp/src/libmockcpp.la \
-  $(top_builddir)/src/libtestngpp.la \
-  $(top_builddir)/src/runner/libtestngpprunner.la \
-  $(LIBLTDL) 
-
+AM_LDFLAGS = $(top_builddir)/libs/libcxxtest.la \
+	$(top_srcdir)/3rdparty/mockcpp/src/libmockcpp.la \
+	$(top_builddir)/src/libtestngpp.la \
+	$(top_builddir)/src/runner/libtestngpprunner.la \
+	$(am__append_1) $(am__append_2)
 UT1_SOURCE = testngpp-ut1.cpp
 UT2_SOURCE = testngpp-ut2.cpp
 UT3_SOURCE = testngpp-ut3.cpp

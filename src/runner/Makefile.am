@@ -7,8 +7,13 @@ lib_LTLIBRARIES = libtestngpprunner.la
 
 libtestngpprunner_la_LDFLAGS = \
   -no-undefined \
-  $(top_builddir)/src/libtestngpp.la \
-  $(LIBLTDL)
+  $(top_builddir)/src/libtestngpp.la 
+
+if TESTNGPP_USE_DLOPEN
+  libtestngpprunner_la_LDFLAGS += -ldl
+else
+  libtestngpprunner_la_LDFLAGS += $(LIBLTDL)
+endif
 
 nodist_libtestngpprunner_la_SOURCES = \
   TestSuiteRunner.cpp \

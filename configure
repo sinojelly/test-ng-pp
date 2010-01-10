@@ -745,10 +745,10 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
 subdirs
-TESTNGPP_USE_DLOPEN_FALSE
-TESTNGPP_USE_DLOPEN_TRUE
 TESTNGPP_USE_LTDL_FALSE
 TESTNGPP_USE_LTDL_TRUE
+TESTNGPP_USE_DLOPEN_FALSE
+TESTNGPP_USE_DLOPEN_TRUE
 pkgpyexecdir
 pyexecdir
 pkgpythondir
@@ -14372,6 +14372,71 @@ $as_echo "$am_cv_python_pyexecdir" >&6; }
 
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing dlopen" >&5
+$as_echo_n "checking for library containing dlopen... " >&6; }
+if test "${ac_cv_search_dlopen+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dlopen ();
+int
+main ()
+{
+return dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' dl; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_dlopen=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if test "${ac_cv_search_dlopen+set}" = set; then :
+  break
+fi
+done
+if test "${ac_cv_search_dlopen+set}" = set; then :
+
+else
+  ac_cv_search_dlopen=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_dlopen" >&5
+$as_echo "$ac_cv_search_dlopen" >&6; }
+ac_res=$ac_cv_search_dlopen
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+fi
+
+ if test "$ac_cv_search_dlopen" != no; then
+  TESTNGPP_USE_DLOPEN_TRUE=
+  TESTNGPP_USE_DLOPEN_FALSE='#'
+else
+  TESTNGPP_USE_DLOPEN_TRUE='#'
+  TESTNGPP_USE_DLOPEN_FALSE=
+fi
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing lt_dlopenext" >&5
 $as_echo_n "checking for library containing lt_dlopenext... " >&6; }
 if test "${ac_cv_search_lt_dlopenext+set}" = set; then :
@@ -14437,68 +14502,9 @@ else
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing dlopen" >&5
-$as_echo_n "checking for library containing dlopen... " >&6; }
-if test "${ac_cv_search_dlopen+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dlopen ();
-int
-main ()
-{
-return dlopen ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' dl; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_dlopen=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if test "${ac_cv_search_dlopen+set}" = set; then :
-  break
-fi
-done
-if test "${ac_cv_search_dlopen+set}" = set; then :
-
-else
-  ac_cv_search_dlopen=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_dlopen" >&5
-$as_echo "$ac_cv_search_dlopen" >&6; }
-ac_res=$ac_cv_search_dlopen
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-
-fi
-
- if test "$ac_cv_search_dlopen" != no; then
-  TESTNGPP_USE_DLOPEN_TRUE=
-  TESTNGPP_USE_DLOPEN_FALSE='#'
-else
-  TESTNGPP_USE_DLOPEN_TRUE='#'
-  TESTNGPP_USE_DLOPEN_FALSE=
+if test "x${ac_cv_search_dlopen}" == "x" && \
+   test "x${ac_cv_search_dlopenext}" == "x"; then
+     as_fn_error "Unable to find a module loading library" "$LINENO" 5
 fi
 
 
@@ -14665,12 +14671,12 @@ if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   as_fn_error "conditional \"am__fastdepCXX\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${TESTNGPP_USE_LTDL_TRUE}" && test -z "${TESTNGPP_USE_LTDL_FALSE}"; then
-  as_fn_error "conditional \"TESTNGPP_USE_LTDL\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
 if test -z "${TESTNGPP_USE_DLOPEN_TRUE}" && test -z "${TESTNGPP_USE_DLOPEN_FALSE}"; then
   as_fn_error "conditional \"TESTNGPP_USE_DLOPEN\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${TESTNGPP_USE_LTDL_TRUE}" && test -z "${TESTNGPP_USE_LTDL_FALSE}"; then
+  as_fn_error "conditional \"TESTNGPP_USE_LTDL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

@@ -18,9 +18,13 @@ AM_LDFLAGS = \
   $(top_builddir)/libs/libcxxtest.la \
   $(top_srcdir)/3rdparty/mockcpp/src/libmockcpp.la \
   $(top_builddir)/src/libtestngpp.la \
-  $(top_builddir)/src/runner/libtestngpprunner.la \
-  $(LIBLTDL) 
+  $(top_builddir)/src/runner/libtestngpprunner.la 
 
+if TESTNGPP_USE_DLOPEN
+  AM_LDFLAGS += -ldl
+else
+  AM_LDFLAGS += $(LIBLTDL) 
+endif
 
 UT1_SOURCE = testngpp-ut1.cpp
 UT2_SOURCE = testngpp-ut2.cpp
