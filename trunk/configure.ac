@@ -6,11 +6,17 @@ AC_PROG_LIBTOOL
 AC_PROG_CXX
 AM_PATH_PYTHON([2.4],,[:])
 
+AC_SEARCH_LIBS([dlopen],[dl])
+AM_CONDITIONAL([TESTNGPP_USE_DLOPEN], [test "$ac_cv_search_dlopen" != no])
+
 AC_SEARCH_LIBS([lt_dlopenext],[ltdl])
 AM_CONDITIONAL([TESTNGPP_USE_LTDL], [test "$ac_cv_search_lt_dlopenext" != no])
 
-AC_SEARCH_LIBS([dlopen],[dl])
-AM_CONDITIONAL([TESTNGPP_USE_DLOPEN], [test "$ac_cv_search_dlopen" != no])
+if test "x${ac_cv_search_dlopen}" == "x" && \
+   test "x${ac_cv_search_dlopenext}" == "x"; then
+     AC_ERROR([Unable to find a module loading library])
+fi
+
 
 AC_CONFIG_SUBDIRS([3rdparty/mockcpp])
 AC_CONFIG_FILES([
