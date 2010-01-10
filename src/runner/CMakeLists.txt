@@ -56,7 +56,9 @@ ELSE(TESTNGPP_USE_DLOPEN)
   MESSAGE(FATAL_ERROR "No module loader found")
 ENDIF(TESTNGPP_USE_DLOPEN)
 
-ADD_LIBRARY(testngpp-runner-lib STATIC ${TESTNGRUNNER_LIB_SRCS})
+ADD_LIBRARY(testngpp-runner-lib SHARED ${TESTNGRUNNER_LIB_SRCS})
+
+TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 
 ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp)
 
