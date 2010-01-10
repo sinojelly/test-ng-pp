@@ -1,1 +1,0 @@
-DELEGATED_METHOD_GET_BY_VPTR(0, vtblIndex)
