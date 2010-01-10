@@ -2,8 +2,7 @@
 #include <iostream>
 
 #include <testngpp/Error.h>
-
-#include <testngpp/comm/ExceptionKeywords.h>
+#include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/LTTestSuiteLoader.h>

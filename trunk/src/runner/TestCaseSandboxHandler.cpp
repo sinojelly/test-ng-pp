@@ -1,12 +1,15 @@
 
+#include <testngpp/ExceptionKeywords.h>
+
+#include <testngpp/internal/TestCase.h>
+
 #include <testngpp/comm/PipeWrittableChannel.h>
-#include <testngpp/comm/ExceptionKeywords.h>
 
 #include <testngpp/runner/TestCaseSandboxHandler.h>
 #include <testngpp/runner/TestCaseResultCollector.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 #include <testngpp/runner/TestCaseRunner.h>
-#include <testngpp/internal/TestCase.h>
+
 
 TESTNGPP_NS_START
 

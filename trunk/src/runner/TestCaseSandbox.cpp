@@ -3,9 +3,9 @@
 #include <sys/socket.h>
 
 #include <testngpp/Error.h>
+#include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/comm/PipeReadableChannel.h>
-#include <testngpp/comm/ExceptionKeywords.h>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestCase.h>
