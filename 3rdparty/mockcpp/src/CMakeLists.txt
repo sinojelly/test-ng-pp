@@ -15,7 +15,7 @@ SET(PACKAGE \"mockcpp\")
 SET(VERSION \"2.4\")
 
 
-SET(MOCKCPP_ROOT ${CMAKE_SOURCE_DIR}/3rdparty/mockcpp)
+SET(MOCKCPP_SRC_ROOT ${CMAKE_SOURCE_DIR}/3rdparty/mockcpp)
 
 # Set MOCKCPP_MAX_INHERITANCE
 #
@@ -149,8 +149,7 @@ ELSE(WIN32)
    SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} DummyApiHook.cpp)
 ENDIF(WIN32)
 ######################################################
-SET(MOCKCPP_HEADERS_PATH ${MOCKCPP_ROOT}/include/mockcpp)
-SET(MOCKCPP_SOURCES_PATH ${MOCKCPP_ROOT}/src)
+SET(MOCKCPP_HEADERS_PATH ${MOCKCPP_SRC_ROOT}/include/mockcpp)
 
 SET(MOCKCPP_VTBL_RELATED_HEADERS 
     ${MOCKCPP_HEADERS_PATH}/DelegatedMethodGetDef.h 
@@ -173,7 +172,7 @@ ELSE(MOCKCPP_ALLOW_MI)
 ENDIF(MOCKCPP_ALLOW_MI)
 
 ######################################################
-SET(VTBL_GENERATOR ${MOCKCPP_ROOT}/src/generate_vtbl_related_files.py)
+SET(VTBL_GENERATOR ${MOCKCPP_SRC_ROOT}/src/generate_vtbl_related_files.py)
 SET(EXTRA_VTBL_HEADERS_DEFS
     --allow-mi=${ALLOW_MI}
     --max-inheritance=${MOCKCPP_MAX_INHERITANCE}
@@ -189,7 +188,7 @@ FOREACH(HEADER ${MOCKCPP_VTBL_RELATED_HEADERS})
 ENDFOREACH()
 
 ######################################################
-SET(ARG_GENERATOR ${MOCKCPP_ROOT}/src/generate_arg_related_files.py)
+SET(ARG_GENERATOR ${MOCKCPP_SRC_ROOT}/src/generate_arg_related_files.py)
 SET(EXTRA_ARG_HEADERS_DEFS
     --max-parameters=${MOCKCPP_MAX_PARAMETERS}
     --include-path=${MOCKCPP_HEADERS_PATH}
@@ -203,13 +202,13 @@ FOREACH(HEADER ${MOCKCPP_ARG_RELATED_HEADER_FILES})
 ENDFOREACH()
 
 ######################################################
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
 
 ADD_LIBRARY(mockcpp SHARED ${MOCKCPP_SRCS})
 
 TARGET_LINK_LIBRARIES(mockcpp -ltestngpp)
 
-INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_ROOT}/include ${MOCKCPP_ROOT}/3rdparty)
+INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_SRC_ROOT}/include ${MOCKCPP_SRC_ROOT}/3rdparty)
 
 ADD_CUSTOM_TARGET(vtbl_related_headers DEPENDS ${MOCKCPP_VTBL_RELATED_HEADERS})
 ADD_CUSTOM_TARGET(arg_related_headers DEPENDS ${MOCKCPP_ARG_RELATED_HEADER_FILES})
