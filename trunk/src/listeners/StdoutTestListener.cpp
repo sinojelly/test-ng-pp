@@ -1,20 +1,3 @@
-/**
-    TestNG++ is a practical, easy-to-use C/C++ xUnit framework.
-    Copyright (C) <2009>  <Arthur Yuan: arthur.ii.yuan@gmail.com>
-
-    TestNG++ is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    TestNG++ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
-**/
 
 #include <iostream>
 #include <string.h>
@@ -176,42 +159,12 @@ addFixtureFailure(TestFixtureInfoReader*, const AssertionFailure& failure)
 void StdoutTestListener::
 startTestSuite(TestSuiteInfoReader* suite)
 {
-#if 0
-   std::cout << suite->getName() << std::endl;
-#endif
 }
 
 ///////////////////////////////////////////////////////////
 void StdoutTestListener::
 endTestSuite(TestSuiteInfoReader* suite)
 {
-#if 0
-   if(suite == 0)
-   {
-      return;
-   }
-
-   TestSuiteResultReporter* reporter = This->suiteResultReporter;
-
-   unsigned int successCases = reporter->getNumberOfSuccessfulTestCases(suite);
-
-   int successRate = 0;
-   if(reporter->getNumberOfTestCases(suite) != 0)
-   {
-      successRate = int(successCases*100/reporter->getNumberOfTestCases(suite)); 
-   }
-
-   std::cout << std::endl
-             << " success: " << successCases
-             << " failed: " << reporter->getNumberOfFailedTestCases(suite)
-             << " error: "  << reporter->getNumberOfErrorTestCases(suite)
-             << " crash: "  << reporter->getNumberOfCrashedTestCases(suite) << std::endl
-             << " success rate: " << successRate << "%"
-             << std::endl
-             << "======================================"
-             << std::endl;
-#endif
-
 }
 
 ///////////////////////////////////////////////////////////
@@ -386,8 +339,8 @@ void ColorfulStdoutTestListener::
 startTestCase(TestCaseInfoReader* testcase)
 {  
       std::cout << "\33[32m[ RUN     ]\33[0m"
-	            << testcase->getName()
-				<< std::endl; 
+	             << testcase->getName()
+				    << std::endl; 
 }
 
 ///////////////////////////////////////////////////////////
@@ -398,8 +351,7 @@ endTestCase(TestCaseInfoReader* testcase)
    {
    case TestCaseResultReporter::SUCCESS:
       std::cout << "\33[32m[      OK ]\33[0m"
-	            << testcase->getName()
-				<< std::endl; 
+				    << std::endl; 
       break;
    case TestCaseResultReporter::FAILED:
       break;
@@ -476,8 +428,14 @@ void ColorfulStdoutTestListener::endTest()
    if(This->resultReporter->getNumberOfUnloadableSuites() == 0 &&
          This->resultReporter->getNumberOfUnsuccessfulTestCases() == 0)
    {
-      std::cout << "(" << This->resultReporter->getNumberOfTestCases()
-                << " cases) OK!" << std::endl;
+      std::cout << "(" 
+                << This->resultReporter->getNumberOfTestCases()
+                << " cases) "
+                << "\33[32m"
+                << "OK" 
+                << "\33[0m"
+                << "!"
+                << std::endl;
       return ;
    }
 
@@ -488,38 +446,64 @@ void ColorfulStdoutTestListener::endTest()
       unsigned int totalSuites = This->resultReporter->getNumberOfLoadedSuites() 
                                + This->resultReporter->getNumberOfUnloadableSuites();
 
-      unsigned int rate = (unsigned int)(100*This->resultReporter->getNumberOfLoadedSuites()/totalSuites);
+      unsigned int rate = \
+          (unsigned int)(100*This->resultReporter->getNumberOfLoadedSuites()/totalSuites);
 
-      std::cout << " loaded suites: " << This->resultReporter->getNumberOfLoadedSuites()
-                << " unloadable suites: " << This->resultReporter->getNumberOfUnloadableSuites()
+      std::cout << " loaded suites: " 
+                << This->resultReporter->getNumberOfLoadedSuites()
+                << " unloadable suites: " 
+                << "\33[31m"
+                << This->resultReporter->getNumberOfUnloadableSuites()
+                << "\33[0m"
                 << std::endl
-                << " load success rate: " << rate << "%"
+                << " load success rate: " 
+                << "\33[31m"
+                << rate << "%"
+                << "\33[0m"
                 << std::endl;
    }
 
    if(This->resultReporter->getNumberOfUnsuccessfulTestCases() > 0)
    {
-      unsigned int successCases = This->resultReporter->getNumberOfSuccessfulTestCases();
-      unsigned int rate = int(successCases*100/This->resultReporter->getNumberOfTestCases()); 
+      unsigned int successCases = \
+          This->resultReporter->getNumberOfSuccessfulTestCases();
+      unsigned int rate = \
+          (unsigned int)(successCases*100/This->resultReporter->getNumberOfTestCases()); 
 
-      std::cout << " success: " << successCases;
+      std::cout << " success: "
+                << "\33[32m" 
+                << successCases
+                << "\33[0m";
 
       if(This->resultReporter->getNumberOfFailedTestCases() > 0)
       {
-         std::cout << " failed: " << This->resultReporter->getNumberOfFailedTestCases();
+         std::cout << " failed: " 
+                   << "\33[31m" 
+                   << This->resultReporter->getNumberOfFailedTestCases()
+                   << "\33[0m";
       }
 
       if(This->resultReporter->getNumberOfErrorTestCases() > 0)
       {
-         std::cout << " error: "  << This->resultReporter->getNumberOfErrorTestCases();
+         std::cout << " error: "  
+                   << "\33[31m" 
+                   << This->resultReporter->getNumberOfErrorTestCases()
+                   << "\33[0m";
       }
 
       if(This->resultReporter->getNumberOfCrashedTestCases() > 0)
       {
-         std::cout << " crashed: "  << This->resultReporter->getNumberOfCrashedTestCases();
+         std::cout << " crashed: "  
+                   << "\33[31m" 
+                   << This->resultReporter->getNumberOfCrashedTestCases()
+                   << "\33[0m";
       }
       std::cout << std::endl 
-                << " success rate: " << rate << '%' << std::endl;
+                << " success rate: "
+                << "\33[31m" 
+                << rate << '%' 
+                << "\33[0m"
+                << std::endl;
    }
 }
 
@@ -537,25 +521,33 @@ TESTNGPP_NS_END
 
 ///////////////////////////////////////////////////////////
 USING_TESTNGPP_NS
+
+#define LISTENER(name) testngppstdoutlistener_##name
 ///////////////////////////////////////////////////////////
 extern "C"
 TestListener*
-testngppstdoutlistener_create_instance(
+LISTENER(create_instance)(
    TestResultReporter* resultReporter,
    TestSuiteResultReporter* suiteReporter,
    TestCaseResultReporter* caseResultReporter,
    int argc, char**argv)
 {
     if(argc == 2 && !strcmp("-c", argv[1]))
-        return new ColorfulStdoutTestListener(resultReporter, suiteReporter, caseResultReporter);
+        return new ColorfulStdoutTestListener( \
+                 resultReporter, \
+                 suiteReporter, \
+                 caseResultReporter);
 
-     return new StdoutTestListener(resultReporter, suiteReporter, caseResultReporter);
+     return new StdoutTestListener( \
+                 resultReporter, \
+                 suiteReporter, \
+                 caseResultReporter);
 }
 
 ///////////////////////////////////////////////////////////
 extern "C"
 void
-testngppstdoutlistener_destroy_instance(TestListener* instance)
+LISTENER(destroy_instance)(TestListener* instance)
 {
     delete instance;
 }
