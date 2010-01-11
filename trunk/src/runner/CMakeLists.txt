@@ -10,6 +10,18 @@ ADD_DEFINITIONS(
 
 SET(TESTNGPP_LIBRARY -ltestngpp)
 
+IF(CYGWIN)
+  SET(MODULE_FLAGS
+    "-shared -nostdlib -lstdc++ -lgcc \
+     -lcygwin -luser32 -lkernel32 \
+     -ladvapi32 -lshell32 -lgcc \
+     -Wl,--enable-autoimage-base \
+     -Xlinker --out-implib -Xlinker"
+  )
+  SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS ${MODULE_FLAGS})
+  SET(CMAKE_MODULE_LIBRARY_LINK_CXX_FLAGS ${MODULE_FLAGS})
+ENDIF(CYGWIN)
+
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src .)
 
@@ -62,6 +74,7 @@ TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 
 ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp)
 
+# -Wl,--export-dynamic
 ADD_DEPENDENCIES(testngpp-runner testngpp-runner-lib)
 TARGET_LINK_LIBRARIES(testngpp-runner ${TESTNGPP_LIBRARY} testngpp-runner-lib)
 
