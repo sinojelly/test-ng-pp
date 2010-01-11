@@ -100,7 +100,7 @@ am__libmockcpp_for_test_la_SOURCES_DIST = AfterMatcher.cpp AnyBase.cpp \
 	IsStringEndWith.cpp IsStringContains.cpp \
 	DelegatedMethodGetter.cpp DieStub.cpp InterfaceInfo.cpp \
 	GenericMethodIndicesChecker.cpp DestructorChecker.cpp \
-	HookMockObject.cpp CApiHookKey.cpp
+	HookMockObject.cpp CApiHookKey.cpp DummyApiHook.cpp
 am__objects_1 = AfterMatcher.lo AnyBase.lo AnyCast.lo Any.lo \
 	Asserter.lo AssertionFailedError.lo BeforeMatcher.lo \
 	CallerMatcher.lo ChainableMockMethodCore.lo \
@@ -128,7 +128,8 @@ am__objects_1 = AfterMatcher.lo AnyBase.lo AnyCast.lo Any.lo \
 	StringConstraint.lo IsStringStartWith.lo IsStringEndWith.lo \
 	IsStringContains.lo DelegatedMethodGetter.lo DieStub.lo \
 	InterfaceInfo.lo GenericMethodIndicesChecker.lo \
-	DestructorChecker.lo HookMockObject.lo CApiHookKey.lo
+	DestructorChecker.lo HookMockObject.lo CApiHookKey.lo \
+	DummyApiHook.lo
 @USE_TEST_TARGET_TRUE@am_libmockcpp_for_test_la_OBJECTS =  \
 @USE_TEST_TARGET_TRUE@	$(am__objects_1)
 libmockcpp_for_test_la_OBJECTS = $(am_libmockcpp_for_test_la_OBJECTS)
@@ -303,7 +304,7 @@ AM_CPPFLAGS = \
 @USE_TEST_TARGET_TRUE@noinst_LTLIBRARIES = libmockcpp-for-test.la
 @USE_TEST_TARGET_TRUE@libmockcpp_for_test_la_LDFLAGS = \
 @USE_TEST_TARGET_TRUE@   @MOCKCPP_LDFLAGS_FOR_DIST@ \
-@USE_TEST_TARGET_TRUE@   ../3rdparty/testcpp/src/libtestcpp.la \
+@USE_TEST_TARGET_TRUE@   $(top_builddir)/../../src/libtestngpp.la \
 @USE_TEST_TARGET_TRUE@   -rpath /dev/null 
 
 lib_LTLIBRARIES = libmockcpp.la
@@ -548,7 +549,8 @@ MOCKCPP_SRCS = \
  GenericMethodIndicesChecker.cpp \
  DestructorChecker.cpp \
  HookMockObject.cpp \
- CApiHookKey.cpp
+ CApiHookKey.cpp \
+ DummyApiHook.cpp 
 
 libmockcpp_la_SOURCES = $(MOCKCPP_SRCS)
 @USE_TEST_TARGET_TRUE@libmockcpp_for_test_la_SOURCES = $(MOCKCPP_SRCS)
@@ -672,6 +674,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DelegatedMethodGetter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DestructorChecker.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DieStub.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DummyApiHook.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Exception.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ExpectsMatcher.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Formatter.Plo@am__quote@

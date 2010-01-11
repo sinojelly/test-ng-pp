@@ -12,7 +12,7 @@ if USE_TEST_TARGET
 noinst_LTLIBRARIES = libmockcpp-for-test.la
 libmockcpp_for_test_la_LDFLAGS = \
    @MOCKCPP_LDFLAGS_FOR_DIST@ \
-   ../3rdparty/testcpp/src/libtestcpp.la \
+   $(top_builddir)/../../src/libtestngpp.la \
    -rpath /dev/null 
 endif
 
@@ -261,7 +261,8 @@ MOCKCPP_SRCS = \
  GenericMethodIndicesChecker.cpp \
  DestructorChecker.cpp \
  HookMockObject.cpp \
- CApiHookKey.cpp
+ CApiHookKey.cpp \
+ DummyApiHook.cpp 
 
 libmockcpp_la_SOURCES = $(MOCKCPP_SRCS)
 
