@@ -9,6 +9,16 @@ SET(TESTNGPP_SRCS
   StringToOptions.cpp
 )
 
+IF(CYGWIN)
+  SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS
+    "-shared -nostdlib -lstdc++ -lgcc \
+     -lcygwin -luser32 -lkernel32 \
+     -ladvapi32 -lshell32 -lgcc \
+     -Wl,--enable-autoimage-base \
+     -Xlinker --out-implib -Xlinker"
+  ) 
+ENDIF(CYGWIN)
+
 ADD_LIBRARY(testngpp SHARED ${TESTNGPP_SRCS})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
