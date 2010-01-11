@@ -104,14 +104,8 @@ fi
 MOCKCPP_MAX_PARAMS=$max_parameters
 AC_SUBST(MOCKCPP_MAX_PARAMS)
 
-AC_CONFIG_SUBDIRS([3rdparty/cxxtestplus])
 AC_CONFIG_FILES([
   Makefile
   src/Makefile
-  ut/Makefile
-  ft/Makefile
-  samples/cpp/Makefile
-  samples/cpp/src/Makefile
-  samples/cpp/ut/Makefile
 ])
 AC_OUTPUT
