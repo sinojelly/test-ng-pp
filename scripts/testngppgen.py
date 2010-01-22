@@ -47,6 +47,7 @@ allFixtures = []
 fixture_tag_re = re.compile( r'^\s*//\s*@fixture\s*$')
 test_tag_re = re.compile( r'^\s*//\s*@test\s*$')
 fixture_re = re.compile( r'^(?P<fixtureDef>\s*(class|struct)\s*(?P<fixtureName>[A-Za-z_]\w*)\s*:\s*public\s+((testngpp|TESTNGPP_NS)\s*::)?\s*TestFixture\w*)' )
+fixture_re2 = re.compile( r'^FIXTURE\(\)')
 bl_re = re.compile( r'^\s*$' )
 sl_re = re.compile( r'^\s*//.*$' )
 msl_re = re.compile( r'^\s*/\*.*\*/\s*(//.*)?$' )
