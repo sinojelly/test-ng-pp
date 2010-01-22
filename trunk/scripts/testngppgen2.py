@@ -54,7 +54,7 @@ class Continue:
    pass
 
 ##############################################
-slc_re   = re.compile( r'^(?P<content>.*?)\/\/.*$' )
+slc_re   = re.compile( r'^(?P<content>.*?)//.*$' )
 mlc_re   = re.compile( r'^(?P<content>.*?)/\*.*$' )
 emlc_re  = re.compile( r'^.*?\*/(?P<rest>.*)$' )
 
