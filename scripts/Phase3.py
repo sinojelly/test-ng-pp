@@ -31,21 +31,6 @@ class FixturesInOneFile(Fixtures):
       Fixtures.__init__(self, inst, expr)
 
    #######################################################
-   def show(self):
-      print "#"+self.inst, self.expr
-
-      for fixture in self.fixtures:
-         fixture.show()
-
-      for scope in self.scopes:
-         scope.show()
-
-      for sibling in self.siblings:
-         sibling.show()
-
-      print "//#"+self.inst, self.expr
-
-   #######################################################
    def add_fixture(self, fixture):
       self.fixtures.append(fixture)
 
@@ -125,7 +110,5 @@ class Phase3Parser:
 ##########################################################
 def phase3(globalScope):
    ''' return: Fixtures'''
-   fixtures = Phase3Parser(globalScope).parse()
-   fixtures.show()
-   return fixtures
+   return Phase3Parser(globalScope).parse()
 

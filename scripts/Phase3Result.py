@@ -6,12 +6,17 @@ import sys
 class TestCase:
    def __init__(self, name):
       self.name = name
+      self.file = "a.h"
+      self.line = 100
 
    def get_name(self):
       return self.name
 
-   def show(self):
-      print "TEST(", self.name, ")"
+   def get_file_name(self):
+      return self.file
+
+   def get_line_number(self):
+      return self.line
 
 ##########################################################
 class Fixture:
@@ -24,11 +29,6 @@ class Fixture:
 
    def get_testcases(self):
       return self.testcases
-
-   def show(self):
-      print "FIXTURE(", self.name, ")"
-      for testcase in self.testcases:
-         testcase.show()
 
 ##########################################################
 class Fixtures:
@@ -46,5 +46,16 @@ class Fixtures:
 
       return result
 
-   
+   def get_fixtures(self):
+      return self.fixtures
 
+   def get_sub_scopes(self):
+      return self.scopes
+   
+   def get_siblings(self):
+      return self.siblings
+
+   def is_root_scope(self):
+      return self.inst == "ifdef" or \
+             self.inst == "ifndef" or \
+             self.inst == "if"
