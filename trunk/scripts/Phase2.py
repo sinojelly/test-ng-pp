@@ -37,6 +37,24 @@ class BaseScope(PreprocessScope):
    def __init__(self, file, line, parent, name, expr):
       PreprocessScope.__init__(self, file, line, parent, name, expr)
 
+   def stay_in_zero(self):
+      return self.is_zero() or (self.parent and self.parent.stay_in_zero())
+
+   #######################################################
+   def is_zero(self):
+      return None
+
+   #######################################################
+   def is_one(self):
+      return None
+
+   #######################################################
+   def add_line(self, lines):
+      if not self.stay_in_zero():
+         self.lines.append(lines[0])
+
+      return create_cont(lines[1:])
+
    #######################################################
    def handle_done(self, result):
       if result['root'] == self:
@@ -62,29 +80,27 @@ class BaseScope(PreprocessScope):
       line = lines[0]
 
       if isinstance(line, Tag):
-         self.lines.append(line)
-         return create_cont(lines[1:])
+         return self.add_line(lines)
 
       matched = cpp_re.match(line.get_content())
       if not matched:
-         self.lines.append(line) 
-         return create_cont(lines[1:])
+         return self.add_line(lines)
 
       return self.parse_cpp_line(lines, matched.group('instruction'), matched.group('rest')) 
 
    #######################################################
    def parse_cpp_line(self, lines, inst, rest):
       if not is_scope_inst(inst):
-         self.lines.append(lines[0]) 
-         return create_cont(lines[1:])
+         return self.add_line(lines)
 
       return self.parse_scope_inst(lines, inst, rest)
 
    #######################################################
    def add_scope(self, scope, lines):
-      self.lines.append(scope)
-      return scope.parse(lines[1:])
+      if not self.stay_in_zero():
+         self.lines.append(scope)
 
+      return scope.parse(lines[1:])
 
    #######################################################
    def add_ifdef_scope(self, lines, rest, isIfndef):
@@ -130,7 +146,9 @@ class ConditionScope(BaseScope):
 
    #######################################################
    def add_elses(self, scope, lines):
+      #if not self.root.stay_in_zero():
       self.root.elses.append(scope)
+
       return scope.parse(lines[1:])
 
    #######################################################
@@ -149,14 +167,6 @@ class ConditionScope(BaseScope):
    def is_digit(self):
       return self.is_zero() or self.is_one()
 
-   #######################################################
-   def is_zero(self):
-      return None 
-
-   #######################################################
-   def is_one(self):
-      return None
-
 ##########################################################
 zero_re = re.compile( r'^\s*0\s*$' )
 one_re  = re.compile( r'^\s*1\s*$' )
@@ -171,6 +181,9 @@ def getIfName(isElif):
 class IfScope(ConditionScope):   
    #######################################################
    def __init__(self, file, line, parent, rest, root):
+      if root and (root.is_zero() or root.is_one()):
+         fatal(line, "#if 0 or #if 1 does not allow #elif")
+
       self.rest = rest
 
       isElif = True
@@ -245,11 +258,11 @@ class ElseScope(ConditionScope):
 
    #######################################################
    def is_zero(self):
-      return this.root.is_one()
+      return self.root.is_one()
 
    #######################################################
    def is_one(self):
-      return this.root.is_zero()
+      return self.root.is_zero()
 
 ##########################################################
 def phase2(lines, file):
