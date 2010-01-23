@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 from Phase1Result import *
-from Phase2Result import *
-from Phase3Result import *
+from TestCase import *
+from PreprocessScope import *
 
 from Message import *
 

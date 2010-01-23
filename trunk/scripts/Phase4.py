@@ -3,8 +3,6 @@
 from Message import *
 
 from Phase1Result import *
-from Phase2Result import *
-from Phase3Result import *
 
 def get_testcase_base_name():
    return "TESTNGPP_NS::TestCase"
