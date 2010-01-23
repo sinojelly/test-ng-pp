@@ -1,4 +1,6 @@
 
+import sys
+
 ############################################
 class TestScope:
    #########################################
@@ -9,11 +11,23 @@ class TestScope:
       self.sub_scopes = []
       self.siblings = []
 
+   def show(self):
+      print "#" + self.inst, self.expr
+
+      for elem in self.elements:
+         elem.show()
+
+      for scope in self.sub_scopes:
+         scope.show()
+
+      for scope in self.siblings:
+         scope.show()
+
    #########################################
    def get_inst(self):
       result = self.inst
       if self.expr:
-         result = result + " " + self.inst
+         result = result + " " + self.expr
 
       return result
 

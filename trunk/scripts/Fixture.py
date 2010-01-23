@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import sys
+
 from TestScope import TestScope
 
 ###########################################
@@ -8,6 +10,11 @@ class Fixture:
    def __init__(self, name):
       self.name = name
       self.scope = TestScope("::", None)
+
+   def show(self):
+      content = "FIXTURE("+self.name+")"
+      print content.encode('utf-8')
+      self.scope.show()
 
    ########################################
    def get_name(self):

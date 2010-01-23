@@ -11,6 +11,7 @@ from PreprocessScope import *
 from Fixture import Fixture
 
 from TestCaseParser import TestCaseParser
+from PreprocessScopeParser import *
 
 from Message import *
 
@@ -121,19 +122,19 @@ class FixtureParser:
    def look_for_testcase(self, line):
       testcase_name = is_testcase_def(line)
       if testcase_name:
-         self.parser = TestCaseParser(testcase_name)
+         self.parser = TestCaseParser(testcase_name, self.file, line.get_line_number())
          return None
 
       return self.handle_normal_line(line)
         
    #######################################################
    def handle_sub_scope(self, scope):
-      self.fixture.add_sub_scope(PreprocessScopeParser(scope, is_testcase_def, TestCaseParser, "test case"))
+      self.fixture.add_sub_scope(PreprocessScopeParser(scope, is_testcase_def, TestCaseParser, "test case").parse())
 
    #######################################################
    def handle_sub_scopes(self):
       for scope in self.scopes:
-         self.handle_sub_scope(self, scope)
+         self.handle_sub_scope(scope)
 
    #######################################################
    def handle_normal_line(self, line):
@@ -141,6 +142,7 @@ class FixtureParser:
          self.handle_char(line, c)
 
       if self.done:
+         self.handle_sub_scopes()
          return self.fixture
 
       return None
