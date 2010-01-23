@@ -20,5 +20,7 @@ def is_fixture_def(line):
    
 ##########################################################
 def phase3(globalScope):
-   return PreprocessScopeParser(globalScope, is_fixture_def, FixtureParser, "fixture").parse()
+   result = PreprocessScopeParser(globalScope, is_fixture_def, FixtureParser, "fixture").parse()
+   result.show()
+   return result
 
