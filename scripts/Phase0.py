@@ -41,7 +41,7 @@ class Phase0Parser:
          return
 
       if line[-1] == "\\":
-         if len(line) > 1 and len[-2] == "\\":
+         if len(line) > 1 and line[-2] == "\\":
             raw_fatal(self.line_number, "stray '\\' in program")
          else:
             self.add_unclosed_line(line)
