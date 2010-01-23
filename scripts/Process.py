@@ -5,6 +5,7 @@ import re
 import os
 import codecs
 
+from Phase0 import phase0
 from Phase1 import phase1
 from Phase2 import phase2
 from Phase3 import phase3
@@ -33,7 +34,7 @@ def getCleanLines(fixtureFile):
 
 ##########################################################
 def processTestFixtureFile(file):
-    return phase3(phase2(phase1(getCleanLines(file)), file))
+    return phase3(phase2(phase1(phase0(getCleanLines(file))), file))
 
 ##########################################################
 def checkFixtureExistence(fixtureFiles):
