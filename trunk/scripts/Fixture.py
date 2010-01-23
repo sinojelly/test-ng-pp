@@ -7,9 +7,11 @@ from TestScope import TestScope
 ###########################################
 class Fixture:
    ########################################
-   def __init__(self, name):
+   def __init__(self, name, file, line):
       self.name = name
       self.scope = TestScope("::", None)
+      self.file = file
+      self.line = line
 
    def show(self):
       content = "FIXTURE("+self.name+")"
@@ -31,5 +33,13 @@ class Fixture:
    ########################################
    def get_scope(self):
       return self.scope
+
+   ########################################
+   def get_file_name(self):
+      return self.file
+
+   ########################################
+   def get_line_number(self):
+      return self.line
 
 ###########################################

@@ -34,7 +34,7 @@ class FixtureParser:
       self.begin = True
       self.end = None
       self.done = None
-      self.fixture = Fixture(name)
+      self.fixture = Fixture(name, file, line)
       self.parser = None
       self.file = file
       self.line = line
