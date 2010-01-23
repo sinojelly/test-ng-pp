@@ -54,9 +54,17 @@ class TestCaseDefGenerator:
                        get_fixture_para() + ");", self.file)
       output("     " + get_fixture_var() + "->setUp(); ", self.file)
       output("   }", self.file)
+      output("   void tearDown()", self.file)
+      output("   {", self.file)
+      output("     " + get_fixture_var() + "->tearDown(); ", self.file)
+      output("   }", self.file)
       output("   void run()", self.file)
       output("   {", self.file)
       output("     " + get_fixture_var() + "->" + self.testcase.get_name() + "();", self.file)
+      output("   }", self.file)
+      output("   " + get_fixture_base_name() + "* getFixture() const", self.file)
+      output("   {", self.file)
+      output("      return " + get_fixture_var() + ";", self.file)
       output("   }", self.file)
       output("private:", self.file)
       output("   " + self.fixture.get_name() + "* " + get_fixture_var() + ";", self.file)
@@ -168,8 +176,25 @@ class ScopesGenerator:
          ScopeGenerator(scope, self.file, generator_getter).generate()
      
 ################################################
+class SuiteGenerator:
+   #############################################
+   def __init__(self, scopes, file, suite):
+      self.scopes = scopes
+      self.suite = suite
+      self.file = file
+
+   #############################################
+   def generate_fixtures(self):
+      ScopesGenerator(self.scopes, self.file) \
+         .generate(lambda file, elem: FixtureGenerator(file, elem) )
+
+   #############################################
+   def generate(self):
+      self.generate_fixtures()
+
+################################################
 ################################################
 def phase4(target, scopes):
    file = None
-   ScopesGenerator(scopes, file).generate(lambda file, elem: FixtureGenerator(file, elem) )
+   SuiteGenerator(scopes, file, target).generate()
 
