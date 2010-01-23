@@ -6,6 +6,7 @@ import os
 import codecs
 
 from Phase1Result import *
+from LogicalLine import *
 
 ##########################################################
 blank_slc_re  = re.compile( r'^\s*//.*$', re.UNICODE)
@@ -45,9 +46,9 @@ def is_blank_slc(line):
 class Phase1Parser:
    def __init__(self, lines):
       self.result = []
-      self.line_number = 1
       self.lines = lines
       self.in_comment = None
+      self.line_number = 0
 
    #######################################################
    def is_tag_of(self, line):
@@ -60,10 +61,10 @@ class Phase1Parser:
       return True
 
    #######################################################
-   def remove_single_line_comment(self, line):
-      matched = slc_re.match(line)
+   def remove_single_line_comment(self, content):
+      matched = slc_re.match(content)
       if not matched:
-         return line
+         return content
 
       return matched.group("content")
 
@@ -79,37 +80,38 @@ class Phase1Parser:
       return content_without_slc
 
    #######################################################
-   def parseLineInComment(self, line):
+   def parse_line_in_comment(self, line):
       if not self.in_comment:
          return None
 
       matched = emlc_re.match(line)
       if matched:
          self.in_comment = None
-         self.parseLineOutOfComment(matched.group('rest'))
+         self.parse_line_out_of_comment(matched.group('rest'))
 
       return True
 
    #######################################################
-   def parseLineOutOfComment(self, line):
+   def parse_line_out_of_comment(self, line):
       if is_blank(line) or self.is_tag_of(line) or is_blank_slc(line):
          return
 
-      content = self.try_to_erase_comment(line)
-      if is_blank(content):
+      rest = self.try_to_erase_comment(line)
+      if is_blank(rest):
          return
 
-      self.result.append(Unknown(self.line_number, content))
+      self.result.append(Unknown(self.line_number, rest))
 
    #######################################################
-   def parseLine(self, line):
-      self.parseLineInComment(line) or self.parseLineOutOfComment(line)
+   def parse_line(self, line):
+      self.parse_line_in_comment(line) or \
+      self.parse_line_out_of_comment(line)
 
    #######################################################
    def parse(self):
       for line in self.lines:
-         self.parseLine(line)
-         self.line_number += 1
+         self.line_number = line.get_line_number()
+         self.parse_line(line.get_content())
 
       return self.result
 

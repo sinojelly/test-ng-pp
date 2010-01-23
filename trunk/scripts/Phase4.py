@@ -5,6 +5,10 @@ from Message import *
 
 from Phase1Result import *
 
+def output(content, file):
+   lines = content + "\n"
+   file.writelines(lines.encode('utf-8'))
+
 def get_base_name(file):
     return os.path.basename(file).split('.')[0]
 
@@ -173,12 +177,12 @@ class ScopeGenerator:
    def generate_begin(self):
       inst = self.scope.get_inst()
       if inst != "::":
-         print "#" + inst
+         output("#" + inst, self.file)
 
    #############################################
    def generate_end(self):
       if self.scope.is_root_scope():
-         print "#endif", "//", self.scope.get_inst()
+         output("#endif // #" + self.scope.get_inst(), self.file)
 
    #############################################
    def generate_scopes(self, scopes):
@@ -312,8 +316,14 @@ class SuiteGenerator:
 ################################################
 ################################################
 def phase4(fixture_files, target, scopes):
-   file = None
-   suite = get_base_name(target)
-   SuiteGenerator(scopes, file, suite, fixture_files).generate()
+   try:
+      file = open(target, "w")
+   except IOError:
+      print >> sys.stderr, "open", target, "failed"
+      sys.exit(1)
+
+   SuiteGenerator(scopes, file, get_base_name(target), fixture_files).generate()
+
+   file.close()
 
 ################################################
