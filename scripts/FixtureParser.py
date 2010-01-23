@@ -6,8 +6,9 @@ import os
 import codecs
 
 from Phase1Result import *
-from Phase2Result import *
-from Phase3Result import *
+
+from PreprocessScope import *
+from Fixture import Fixture
 
 from TestCaseParser import TestCaseParser
 
@@ -24,27 +25,18 @@ def is_testcase_def(line):
    return None
 
 ##########################################################
-class TestFixture(Fixture):
-   #######################################################
-   def __init__(self, name):
-      Fixture.__init__(self, name)
-
-   #######################################################
-   def add_testcase(self, testcase):
-      self.testcases.append(testcase)
-
-##########################################################
 class FixtureParser:
    #######################################################
-   def __init__(self, name):
+   def __init__(self, name, file, line):
       self.scopes = []
-      self.in_testcase = None
       self.numberOfUnclosedBraces = 0
       self.begin = True
       self.end = None
       self.done = None
-      self.fixture = TestFixture(name)
+      self.fixture = Fixture(name)
       self.parser = None
+      self.file = file
+      self.line = line
 
    #######################################################
    def add_scope(self, scope):
@@ -135,6 +127,15 @@ class FixtureParser:
       return self.handle_normal_line(line)
         
    #######################################################
+   def handle_sub_scope(self, scope):
+      self.fixture.add_sub_scope(PreprocessScopeParser(scope, is_testcase_def, TestCaseParser, "test case"))
+
+   #######################################################
+   def handle_sub_scopes(self):
+      for scope in self.scopes:
+         self.handle_sub_scope(self, scope)
+
+   #######################################################
    def handle_normal_line(self, line):
       for c in line.get_content():
          self.handle_char(line, c)
@@ -147,9 +148,10 @@ class FixtureParser:
    #######################################################
    def parse(self, line):
       if isinstance(line, Tag):
-         return self.handle_tag(line)
+         self.handle_tag(line)
+         return None
 
-      if isinstance(line, Scope):
+      if isinstance(line, PreprocessScope):
          self.add_scope(line)
          return None
       

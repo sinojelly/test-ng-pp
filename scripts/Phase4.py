@@ -68,7 +68,7 @@ class FixtureGenerator:
 
    #############################################
    def generate_testcases(self):
-      for testcase in self.fixture.get_testcases():
+      for testcase in self.fixture.get_scope().get_elements():
          TestCaseGenerator(testcase, self.fixture, self.file).generate()
 
    def get_testcase_array(self):
@@ -135,18 +135,18 @@ class FixtureScopeGenerator(ScopeGenerator):
 
    #############################################
    def generate_content(self):
-      for fixture in self.scope.get_fixtures():
+      for fixture in self.scope.get_elements():
          FixtureGenerator(fixture, self.file).generate()
 
 ################################################
 class TestCaseScopeGenerator(ScopeGenerator):
    #############################################
    def __init__(self, scope, file):
-      ScopeGenerator.__init__(self, scope, file)
+      ScopeGenerator.__init__(self, scope.get_scope(), file)
 
    #############################################
    def generate_content(self):
-      for testcase in self.scope.get_testcases():
+      for testcase in self.scope.get_elements():
          TestCaseGenerator(testcase, self.file).generate()
 
 ################################################
