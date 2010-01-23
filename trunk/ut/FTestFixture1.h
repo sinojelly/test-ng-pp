@@ -26,8 +26,9 @@ class FTestFixture1
            , TestCase(nameOfCase, nameOfFixture, file, line)
       {}
 
+      TestFixture* getFixture() const { return m_fixture; }
       void run() {}
-      void setUp()
+      void setUp(TestFixture*)
       {
          m_fixture->setUp();
       }

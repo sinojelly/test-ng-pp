@@ -20,6 +20,7 @@
 #include <testngpp/runner/TestResultCollector.h>
 
 
+#include "MyTestCase.h"
 
 
 
@@ -28,19 +29,6 @@ USING_TESTNGPP_NS
 
 class TestTestSuiteRunner: public CxxTest::TestSuite
 {
-   struct MyTestCase : public TestCase
-   {
-      MyTestCase( const std::string& nameOfCase
-           , const std::string& nameOfFixture
-           , const std::string& file
-           , unsigned int line)
-           : TestCase(nameOfCase, nameOfFixture, file, line)
-      {}
-
-      void run() {}
-      void setUp() {}
-      void tearDown() {}
-   };
 
 private:
    TESTNGPP_RCP checkpoint;

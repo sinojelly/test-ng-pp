@@ -48,7 +48,9 @@ struct MyTestCase : public TestCase
 
    MyTestFixture myTestFixture;
 
-   void setUp()
+   TESTNGPP_NS::TestFixture* getFixture() const { return 0; }
+
+   void setUp(TESTNGPP_NS::TestFixture*)
    {
       myTestFixture.setUp();
    }

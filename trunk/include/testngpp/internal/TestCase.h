@@ -24,8 +24,9 @@
 
 #include <testngpp/internal/TestCaseInfoReader.h>
 
-
 TESTNGPP_NS_START
+
+struct TestFixture;
 
 struct TestCase
    : public TestCaseInfoReader
@@ -40,6 +41,8 @@ struct TestCase
       , lineOfFile(line)
    {}
 
+	virtual ~TestCase() {}
+
 	const std::string& getName() const
 	{ return name; }
 
@@ -52,11 +55,11 @@ struct TestCase
 	const unsigned int getLineOfFile() const
 	{ return lineOfFile; }
 
-   virtual void setUp() = 0;
-   virtual void run() = 0;
-   virtual void tearDown() = 0;
+   virtual TESTNGPP_NS::TestFixture* getFixture() const = 0;
 
-	virtual ~TestCase() {}
+   virtual void setUp(TESTNGPP_NS::TestFixture* fixture = 0) = 0;
+   virtual void tearDown() = 0;
+   virtual void run() = 0;
 
 private:
 	std::string name;

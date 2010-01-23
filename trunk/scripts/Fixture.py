@@ -8,7 +8,8 @@ from TestScope import TestScope
 class Fixture:
    ########################################
    def __init__(self, name, file, line):
-      self.name = name
+      self.id   = name[0]
+      self.name = name[1]
       self.scope = TestScope("::", None)
       self.file = file
       self.line = line
@@ -19,8 +20,15 @@ class Fixture:
       self.scope.show()
 
    ########################################
+   def get_id(self):
+      return self.id
+
+   ########################################
    def get_name(self):
-      return self.name
+      if self.name:
+         return self.name
+
+      return self.id
 
    ########################################
    def add_testcase(self, testcase):
