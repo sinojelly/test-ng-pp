@@ -74,7 +74,7 @@ class TestCaseParser:
          # TODO: Warning Here...
          return None
       
-      if isinstance(line, Scope):
+      if isinstance(line, PreprocessScope):
          # We don't care scopes in testcases
          return None
 

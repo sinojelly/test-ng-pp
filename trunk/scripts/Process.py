@@ -32,8 +32,8 @@ def getCleanLines(fixtureFile):
    return cleanLines
 
 ##########################################################
-def processTestFixtureFile(fixtureFile):
-    return phase3(phase2(phase1(getCleanLines(fixtureFile))))
+def processTestFixtureFile(file):
+    return phase3(phase2(phase1(getCleanLines(file)), file))
 
 ##########################################################
 def checkFixtureExistence(fixtureFiles):

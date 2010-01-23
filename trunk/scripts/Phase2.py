@@ -5,17 +5,14 @@ import re
 import os
 
 from Phase1Result import *
-from Phase2Result import *
+
+from PreprocessScope import *
+
 from Message import *
 
 cpp_re  = re.compile( r'^\s*#\s*(?P<instruction>\w+)(\s+(?P<rest>.*))?$', re.UNICODE)
 macro_re = re.compile( r'^\s*[A-Za-z_][A-Za-z0-9_]*\s*$', re.UNICODE)
 
-
-##########################################################
-def fatal(line_number, error):
-   print >> sys.stderr, line_number, ":", error
-   sys.exit(1)
 
 ##########################################################
 def create_cont(lines):
@@ -35,22 +32,10 @@ def is_scope_inst(inst):
           inst == "endif"
 
 ##########################################################
-class BaseScope(Scope):
+class BaseScope(PreprocessScope):
    #######################################################
-   def __init__(self, parent, name, expr):
-      Scope.__init__(self, parent, name, expr)
-
-   #######################################################
-   def show(self):
-      print "SCOPE ---> ", self.name, self.expr
-
-      for line in self.lines:
-         line.show()
-
-      for elses in self.elses:
-         elses.show()
-
-      print "<----SCOPE", self.name
+   def __init__(self, file, line, parent, name, expr):
+      PreprocessScope.__init__(self, file, line, parent, name, expr)
 
    #######################################################
    def handle_done(self, result):
@@ -105,14 +90,14 @@ class BaseScope(Scope):
    def add_ifdef_scope(self, lines, rest, isIfndef):
       matched = macro_re.match(rest)
       if not matched:
-         fatal(lines[0].get_line_number(), "grammar error: only macro allowed")
+         fatal(lines[0], "grammar error: only macro allowed")
 
-      return self.add_scope(IfdefScope(self, rest, isIfndef), lines)
+      return self.add_scope(IfdefScope(self.file, lines[0], self, rest, isIfndef), lines)
 
    #######################################################
    def parse_scope_inst(self, lines, inst, rest):
       if inst == "if":
-         return self.add_scope(IfScope(self, rest, None), lines)
+         return self.add_scope(IfScope(self.file, lines[0], self, rest, None), lines)
       elif inst == "ifndef":
          return self.add_ifdef_scope(lines, rest, True)
       elif inst == "ifdef":
@@ -122,23 +107,23 @@ class BaseScope(Scope):
 
    #######################################################
    def parse_other_insts(self, lines, inst, rest):
-      fatal(0, "should not be here")
+      fatal(lines[0], "should not be here")
 
 ##########################################################
 class GlobalScope(BaseScope):
    #######################################################
-   def __init__(self):
-       Scope.__init__(self, None, "::", None)
+   def __init__(self, file):
+       BaseScope.__init__(self, file, 1, None, "::", None)
 
    #######################################################
    def parse_other_insts(self, lines, inst, rest):
-       fatal(lines[0].get_line_number(), "(global) unexpected preprocessor instruction \"" + inst + "\"")
+       fatal(lines[0], "(global) unexpected preprocessor instruction \"" + inst + "\"")
 
 ##########################################################
 class ConditionScope(BaseScope):
    #######################################################
-   def __init__(self, parent, root, name, expr):
-       Scope.__init__(self, parent, name, expr)
+   def __init__(self, file, line, parent, root, name, expr):
+       BaseScope.__init__(self, file, line.get_line_number(), parent, name, expr)
        self.root = root
        if root == None:
           self.root = self
@@ -176,8 +161,6 @@ class ConditionScope(BaseScope):
 zero_re = re.compile( r'^\s*0\s*$' )
 one_re  = re.compile( r'^\s*1\s*$' )
 
-
-
 ##########################################################
 def getIfName(isElif):
    if isElif:
@@ -187,7 +170,7 @@ def getIfName(isElif):
 ##########################################################
 class IfScope(ConditionScope):   
    #######################################################
-   def __init__(self, parent, rest, root):
+   def __init__(self, file, line, parent, rest, root):
       self.rest = rest
 
       isElif = True
@@ -205,7 +188,7 @@ class IfScope(ConditionScope):
       if matched:
          self.one = True
 
-      ConditionScope.__init__(self, parent, root, getIfName(isElif), rest)
+      ConditionScope.__init__(self, file, line, parent, root, getIfName(isElif), rest)
 
    #######################################################
    def is_zero(self):
@@ -215,16 +198,19 @@ class IfScope(ConditionScope):
    def is_one(self):
       return self.one
 
-   #######################################################
-   def get_scope(self, inst, rest):
+   def get_scope_cls(self, inst):
       if inst == "elif":
-         return IfScope(self.parent, rest, self.root)
+         return IfScope
 
-      return ElseScope(self.parent, rest, self.root)
+      return ElseScope
+
+   #######################################################
+   def get_scope(self, line, inst, rest):
+      return self.get_scope_cls(inst)(self.file, line, self.parent, rest, self.root)
 
    #######################################################
    def parse_else_scope(self, lines, inst, rest):
-      return self.add_elses(self.get_scope(inst, rest), lines)
+      return self.add_elses(self.get_scope(lines[0], inst, rest), lines)
 
 ##########################################################
 def getIfdefName(isIfndef):
@@ -236,26 +222,26 @@ def getIfdefName(isIfndef):
 ##########################################################
 class IfdefScope(ConditionScope):
    #######################################################
-   def __init__(self, parent, rest, isIfndef):
-      ConditionScope.__init__(self, parent, None, getIfdefName(isIfndef), rest)
+   def __init__(self, file, line, parent, rest, isIfndef):
+      ConditionScope.__init__(self, file, line, parent, None, getIfdefName(isIfndef), rest)
       self.isIfndef = isIfndef
 
    #######################################################
    def parse_else_scope(self, lines, inst, rest):
       if inst == "elif":
-         fatal(lines[0].get_line_number(), "unexpected preprocessor instruction " + inst)
+         fatal(lines[0], "unexpected preprocessor instruction " + inst)
 
-      return self.add_elses(ElseScope(self.parent, rest, self), lines)
+      return self.add_elses(ElseScope(self.file, lines[0], self.parent, rest, self), lines)
 
 ##########################################################
 class ElseScope(ConditionScope):
    #######################################################
-   def __init__(self, parent, rest, root):
-      ConditionScope.__init__(self, parent, root, "else", None)
+   def __init__(self, file, line, parent, rest, root):
+      ConditionScope.__init__(self, file, line, parent, root, "else", None)
    
    #######################################################
    def parse_else_scope(self, lines, inst, rest):
-      fatal(lines[0].get_line_number(), "unexpected preprocessor instruction " + inst)
+      fatal(lines[0], "unexpected preprocessor instruction " + inst)
 
    #######################################################
    def is_zero(self):
@@ -266,8 +252,8 @@ class ElseScope(ConditionScope):
       return this.root.is_zero()
 
 ##########################################################
-def phase2(lines):
-   scope = GlobalScope()
+def phase2(lines, file):
+   scope = GlobalScope(file)
    scope.parse(lines)
    return scope
 
