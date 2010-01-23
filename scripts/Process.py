@@ -44,12 +44,12 @@ def checkFixtureExistence(fixtureFiles):
 
 
 ##########################################################
-def process(target, fixtureFiles):
-   checkFixtureExistence(fixtureFiles)
+def process(target, fixture_files):
+   checkFixtureExistence(fixture_files)
 
    fixtures = []
-   for fixtureFile in fixtureFiles:
-      fixtures.append(processTestFixtureFile(fixtureFile))
+   for file in fixture_files:
+      fixtures.append(processTestFixtureFile(file))
 
-   phase4(target, fixtures)
+   phase4(fixture_files, target, fixtures)
 
