@@ -13,3 +13,6 @@ def warning(line, msg):
 
 def info(line, msg):
    print >> sys.stdout, line.get_line_number(), ":", error
+
+def output(content, file):
+   print content.encode('utf-8')

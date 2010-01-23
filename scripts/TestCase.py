@@ -2,10 +2,14 @@
 ##########################################
 class TestCase:
    ########################################
-   def __init__(self, name):
+   def __init__(self, name, file, line):
       self.name = name
-      self.file = "a.h"
-      self.line = 100
+      self.file = file
+      self.line = line
+
+   def show(self):
+       content = "TEST(" + self.name + ")"
+       print content.encode('utf-8')
 
    ########################################
    def get_name(self):
@@ -19,3 +23,4 @@ class TestCase:
    def get_line_number(self):
       return self.line
 
+##########################################

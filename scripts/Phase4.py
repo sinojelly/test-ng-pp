@@ -13,8 +13,11 @@ def get_fixture_base_name():
 def get_fixture_var():
    return "fixture"
 
-def get_fixture_var_decl():
-   return get_fixture_base_name() + "* " + get_fixture_var()
+def get_fixture_para():
+   return "pFixture"
+
+def get_fixture_para_decl():
+   return get_fixture_base_name() + "* " + get_fixture_para()
 
 def get_testcase_class_name(testcase):
    return "TESTCASE_" + testcase.get_name()
@@ -23,60 +26,83 @@ def get_testcase_instance_name(testcase):
    return "testcase_instance_" + testcase.get_name()
 
 ################################################
-class TestCaseGenerator:
+class TestCaseDefGenerator:
    #############################################
-   def __init__(self, testcase, fixture, file):
+   def __init__(self, file, testcase, fixture):
       self.fixture = fixture
       self.testcase = testcase
       self.file = file
 
    #############################################
-   def get_content(self):
-      return "static struct " + get_testcase_class_name(self.testcase) + "\n" + \
-             "   : public " + get_testcase_base_name() + "\n" + \
-             "{" + "\n" + \
-             "   " + get_testcase_class_name(self.testcase) + "(" + get_fixture_var_decl() + ")" + "\n" + \
-             "     :" + get_testcase_base_name() +                   "\n" + \
-             "        (\"" + self.testcase.get_name() + "\"" +       "\n" + \
-             "        , \"" + self.fixture.get_name() + "\"" +       "\n" + \
-             "        , " + get_fixture_var()  +                     "\n" + \
-             "        , \"" + self.testcase.get_file_name() + "\"" + "\n" + \
-             "        , " + str(self.testcase.get_line_number())  + ")" +   "\n" + \
-             "   {" +                                                "\n" + \
-             "      if(" + get_fixture_var() + " == 0)" +            "\n" + \
-             "         " + get_fixture_var() + " = new " + self.fixture.get_name() + "();\n" + \
-             "   }\n" +                                              "\n" + \
-             "} " + get_testcase_instance_name(self.testcase) + ";"+ "\n" + \
-             ""
-
    def generate(self):
-      print self.get_content().encode('utf-8')
-
+      output("static struct " + get_testcase_class_name(self.testcase), self.file)
+      output("   : public " + get_testcase_base_name(), self.file)
+      output("{", self.file)
+      output("   " + get_testcase_class_name(self.testcase) + "()", self.file)
+      output("     :" + get_testcase_base_name(), self.file)
+      output("        (\"" + self.testcase.get_name() + "\"", self.file)
+      output("        , \"" + self.fixture.get_name() + "\"", self.file)
+      output("        , \"" + self.testcase.get_file_name() + "\"", self.file)
+      output("        , " + str(self.testcase.get_line_number())  + ")", self.file)
+      output("   {}", self.file)
+      output("   void setUp(" + get_fixture_para_decl() + ")", self.file)
+      output("   {", self.file)
+      output("      if(" + get_fixture_para() + " == 0)", self.file)
+      output("         " + get_fixture_var() + " = new " + self.fixture.get_name() + "();", self.file)
+      output("      else", self.file)
+      output("         " + get_fixture_var() + " = dynamic_cast<" + self.fixture.get_name() + "*>(" + \
+                       get_fixture_para() + ");", self.file)
+      output("     " + get_fixture_var() + "->setUp(); ", self.file)
+      output("   }", self.file)
+      output("   void run()", self.file)
+      output("   {", self.file)
+      output("     " + get_fixture_var() + "->" + self.testcase.get_name() + "();", self.file)
+      output("   }", self.file)
+      output("private:", self.file)
+      output("   " + self.fixture.get_name() + "* " + get_fixture_var() + ";", self.file)
+      output("} " + get_testcase_instance_name(self.testcase) + ";", self.file)
 
 ################################################
 def get_testcase_array_var(fixture):
    return "g_TESTCASEARRAY_" + fixture.get_name()
 
 ################################################
+class TestCaseArrayGenerator:
+   #############################################
+   def __init__(self, file, testcase, fixture):
+      self.testcase = testcase
+      self.file = file
+      self.fixture = fixture
+
+   #############################################
+   def generate(self):
+      output("&" + get_testcase_instance_name(self.testcase) + ",", self.file)
+
+################################################
 class FixtureGenerator:
    #############################################
-   def __init__(self, fixture, file):
+   def __init__(self, file, fixture):
       self.fixture = fixture
       self.file = file
 
    #############################################
    def generate_testcases(self):
-      for testcase in self.fixture.get_scope().get_elements():
-         TestCaseGenerator(testcase, self.fixture, self.file).generate()
+      ScopesGenerator([self.fixture.get_scope()], self.file) \
+         .generate(lambda file, elem: TestCaseDefGenerator(file, elem, self.fixture))
 
-   def get_testcase_array(self):
-      return "static " + get_testcase_base_name() + "* " + \
-                 get_testcase_array_var(self.fixture) + "[] = {" + "\n" + \
-             "};" + "\n" 
+   def generate_testcase_array_content(self):
+      ScopesGenerator([self.fixture.get_scope()], self.file) \
+         .generate(lambda file, elem: TestCaseArrayGenerator(file, elem, self.fixture))
 
    #############################################
    def generate_testcase_array(self):
-      print self.get_testcase_array().encode('utf-8')
+      output("static " + get_testcase_base_name() + "* " + \
+                 get_testcase_array_var(self.fixture) + "[] = {", self.file)
+
+      self.generate_testcase_array_content()
+
+      output("0", self.file)
+      output("};", self.file)
 
    #############################################
    def generate(self):
@@ -84,11 +110,13 @@ class FixtureGenerator:
       self.generate_testcase_array()
       
 ################################################
+################################################
 class ScopeGenerator:
    #############################################
-   def __init__(self, scope, file):
+   def __init__(self, scope, file, generator_getter):
       self.scope = scope
       self.file = file
+      self.get_generator = generator_getter
 
    #############################################
    def generate_begin(self):
@@ -103,7 +131,7 @@ class ScopeGenerator:
 
    #############################################
    def generate_scopes(self, scopes):
-      ScopesGenerator(scopes, self.file).generate(self.__class__)
+      ScopesGenerator(scopes, self.file).generate(self.get_generator)
 
    #############################################
    def generate_sub_scopes(self):
@@ -115,7 +143,8 @@ class ScopeGenerator:
 
    #############################################
    def generate_content(self):
-      pass
+      for elem in self.scope.get_elements():
+         self.get_generator(self.file, elem).generate()
 
    #############################################
    def generate(self):
@@ -126,27 +155,6 @@ class ScopeGenerator:
       self.generate_end()
 
 ################################################
-class FixtureScopeGenerator(ScopeGenerator):
-   #############################################
-   def __init__(self, scope, file):
-      ScopeGenerator.__init__(self, scope, file)
-
-   #############################################
-   def generate_content(self):
-      for fixture in self.scope.get_elements():
-         FixtureGenerator(fixture, self.file).generate()
-
-################################################
-class TestCaseScopeGenerator(ScopeGenerator):
-   #############################################
-   def __init__(self, scope, file):
-      ScopeGenerator.__init__(self, scope.get_scope(), file)
-
-   #############################################
-   def generate_content(self):
-      for testcase in self.scope.get_elements():
-         TestCaseGenerator(testcase, self.file).generate()
-
 ################################################
 class ScopesGenerator:
    #############################################
@@ -155,12 +163,13 @@ class ScopesGenerator:
      self.file = file
 
    #############################################
-   def generate(self, cls):
+   def generate(self, generator_getter):
       for scope in self.scopes:
-         cls(scope, self.file).generate()
+         ScopeGenerator(scope, self.file, generator_getter).generate()
      
+################################################
 ################################################
 def phase4(target, scopes):
    file = None
-   ScopesGenerator(scopes, file).generate(FixtureScopeGenerator)
+   ScopesGenerator(scopes, file).generate(lambda file, elem: FixtureGenerator(file, elem) )
 
