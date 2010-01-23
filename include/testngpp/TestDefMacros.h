@@ -16,15 +16,17 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef __TESTNGPP_HPP
-#define __TESTNGPP_HPP
+#ifndef __TESTNGPP_TEST_DEF_MACROS_H
+#define __TESTNGPP_TEST_DEF_MACROS_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/Asserter.h>
-#include <testngpp/TestFixture.h>
-#include <testngpp/ResourceCheckPoint.h>
-#include <testngpp/ExceptionKeywords.h>
-#include <testngpp/TestDefMacros.h>
+
+#define __TESTNGPP_LINENAME_CAT( name, line ) name##line
+#define __LINENAME( name, line ) __TESTNGPP_LINENAME_CAT( name, line )
+#define __TESTNGPP_LINENAME( name ) __LINENAME( name, __LINE__ )
+
+#define TEST(...) void __TESTNGPP_LINENAME(test_) (void)
+#define FIXTURE(id , ...) struct id : public TESTNGPP_NS::TestFixture
 
 #endif
 

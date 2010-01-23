@@ -1,8 +1,15 @@
 
+import os
 
 from Message import *
 
 from Phase1Result import *
+
+def get_base_name(file):
+    return os.path.basename(file).split('.')[0]
+
+def get_fixture_name_in_src(fixture):
+   return "TestFixture_" 
 
 def get_testcase_base_name():
    return "TESTNGPP_NS::TestCase"
@@ -16,17 +23,23 @@ def get_fixture_var():
 def get_fixture_para():
    return "pFixture"
 
+def get_testcase_id(testcase):
+   return "test_" + str(testcase.get_line_number())
+
 def get_fixture_para_decl():
    return get_fixture_base_name() + "* " + get_fixture_para()
 
-def get_testcase_class_name(testcase):
-   return "TESTCASE_" + testcase.get_name()
+def get_testcase_class_name(fixture, testcase):
+   return "TESTCASE_" + fixture.get_id() + get_testcase_id(testcase)
 
-def get_testcase_instance_name(testcase):
-   return "testcase_instance_" + testcase.get_name()
+def get_testcase_instance_name(fixture, testcase):
+   return "testcase_instance_" + fixture.get_id() + get_testcase_id(testcase)
 
 def get_fixture_desc_class():
    return "TESTNGPP_NS::TestFixtureDesc"
+
+def get_fixture_desc_var(fixture):
+   return "test_fixture_desc_instance_" + fixture.get_id()
 
 ################################################
 class TestCaseDefGenerator:
@@ -38,10 +51,10 @@ class TestCaseDefGenerator:
 
    #############################################
    def generate(self):
-      output("static struct " + get_testcase_class_name(self.testcase), self.file)
+      output("static struct " + get_testcase_class_name(self.fixture, self.testcase), self.file)
       output("   : public " + get_testcase_base_name(), self.file)
       output("{", self.file)
-      output("   " + get_testcase_class_name(self.testcase) + "()", self.file)
+      output("   " + get_testcase_class_name(self.fixture, self.testcase) + "()", self.file)
       output("     :" + get_testcase_base_name(), self.file)
       output("        (\"" + self.testcase.get_name() + "\"", self.file)
       output("        , \"" + self.fixture.get_name() + "\"", self.file)
@@ -51,9 +64,9 @@ class TestCaseDefGenerator:
       output("   void setUp(" + get_fixture_para_decl() + ")", self.file)
       output("   {", self.file)
       output("      if(" + get_fixture_para() + " == 0)", self.file)
-      output("         " + get_fixture_var() + " = new " + self.fixture.get_name() + "();", self.file)
+      output("         " + get_fixture_var() + " = new " + self.fixture.get_id() + "();", self.file)
       output("      else", self.file)
-      output("         " + get_fixture_var() + " = dynamic_cast<" + self.fixture.get_name() + "*>(" + \
+      output("         " + get_fixture_var() + " = dynamic_cast<" + self.fixture.get_id() + "*>(" + \
                        get_fixture_para() + ");", self.file)
       output("     " + get_fixture_var() + "->setUp(); ", self.file)
       output("   }", self.file)
@@ -63,19 +76,19 @@ class TestCaseDefGenerator:
       output("   }", self.file)
       output("   void run()", self.file)
       output("   {", self.file)
-      output("     " + get_fixture_var() + "->" + self.testcase.get_name() + "();", self.file)
+      output("     " + get_fixture_var() + "->" + get_testcase_id(self.testcase) + "();", self.file)
       output("   }", self.file)
       output("   " + get_fixture_base_name() + "* getFixture() const", self.file)
       output("   {", self.file)
       output("      return " + get_fixture_var() + ";", self.file)
       output("   }", self.file)
       output("private:", self.file)
-      output("   " + self.fixture.get_name() + "* " + get_fixture_var() + ";", self.file)
-      output("} " + get_testcase_instance_name(self.testcase) + ";", self.file)
+      output("   " + self.fixture.get_id() + "* " + get_fixture_var() + ";", self.file)
+      output("} " + get_testcase_instance_name(self.fixture, self.testcase) + ";", self.file)
 
 ################################################
 def get_testcase_array_var(fixture):
-   return "g_TESTCASEARRAY_" + fixture.get_name()
+   return "g_TESTCASEARRAY_" + fixture.get_id()
 
 ################################################
 class TestCaseArrayGenerator:
@@ -87,7 +100,7 @@ class TestCaseArrayGenerator:
 
    #############################################
    def generate(self):
-      output("&" + get_testcase_instance_name(self.testcase) + ",", self.file)
+      output("&" + get_testcase_instance_name(self.fixture, self.testcase) + ",", self.file)
 
 ################################################
 class FixtureGenerator:
@@ -129,10 +142,23 @@ class FixtureDescGenerator:
    
    #############################################
    def generate(self):
-      output("&" + get_fixture_desc_class() + "(\"" + self.fixture.get_name() + \
-             "\",\"" + self.fixture.get_file_name() + "\"," + get_testcase_array_var(self.fixture) + \
+      output("static " + get_fixture_desc_class() + " " + get_fixture_desc_var(self.fixture) + \
+             "(\"" + self.fixture.get_name() + \
+             "\",\"" + self.fixture.get_file_name() + \
+             "\"," + get_testcase_array_var(self.fixture) + \
              "," + "sizeof(" + get_testcase_array_var(self.fixture) + \
-             ")/sizeof(" + get_testcase_array_var(self.fixture) + "[0])-1),", self.file)
+             ")/sizeof(" + get_testcase_array_var(self.fixture) + \
+             "[0])-1);", self.file)
+
+################################################
+class FixtureDescArrayGenerator:
+   #############################################
+   def __init__(self, file, fixture):
+      self.fixture = fixture
+      self.file = file
+
+   def generate(self):
+      output("&" + get_fixture_desc_var(self.fixture) + ",", self.file)
 
 ################################################
 ################################################
@@ -156,7 +182,8 @@ class ScopeGenerator:
 
    #############################################
    def generate_scopes(self, scopes):
-      ScopesGenerator(scopes, self.file).generate(self.get_generator)
+      ScopesGenerator(scopes, self.file) \
+         .generate(self.get_generator)
 
    #############################################
    def generate_sub_scopes(self):
@@ -194,13 +221,13 @@ class ScopesGenerator:
      
 ################################################
 def get_suite_desc_name(suite):
-   return "TESTSUITEDESC_" + suite
+   return "test_suite_desc_instance_" + suite
 
 def get_suite_desc_class():
    return "TESTNGPP_NS::TestSuiteDesc"
 
 def get_fixture_array_name(suite):
-   return "ARRAY_OF_FIXTURE_DESC_" + suite
+   return "array_of_fixture_desc_" + suite
 
 def get_suite_getter_name():
    return "___testngpp_test_suite_desc_getter"
@@ -232,10 +259,17 @@ class SuiteGenerator:
          .generate(lambda file, elem: FixtureDescGenerator(file, elem) )
 
    #############################################
-   def generate_fixture_array(self):
-      output("static " + get_fixture_desc_class() + "* " + get_fixture_array_name(self.suite) + "[] = {", self.file)
+   def generate_fixture_desc_array(self):
+      ScopesGenerator(self.scopes, self.file) \
+         .generate(lambda file, elem: FixtureDescArrayGenerator(file, elem) )
 
-      self.generate_fixture_descs()
+   #############################################
+   def generate_fixture_array(self):
+      output("static " + get_fixture_desc_class() + \
+             "* " + get_fixture_array_name(self.suite) + \
+             "[] = {", self.file)
+
+      self.generate_fixture_desc_array()
 
       output("0", self.file)
       output("};", self.file)
@@ -271,6 +305,7 @@ class SuiteGenerator:
       self.generate_headers()
       self.generate_fixtures()
       self.generate_fixture_array()
+      self.generate_fixture_descs()
       self.generate_suite_desc()
       self.generate_suite_getter()
 
@@ -278,6 +313,7 @@ class SuiteGenerator:
 ################################################
 def phase4(fixture_files, target, scopes):
    file = None
-   suite = os.path.basename(target).split('.')[0]
+   suite = get_base_name(target)
    SuiteGenerator(scopes, file, suite, fixture_files).generate()
 
+################################################

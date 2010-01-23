@@ -8,13 +8,13 @@ from PreprocessScopeParser import *
 
 from FixtureParser import FixtureParser
 
-fixture_re  = re.compile( r'^\s*FIXTURE\s*\(\s*(?P<fixtureName>\w+)\s*\)\s*', re.UNICODE)
+fixture_re  = re.compile( r'''^\s*FIXTURE\s*\(\s*(?P<fixtureId>[A-Za-z_][A-Za-z0-9_]*)\s*(,\s*(?P<fixtureName>\w+))?\)\s*''', re.UNICODE)
 
 ##########################################################
 def is_fixture_def(line):
-   m = fixture_re.match(line.get_content())
-   if m:
-      return m.group("fixtureName")
+   matched = fixture_re.match(line.get_content())
+   if matched:
+      return matched.group("fixtureId"), matched.group("fixtureName")
 
    return None
    
