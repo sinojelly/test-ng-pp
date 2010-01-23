@@ -308,8 +308,8 @@ class SuiteGenerator:
    def generate(self):
       self.generate_headers()
       self.generate_fixtures()
-      self.generate_fixture_array()
       self.generate_fixture_descs()
+      self.generate_fixture_array()
       self.generate_suite_desc()
       self.generate_suite_getter()
 
