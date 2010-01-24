@@ -8,6 +8,8 @@
 
 USING_TESTNGPP_NS
 
+struct TestFixture12 {};
+
 class TestFoo : public TestFixture
 {
 public:
@@ -31,11 +33,9 @@ public:
 
        TS_ASSERT(false);
 
-       std::cout << "running" << std::endl;
-
        __TESTNGPP_CLEANUP
 
-       std::cout << "case 0 cleanup" << std::endl;
+       TS_ASSERT(true);
 
        __TESTNGPP_DONE
     }
@@ -48,11 +48,9 @@ public:
 
        TS_ASSERT(true);
 
-       std::cout << "case 1 running" << std::endl;
-
        __TESTNGPP_CLEANUP
 
-       std::cout << "case 1 cleanup" << std::endl;
+       TS_ASSERT(false);
 
        __TESTNGPP_DONE
     }
@@ -130,5 +128,32 @@ public:
     void testCase14()
     {
       TS_ASSERT_THROWS(testCase3(), std::exception);
+    }
+};
+
+
+FIXTURE(ChineseFixture, 中文套件样例)
+{
+    void func()
+    {
+       throw 1;
+    }
+
+    TEST(测试用例1)
+    {
+      TS_ASSERT_THROWS_NOTHING(func());
+    }
+
+    TEST(测试用例2)
+    {
+      TS_ASSERT(std::string("abc") == std::string("abcd"));
+    }
+
+    TEST(测试用例3)
+    {
+      int a = 1;
+      int b = 1;
+
+      TS_ASSERT_EQUALS(a, b);
     }
 };
