@@ -3,12 +3,11 @@
 from Phase1Result import *
 
 from TestScope import TestScope
-from ElemParser import ElemParser
 
 ##########################################################
 class PreprocessScopeParser:
    #######################################################
-   def __init__(self, file, pp_scope, parser):
+   def __init__(self, file, pp_scope, parser, elem_parser_cls):
       self.pp_scope = pp_scope
 
       self.file   = file
@@ -16,11 +15,13 @@ class PreprocessScopeParser:
 
       self.container = TestScope(pp_scope.get_inst(), pp_scope.get_expr())
 
-      self.elem_parser = ElemParser(file, parser, self.container)
+      self.elem_parser = elem_parser_cls(file, parser, self.container)
+
+      self.elem_parser_cls = elem_parser_cls
 
    #######################################################
    def parse_scope(self, scope):
-      return PreprocessScopeParser(self.file, scope, self.parser).parse()
+      return PreprocessScopeParser(self.file, scope, self.parser, self.elem_parser_cls).parse()
          
    #######################################################
    def parse(self):
