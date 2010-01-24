@@ -7,6 +7,9 @@ from PreprocessScope import *
 from Message import *
 
 
+
+
+
 ##########################################################
 class TestCaseParser:
    #######################################################
@@ -16,7 +19,19 @@ class TestCaseParser:
       self.done = None
       self.numberOfUnclosedBraces = 0
       self.file = file
+      self.verify_testcase_tags(tags)
 
+   #######################################################
+   def verify_testcase_tag(self, tag):
+      if tag.get_tag() != "test" and tag.get_tag() != "depend":
+         warning(self.file, tag, "unknown tag @" + tag.get_tag())
+
+   #######################################################
+   def verify_testcase_tags(self, tags):
+      for tag in tags:
+         self.verify_testcase_tag(tag)
+
+   #######################################################
    def get_container(self):
       return None
 

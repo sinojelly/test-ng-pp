@@ -16,8 +16,7 @@ fixture_re1  = re.compile( \
    re.UNICODE)
 
 fixture_re2  = re.compile( \
-   r'''^\s*(struct|class)\s+(?P<fixtureId>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*public\s+((TESTNGPP_NS|TESTCPP_NS|testngpp|testcpp)\s*::)?\s*TestFixture\s*$''', 
-   re.UNICODE)
+   r'''^\s*(struct|class)\s+(?P<fixtureId>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*public\s+((TESTNGPP_NS|TESTCPP_NS|testngpp|testcpp)\s*::)?\s*TestFixture\s*$''' )
 
 ##########################################################
 def is_fixture_def(line):
