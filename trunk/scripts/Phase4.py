@@ -34,10 +34,10 @@ def get_fixture_para_decl():
    return get_fixture_base_name() + "* " + get_fixture_para()
 
 def get_testcase_class_name(fixture, testcase):
-   return "TESTCASE_" + fixture.get_id() + get_testcase_id(testcase)
+   return "TESTCASE_" + fixture.get_id() + "_" + get_testcase_id(testcase)
 
 def get_testcase_instance_name(fixture, testcase):
-   return "testcase_instance_" + fixture.get_id() + get_testcase_id(testcase)
+   return "testcase_instance_" + fixture.get_id() + "_" + get_testcase_id(testcase)
 
 def get_fixture_desc_class():
    return "TESTNGPP_NS::TestFixtureDesc"
