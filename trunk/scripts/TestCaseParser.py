@@ -10,8 +10,8 @@ from Message import *
 ##########################################################
 class TestCaseParser:
    #######################################################
-   def __init__(self, name, file, line):
-      self.testcase = TestCase(name, file, line)
+   def __init__(self, name, file, line, tags):
+      self.testcase = TestCase(name, file, line, tags)
       self.begin = True
       self.done = None
       self.numberOfUnclosedBraces = 0

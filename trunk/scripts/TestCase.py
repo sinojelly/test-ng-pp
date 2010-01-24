@@ -2,11 +2,12 @@
 ##########################################
 class TestCase:
    ########################################
-   def __init__(self, name, file, line):
+   def __init__(self, name, file, line, tags):
       self.id   = name[0]
       self.name = name[1]
       self.file = file
       self.line = line
+      self.tags = tags
 
    def show(self):
        content = "TEST(" + self.get_name() + ")"

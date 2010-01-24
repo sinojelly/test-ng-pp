@@ -18,6 +18,8 @@ from Message import *
 testcase_re1 = re.compile( r'^\s*TEST\s*\(\s*(?P<testcaseName>\w+)\s*\)\s*$' , re.UNICODE)
 testcase_re2 = re.compile( r'^\s*void\s+(?P<testcaseId>test[A-Za-z0-9_]+)\s*\(\s*(void)?\s*\)\s*$')
 
+testcase_re3 = re.compile( r'^\s*void\s+(?P<testcaseId>[A-Za-z_][A-Za-z0-9_]*)\s*\(\s*(void)?\s*\)\s*$')
+
 ##########################################################
 def is_testcase_def(line):
    matched = testcase_re1.match(line) 
@@ -30,6 +32,14 @@ def is_testcase_def(line):
 
    return None
 
+##########################################################
+def might_be_testcase_def(line):
+   matched = testcase_re3.match(line)
+   if matched:
+      return matched.group("testcaseId"), None
+
+   return None
+   
 ##########################################################
 class FixtureParser:
    def __init__(self, name, file, line):
@@ -48,7 +58,23 @@ class FixtureParser:
       return self.container
 
    #######################################################
+   def __might_be_elem_def(self, content):
+      return might_be_testcase_def(content)
+   
+   #######################################################
+   def __has_test_tag(self):
+      for tag in self.tags:
+         if tag.get_tag() == "test":
+            return True
+
+      return None
+
+   #######################################################
    def is_elem_def(self, content):
+      id = self.__might_be_elem_def(content)
+      if id and self.__has_test_tag():
+         return id
+
       return is_testcase_def(content)
 
    #######################################################
@@ -59,7 +85,7 @@ class FixtureParser:
    def __report_useless_tags(self):
       for tag in self.tags:
          warning(self.file, tag, "useless tag definition @" + tag.get_tag())
-
+      self.tags = []
    #######################################################
    def verify_scope(self, tag):
       self.__report_useless_tags()
@@ -67,7 +93,9 @@ class FixtureParser:
 
    #######################################################
    def create_elem_parser(self, elem_name, file, line):
-      return TestCaseParser(elem_name, file, line)
+      parser = TestCaseParser(elem_name, file, line, self.tags)
+      self.tags = []
+      return parser
 
    #######################################################
    def get_type_name(self):
@@ -129,6 +157,7 @@ class FixtureParser:
 
    #######################################################
    def parse_line(self, line):
+      self.__report_useless_tags()
       for c in line.get_content():
          self.__handle_char(line, c)
 
