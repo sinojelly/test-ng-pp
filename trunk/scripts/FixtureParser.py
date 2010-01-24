@@ -16,14 +16,17 @@ from PreprocessScopeParser import *
 from Message import *
 
 testcase_re1 = re.compile( r'^\s*TEST\s*\(\s*(?P<testcaseName>\w+)\s*\)\s*$' , re.UNICODE)
-testcase_re2 = re.compile( r'^\s*void\s+(?P<testcaseName>test[A-Za-z0-9_]+)\s*\(\s*(void)?\s*\)\s*$')
+testcase_re2 = re.compile( r'^\s*void\s+(?P<testcaseId>test[A-Za-z0-9_]+)\s*\(\s*(void)?\s*\)\s*$')
 
 ##########################################################
 def is_testcase_def(line):
-   matched = testcase_re1.match(line.get_content()) or \
-             testcase_re2.match(line.get_content())
+   matched = testcase_re1.match(line.get_content()) 
    if matched:
-      return matched.group("testcaseName")
+      return None, matched.group("testcaseName")
+
+   matched = testcase_re2.match(line.get_content())
+   if matched:
+      return matched.group("testcaseId"), None
 
    return None
 
