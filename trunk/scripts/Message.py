@@ -4,16 +4,16 @@ import os
 
 from Phase1Result import *
 
-def raw_fatal(line_number, error):
-   print >> sys.stderr, line_number, ":", error
+def raw_fatal(file, line_number, error):
+   print >> sys.stderr, file + ":" + str(line_number) + ": error:", error
    sys.exit(1)
 
-def fatal(line, error):
-   raw_fatal(line.get_line_number(), error)
+def fatal(file, line, error):
+   raw_fatal(file, line.get_line_number(), error)
 
-def warning(line, msg):
+def warning(file, line, msg):
    print >> sys.stderr, line.get_line_number(), ":", error
 
-def info(line, msg):
+def info(file, line, msg):
    print >> sys.stdout, line.get_line_number(), ":", error
 

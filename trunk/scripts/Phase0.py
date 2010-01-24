@@ -7,7 +7,8 @@ from Message import raw_fatal
 
 #######################################################
 class Phase0Parser:
-   def __init__(self, lines):
+   def __init__(self, file, lines):
+      self.file  = file
       self.lines = lines
       self.logical_lines = []
       self.line_number = 1
@@ -42,7 +43,7 @@ class Phase0Parser:
 
       if line[-1] == "\\":
          if len(line) > 1 and line[-2] == "\\":
-            raw_fatal(self.line_number, "stray '\\' in program")
+            raw_fatal(self.file, self.line_number, "stray '\\' in program")
          else:
             self.add_unclosed_line(line)
       else:
@@ -56,7 +57,7 @@ class Phase0Parser:
       return self.logical_lines
 
 ##########################################################
-def phase0(lines):
-   return Phase0Parser(lines).parse()
+def phase0(file, lines):
+   return Phase0Parser(file, lines).parse()
 
 

@@ -15,6 +15,7 @@ class TestCaseParser:
       self.begin = True
       self.done = None
       self.numberOfUnclosedBraces = 0
+      self.file = file
 
    #######################################################
    def handle_space(self, line, c):
@@ -28,7 +29,7 @@ class TestCaseParser:
       if not self.done:
          return None
 
-      fatal(line, "unexpected char '" + c + "'")
+      fatal(self.file, line, "unexpected char '" + c + "'")
       
    #######################################################
    def handle_begin(self, line, c):
@@ -41,7 +42,7 @@ class TestCaseParser:
          return True
 
       print line.get_content()
-      fatal(line, "expects '{'")
+      fatal(self.file, line, "expects '{'")
   
    #######################################################
    def handle_others(self, line, c):
