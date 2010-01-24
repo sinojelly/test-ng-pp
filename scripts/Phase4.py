@@ -28,6 +28,9 @@ def get_fixture_para():
    return "pFixture"
 
 def get_testcase_id(testcase):
+   if testcase.get_id():
+      return testcase.get_id()
+
    return "test_" + str(testcase.get_line_number())
 
 def get_fixture_para_decl():

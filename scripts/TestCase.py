@@ -3,7 +3,8 @@
 class TestCase:
    ########################################
    def __init__(self, name, file, line):
-      self.name = name
+      self.id   = name[0]
+      self.name = name[1]
       self.file = file
       self.line = line
 
@@ -13,7 +14,14 @@ class TestCase:
 
    ########################################
    def get_name(self):
+      if not self.name:
+         return self.id
+
       return self.name
+
+   ########################################
+   def get_id(self):
+      return self.id
 
    ########################################
    def get_file_name(self):
