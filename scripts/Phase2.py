@@ -3,6 +3,7 @@
 import sys
 import re
 import os
+import codecs
 
 from Phase1Result import *
 
@@ -12,7 +13,6 @@ from Message import *
 
 cpp_re  = re.compile( r'^\s*#\s*(?P<instruction>\w+)(\s+(?P<rest>.*))?$', re.UNICODE)
 macro_re = re.compile( r'^\s*[A-Za-z_][A-Za-z0-9_]*\s*$', re.UNICODE)
-
 
 ##########################################################
 def create_cont(lines):
@@ -168,8 +168,31 @@ class ConditionScope(BaseScope):
       return self.is_zero() or self.is_one()
 
 ##########################################################
-zero_re = re.compile( r'^\s*0\s*$' )
-one_re  = re.compile( r'^\s*1\s*$' )
+hex_re = re.compile( r'^\s*(?P<value>0[xX][A-Fa-f0-9]+)\s*$' )
+oct_re = re.compile( r'^\s*(?P<value>0[0-7]*)\s*$' )
+dec_re = re.compile( r'^\s*(?P<value>[1-9][0-9]*)\s*$' )
+
+def convert_to_int(line, str, base):
+   try:
+      return int(str, base)
+   except ValueError:
+      fatal(line, "Invalid int literal " + str)
+     
+##########################################################
+def is_number(line, content):
+   matched = dec_re.match(content)
+   if matched:
+      return convert_to_int(line, matched.group("value"), 10)
+
+   matched = hex_re.match(content)
+   if matched:
+      return convert_to_int(line, matched.group("value"), 16)
+
+   matched = oct_re.match(content)
+   if matched:
+      return convert_to_int(line, matched.group("value"), 8)
+
+   return None
 
 ##########################################################
 def getIfName(isElif):
@@ -192,14 +215,11 @@ class IfScope(ConditionScope):
          isElif = None
 
       self.zero = None
-      matched = zero_re.match(rest)
-      if matched:
-         self.zero = True
-
       self.one = None
-      matched = one_re.match(rest)
-      if matched:
-         self.one = True
+
+      value = is_number(line, rest)
+      if value == 0:   self.zero = True
+      elif value > 0:  self.one = True
 
       ConditionScope.__init__(self, file, line, parent, root, getIfName(isElif), rest)
 
