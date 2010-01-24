@@ -15,7 +15,7 @@ class Fixture:
       self.line = line
 
    def show(self):
-      content = "FIXTURE("+self.name+")"
+      content = "FIXTURE("+self.get_name()+")"
       print content.encode('utf-8')
       self.scope.show()
 
@@ -31,7 +31,7 @@ class Fixture:
       return self.id
 
    ########################################
-   def add_testcase(self, testcase):
+   def add_elem(self, testcase):
       self.scope.add_elem(testcase)
 
    ########################################

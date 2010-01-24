@@ -50,6 +50,7 @@ class BaseScope(PreprocessScope):
 
    #######################################################
    def add_line(self, lines):
+      line = lines[0]
       if not self.stay_in_zero():
          self.lines.append(lines[0])
 

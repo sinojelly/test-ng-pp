@@ -19,6 +19,9 @@ class Tag(Line):
       self.tag = tag
       self.value = value
 
+   def get_tag(self):
+      return self.tag
+
    def show(self):
       print >> sys.stdout, self.line_number, "tag", self.tag, self.value
 

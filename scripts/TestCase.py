@@ -9,7 +9,7 @@ class TestCase:
       self.line = line
 
    def show(self):
-       content = "TEST(" + self.name + ")"
+       content = "TEST(" + self.get_name() + ")"
        print content.encode('utf-8')
 
    ########################################
