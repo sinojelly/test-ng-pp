@@ -5,6 +5,7 @@ import codecs
 
 from Phase1Result import *
 from PreprocessScopeParser import *
+from ElemParser import ElemParser
 
 from FixtureParser import FixtureParser
 
@@ -59,5 +60,5 @@ class GlobalParser:
 
 ##########################################################
 def phase3(globalScope, file):
-   return PreprocessScopeParser(file, globalScope, GlobalParser(file)).parse()
+   return PreprocessScopeParser(file, globalScope, GlobalParser(file), ElemParser).parse()
 

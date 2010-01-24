@@ -53,10 +53,6 @@ class FixtureParser:
 
    #######################################################
    def handle_tag(self, tag):
-      if self.parser:
-         warning(self.file, tag, "tag is not allowed in testcase definition")
-         return
-
       self.tags.append(tag)
 
    #######################################################

@@ -79,4 +79,8 @@ class TestCaseParser:
 
       return None
 
+   #######################################################
+   def handle_tag(self, tag):
+      warning(self.file, tag, "tag is not allowed in testcase definition")
+
 ##########################################################

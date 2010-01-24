@@ -24,6 +24,15 @@ class PreprocessScope:
       self.file   = file
       self.line   = line
 
+   def show(self):
+      print "#" + self.inst, self.expr
+
+      for line in self.lines:
+         line.show()
+
+      for scope in self.elses:
+         scope.show()
+
    ##################################
    def get_file_name(self):
       return self.file
