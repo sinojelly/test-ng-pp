@@ -20,11 +20,11 @@ testcase_re2 = re.compile( r'^\s*void\s+(?P<testcaseId>test[A-Za-z0-9_]+)\s*\(\s
 
 ##########################################################
 def is_testcase_def(line):
-   matched = testcase_re1.match(line.get_content()) 
+   matched = testcase_re1.match(line) 
    if matched:
       return None, matched.group("testcaseName")
 
-   matched = testcase_re2.match(line.get_content())
+   matched = testcase_re2.match(line)
    if matched:
       return matched.group("testcaseId"), None
 
@@ -32,46 +32,67 @@ def is_testcase_def(line):
 
 ##########################################################
 class FixtureParser:
-   #######################################################
    def __init__(self, name, file, line):
-      self.scopes = []
       self.numberOfUnclosedBraces = 0
       self.begin = True
       self.end = None
       self.done = None
-      self.fixture = Fixture(name, file, line)
-      self.parser = None
       self.file = file
       self.line = line
+      self.tags = []
+
+      self.container = Fixture(name, self.file, self.line)
 
    #######################################################
-   def add_scope(self, scope):
-      self.scopes.append(scope)
+   def get_container(self):
+      return self.container
 
    #######################################################
-   def add_testcase(self, testcase):
-      self.fixture.add_testcase(testcase)
+   def is_elem_def(self, content):
+      return is_testcase_def(content)
 
    #######################################################
    def handle_tag(self, tag):
-      return None
+      if self.parser:
+         warning(self.file, tag, "tag is not allowed in testcase definition")
+         return
+
+      self.tags.append(tag)
 
    #######################################################
-   def handle_space(self, line, c):
+   def __report_useless_tags(self):
+      for tag in self.tags:
+         warning(self.file, tag, "useless tag definition @" + tag.get_tag())
+
+   #######################################################
+   def verify_scope(self, tag):
+      self.__report_useless_tags()
+      return True
+
+   #######################################################
+   def create_elem_parser(self, elem_name, file, line):
+      return TestCaseParser(elem_name, file, line)
+
+   #######################################################
+   def get_type_name(self):
+      return "fixture"
+
+   #######################################################
+   def __handle_space(self, line, c):
       if c.isspace():
          return True
 
       return None
 
    #######################################################
-   def handle_done(self, line, c):
+   def __handle_done(self, line, c):
       if not self.done:
          return None
 
       fatal(self.file, line, "unexpected char '" + c + "'")
 
    #######################################################
-   def handle_begin(self, line, c):
+   def __handle_begin(self, line, c):
       if not self.begin:
          return None
       
@@ -80,10 +101,10 @@ class FixtureParser:
          self.begin = None
          return True
 
-      fatal(self.file, line, "expects '{', but \'" + c + "\' found.")
+      report_expect_char(self.file, line, "{", c)
 
    #######################################################
-   def handle_end(self, line, c):
+   def __handle_end(self, line, c):
       if not self.end:
          return None
 
@@ -91,10 +112,10 @@ class FixtureParser:
          self.done = True
          return True
 
-      fatal(self.file, line, "expectes ';', but \'" + c + "\' found.")
+      report_expect_char(self.file, line, ";", c)
 
    #######################################################
-   def handle_others(self, line, c):
+   def __handle_others(self, line, c):
       if c == '{':
          self.numberOfUnclosedBraces += 1
       elif c == '}':
@@ -103,67 +124,22 @@ class FixtureParser:
             self.end = True
 
    #######################################################
-   def handle_char(self, line, c):
-      self.handle_space(line, c) or \
-      self.handle_done(line, c) or \
-      self.handle_begin(line, c) or \
-      self.handle_end(line, c)   or \
-      self.handle_others(line, c)
-
-
-   #######################################################
-   def handle_line(self, line):
-      if self.parser:
-         testcase = self.parser.parse(line)
-         if testcase:
-            self.add_testcase(testcase) 
-            self.parser = None
-
-         return None
-         
-      return self.look_for_testcase(line)
+   def __handle_char(self, line, c):
+      self.__handle_space(line, c) or \
+      self.__handle_done(line, c) or \
+      self.__handle_begin(line, c) or \
+      self.__handle_end(line, c)   or \
+      self.__handle_others(line, c)
 
    #######################################################
-   def look_for_testcase(self, line):
-      testcase_name = is_testcase_def(line)
-      if testcase_name:
-         self.parser = TestCaseParser(testcase_name, self.file, line.get_line_number())
-         return None
-
-      return self.handle_normal_line(line)
-        
-   #######################################################
-   def handle_sub_scope(self, scope):
-      self.fixture.add_sub_scope(PreprocessScopeParser(self.file, \
-         scope, is_testcase_def, TestCaseParser, "test case").parse())
-
-   #######################################################
-   def handle_sub_scopes(self):
-      for scope in self.scopes:
-         self.handle_sub_scope(scope)
-
-   #######################################################
-   def handle_normal_line(self, line):
+   def parse_line(self, line):
       for c in line.get_content():
-         self.handle_char(line, c)
+         self.__handle_char(line, c)
 
       if self.done:
-         self.handle_sub_scopes()
-         return self.fixture
+         return self.container
 
       return None
-
-   #######################################################
-   def parse(self, line):
-      if isinstance(line, Tag):
-         self.handle_tag(line)
-         return None
-
-      if isinstance(line, PreprocessScope):
-         self.add_scope(line)
-         return None
-      
-      return self.handle_line(line)
 
 ##########################################################
 

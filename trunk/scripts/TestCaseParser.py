@@ -17,6 +17,13 @@ class TestCaseParser:
       self.numberOfUnclosedBraces = 0
       self.file = file
 
+   def get_container(self):
+      return None
+
+   #######################################################
+   def is_elem_def(self, content):
+      return None
+
    #######################################################
    def handle_space(self, line, c):
       if c.isspace():
@@ -29,7 +36,7 @@ class TestCaseParser:
       if not self.done:
          return None
 
-      fatal(self.file, line, "unexpected char '" + c + "'")
+      fatal(self.file, line, "unexpected char '" + c + "' in test case definition")
       
    #######################################################
    def handle_begin(self, line, c):
@@ -41,8 +48,7 @@ class TestCaseParser:
          self.begin = None
          return True
 
-      print line.get_content()
-      fatal(self.file, line, "expects '{'")
+      report_expect_char(self.file, line, "{", c)
   
    #######################################################
    def handle_others(self, line, c):
@@ -61,7 +67,10 @@ class TestCaseParser:
       self.handle_others(line, c)
 
    #######################################################
-   def handle_line(self, line):
+   def parse_line(self, line):
+      if self.done:
+         fatal(self.file, line, "internal error while parsing in test case")
+
       for c in line.get_content():
          self.handle_char(line, c)
 
@@ -70,15 +79,4 @@ class TestCaseParser:
 
       return None
 
-   #######################################################
-   def parse(self, line):
-      if isinstance(line, Tag):
-         # TODO: Warning Here...
-         return None
-      
-      if isinstance(line, PreprocessScope):
-         # We don't care scopes in testcases
-         return None
-
-      return self.handle_line(line)
-
+##########################################################
