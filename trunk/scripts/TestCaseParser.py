@@ -40,6 +40,7 @@ class TestCaseParser:
          self.begin = None
          return True
 
+      print line.get_content()
       fatal(line, "expects '{'")
   
    #######################################################
