@@ -106,7 +106,7 @@ class BaseScope(PreprocessScope):
    def add_ifdef_scope(self, lines, rest, isIfndef):
       matched = macro_re.match(rest)
       if not matched:
-         fatal(lines[0], "grammar error: only macro allowed")
+         fatal(self.file, lines[0], "grammar error: only macro allowed")
 
       return self.add_scope(IfdefScope(self.file, lines[0], self, rest, isIfndef), lines)
 
@@ -123,7 +123,7 @@ class BaseScope(PreprocessScope):
 
    #######################################################
    def parse_other_insts(self, lines, inst, rest):
-      fatal(lines[0], "should not be here")
+      fatal(self.file, lines[0], "should not be here")
 
 ##########################################################
 class GlobalScope(BaseScope):
@@ -133,7 +133,7 @@ class GlobalScope(BaseScope):
 
    #######################################################
    def parse_other_insts(self, lines, inst, rest):
-       fatal(lines[0], "(global) unexpected preprocessor instruction \"" + inst + "\"")
+       fatal(self.file, lines[0], "(global) unexpected preprocessor instruction \"" + inst + "\"")
 
 ##########################################################
 class ConditionScope(BaseScope):
@@ -161,7 +161,7 @@ class ConditionScope(BaseScope):
 
    #######################################################
    def parse_else_scope(self, lines, inst, rest):
-      fatal(0, "should not be here")
+      fatal(self.file, lines[0], "should not be here")
 
    #######################################################
    def is_digit(self):
@@ -172,25 +172,25 @@ hex_re = re.compile( r'^\s*(?P<value>0[xX][A-Fa-f0-9]+)\s*$' )
 oct_re = re.compile( r'^\s*(?P<value>0[0-7]*)\s*$' )
 dec_re = re.compile( r'^\s*(?P<value>[1-9][0-9]*)\s*$' )
 
-def convert_to_int(line, str, base):
+def convert_to_int(file, line, str, base):
    try:
       return int(str, base)
    except ValueError:
-      fatal(line, "Invalid int literal " + str)
+      fatal(file, line, "Invalid int literal " + str)
      
 ##########################################################
-def is_number(line, content):
+def is_number(file, line, content):
    matched = dec_re.match(content)
    if matched:
-      return convert_to_int(line, matched.group("value"), 10)
+      return convert_to_int(file, line, matched.group("value"), 10)
 
    matched = hex_re.match(content)
    if matched:
-      return convert_to_int(line, matched.group("value"), 16)
+      return convert_to_int(file, line, matched.group("value"), 16)
 
    matched = oct_re.match(content)
    if matched:
-      return convert_to_int(line, matched.group("value"), 8)
+      return convert_to_int(file, line, matched.group("value"), 8)
 
    return None
 
@@ -205,7 +205,7 @@ class IfScope(ConditionScope):
    #######################################################
    def __init__(self, file, line, parent, rest, root):
       if root and (root.is_zero() or root.is_one()):
-         fatal(line, "#if 0 or #if 1 does not allow #elif")
+         fatal(self.file, line, "#if 0 or #if 1 does not allow #elif")
 
       self.rest = rest
 
@@ -217,7 +217,7 @@ class IfScope(ConditionScope):
       self.zero = None
       self.one = None
 
-      value = is_number(line, rest)
+      value = is_number(file, line, rest)
       if value == 0:   self.zero = True
       elif value > 0:  self.one = True
 
@@ -262,7 +262,7 @@ class IfdefScope(ConditionScope):
    #######################################################
    def parse_else_scope(self, lines, inst, rest):
       if inst == "elif":
-         fatal(lines[0], "unexpected preprocessor instruction " + inst)
+         fatal(self.file, lines[0], "unexpected preprocessor instruction " + inst)
 
       return self.add_elses(ElseScope(self.file, lines[0], self.parent, rest, self), lines)
 
@@ -274,7 +274,7 @@ class ElseScope(ConditionScope):
    
    #######################################################
    def parse_else_scope(self, lines, inst, rest):
-      fatal(lines[0], "unexpected preprocessor instruction " + inst)
+      fatal(self.file, lines[0], "unexpected preprocessor instruction " + inst)
 
    #######################################################
    def is_zero(self):

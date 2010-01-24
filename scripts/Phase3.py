@@ -25,6 +25,6 @@ def is_fixture_def(line):
    return None
    
 ##########################################################
-def phase3(globalScope):
-   return PreprocessScopeParser(globalScope, is_fixture_def, FixtureParser, "fixture").parse()
+def phase3(globalScope, file):
+   return PreprocessScopeParser(file, globalScope, is_fixture_def, FixtureParser, "fixture").parse()
 

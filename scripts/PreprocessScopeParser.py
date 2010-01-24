@@ -9,7 +9,9 @@ from TestScope import TestScope
 ##########################################################
 class PreprocessScopeParser:
    #######################################################
-   def __init__(self, pp_scope, is_elem_def, elem_parser_cls, type_name ):
+   def __init__(self, file, pp_scope, is_elem_def, elem_parser_cls, type_name):
+
+      self.file = file
 
       self.pp_scope = pp_scope
 
@@ -59,7 +61,7 @@ class PreprocessScopeParser:
       
    #######################################################
    def parse_scope(self, scope):
-      return PreprocessScopeParser(scope, \
+      return PreprocessScopeParser(self.file, scope, \
          self.is_elem_def, \
          self.elem_parser_cls, \
          self.type_name).parse()
@@ -70,7 +72,7 @@ class PreprocessScopeParser:
          self.parse_line(line)
 
       if self.parser:
-         fatal(self.pp_scope.get_lines()[-1], \
+         fatal(self.file, self.pp_scope.get_lines()[-1], \
             "incompleted " + self.type_name + " definition")
 
       # sub scope

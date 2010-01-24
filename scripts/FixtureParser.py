@@ -65,7 +65,7 @@ class FixtureParser:
       if not self.done:
          return None
 
-      fatal(line, "unexpected char '" + c + "'")
+      fatal(self.file, line, "unexpected char '" + c + "'")
 
    #######################################################
    def handle_begin(self, line, c):
@@ -77,7 +77,7 @@ class FixtureParser:
          self.begin = None
          return True
 
-      fatal(line, "expected '{'")
+      fatal(self.file, line, "expects '{', but \'" + c + "\' found.")
 
    #######################################################
    def handle_end(self, line, c):
@@ -88,7 +88,7 @@ class FixtureParser:
          self.done = True
          return True
 
-      fatal(line, "expected ';'")
+      fatal(self.file, line, "expectes ';', but \'" + c + "\' found.")
 
    #######################################################
    def handle_others(self, line, c):
@@ -131,7 +131,8 @@ class FixtureParser:
         
    #######################################################
    def handle_sub_scope(self, scope):
-      self.fixture.add_sub_scope(PreprocessScopeParser(scope, is_testcase_def, TestCaseParser, "test case").parse())
+      self.fixture.add_sub_scope(PreprocessScopeParser(self.file, \
+         scope, is_testcase_def, TestCaseParser, "test case").parse())
 
    #######################################################
    def handle_sub_scopes(self):
