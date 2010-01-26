@@ -15,4 +15,4 @@ libfoo_la_LDFLAGS = \
 libfoo_la_LIBADD = $(top_builddir)/src/libtestngpp.la
 
 TestFoo.cpp : TestFoo.h
-	$(PYTHON) $(top_builddir)/scripts/testngppgen.py -o $@ $<
+	$(PYTHON) $(top_builddir)/scripts/testngppgen3.py -o $@ $<
