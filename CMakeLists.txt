@@ -26,9 +26,19 @@ ADD_SUBDIRECTORY(libs)
 ADD_SUBDIRECTORY(ut)
 ADD_SUBDIRECTORY(samples)
 
+########################################################
 INSTALL(DIRECTORY include/testngpp DESTINATION include
           PATTERN ".svn" EXCLUDE
           PATTERN "comm" EXCLUDE
           PATTERN "runner" EXCLUDE
-          PATTERN "utils" EXCLUDE
-          PATTERN "testngpp/*")
+          PATTERN "utils" EXCLUDE)
+
+IF(USING_AS_TESTCPP)
+  INSTALL(DIRECTORY include/testcpp DESTINATION include
+          PATTERN ".svn" EXCLUDE)
+ENDIF(USING_AS_TESTCPP)
+
+IF(USING_AS_CXXTEST)
+  INSTALL(DIRECTORY include/cxxtest DESTINATION include
+          PATTERN ".svn" EXCLUDE)
+ENDIF(USING_AS_CXXTEST)
