@@ -29,13 +29,13 @@ struct TestCaseSandboxHandlerImpl
    TestCaseRunner* runner;
 };
 
-
 //////////////////////////////////////////////////////
 void
 TestCaseSandboxHandlerImpl::handle(ChannelId channelId)
 {
    TestCaseResultCollector* reporter = \
-         new TestCaseSandboxResultReporter(new PipeWrittableChannel(channelId));
+         new TestCaseSandboxResultReporter( \
+            new PipeWrittableChannel(channelId));
    
    __TESTNGPP_DO
    {
@@ -46,7 +46,6 @@ TestCaseSandboxHandlerImpl::handle(ChannelId channelId)
       delete reporter;
    }
    __TESTNGPP_DONE
-
 }
 
 //////////////////////////////////////////////////////
