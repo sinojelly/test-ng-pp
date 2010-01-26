@@ -24,6 +24,7 @@
 // backward-compatible
 #define testcpp     testngpp
 #define TESTCPP_NS testcpp
+#define USING_TESTCPP_NS using namespace TESTCPP_NS;
 
 #endif
 
