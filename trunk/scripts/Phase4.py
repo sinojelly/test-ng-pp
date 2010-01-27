@@ -6,6 +6,9 @@ from Message import *
 from Phase1Result import *
 
 def output(content, file):
+   if file == None:
+      return
+
    lines = content + "\n"
    file.writelines(lines.encode('utf-8'))
 
@@ -27,9 +30,9 @@ def get_fixture_var():
 def get_fixture_para():
    return "pFixture"
 
-def get_testcase_id(testcase):
-   if testcase.get_id():
-      return testcase.get_id()
+def get_testcase_name(testcase):
+   if testcase.get_traditional_name():
+      return testcase.get_traditional_name()
 
    return "test_" + str(testcase.get_line_number())
 
@@ -37,16 +40,21 @@ def get_fixture_para_decl():
    return get_fixture_base_name() + "* " + get_fixture_para()
 
 def get_testcase_class_name(fixture, testcase):
-   return "TESTCASE_" + fixture.get_id() + "_" + get_testcase_id(testcase)
+   return "TESTCASE_" + fixture.get_id() + "_" + get_testcase_name(testcase)
 
 def get_testcase_instance_name(fixture, testcase):
-   return "testcase_instance_" + fixture.get_id() + "_" + get_testcase_id(testcase)
+   return "testcase_instance_" + fixture.get_id() + "_" + get_testcase_name(testcase)
 
 def get_fixture_desc_class():
    return "TESTNGPP_NS::TestFixtureDesc"
 
 def get_fixture_desc_var(fixture):
    return "test_fixture_desc_instance_" + fixture.get_id()
+
+def get_depends_var(fixture, testcase):
+   depends = testcase.get_depends()
+   if depends == None: return "0"
+   return get_testcase_instance_name(fixture, depends)
 
 ################################################
 class TestCaseDefGenerator:
@@ -57,7 +65,7 @@ class TestCaseDefGenerator:
       self.file = file
 
    #############################################
-   def generate(self):
+   def __generate(self):
       output("static struct " + get_testcase_class_name(self.fixture, self.testcase), self.file)
       output("   : public " + get_testcase_base_name(), self.file)
       output("{", self.file)
@@ -65,6 +73,7 @@ class TestCaseDefGenerator:
       output("     :" + get_testcase_base_name(), self.file)
       output("        (\"" + self.testcase.get_name() + "\"", self.file)
       output("        , \"" + self.fixture.get_name() + "\"", self.file)
+      output("        , " + get_depends_var(self.fixture, self.testcase), self.file)
       output("        , \"" + self.testcase.get_file_name() + "\"", self.file)
       output("        , " + str(self.testcase.get_line_number())  + ")", self.file)
       output("   {}", self.file)
@@ -85,7 +94,7 @@ class TestCaseDefGenerator:
       output("   }", self.file)
       output("   void run()", self.file)
       output("   {", self.file)
-      output("     " + get_fixture_var() + "->" + get_testcase_id(self.testcase) + "();", self.file)
+      output("     " + get_fixture_var() + "->" + get_testcase_name(self.testcase) + "();", self.file)
       output("   }", self.file)
       output("   " + get_fixture_base_name() + "* getFixture() const", self.file)
       output("   {", self.file)
@@ -95,6 +104,17 @@ class TestCaseDefGenerator:
       output("   " + self.fixture.get_id() + "* " + get_fixture_var() + ";", self.file)
       output("} " + get_testcase_instance_name(self.fixture, self.testcase) + ";", self.file)
 
+   def generate(self):
+      if self.testcase.has_been_generated():
+         return
+
+      depends = self.testcase.get_depends()
+      if depends:
+         TestCaseDefGenerator(self.file, depends, self.fixture).generate()
+
+      self.__generate()
+      self.testcase.mark_as_generated()
+         
 ################################################
 def get_testcase_array_var(fixture):
    return "g_TESTCASEARRAY_" + fixture.get_id()
@@ -112,6 +132,34 @@ class TestCaseArrayGenerator:
       output("&" + get_testcase_instance_name(self.fixture, self.testcase) + ",", self.file)
 
 ################################################
+class TestCaseDependsVerifier:
+   #############################################
+   def __init__(self, testcase):
+      self.testcase = testcase
+
+   #############################################
+   def generate(self):
+      depends = self.testcase.get_depends()
+      temp = depends
+      while temp != None:
+        temp = temp.get_depends()
+        if temp == depends:
+           self.testcase.report_cyclic_depend_error()
+
+
+################################################
+class TestCaseSeeker:
+   #############################################
+   def __init__(self, fixture):
+      self.fixture = fixture
+
+   #############################################
+   def generate(self):
+      ScopesGenerator([self.fixture.get_scope()], None) \
+         .generate(lambda file, elem: TestCaseDependsVerifier(elem))
+
+
+################################################
 class FixtureGenerator:
    #############################################
    def __init__(self, file, fixture):
@@ -123,6 +171,7 @@ class FixtureGenerator:
       ScopesGenerator([self.fixture.get_scope()], self.file) \
          .generate(lambda file, elem: TestCaseDefGenerator(file, elem, self.fixture))
 
+   #############################################
    def generate_testcase_array_content(self):
       ScopesGenerator([self.fixture.get_scope()], self.file) \
          .generate(lambda file, elem: TestCaseArrayGenerator(file, elem, self.fixture))
@@ -319,8 +368,14 @@ class SuiteGenerator:
       self.generate_suite_getter()
 
 ################################################
+def verify_testcase_deps(scopes):
+   ScopesGenerator(scopes, None) \
+         .generate(lambda file, elem: TestCaseSeeker(elem) )
+
 ################################################
 def phase4(fixture_files, target, scopes):
+   verify_testcase_deps(scopes)
+
    try:
       file = open(target, "w")
    except IOError:

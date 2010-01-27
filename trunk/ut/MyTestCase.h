@@ -11,7 +11,7 @@ struct MyTestCase : public TESTNGPP_NS::TestCase
            , const std::string& nameOfFixture
            , const std::string& file
            , unsigned int line)
-           : TESTNGPP_NS::TestCase(nameOfCase, nameOfFixture, file, line)
+           : TESTNGPP_NS::TestCase(nameOfCase, nameOfFixture, 0, file, line)
    {}
 
    TESTNGPP_NS::TestFixture* getFixture() const { return 0; }

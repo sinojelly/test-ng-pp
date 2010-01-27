@@ -59,6 +59,9 @@ class BaseScope(PreprocessScope):
    #######################################################
    def handle_done(self, result):
       if result['root'] == self:
+         if self.parent != None:
+            self.parent.merge(self)
+
          return create_cont(result['lines'])
 
       return result
@@ -94,31 +97,37 @@ class BaseScope(PreprocessScope):
       if not is_scope_inst(inst):
          return self.add_line(lines)
 
-      return self.parse_scope_inst(lines, inst, rest)
+      expr = rest
+      if rest != None:
+         expr = "".join(re.split("\s*",rest))
+
+      return self.parse_scope_inst(lines, inst, expr)
 
    #######################################################
-   def add_scope(self, scope, lines):
+   def add_scope(self, scope):
       if not self.stay_in_zero():
          self.lines.append(scope)
 
+   #######################################################
+   def start_scope(self, scope, lines):
       return scope.parse(lines[1:])
 
    #######################################################
-   def add_ifdef_scope(self, lines, rest, isIfndef):
+   def start_ifdef_scope(self, lines, rest, isIfndef):
       matched = macro_re.match(rest)
       if not matched:
          fatal(self.file, lines[0], "grammar error: only macro allowed")
 
-      return self.add_scope(IfdefScope(self.file, lines[0], self, rest, isIfndef), lines)
+      return self.start_scope(IfdefScope(self.file, lines[0], self, rest, isIfndef), lines)
 
    #######################################################
    def parse_scope_inst(self, lines, inst, rest):
       if inst == "if":
-         return self.add_scope(IfScope(self.file, lines[0], self, rest, None), lines)
+         return self.start_scope(IfScope(self.file, lines[0], self, rest, None), lines)
       elif inst == "ifndef":
-         return self.add_ifdef_scope(lines, rest, True)
+         return self.start_ifdef_scope(lines, rest, True)
       elif inst == "ifdef":
-         return self.add_ifdef_scope(lines, rest, None)
+         return self.start_ifdef_scope(lines, rest, None)
 
       return self.parse_other_insts(lines, inst, rest)
 

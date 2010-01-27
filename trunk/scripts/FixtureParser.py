@@ -49,7 +49,7 @@ class FixtureParser:
       self.done = None
       self.file = file
       self.line = line
-      self.tags = []
+      self.tag = None
 
       self.container = Fixture(name, self.file, self.line)
 
@@ -63,9 +63,8 @@ class FixtureParser:
    
    #######################################################
    def __has_test_tag(self):
-      for tag in self.tags:
-         if tag.get_tag() == "test":
-            return True
+      if self.tag != None and self.tag.get_tag() == "test":
+         return True
 
       return None
 
@@ -79,22 +78,25 @@ class FixtureParser:
 
    #######################################################
    def handle_tag(self, tag):
-      self.tags.append(tag)
+      self.__report_useless_tag()
+      self.tag = tag
 
    #######################################################
-   def __report_useless_tags(self):
-      for tag in self.tags:
-         warning(self.file, tag, "useless tag definition @" + tag.get_tag())
-      self.tags = []
+   def __report_useless_tag(self):
+      if self.tag != None:
+         warning(self.file, self.tag, "useless tag definition @" + self.tag.get_tag())
+
+      self.tag = None
+
    #######################################################
    def verify_scope(self, tag):
-      self.__report_useless_tags()
+      self.__report_useless_tag()
       return True
 
    #######################################################
-   def create_elem_parser(self, elem_name, file, line):
-      parser = TestCaseParser(elem_name, file, line, self.tags)
-      self.tags = []
+   def create_elem_parser(self, elem_name, scope, file, line):
+      parser = TestCaseParser(elem_name, scope, file, line, self.tag)
+      self.tag = None
       return parser
 
    #######################################################
@@ -157,7 +159,7 @@ class FixtureParser:
 
    #######################################################
    def parse_line(self, line):
-      self.__report_useless_tags()
+      self.__report_useless_tag()
       for c in line.get_content():
          self.__handle_char(line, c)
 

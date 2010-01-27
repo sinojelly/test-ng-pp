@@ -27,7 +27,7 @@ TESTNGPP_NS_START
 
 struct PipeReadableChannel: public ReadableChannel
 {
-   PipeReadableChannel(int pipeFd);
+   PipeReadableChannel(int pipeFd, bool autoClose=true);
    ~PipeReadableChannel();
 
    unsigned char readByte() throw (Error, EOFError); 
@@ -41,6 +41,7 @@ struct PipeReadableChannel: public ReadableChannel
 private:
 
    int fd;
+   bool shouldClose;
 };
 
 TESTNGPP_NS_END

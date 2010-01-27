@@ -11,7 +11,7 @@ class ElemParser:
    #######################################################
    def __init__(self, file, parser, container):
       self.file   = file
-      self.parser = parser
+      self.parser = parser     # for fixture
       self.elem_parser = None
       self.sub_scopes = []
       self.done = None
@@ -30,7 +30,9 @@ class ElemParser:
    #######################################################
    def __create_elem_parser(self, elem_name, line):
       elem_parser = self.parser.create_elem_parser(elem_name,\
-         self.file, line.get_line_number())
+                       self.container.get_scope(), \
+                       self.file, \
+                       line.get_line_number())
 
       return ElemParser(self.file, elem_parser, elem_parser.get_container())
    
@@ -66,7 +68,8 @@ class ElemParser:
 
    #######################################################
    def __parse_scope(self, scope):
-      return PreprocessScopeParser(self.file, scope, self.parser, self.__class__).parse()
+      return PreprocessScopeParser(self.file, scope, self.parser, \
+               self.__class__, self.container.get_scope()).parse()
 
    #######################################################
    def __handle_sub_scopes(self):

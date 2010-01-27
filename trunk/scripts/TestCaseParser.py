@@ -13,23 +13,18 @@ from Message import *
 ##########################################################
 class TestCaseParser:
    #######################################################
-   def __init__(self, name, file, line, tags):
-      self.testcase = TestCase(name, file, line, tags)
+   def __init__(self, name, scope, file, line, tag):
+      self.verify_testcase_tag(tag)
+      self.testcase = TestCase(name, scope, file, line, tag)
       self.begin = True
       self.done = None
       self.numberOfUnclosedBraces = 0
       self.file = file
-      self.verify_testcase_tags(tags)
 
    #######################################################
    def verify_testcase_tag(self, tag):
-      if tag.get_tag() != "test" and tag.get_tag() != "depend":
+      if tag != None and tag.get_tag() != "test":
          warning(self.file, tag, "unknown tag @" + tag.get_tag())
-
-   #######################################################
-   def verify_testcase_tags(self, tags):
-      for tag in tags:
-         self.verify_testcase_tag(tag)
 
    #######################################################
    def get_container(self):

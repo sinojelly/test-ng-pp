@@ -33,10 +33,12 @@ struct TestCase
 {
 	TestCase( const std::string& nameOfCase
            , const std::string& nameOfFixture
+           , TESTNGPP_NS::TestCase* testcase
            , const std::string& file
            , unsigned int line)
 		: name(nameOfCase)
       , fixtureName(nameOfFixture)
+      , depends(testcase)
       , fileName(file)
       , lineOfFile(line)
    {}
@@ -48,6 +50,10 @@ struct TestCase
 
 	const std::string& getNameOfFixture() const
 	{ return fixtureName; }
+
+   TESTNGPP_NS::TestCase* 
+   getDependedTestCase() const
+   { return depends; }
 
 	const std::string& getFileName() const
 	{ return fileName; }
@@ -64,6 +70,7 @@ struct TestCase
 private:
 	std::string name;
 	std::string fixtureName;
+   TESTNGPP_NS::TestCase* depends;
    std::string fileName;
 	unsigned int lineOfFile;
 };
