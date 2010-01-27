@@ -50,7 +50,7 @@ class GlobalParser:
    def verify_scope(self, tag):
       return True
 
-   def create_elem_parser(self, elem_name, file, line):
+   def create_elem_parser(self, elem_name, scope, file, line):
       return FixtureParser(elem_name, file, line)
 
    def get_type_name(self):
@@ -64,5 +64,5 @@ class GlobalParser:
 
 ##########################################################
 def phase3(globalScope, file):
-   return PreprocessScopeParser(file, globalScope, GlobalParser(file), ElemParser).parse()
+   return PreprocessScopeParser(file, globalScope, GlobalParser(file), ElemParser, None).parse()
 

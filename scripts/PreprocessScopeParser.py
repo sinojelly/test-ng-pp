@@ -7,13 +7,13 @@ from TestScope import TestScope
 ##########################################################
 class PreprocessScopeParser:
    #######################################################
-   def __init__(self, file, pp_scope, parser, elem_parser_cls):
+   def __init__(self, file, pp_scope, parser, elem_parser_cls, parent):
       self.pp_scope = pp_scope
 
       self.file   = file
       self.parser = parser
 
-      self.container = TestScope(pp_scope.get_inst(), pp_scope.get_expr())
+      self.container = TestScope(pp_scope.get_inst(), pp_scope.get_expr(), parent)
 
       self.elem_parser = elem_parser_cls(file, parser, self.container)
 
@@ -21,7 +21,10 @@ class PreprocessScopeParser:
 
    #######################################################
    def parse_scope(self, scope):
-      return PreprocessScopeParser(self.file, scope, self.parser, self.elem_parser_cls).parse()
+      return PreprocessScopeParser(self.file, \
+                scope, self.parser, \
+                self.elem_parser_cls, \
+                self.container).parse()
          
    #######################################################
    def parse(self):

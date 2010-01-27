@@ -10,7 +10,7 @@ from LogicalLine import *
 
 ##########################################################
 blank_slc_re  = re.compile( r'^\s*//.*$', re.UNICODE)
-tag_re        = re.compile( r'^\s*//\s*@\s*(?P<tag>[A-Za-z]+)\s*(:\s*(?P<value>.*?))?\s*$', re.UNICODE )
+tag_re        = re.compile( r'^\s*//\s*@\s*(?P<tag>[A-Za-z]+)\s*(\(\s*(?P<value>.*?)\))?\s*$', re.UNICODE )
 
 slc_re   = re.compile( r'^(?P<content>.*?)//.*$', re.UNICODE )
 smlc_re  = re.compile( r'^(?P<content>.*?)/\*.*$', re.UNICODE )

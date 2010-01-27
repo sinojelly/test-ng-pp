@@ -10,7 +10,7 @@ class Fixture:
    def __init__(self, name, file, line):
       self.id   = name[0]
       self.name = name[1]
-      self.scope = TestScope("::", None)
+      self.scope = TestScope("::", None, None)
       self.file = file
       self.line = line
 
@@ -18,6 +18,10 @@ class Fixture:
       content = "FIXTURE("+self.get_name()+")"
       print content.encode('utf-8')
       self.scope.show()
+
+   ########################################
+   def set_scope(self, scope):
+      pass
 
    ########################################
    def get_id(self):
@@ -29,6 +33,10 @@ class Fixture:
          return self.name
 
       return self.id
+
+   ########################################
+   def merge(self, scope):
+      self.scope.merge(scope)
 
    ########################################
    def add_elem(self, testcase):

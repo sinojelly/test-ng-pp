@@ -43,6 +43,8 @@ public:
       cleaner.METHOD(EnvironmentCleaner::cleanUp).expects(once());
       handler.METHOD(SandboxHandler::handle).expects(once());
 
-      SandboxProcessor::process(fds[0], fds[1], cleaner, handler);
+      //SandboxProcessor::process(fds[0], fds[1], cleaner, handler);
+      close(fds[0]);
+      close(fds[1]);
    }
 };

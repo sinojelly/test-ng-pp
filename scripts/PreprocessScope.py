@@ -33,6 +33,17 @@ class PreprocessScope:
       for scope in self.elses:
          scope.show()
 
+   def merge(self, scope):
+      if scope.is_one():
+        self.lines += scope.lines
+      elif scope.is_zero():
+        assert len(scope.elses) <= 1
+        if len(scope.elses) > 0:
+           self.lines += scope.elses[0].lines
+      else:
+        self.add_scope(scope)
+
+
    ##################################
    def get_file_name(self):
       return self.file

@@ -17,10 +17,14 @@ class Tag(Line):
    def __init__(self, line_number, tag, value):
       Line.__init__(self, line_number)
       self.tag = tag
+      
       self.value = value
 
    def get_tag(self):
       return self.tag
+
+   def get_value(self):
+      return self.value
 
    def show(self):
       print >> sys.stdout, self.line_number, "tag", self.tag, self.value

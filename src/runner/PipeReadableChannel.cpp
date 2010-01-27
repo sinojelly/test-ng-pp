@@ -10,14 +10,14 @@
 TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
-PipeReadableChannel::PipeReadableChannel(int pipeFd)
-   : fd(pipeFd)
+PipeReadableChannel::PipeReadableChannel(int pipeFd, bool autoClose)
+   : fd(pipeFd), shouldClose(autoClose)
 {}
 
 //////////////////////////////////////////////////////////////////
 PipeReadableChannel::~PipeReadableChannel()
 {
-   ::close(fd);
+   if(shouldClose) ::close(fd);
 }
 
 //////////////////////////////////////////////////////////////////
