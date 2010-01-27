@@ -26,7 +26,7 @@
 #define __TESTNGPP_LINENAME( name ) __LINENAME( name, __LINE__ )
 
 #define TEST(...) void __TESTNGPP_LINENAME(test_) (void)
-#define FIXTURE(id , ...) struct id : public TESTNGPP_NS::TestFixture
+#define FIXTURE(cut, ...) struct Test##cut: public TESTNGPP_NS::TestFixture
 
 #endif
 

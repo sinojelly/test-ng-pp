@@ -40,21 +40,27 @@ def get_fixture_para_decl():
    return get_fixture_base_name() + "* " + get_fixture_para()
 
 def get_testcase_class_name(fixture, testcase):
-   return "TESTCASE_" + fixture.get_id() + "_" + get_testcase_name(testcase)
+   return "TESTCASE_" + get_fixture_id(fixture) + "_" + get_testcase_name(testcase)
 
 def get_testcase_instance_name(fixture, testcase):
-   return "testcase_instance_" + fixture.get_id() + "_" + get_testcase_name(testcase)
+   return "testcase_instance_" + get_fixture_id(fixture) + "_" + get_testcase_name(testcase)
 
 def get_fixture_desc_class():
    return "TESTNGPP_NS::TestFixtureDesc"
 
 def get_fixture_desc_var(fixture):
-   return "test_fixture_desc_instance_" + fixture.get_id()
+   return "test_fixture_desc_instance_" + get_fixture_id(fixture)
+
+def get_file_name(testcase):
+   return os.path.basename(testcase.get_file_name())
 
 def get_depends_var(fixture, testcase):
    depends = testcase.get_depends()
    if depends == None: return "0"
    return get_testcase_instance_name(fixture, depends)
+
+def get_fixture_id(fixture):
+   return fixture.get_id()
 
 ################################################
 class TestCaseDefGenerator:
@@ -74,18 +80,18 @@ class TestCaseDefGenerator:
       output("        (\"" + self.testcase.get_name() + "\"", self.file)
       output("        , \"" + self.fixture.get_name() + "\"", self.file)
       output("        , " + get_depends_var(self.fixture, self.testcase), self.file)
-      output("        , \"" + self.testcase.get_file_name() + "\"", self.file)
+      output("        , \"" + get_file_name(self.testcase) + "\"", self.file)
       output("        , " + str(self.testcase.get_line_number())  + ")", self.file)
       output("   {}", self.file)
       output("   void setUp(" + get_fixture_para_decl() + ")", self.file)
       output("   {", self.file)
       output("      if(" + get_fixture_para() + " == 0)", self.file)
       output("      {", self.file)
-      output("         " + get_fixture_var() + " = new " + self.fixture.get_id() + "();", self.file)
+      output("         " + get_fixture_var() + " = new " + get_fixture_id(self.fixture) + "();", self.file)
       output("         " + get_fixture_var() + "->setUp(); ", self.file)
       output("      }", self.file)
       output("      else", self.file)
-      output("         " + get_fixture_var() + " = dynamic_cast<" + self.fixture.get_id() + "*>(" + \
+      output("         " + get_fixture_var() + " = dynamic_cast<" + get_fixture_id(self.fixture) + "*>(" + \
                        get_fixture_para() + ");", self.file)
       output("   }", self.file)
       output("   void tearDown()", self.file)
@@ -101,7 +107,7 @@ class TestCaseDefGenerator:
       output("      return " + get_fixture_var() + ";", self.file)
       output("   }", self.file)
       output("private:", self.file)
-      output("   " + self.fixture.get_id() + "* " + get_fixture_var() + ";", self.file)
+      output("   " + get_fixture_id(self.fixture) + "* " + get_fixture_var() + ";", self.file)
       output("} " + get_testcase_instance_name(self.fixture, self.testcase) + ";", self.file)
 
    def generate(self):
@@ -117,7 +123,7 @@ class TestCaseDefGenerator:
          
 ################################################
 def get_testcase_array_var(fixture):
-   return "g_TESTCASEARRAY_" + fixture.get_id()
+   return "g_TESTCASEARRAY_" + get_fixture_id(fixture)
 
 ################################################
 class TestCaseArrayGenerator:
@@ -202,7 +208,7 @@ class FixtureDescGenerator:
    def generate(self):
       output("static " + get_fixture_desc_class() + " " + get_fixture_desc_var(self.fixture) + \
              "(\"" + self.fixture.get_name() + \
-             "\",\"" + self.fixture.get_file_name() + \
+             "\",\"" + get_file_name(self.fixture) + \
              "\"," + get_testcase_array_var(self.fixture) + \
              "," + "sizeof(" + get_testcase_array_var(self.fixture) + \
              ")/sizeof(" + get_testcase_array_var(self.fixture) + \
@@ -356,7 +362,7 @@ class SuiteGenerator:
       self.generate_dep_headers()
 
       for header in self.fixture_files:
-         output("#include \"" + header + "\"", self.file)
+         output("#include \"" + os.path.basename(header) + "\"", self.file)
 
    #############################################
    def generate(self):

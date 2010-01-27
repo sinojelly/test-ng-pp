@@ -24,7 +24,7 @@ fixture_re3  = re.compile( \
 def is_fixture_def(line):
    matched = fixture_re1.match(line)
    if matched:
-      return matched.group("fixtureId"), matched.group("fixtureName")
+      return "Test"+matched.group("fixtureId"), matched.group("fixtureName")
 
    matched = fixture_re2.match(line)
    if matched:
