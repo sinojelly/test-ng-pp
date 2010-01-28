@@ -118,19 +118,19 @@ endTestCase(TestCaseInfoReader* testcase)
 {
    switch(This->caseResultReporter->getTestCaseResult(testcase))
    {
-   case TestCaseResultReporter::SUCCESS:
+   case TestCaseResultReporter::TR_SUCCESS:
       This->numberOfSuccessfulCases++;
       break;
-   case TestCaseResultReporter::FAILED:
+   case TestCaseResultReporter::TR_FAILED:
       This->numberOfFailedCases++;
       break;
-   case TestCaseResultReporter::ERROR:
+   case TestCaseResultReporter::TR_ERROR:
       This->numberOfErrorCases++;
       break;
-   case TestCaseResultReporter::CRASHED:
+   case TestCaseResultReporter::TR_CRASHED:
       This->numberOfCrashedCases++;
       break;
-   case TestCaseResultReporter::UNKNOWN:
+   case TestCaseResultReporter::TR_UNKNOWN:
    default:
       throw Error(TESTNGPP_INTERNAL_ERROR(6003));
    }

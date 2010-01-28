@@ -88,8 +88,8 @@ public:
 			.METHOD(TestCaseResultReporter::getTestCaseResult)
 			.stubs()
 			.with(eq((TestCaseInfoReader*) testCaseInfoReader))
-			.will(returnValue((unsigned int) TestCaseResultReporter::SUCCESS))
-			.then(returnValue((unsigned int) TestCaseResultReporter::FAILED));
+			.will(returnValue((unsigned int) TestCaseResultReporter::TR_SUCCESS))
+			.then(returnValue((unsigned int) TestCaseResultReporter::TR_FAILED));
 
 		AssertionFailure assertionFailure((const std::string) "Test-2.cpp",
 				1,

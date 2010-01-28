@@ -11,11 +11,11 @@ struct TestCaseInfoReader;
 struct TestCaseResultReporter
 {
    enum {
-      SUCCESS = 0,
-      FAILED  = 1,
-      ERROR   = 2,
-      CRASHED = 3,
-      UNKNOWN = 4
+      TR_SUCCESS = 0,
+      TR_FAILED  = 1,
+      TR_ERROR   = 2,
+      TR_CRASHED = 3,
+      TR_UNKNOWN = 4
    };
    
    virtual unsigned int getTestCaseResult(TestCaseInfoReader*) const = 0;
