@@ -25,7 +25,7 @@ public:
          value = 101;
          throw Fail0();
       }
-      __TESTNGPP_CATCH(Fail0& fail)
+      __TESTNGPP_CATCH(Fail0&)
       {
          value = 102;
       }
@@ -51,7 +51,7 @@ public:
          *value = 101;
          throw Fail0();
       }
-      __TESTNGPP_CATCH(Fail0& fail)
+      __TESTNGPP_CATCH(Fail0&)
       {
          *value = 102;
          throw;
@@ -80,7 +80,7 @@ public:
       {
          value = 101;
       }
-      __TESTNGPP_CATCH(Fail0& fail)
+      __TESTNGPP_CATCH(Fail0&)
       {
          value = 102;
          throw;
@@ -159,7 +159,7 @@ public:
          *value = 100;
          throw Fail0();
       }
-      __TESTNGPP_CATCH(Fail0& fail)
+      __TESTNGPP_CATCH(Fail0&)
       {
          *value = 101;
          throw Fail0();
@@ -194,7 +194,7 @@ public:
          value = 101;
          throw Fail0();
       }
-      __TESTNGPP_CATCH(Fail0& fail)
+      __TESTNGPP_CATCH(Fail0&)
       {
          value = 102;
       }
