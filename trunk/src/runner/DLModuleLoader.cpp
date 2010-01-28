@@ -73,7 +73,6 @@ namespace
 
 /////////////////////////////////////////////////////////////////
 void
-DLModuleLoaderImpl::
 DLModuleLoaderImpl::loadUnderPaths \
                  ( const std::list<std::string>& searchingPaths
                  , const std::string& modulePath)

@@ -5,7 +5,7 @@
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
-#include <testngpp/runner/DllModuleLoader.h>
+#include <testngpp/runner/Win32DllModuleLoader.h>
 
 
 TESTNGPP_NS_START
@@ -69,7 +69,6 @@ namespace
 
 /////////////////////////////////////////////////////////////////
 void
-Win32DllModuleLoaderImpl::
 Win32DllModuleLoaderImpl::loadUnderPaths \
                  ( const std::list<std::string>& searchingPaths
                  , const std::string& modulePath)
@@ -84,11 +83,7 @@ Win32DllModuleLoaderImpl::loadUnderPaths \
       }
    }
 
-   handle = openModule(modulePath);
-   if(handle == 0)
-   {
-      throw Error(::dlerror());
-   }
+   load(modulePath);
 }
 
 ////////////////////////////////////////////////////////
@@ -98,7 +93,7 @@ Win32DllModuleLoaderImpl::load(const std::string& modulePath)
     handle = openModule(modulePath.c_str());
     if(handle == 0)
     {
-        throw Error(::dlerror());
+        throw Error("Can't open module " + modulePath);
     }
 }
 
@@ -108,7 +103,7 @@ Win32DllModuleLoaderImpl::unload()
 {
     if(handle != 0)
     {
-        ::FreeLibrary(handle);
+        ::FreeLibrary((HMODULE)handle);
         handle = 0;
     }
 }
@@ -122,10 +117,10 @@ Win32DllModuleLoaderImpl::findSymbol(const std::string& symbol)
         throw Error("module has not been loaded yet");
     }
 
-    void* ptr = (void*) ::GetProcAddress(handle, symbol.c_str());
+    void* ptr = (void*) ::GetProcAddress((HMODULE)handle, symbol.c_str());
     if(ptr == 0)
     {
-        throw Error(::dlerror());
+        throw Error("Can't find symbol " + symbol);
     }
 
     return ptr;
