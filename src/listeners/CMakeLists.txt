@@ -8,7 +8,7 @@ ADD_DEFINITIONS(
     -DVERSION=${VERSION}
 )
 
-SET(TESTNGPP_LIBRARY -ltestngpp)
+SET(TESTNGPP_LIBRARY testngpp)
 
 IF(CMAKE_SYSTEM_NAME MATCHES Linux)
   IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -31,11 +31,11 @@ ADD_LIBRARY(testngppstdoutlistener MODULE ${STDOUTLISTENER_SRCS})
 ADD_LIBRARY(testngppxmllistener MODULE ${XMLLISTENER_SRCS})
 
 ADD_LIBRARY(testngppxmllistener-fortest SHARED ${XMLLISTENER_SRCS})
-TARGET_LINK_LIBRARIES(testngppxmllistener-fortest -ltestngpp)
+TARGET_LINK_LIBRARIES(testngppxmllistener-fortest ${TESTNGPP_LIBRARY})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include .)
 
 SET_TARGET_PROPERTIES(testngppstdoutlistener testngppxmllistener
    PROPERTIES SUFFIX ".so")
-TARGET_LINK_LIBRARIES(testngppstdoutlistener -ltestngpp)
-TARGET_LINK_LIBRARIES(testngppxmllistener -ltestngpp)
+TARGET_LINK_LIBRARIES(testngppstdoutlistener ${TESTNGPP_LIBRARY})
+TARGET_LINK_LIBRARIES(testngppxmllistener ${TESTNGPP_LIBRARY})

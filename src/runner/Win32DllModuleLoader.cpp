@@ -28,7 +28,7 @@ struct Win32DllModuleLoaderImpl
 
     void* findSymbol(const std::string& symbol);
 
-    HMODULE handle;
+    void* handle;
 };
 
 ////////////////////////////////////////////////////////
