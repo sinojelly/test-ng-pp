@@ -1,9 +1,12 @@
 
 #include <testngpp/runner/TestFixtureRunnerWrapper.h>
-#include <testngpp/runner/TestFixtureSandboxRunner.h>
 #include <testngpp/runner/SimpleTestFixtureRunner.h>
 #include <testngpp/runner/SimpleTestCaseRunner.h>
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
+
+#if !defined(TESTNGPP_DISABLE_SANDBOX) || !TESTNGPP_DISABLE_SANDBOX
+#include <testngpp/runner/TestFixtureSandboxRunner.h>
+#endif
 
 TESTNGPP_NS_START
 
@@ -25,6 +28,7 @@ namespace
       {
          ref++;
       }
+
       return caseRunner;
    }
 
@@ -41,6 +45,7 @@ namespace
       }
    }
    
+#if !defined(TESTNGPP_DISABLE_SANDBOX) || !TESTNGPP_DISABLE_SANDBOX
    TestFixtureRunner*
    createSandboxInstance(unsigned int maxConcurrent)
    {
@@ -53,6 +58,7 @@ namespace
                   new TestFixtureSandboxRunner( \
                      maxConcurrent, createTestCaseRunner()));
    }
+#endif
 
    TestFixtureRunner*
    createSimpleInstance()
@@ -69,8 +75,12 @@ TestFixtureRunner*
 TestFixtureRunnerFactory::
 createInstance(bool useSandbox, unsigned int maxConcurrent)
 {
+#if defined(TESTNGPP_DISABLE_SANDBOX) && TESTNGPP_DISABLE_SANDBOX
+   return createSimpleInstance();
+#else
    return useSandbox? createSandboxInstance(maxConcurrent) :
       createSimpleInstance();
+#endif
 }
 
 ////////////////////////////////////////////////////////

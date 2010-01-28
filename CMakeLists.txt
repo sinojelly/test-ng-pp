@@ -26,6 +26,11 @@ ADD_SUBDIRECTORY(libs)
 ADD_SUBDIRECTORY(ut)
 ADD_SUBDIRECTORY(samples)
 
+IF(MSVC)
+  SET(TESTNGPP_DISABLE_SANDBOX true)
+  SET(TESTNGPP_DISABLE_RC      true)
+ENDIF(MSVC)
+
 ########################################################
 INSTALL(DIRECTORY include/testngpp DESTINATION include
           PATTERN ".svn" EXCLUDE

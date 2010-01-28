@@ -1,23 +1,23 @@
 
+SET(TESTNGPP_RC_SRCS
+  ResourceCheckPoint.cpp 
+)
+
 SET(TESTNGPP_SRCS
   AssertionFailure.cpp 
   TestSuiteDesc.cpp 
-  ResourceCheckPoint.cpp 
   TypeString.cpp 
   Formatter.cpp 
   OptionList.cpp 
   StringToOptions.cpp
 )
 
-IF(CYGWIN)
-  SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS
-    "-shared -nostdlib -lstdc++ -lgcc \
-     -lcygwin -luser32 -lkernel32 \
-     -ladvapi32 -lshell32 -lgcc \
-     -Wl,--enable-autoimage-base \
-     -Xlinker --out-implib -Xlinker"
-  ) 
-ENDIF(CYGWIN)
+IF(NOT TESTNGPP_DISABLE_RC)
+  SET(TESTNGPP_SRCS
+     ${TESTNGPP_SRCS}
+     ${TESTNGPP_RC_SRCS}
+  )
+ENDIF(NOT TESTNGPP_DISABLE_RC)
 
 ADD_LIBRARY(testngpp SHARED ${TESTNGPP_SRCS})
 

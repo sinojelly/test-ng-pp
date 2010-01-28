@@ -1,6 +1,12 @@
 
 INCLUDE(FindPythonInterp)
 
+IF(TESTNGPP_DISABLE_RC)
+  ADD_DEFINITIONS(-DTESTNGPP_DISABLE_RC=1)
+ELSE(TESTNGPP_DISABLE_RC)
+  ADD_DEFINITIONS(-DTESTNGPP_DISABLE_RC=0)
+ENDIF(TESTNGPP_DISABLE_RC)
+
 IF(PYTHONINTERP_FOUND)
   SET(PYTHON ${PYTHON_EXECUTABLE})
 ELSE(PYTHONINTERP_FOUND)
@@ -24,6 +30,16 @@ IF(CMAKE_SYSTEM_NAME MATCHES Linux)
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES Linux)
 
+SET(SANDBOX_UT_CASES
+  TestTestCaseSandboxResultReporter.h 
+  TestPipeReadableChannel.h 
+  TestPipeWrittableChannel.h 
+  TestTestFixtureSandboxRunner.h 
+  TestSandboxProcessor.h
+  TestSandbox.h 
+  TestTestCaseSandbox.h 
+)
+
 SET(UT_CASES
   TestTestCase.h 
   TestAssertionFailure.h 
@@ -31,23 +47,20 @@ SET(UT_CASES
   TestTestSuiteDesc.h 
   TestStringToOptions.h 
   TestExceptionKeywords.h
-  TestTestFixtureSandboxRunner.h 
   TestSimpleTestSuiteResultReporter.h 
   TestSimpleTestCaseRunner.h
-  TestTestCaseSandboxResultReporter.h 
-  TestPipeReadableChannel.h 
-  TestPipeWrittableChannel.h 
-  TestSandboxProcessor.h
   TestPosixFNMatcher.h 
   TestGeneralTestFilter.h 
   TestTestFilterFactory.h 
   TestOrCompositeTestFilter.h
-  TestSandbox.h 
-  TestTestCaseSandbox.h 
   TestTestSuiteRunner.h
   TestXMLTestListener.h 
   TestXMLBuilder.h
 )
+
+IF(NOT TESTNGPP_DISABLE_SANDBOX)
+  SET(UT_CASES ${UT_CASES} ${SANDBOX_UT_CASES})
+ENDIF(NOT TESTNGPP_DISABLE_SANDBOX)
 
 LINK_DIRECTORIES(
   ${CMAKE_BINARY_DIR}/libs
@@ -99,6 +112,5 @@ FOREACH(CASE ${UT_CASES})
 
   ADD_DEPENDENCIES(${CASE_MODULE} ${CASE_NAME})
 ENDFOREACH()
-
 
 

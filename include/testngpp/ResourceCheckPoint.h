@@ -26,6 +26,14 @@
 TESTNGPP_NS_START
 
 ///////////////////////////////////////////////////////////
+#if defined(TESTNGPP_DISABLE_RC) && TESTNGPP_DISABLE_RC
+
+#define TESTNGPP_RCP int
+#define TESTNGPP_SET_RESOURCE_CHECK_POINT() 0
+#define TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(rcp)
+
+#else
+
 struct ResourceCheckPoint
 {
    size_t memory;
@@ -48,6 +56,8 @@ void testngppVerifyCheckPoint(const ResourceCheckPoint& rcp
 }while(0)
 
 ///////////////////////////////////////////////////////////
+
+#endif
 
 TESTNGPP_NS_END
 

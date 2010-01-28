@@ -5,6 +5,7 @@ from Message import *
 
 from Phase1Result import *
 
+################################################
 def output(content, file):
    if file == None:
       return
@@ -14,9 +15,6 @@ def output(content, file):
 
 def get_base_name(file):
     return os.path.basename(file).split('.')[0]
-
-def get_fixture_name_in_src(fixture):
-   return "TestFixture_" 
 
 def get_testcase_name(testcase):
    if testcase.get_traditional_name():
@@ -47,6 +45,7 @@ def get_depends_var(fixture, testcase):
 def get_fixture_id(fixture):
    return fixture.get_id()
 
+################################################
 testcase_template = '''
 static struct %s 
    : public TESTNGPP_NS::TestCase
@@ -175,9 +174,11 @@ class TestCaseSeeker:
          .generate(lambda file, elem: TestCaseDependsVerifier(elem))
 
 
+################################################
 testcase_array_template_begin = '''
 static TESTNGPP_NS::TestCase* %s[] = {'''
 
+################################################
 array_template_end = '''0
 };
 
@@ -216,6 +217,7 @@ class FixtureGenerator:
       self.generate_testcases()
       self.generate_testcase_array()
       
+################################################
 fixture_desc_template = '''
 static TESTNGPP_NS::TestFixtureDesc %s
    ( "%s"
@@ -317,9 +319,6 @@ class ScopesGenerator:
 def get_suite_desc_name(suite):
    return "test_suite_desc_instance_" + suite
 
-def get_suite_desc_class():
-   return "TESTNGPP_NS::TestSuiteDesc"
-
 def get_fixture_array_name(suite):
    return "array_of_fixture_desc_" + suite
 
@@ -333,9 +332,11 @@ dep_headers = [
    "internal/TestSuiteDesc.h"
 ]
 
+################################################
 fixture_array_template_begin = '''
 static TESTNGPP_NS::TestFixtureDesc* %s[] = {'''
 
+################################################
 suite_desc_template = '''
 static TESTNGPP_NS::TestSuiteDesc %s
    ( "%s"
@@ -345,6 +346,7 @@ static TESTNGPP_NS::TestSuiteDesc %s
 
 '''
 
+################################################
 suite_getter_template = '''
 extern "C" TESTNGPP_NS::TestSuiteDesc* %s() {
    return &%s;

@@ -35,13 +35,6 @@ public:
        TS_ASSERT(true);
     }
 
-    // Fail
-    // @test
-    void case2()
-    {
-       ::exit(1);
-    }
-
     // Success
     void testCase3() {}
 
