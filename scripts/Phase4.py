@@ -18,26 +18,11 @@ def get_base_name(file):
 def get_fixture_name_in_src(fixture):
    return "TestFixture_" 
 
-def get_testcase_base_name():
-   return "TESTNGPP_NS::TestCase"
-
-def get_fixture_base_name():
-   return "TESTNGPP_NS::TestFixture"
-
-def get_fixture_var():
-   return "fixture"
-
-def get_fixture_para():
-   return "pFixture"
-
 def get_testcase_name(testcase):
    if testcase.get_traditional_name():
       return testcase.get_traditional_name()
 
    return "test_" + str(testcase.get_line_number())
-
-def get_fixture_para_decl():
-   return get_fixture_base_name() + "* " + get_fixture_para()
 
 def get_testcase_class_name(fixture, testcase):
    return "TESTCASE_" + get_fixture_id(fixture) + "_" + get_testcase_name(testcase)
@@ -61,7 +46,6 @@ def get_depends_var(fixture, testcase):
 
 def get_fixture_id(fixture):
    return fixture.get_id()
-
 
 testcase_template = '''
 static struct %s 
@@ -160,7 +144,8 @@ class TestCaseArrayGenerator:
 
    #############################################
    def generate(self):
-      output("&" + get_testcase_instance_name(self.fixture, self.testcase) + ",", self.file)
+      testcase_in_array = '''&%s,''' % (get_testcase_instance_name(self.fixture, self.testcase))
+      output(testcase_in_array, self.file)
 
 ################################################
 class TestCaseDependsVerifier:
@@ -190,6 +175,15 @@ class TestCaseSeeker:
          .generate(lambda file, elem: TestCaseDependsVerifier(elem))
 
 
+testcase_array_template_begin = '''
+static TESTNGPP_NS::TestCase* %s[] = {'''
+
+array_template_end = '''0
+};
+
+
+'''
+
 ################################################
 class FixtureGenerator:
    #############################################
@@ -209,19 +203,28 @@ class FixtureGenerator:
 
    #############################################
    def generate_testcase_array(self):
-      output("static " + get_testcase_base_name() + "* " + \
-                 get_testcase_array_var(self.fixture) + "[] = {", self.file)
+      begin = testcase_array_template_begin % (get_testcase_array_var(self.fixture))
+
+      output(begin, self.file)
 
       self.generate_testcase_array_content()
 
-      output("0", self.file)
-      output("};", self.file)
+      output(array_template_end, self.file)
 
    #############################################
    def generate(self):
       self.generate_testcases()
       self.generate_testcase_array()
       
+fixture_desc_template = '''
+static TESTNGPP_NS::TestFixtureDesc %s
+   ( "%s"
+   , "%s"
+   , %s
+   , (sizeof(%s)/sizeof(%s[0])) - 1
+   );
+
+'''
 ################################################
 class FixtureDescGenerator:
    #############################################
@@ -231,13 +234,15 @@ class FixtureDescGenerator:
    
    #############################################
    def generate(self):
-      output("static " + get_fixture_desc_class() + " " + get_fixture_desc_var(self.fixture) + \
-             "(\"" + self.fixture.get_name() + \
-             "\",\"" + get_file_name(self.fixture) + \
-             "\"," + get_testcase_array_var(self.fixture) + \
-             "," + "sizeof(" + get_testcase_array_var(self.fixture) + \
-             ")/sizeof(" + get_testcase_array_var(self.fixture) + \
-             "[0])-1);", self.file)
+      fixture_desc_def = fixture_desc_template % ( \
+          get_fixture_desc_var(self.fixture), \
+          self.fixture.get_name(), \
+          self.fixture.get_file_name(), \
+          get_testcase_array_var(self.fixture), \
+          get_testcase_array_var(self.fixture), \
+          get_testcase_array_var(self.fixture) )
+
+      output(fixture_desc_def, self.file)
 
 ################################################
 class FixtureDescArrayGenerator:
@@ -328,6 +333,25 @@ dep_headers = [
    "internal/TestSuiteDesc.h"
 ]
 
+fixture_array_template_begin = '''
+static TESTNGPP_NS::TestFixtureDesc* %s[] = {'''
+
+suite_desc_template = '''
+static TESTNGPP_NS::TestSuiteDesc %s
+   ( "%s"
+   , %s
+   , (sizeof(%s)/sizeof(%s[0])) - 1
+   );
+
+'''
+
+suite_getter_template = '''
+extern "C" TESTNGPP_NS::TestSuiteDesc* %s() {
+   return &%s;
+}
+
+'''
+
 ################################################
 class SuiteGenerator:
    #############################################
@@ -354,28 +378,27 @@ class SuiteGenerator:
 
    #############################################
    def generate_fixture_array(self):
-      output("static " + get_fixture_desc_class() + \
-             "* " + get_fixture_array_name(self.suite) + \
-             "[] = {", self.file)
-
+      fixture_array_def = fixture_array_template_begin % (get_fixture_array_name(self.suite))
+      output(fixture_array_def, self.file)
       self.generate_fixture_desc_array()
-
-      output("0", self.file)
-      output("};", self.file)
+      output(array_template_end, self.file)
 
    #############################################
    def generate_suite_desc(self):
-      output("static " + get_suite_desc_class() + " " + get_suite_desc_name(self.suite) + \
-             "(\"" + self.suite + "\"," + get_fixture_array_name(self.suite) + "," + \
-             "sizeof(" + get_fixture_array_name(self.suite) + \
-             ")/sizeof(" + get_fixture_array_name(self.suite) + "[0])-1);", self.file)
+      suite_def = suite_desc_template % ( \
+         get_suite_desc_name(self.suite), \
+         self.suite, \
+         get_fixture_array_name(self.suite), \
+         get_fixture_array_name(self.suite), \
+         get_fixture_array_name(self.suite) )
+
+      output(suite_def, self.file)
+
 
    #############################################
    def generate_suite_getter(self):
-      output("extern \"C\" " + get_suite_desc_class() + "* " + \
-             get_suite_getter_name() + "() {", self.file)
-      output("   return &" + get_suite_desc_name(self.suite) + ";", self.file)
-      output("}", self.file)
+      suite_getter = suite_getter_template % ( get_suite_getter_name(), get_suite_desc_name(self.suite))
+      output(suite_getter, self.file)
 
    #############################################
    def generate_dep_headers(self):
