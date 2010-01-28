@@ -286,7 +286,7 @@ namespace
 #define LISTENER(name) testngppxmllistener_##name
 
 ///////////////////////////////////////////////////////////
-extern "C"
+extern "C" DLL_EXPORT
 TestListener* LISTENER(create_instance)(
       TestResultReporter* resultReporter
     , TestSuiteResultReporter* suiteReporter
@@ -305,7 +305,7 @@ TestListener* LISTENER(create_instance)(
 }
 
 ///////////////////////////////////////////////////////////
-extern "C"
+extern "C" DLL_EXPORT
 void LISTENER(destroy_instance)(TestListener* instance)
 {
    if(xmlFile.is_open()) xmlFile.close();

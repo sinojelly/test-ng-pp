@@ -142,7 +142,11 @@ namespace
    std::string getListenerSharedObjectName(const std::string& name)
    {
       std::stringstream ss;
+#ifdef _MSC_VER
+	  ss << name;
+#else
       ss << "lib" << name;
+#endif
       return ss.str();
    }
 

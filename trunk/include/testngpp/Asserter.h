@@ -24,6 +24,10 @@
 #include <testngpp/utils/Formatter.h>
 #include <sstream>
 
+#ifdef _MSC_VER
+#include <boost/typeof/typeof.hpp>
+#endif
+
 TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
@@ -45,6 +49,37 @@ TESTNGPP_NS_START
    } \
 }while(0)
 
+#ifdef _MSC_VER
+//////////////////////////////////////////////////////////////////
+#define TS_ASSERT_EQUALS(expected, value) do { \
+   BOOST_TYPEOF(expected) __expected = (expected); \
+   BOOST_TYPEOF(value) _value = (value); \
+   if(__expected != _value) { \
+      std::stringstream ss; \
+      ss << "expected (" #expected " == " #value "), but actually got (" \
+         << TESTNGPP_NS::toTypeAndValueString(__expected) \
+         << " != " \
+         << TESTNGPP_NS::toTypeAndValueString(_value) \
+         << ")"; \
+      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
+   } \
+  }while(0)
+
+//////////////////////////////////////////////////////////////////
+#define TS_ASSERT_NOT_EQUALS(expected, value) do { \
+   BOOST_TYPEOF(expected) __expected = (expected); \
+   BOOST_TYPEOF(value) _value = (value); \
+   if(__expected == _value) {\
+      std::stringstream ss; \
+      ss << "expected (" #expected " != " #value "), but actually got (" \
+         << TESTNGPP_NS::toTypeAndValueString(__expected) \
+         << " == " \
+         << TESTNGPP_NS::toTypeAndValueString(_value) \
+         << ")"; \
+      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
+   } \
+}while(0)
+#else
 //////////////////////////////////////////////////////////////////
 #define TS_ASSERT_EQUALS(expected, value) do { \
    typeof(expected) __expected = (expected); \
@@ -74,6 +109,7 @@ TESTNGPP_NS_START
       throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
    } \
 }while(0)
+#endif
 
 //////////////////////////////////////////////////////////////////
 #define TS_ASSERT_THROWS(expr, except) do { \

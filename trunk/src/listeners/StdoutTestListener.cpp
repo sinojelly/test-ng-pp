@@ -523,8 +523,10 @@ TESTNGPP_NS_END
 USING_TESTNGPP_NS
 
 #define LISTENER(name) testngppstdoutlistener_##name
+
+
 ///////////////////////////////////////////////////////////
-extern "C"
+extern "C" DLL_EXPORT
 TestListener*
 LISTENER(create_instance)(
    TestResultReporter* resultReporter,
@@ -545,7 +547,7 @@ LISTENER(create_instance)(
 }
 
 ///////////////////////////////////////////////////////////
-extern "C"
+extern "C" DLL_EXPORT
 void
 LISTENER(destroy_instance)(TestListener* instance)
 {

@@ -348,7 +348,7 @@ static TESTNGPP_NS::TestSuiteDesc %s
 
 ################################################
 suite_getter_template = '''
-extern "C" TESTNGPP_NS::TestSuiteDesc* %s() {
+extern "C" DLL_EXPORT TESTNGPP_NS::TestSuiteDesc* %s() {
    return &%s;
 }
 
