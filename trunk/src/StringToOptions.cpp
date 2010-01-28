@@ -72,7 +72,7 @@ namespace
    ///////////////////////////////////////////////////
    bool scanInBlank(ParseState& state, char c)
    {
-      PREDICT_CHECK(::isblank(c));
+      PREDICT_CHECK(::isspace(c));
 
       if(!state.isLastCharABlank)
       {
@@ -88,7 +88,7 @@ namespace
    ///////////////////////////////////////////////////
    bool scanInNonBlank(ParseState& state, char c)
    {
-      PREDICT_CHECK(!::isblank(c));
+      PREDICT_CHECK(!::isspace(c));
 
       if(c == '\"')
       {
@@ -105,7 +105,7 @@ namespace
    void scan(ParseState& state, char c)
    {
       scanInDoubleQuote(state, c) || scanInBlank(state, c) || scanInNonBlank(state, c);
-      state.isLastCharABlank = ::isblank(c);
+      state.isLastCharABlank = ::isspace(c);
    }
 
    char* createArg(char* s, char* e)
