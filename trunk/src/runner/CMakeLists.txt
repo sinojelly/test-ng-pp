@@ -1,4 +1,10 @@
 
+IF(TESTNGPP_DISABLE_SANDBOX)
+  ADD_DEFINITIONS(-DTESTNGPP_DISABLE_SANDBOX=1)
+ELSE(TESTNGPP_DISABLE_SANDBOX)
+  ADD_DEFINITIONS(-DTESTNGPP_DISABLE_SANDBOX=0)
+ENDIF(TESTNGPP_DISABLE_SANDBOX)
+
 ADD_DEFINITIONS(
     -DPACKAGE_NAME=${PACKAGE_NAME}
     -DPACKAGE_STRING=${PACKAGE_STRING}
@@ -25,11 +31,9 @@ ENDIF(CYGWIN)
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src .)
 
-SET(TESTNGRUNNER_LIB_SRCS
-  TestSuiteRunner.cpp 
+SET(SANDBOX_SRCS
   TestCaseSandboxResultReporter.cpp 
   TestCaseSandboxResultDecoder.cpp 
-  SimpleTestCaseRunner.cpp 
   Sandbox.cpp 
   SandboxProcessor.cpp 
   TestCaseSandboxHandler.cpp 
@@ -37,6 +41,11 @@ SET(TESTNGRUNNER_LIB_SRCS
   PipeReadableChannel.cpp 
   PipeWrittableChannel.cpp  
   TestFixtureSandboxRunner.cpp 
+)
+
+SET(TESTNGRUNNER_LIB_SRCS
+  TestSuiteRunner.cpp 
+  SimpleTestCaseRunner.cpp 
   TestFixtureRunnerWrapper.cpp 
   TestSuiteLoader.cpp 
   SimpleTestResultDispatcher.cpp 
@@ -53,6 +62,13 @@ SET(TESTNGRUNNER_LIB_SRCS
   PosixFNMatcher.cpp 
   TestRunner.cpp
 )
+
+IF(NOT TESTNGPP_DISABLE_SANDBOX)
+  SET(TESTNGRUNNER_LIB_SRCS
+     ${TESTNGRUNNER_LIB_SRCS}
+     ${SANDBOX_SRCS}
+  )
+ENDIF(NOT TESTNGPP_DISABLE_SANDBOX)
 
 IF(TESTNGPP_USE_DLOPEN)
   SET(TESTNGRUNNER_LIB_SRCS ${TESTNGRUNNER_LIB_SRCS}

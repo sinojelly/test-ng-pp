@@ -58,6 +58,7 @@ void getSpecifiedOptions( const std::string& option
    }
 }
 
+////////////////////////////////////////////////////////////
 static 
 std::string getSingleOption(const std::string& option
                         , OptionList& options
@@ -75,6 +76,7 @@ std::string getSingleOption(const std::string& option
    return defaultValue;
 }
 
+////////////////////////////////////////////////////////////
 static
 bool getFlagOption(const std::string& flag, OptionList& options)
 {
@@ -167,8 +169,6 @@ int main(int argc, char* argv[])
       maxConcurrent = getMaxConcurrent(options);
    }
 
-   TestRunner runner;
-
-   return runner.runTests(useSandbox(options), maxConcurrent, options.args, listeners
+   return TestRunner().runTests(useSandbox(options), maxConcurrent, options.args, listeners
                          , searchingPathsOfListeners, fixtures);
 }

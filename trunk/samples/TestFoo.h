@@ -55,12 +55,14 @@ public:
        __TESTNGPP_DONE
     }
 
+#if !defined(TESTNGPP_DISABLE_SANDBOX) || !TESTNGPP_DISABLE_SANDBOX
     // Fail
     // @test
     void case2()
     {
        ::exit(1);
     }
+#endif
 
     // Success
     void testCase3() {}
