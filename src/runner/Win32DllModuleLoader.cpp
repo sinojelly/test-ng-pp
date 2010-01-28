@@ -1,6 +1,7 @@
 
 #include <string>
 #include <windows.h>
+#include <iostream>
 
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
@@ -50,9 +51,9 @@ namespace
    {
       std::string fullPath(path);
 
-      if(fullPath.at(fullPath.length()-1) != '/')
+      if(fullPath.at(fullPath.length()-1) != '\\')
       {
-         fullPath += "/";
+         fullPath += "\\";
       }
 
       fullPath += modulePath;
@@ -60,10 +61,24 @@ namespace
       return fullPath;
    }
 
+   void* openModule(const std::string& modulePath, const std::string& suffix)
+   {
+      std::string module = modulePath + "." + suffix;
+      return ::LoadLibrary(module.c_str());
+	 
+   }
+
+#define ___(f) (handle != 0) || (handle = f)
+
    void* openModule(const std::string& modulePath)
    {
       std::string module = modulePath + ".dll";
-      return ::LoadLibrary(module.c_str());
+      void* handle = 0;
+
+	  ___(openModule(modulePath, "dll"));
+	  ___(openModule(modulePath, "so"));
+	
+	  return handle;
    }
 }
 
