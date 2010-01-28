@@ -19,7 +19,12 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _MSVC_VER
+#include <GetOpt.h>
+#else
 #include <unistd.h>
+#endif
 
 #include <testngpp/utils/OptionList.h>
 
