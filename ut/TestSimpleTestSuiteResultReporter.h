@@ -38,7 +38,7 @@ public:
 
       caseReporter.METHOD(TestCaseResultReporter::getTestCaseResult)
                   .stubs()
-                  .will(returnValue((unsigned int)testngpp::TestCaseResultReporter::CRASHED));
+                  .will(returnValue((unsigned int)testngpp::TestCaseResultReporter::TR_CRASHED));
 
       SimpleTestSuiteResultReporter suiteReporter(caseReporter);
 

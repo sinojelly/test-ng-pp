@@ -44,14 +44,14 @@ SimpleTestCaseResultReporter::getTestCaseResult(TestCaseInfoReader* testcase) co
 {
    if(testcase == This->testcase && This->finished) 
    {
-      if(This->informedCrashed) return TestCaseResultReporter::CRASHED;
-      if(This->informedError) return TestCaseResultReporter::ERROR;
-      if(This->informedFailure) return TestCaseResultReporter::FAILED;
+      if(This->informedCrashed) return TestCaseResultReporter::TR_CRASHED;
+      if(This->informedError) return TestCaseResultReporter::TR_ERROR;
+      if(This->informedFailure) return TestCaseResultReporter::TR_FAILED;
 
-      return TestCaseResultReporter::SUCCESS;
+      return TestCaseResultReporter::TR_SUCCESS;
    }
 
-   return TestCaseResultReporter::UNKNOWN;
+   return TestCaseResultReporter::TR_UNKNOWN;
 }
 
 ///////////////////////////////////////////////////////////

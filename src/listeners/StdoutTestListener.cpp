@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string.h>
 
+
 #include <testngpp/Error.h>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
@@ -14,6 +15,11 @@
 
 #include <StdoutTestListener.h>
 #include <ColorfulStdoutTestListener.h>
+
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
+
 
 TESTNGPP_NS_START
 
@@ -109,16 +115,16 @@ endTestCase(TestCaseInfoReader* testcase)
 {
    switch(This->caseResultReporter->getTestCaseResult(testcase))
    {
-   case TestCaseResultReporter::SUCCESS:
+   case TestCaseResultReporter::TR_SUCCESS:
       std::cout << "."; 
       break;
-   case TestCaseResultReporter::FAILED:
+   case TestCaseResultReporter::TR_FAILED:
       std::cout << "F";
       break;
-   case TestCaseResultReporter::ERROR:
+   case TestCaseResultReporter::TR_ERROR:
       std::cout << "E"; 
       break;
-   case TestCaseResultReporter::UNKNOWN:
+   case TestCaseResultReporter::TR_UNKNOWN:
       throw Error(TESTNGPP_INTERNAL_ERROR(3001));
    }
    std::cout.flush();
@@ -265,13 +271,56 @@ struct ColorfulStdoutTestListenerImpl
       : resultReporter(reporter)
       , suiteResultReporter(suiteReporter)
       , caseResultReporter(caseReporter)
-   {}
+   {
+#ifdef _MSC_VER
+	   hConsole = ::GetStdHandle(STD_OUTPUT_HANDLE); 
+#endif
+   }
+
+   ~ColorfulStdoutTestListenerImpl()
+   {
+   }
+
+#ifdef _MSC_VER
+   void*       hConsole;
+#endif   
+
+   void switchTextColorToSucc();
+   void switchTextColorToFail();
+   void restoreTextColor();
 
    TestResultReporter* resultReporter;
    TestSuiteResultReporter* suiteResultReporter;
    TestCaseResultReporter* caseResultReporter;
+
 };
 
+void ColorfulStdoutTestListenerImpl::switchTextColorToFail()
+{
+#ifdef _MSC_VER
+	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#else
+	std::cout << "\33[31m";
+#endif
+}
+
+void ColorfulStdoutTestListenerImpl::switchTextColorToSucc()
+{
+#ifdef _MSC_VER
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+#else
+	std::cout << "\33[32m";
+#endif
+}
+
+void ColorfulStdoutTestListenerImpl::restoreTextColor()
+{
+#ifdef _MSC_VER
+	SetConsoleTextAttribute(hConsole, FOREGROUND_INTENSITY);
+#else
+	std::cout << "\33[0m";
+#endif
+}
 ///////////////////////////////////////////////////////////
 ColorfulStdoutTestListener::ColorfulStdoutTestListener(TestResultReporter* reporter
    , TestSuiteResultReporter* suiteReporter
@@ -290,8 +339,10 @@ ColorfulStdoutTestListener::~ColorfulStdoutTestListener()
 void ColorfulStdoutTestListener::
 addCaseCrash(TestCaseInfoReader* testcase)
 {
-   std::cout << "\33[31m[ CRASHED ]\33[0m"
-             << testcase->getFileName() 
+   This->switchTextColorToFail();
+   std::cout << "[ CRASHED ]";
+   This->restoreTextColor();
+   std::cout << testcase->getFileName() 
              << ":" 
              << testcase->getLineOfFile() 
              << ":" 
@@ -305,8 +356,10 @@ addCaseCrash(TestCaseInfoReader* testcase)
 void ColorfulStdoutTestListener::
 addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
 {
-   std::cout << "\33[31m[   ERROR ]\33[0m"
-             << testcase->getFileName() 
+   This->switchTextColorToFail();
+   std::cout << "[   ERROR ]";
+   This->restoreTextColor();
+   std::cout << testcase->getFileName() 
              << ":" 
              << testcase->getLineOfFile() 
              << ":" 
@@ -321,8 +374,11 @@ addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
 void ColorfulStdoutTestListener::
 addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
-   std::cout << "\33[31m[  FAILED ]\33[0m"
-             << failure.getFileName()
+   This->switchTextColorToFail();
+   std::cout << "[  FAILED ]";
+   This->restoreTextColor();
+
+   std::cout << failure.getFileName()
              << ":"
              << failure.getLineOfFile()
              << ":" 
@@ -338,9 +394,11 @@ addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
 void ColorfulStdoutTestListener::
 startTestCase(TestCaseInfoReader* testcase)
 {  
-      std::cout << "\33[32m[ RUN     ]\33[0m"
-	             << testcase->getName()
-				    << std::endl; 
+   This->switchTextColorToSucc();
+   std::cout << "[ RUN     ]";
+   This->restoreTextColor();
+
+   std::cout << testcase->getName() << std::endl; 
 }
 
 ///////////////////////////////////////////////////////////
@@ -349,16 +407,17 @@ endTestCase(TestCaseInfoReader* testcase)
 {
    switch(This->caseResultReporter->getTestCaseResult(testcase))
    {
-   case TestCaseResultReporter::SUCCESS:
-      std::cout << "\33[32m[      OK ]\33[0m"
-				    << std::endl; 
-      break;
-   case TestCaseResultReporter::FAILED:
-      break;
-   case TestCaseResultReporter::ERROR:
-      break;
-   case TestCaseResultReporter::UNKNOWN:
-      throw Error(TESTNGPP_INTERNAL_ERROR(3001));
+   case TestCaseResultReporter::TR_SUCCESS:
+	   This->switchTextColorToSucc();
+	   std::cout << "[      OK ]" << std::endl;
+       This->restoreTextColor();  
+       break;
+   case TestCaseResultReporter::TR_FAILED:
+       break;
+   case TestCaseResultReporter::TR_ERROR:
+       break;
+   case TestCaseResultReporter::TR_UNKNOWN:
+       throw Error(TESTNGPP_INTERNAL_ERROR(3001));
    }
 }
 
@@ -379,16 +438,20 @@ endTestFixture(TestFixtureInfoReader*)
 void ColorfulStdoutTestListener::
 addFixtureError(TestFixtureInfoReader*, const std::string& msg)
 {
-   std::cout << "\33[32m[ FIXTURE ERROR ]\33[0m"
-             << msg << std::endl;
+   This->switchTextColorToFail();
+   std::cout << "[  ERROR  ]";
+   This->restoreTextColor();
+   std::cout << msg << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::
 addFixtureFailure(TestFixtureInfoReader*, const AssertionFailure& failure)
 {
-   std::cout << "\33[32m[ FIXTURE FAILURE ]\33[0m"
-             << failure.what() << std::endl;
+   This->switchTextColorToFail();
+   std::cout << "[ FAILURE ]";
+   This->restoreTextColor();
+   std::cout << failure.what() << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
@@ -407,15 +470,19 @@ endTestSuite(TestSuiteInfoReader* suite)
 void ColorfulStdoutTestListener::
 addSuiteError(TestSuiteInfoReader*, const std::string& msg )
 {
-   std::cout << "\33[32m[ SUITE FAILURE ]\33[0m"
-             << msg
-             << std::endl;
+   This->switchTextColorToFail();
+   std::cout << "[ FAILURE ]";
+   This->restoreTextColor();
+   std::cout << msg << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::startTest()
 {
 }
+
+
+
 
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::endTest()
@@ -430,12 +497,12 @@ void ColorfulStdoutTestListener::endTest()
    {
       std::cout << "(" 
                 << This->resultReporter->getNumberOfTestCases()
-                << " cases) "
-                << "\33[32m"
-                << "OK" 
-                << "\33[0m"
-                << "!"
-                << std::endl;
+                << " cases) ";
+
+      This->switchTextColorToSucc();
+	  std::cout << "OK!" << std::endl;
+      This->restoreTextColor();          
+      
       return ;
    }
 
@@ -451,16 +518,16 @@ void ColorfulStdoutTestListener::endTest()
 
       std::cout << " loaded suites: " 
                 << This->resultReporter->getNumberOfLoadedSuites()
-                << " unloadable suites: " 
-                << "\33[31m"
-                << This->resultReporter->getNumberOfUnloadableSuites()
-                << "\33[0m"
-                << std::endl
-                << " load success rate: " 
-                << "\33[31m"
-                << rate << "%"
-                << "\33[0m"
-                << std::endl;
+                << " unloadable suites: " ;
+	  
+	  This->switchTextColorToFail();
+	  std::cout << This->resultReporter->getNumberOfUnloadableSuites() << std::endl;
+      This->restoreTextColor();  
+
+      std::cout << " load success rate: " ;
+      This->switchTextColorToFail();
+	  std::cout << rate << "%" << std::endl;
+      This->restoreTextColor();  
    }
 
    if(This->resultReporter->getNumberOfUnsuccessfulTestCases() > 0)
@@ -470,40 +537,39 @@ void ColorfulStdoutTestListener::endTest()
       unsigned int rate = \
           (unsigned int)(successCases*100/This->resultReporter->getNumberOfTestCases()); 
 
-      std::cout << " success: "
-                << "\33[32m" 
-                << successCases
-                << "\33[0m";
-
+      std::cout << " success: ";
+      This->switchTextColorToSucc();
+	  std::cout << successCases;
+      This->restoreTextColor();          
+      
       if(This->resultReporter->getNumberOfFailedTestCases() > 0)
       {
-         std::cout << " failed: " 
-                   << "\33[31m" 
-                   << This->resultReporter->getNumberOfFailedTestCases()
-                   << "\33[0m";
+         std::cout << " failed: ";
+         This->switchTextColorToFail();
+	     std::cout << This->resultReporter->getNumberOfFailedTestCases();
+         This->restoreTextColor();  
       }
 
       if(This->resultReporter->getNumberOfErrorTestCases() > 0)
       {
-         std::cout << " error: "  
-                   << "\33[31m" 
-                   << This->resultReporter->getNumberOfErrorTestCases()
-                   << "\33[0m";
+		 std::cout << " error: " ;
+         This->switchTextColorToFail();
+	     std::cout << This->resultReporter->getNumberOfErrorTestCases();
+         This->restoreTextColor();  
       }
 
       if(This->resultReporter->getNumberOfCrashedTestCases() > 0)
       {
-         std::cout << " crashed: "  
-                   << "\33[31m" 
-                   << This->resultReporter->getNumberOfCrashedTestCases()
-                   << "\33[0m";
+         std::cout << " crashed: ";
+		 This->switchTextColorToFail();
+	     std::cout << This->resultReporter->getNumberOfCrashedTestCases();
+         This->restoreTextColor();  
       }
-      std::cout << std::endl 
-                << " success rate: "
-                << "\33[31m" 
-                << rate << '%' 
-                << "\33[0m"
-                << std::endl;
+
+      std::cout << std::endl << " success rate: ";
+	  This->switchTextColorToFail();
+      std::cout << rate << '%' << std::endl;
+      This->restoreTextColor();
    }
 }
 
