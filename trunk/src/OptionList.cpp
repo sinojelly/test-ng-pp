@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef _MSVC_VER
+#ifdef _MSC_VER
 #include <GetOpt.h>
 #else
 #include <unistd.h>

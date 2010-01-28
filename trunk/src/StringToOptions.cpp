@@ -105,7 +105,7 @@ namespace
    void scan(ParseState& state, char c)
    {
       scanInDoubleQuote(state, c) || scanInBlank(state, c) || scanInNonBlank(state, c);
-      state.isLastCharABlank = ::isspace(c);
+	  state.isLastCharABlank = ::isspace(c)?true:false;
    }
 
    char* createArg(char* s, char* e)

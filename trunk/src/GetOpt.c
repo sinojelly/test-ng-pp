@@ -36,8 +36,7 @@
 #endif   
    
 #include <string.h>   
-#include <stdio.h>   
-#include "tailor.h"   
+#include <stdio.h>      
    
 /* Comment out all this code if we are using the GNU C Library, and are not  
    actually compiling the library itself.  This code is part of the GNU C  
@@ -171,10 +170,7 @@ static enum
    whose names are inconsistent.  */   
    
 #if __STDC__ || defined(PROTO)   
-extern char *getenv(const char *name);   
-extern int  strcmp (const char *s1, const char *s2);   
-extern int  strncmp(const char *s1, const char *s2, int n);   
-   
+extern char* __cdecl getenv(const char *name);      
 static int my_strlen(const char *s);   
 static char *my_index (const char *str, int chr);   
 #else   

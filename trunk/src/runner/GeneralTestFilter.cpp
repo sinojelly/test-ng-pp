@@ -1,6 +1,4 @@
 
-#include <fnmatch.h>
-
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/NameMatcher.h>
 #include <testngpp/runner/GeneralTestFilter.h>

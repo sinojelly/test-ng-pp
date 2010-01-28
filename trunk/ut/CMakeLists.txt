@@ -1,6 +1,11 @@
 
 INCLUDE(FindPythonInterp)
 
+IF(MSVC)
+  SET(TESTNGPP_DISABLE_SANDBOX TRUE)
+  SET(TESTNGPP_DISABLE_RC TRUE)
+ENDIF(MSVC)
+  
 IF(TESTNGPP_DISABLE_RC)
   ADD_DEFINITIONS(-DTESTNGPP_DISABLE_RC=1)
 ELSE(TESTNGPP_DISABLE_RC)
@@ -22,7 +27,7 @@ ADD_DEFINITIONS(
     -DVERSION=${VERSION}
 )
 
-SET(TESTNGPP_LIBRARY -ltestngpp)
+SET(TESTNGPP_LIBRARY testngpp)
 
 IF(CMAKE_SYSTEM_NAME MATCHES Linux)
   IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -99,11 +104,11 @@ FOREACH(CASE ${UT_CASES})
   ADD_EXECUTABLE(${CASE_MODULE} ${CASE_SRC})
 
   TARGET_LINK_LIBRARIES(${CASE_MODULE}
-    -lcxxtest 
-    -lmockcpp 
-    -ltestngpp 
-    -ltestngpp-runner-lib 
-    -ltestngppxmllistener-fortest)
+    cxxtest 
+    mockcpp 
+    testngpp 
+    testngpp-runner-lib 
+    testngppxmllistener-fortest)
 
   ADD_CUSTOM_COMMAND(
     OUTPUT ${CASE_SRC}
