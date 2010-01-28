@@ -16,18 +16,6 @@ ADD_DEFINITIONS(
 
 SET(TESTNGPP_LIBRARY -ltestngpp)
 
-IF(CYGWIN)
-  SET(MODULE_FLAGS
-    "-shared -nostdlib -lstdc++ -lgcc \
-     -lcygwin -luser32 -lkernel32 \
-     -ladvapi32 -lshell32 -lgcc \
-     -Wl,--enable-autoimage-base \
-     -Xlinker --out-implib -Xlinker"
-  )
-  SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS ${MODULE_FLAGS})
-  SET(CMAKE_MODULE_LIBRARY_LINK_CXX_FLAGS ${MODULE_FLAGS})
-ENDIF(CYGWIN)
-
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src .)
 
@@ -80,6 +68,11 @@ ELSEIF(TESTNGPP_USE_LTDL)
       LTModuleLoader.cpp 
       LTModuleLoaderFactory.cpp
   )
+ELSEIF(TESTNGPP_USE_LOADLIBRARY)
+  SET(TESTNGRUNNER_LIB_SRCS ${TESTNGRUNNER_LIB_SRCS}
+      Win32DllModuleLoader.cpp 
+      Win32DllModuleLoaderFactory.cpp
+  )
 ELSE(TESTNGPP_USE_DLOPEN)
   MESSAGE(FATAL_ERROR "No module loader found")
 ENDIF(TESTNGPP_USE_DLOPEN)
@@ -98,6 +91,8 @@ IF(TESTNGPP_USE_DLOPEN)
   TARGET_LINK_LIBRARIES(testngpp-runner-lib -ldl)
 ELSEIF(TESTNGPP_USE_LTDL)
   TARGET_LINK_LIBRARIES(testngpp-runner-lib -lltdl)
+ELSEIF(TESTNGPP_USE_LOADLIBRARY)
+  MESSAGE("Use Win32 LoadLibrary as module loader")
 ELSE(TESTNGPP_USE_DLOPEN)
   MESSAGE(FATAL_ERROR "No module loader found")
 ENDIF(TESTNGPP_USE_DLOPEN)
