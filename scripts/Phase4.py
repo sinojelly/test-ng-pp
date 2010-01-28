@@ -62,6 +62,54 @@ def get_depends_var(fixture, testcase):
 def get_fixture_id(fixture):
    return fixture.get_id()
 
+
+testcase_template = '''
+static struct %s 
+   : public TESTNGPP_NS::TestCase
+{
+   %s()
+      : TESTNGPP_NS::TestCase
+        ( "%s"
+        , "%s"
+        , %s
+        , "%s"
+        , %d)
+   {}
+
+   void setUp(TESTNGPP_NS::TestFixture* fixture)
+   {
+      if(fixture == 0)
+      {
+         belongedFixture = new %s();
+         belongedFixture->setUp();
+      }
+      else
+      {
+         belongedFixture = dynamic_cast<%s*>(fixture);
+      }
+   }
+
+   void tearDown()
+   {
+      belongedFixture->tearDown();
+   }
+
+   void run()
+   {
+      belongedFixture->%s();
+   }
+
+   TESTNGPP_NS::TestFixture* getFixture() const
+   {
+      return belongedFixture;
+   }
+
+private:
+   %s* belongedFixture; 
+} %s ;
+
+'''
+
 ################################################
 class TestCaseDefGenerator:
    #############################################
@@ -69,46 +117,23 @@ class TestCaseDefGenerator:
       self.fixture = fixture
       self.testcase = testcase
       self.file = file
-
    #############################################
    def __generate(self):
-      output("static struct " + get_testcase_class_name(self.fixture, self.testcase), self.file)
-      output("   : public " + get_testcase_base_name(), self.file)
-      output("{", self.file)
-      output("   " + get_testcase_class_name(self.fixture, self.testcase) + "()", self.file)
-      output("     :" + get_testcase_base_name(), self.file)
-      output("        (\"" + self.testcase.get_name() + "\"", self.file)
-      output("        , \"" + self.fixture.get_name() + "\"", self.file)
-      output("        , " + get_depends_var(self.fixture, self.testcase), self.file)
-      output("        , \"" + get_file_name(self.testcase) + "\"", self.file)
-      output("        , " + str(self.testcase.get_line_number())  + ")", self.file)
-      output("   {}", self.file)
-      output("   void setUp(" + get_fixture_para_decl() + ")", self.file)
-      output("   {", self.file)
-      output("      if(" + get_fixture_para() + " == 0)", self.file)
-      output("      {", self.file)
-      output("         " + get_fixture_var() + " = new " + get_fixture_id(self.fixture) + "();", self.file)
-      output("         " + get_fixture_var() + "->setUp(); ", self.file)
-      output("      }", self.file)
-      output("      else", self.file)
-      output("         " + get_fixture_var() + " = dynamic_cast<" + get_fixture_id(self.fixture) + "*>(" + \
-                       get_fixture_para() + ");", self.file)
-      output("   }", self.file)
-      output("   void tearDown()", self.file)
-      output("   {", self.file)
-      output("     " + get_fixture_var() + "->tearDown(); ", self.file)
-      output("   }", self.file)
-      output("   void run()", self.file)
-      output("   {", self.file)
-      output("     " + get_fixture_var() + "->" + get_testcase_name(self.testcase) + "();", self.file)
-      output("   }", self.file)
-      output("   " + get_fixture_base_name() + "* getFixture() const", self.file)
-      output("   {", self.file)
-      output("      return " + get_fixture_var() + ";", self.file)
-      output("   }", self.file)
-      output("private:", self.file)
-      output("   " + get_fixture_id(self.fixture) + "* " + get_fixture_var() + ";", self.file)
-      output("} " + get_testcase_instance_name(self.fixture, self.testcase) + ";", self.file)
+      testcase_def = testcase_template % ( \
+         get_testcase_class_name(self.fixture, self.testcase), \
+         get_testcase_class_name(self.fixture, self.testcase), \
+         self.testcase.get_name(), \
+         self.fixture.get_name(), \
+         get_depends_var(self.fixture, self.testcase), \
+         get_file_name(self.testcase), \
+         self.testcase.get_line_number(), \
+         get_fixture_id(self.fixture), \
+         get_fixture_id(self.fixture), \
+         get_testcase_name(self.testcase), \
+         get_fixture_id(self.fixture), \
+         get_testcase_instance_name(self.fixture, self.testcase) \
+         )
+      output(testcase_def, self.file)
 
    def generate(self):
       if self.testcase.has_been_generated():
