@@ -65,7 +65,16 @@ struct TestCase
 
    virtual void setUp(TESTNGPP_NS::TestFixture* fixture = 0) = 0;
    virtual void tearDown() = 0;
-   virtual void run() = 0;
+   virtual void run(bool runDepends=false) = 0;
+
+   void runDependedTestCase()
+   {
+      if(depends == 0)
+         return;
+
+      depends->setUp(getFixture());
+      depends->run(true);
+   }
 
 private:
 	std::string name;

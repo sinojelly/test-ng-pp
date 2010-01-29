@@ -28,7 +28,7 @@ void SimpleTestCaseRunner::run(TestFixtureDesc* desc
 
    __RUN({
       testcase->setUp();
-      testcase->run();
+      testcase->run(true);
    });
 
    __RUN({
