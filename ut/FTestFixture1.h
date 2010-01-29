@@ -27,7 +27,7 @@ class FTestFixture1
       {}
 
       TestFixture* getFixture() const { return m_fixture; }
-      void run() {}
+      void run(bool) {}
       void setUp(TestFixture*)
       {
          m_fixture->setUp();

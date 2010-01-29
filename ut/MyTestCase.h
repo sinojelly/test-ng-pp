@@ -16,7 +16,7 @@ struct MyTestCase : public TESTNGPP_NS::TestCase
 
    TESTNGPP_NS::TestFixture* getFixture() const { return 0; }
 
-   void run() {}
+   void run(bool) {}
    void setUp(TESTNGPP_NS::TestFixture* ) {}
    void tearDown() {}
 };
