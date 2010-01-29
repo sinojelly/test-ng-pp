@@ -65,7 +65,7 @@ static struct MyTestCase1 : public MyTestCase
 {
    MyTestCase1() : MyTestCase("testCase1", 5) {}
 
-   void run()
+   void run(bool)
    {
       myTestFixture.testCase1();
    }
@@ -76,7 +76,7 @@ static struct MyTestCase2 : public MyTestCase
 {
    MyTestCase2() : MyTestCase("testCase1", 5) {}
 
-   void run()
+   void run(bool)
    {
       myTestFixture.testCase2();
    }
@@ -87,7 +87,7 @@ static struct MyTestCase3 : public MyTestCase
 {
    MyTestCase3() : MyTestCase("testCase1", 5) {}
 
-   void run()
+   void run(bool)
    {
       myTestFixture.testCase3();
    }
