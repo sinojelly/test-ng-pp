@@ -40,7 +40,7 @@ def get_file_name(testcase):
 def get_depends_var(fixture, testcase):
    depends = testcase.get_depends()
    if depends == None: return "0"
-   return get_testcase_instance_name(fixture, depends)
+   return "&" + get_testcase_instance_name(fixture, depends)
 
 def get_fixture_id(fixture):
    return fixture.get_id()
@@ -77,8 +77,11 @@ static struct %s
       belongedFixture->tearDown();
    }
 
-   void run()
+   void run(bool runDepends=false)
    {
+      if(runDepends)
+         runDependedTestCase();
+
       belongedFixture->%s();
    }
 
