@@ -51,6 +51,7 @@ SET(TESTNGRUNNER_LIB_SRCS
   OrCompositeTestFilter.cpp 
   GeneralTestFilter.cpp 
   TestFilterFactory.cpp 
+  TestCaseHierarchy.cpp
   PosixFNMatcher.cpp 
   TestRunner.cpp
 )

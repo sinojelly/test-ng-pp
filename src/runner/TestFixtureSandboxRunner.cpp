@@ -111,7 +111,7 @@ createSandbox( TestFixtureDesc* fixture, unsigned int i
 {
    TestCaseSandbox* sandbox = \
          TestCaseSandbox::createInstance( this, fixture->getTestCase(i)
-                                        , fixture, caseRunner, resultCollector);
+                                        , caseRunner, resultCollector);
    sandboxes.push_back(sandbox);
 }
 

@@ -10,7 +10,7 @@ TESTNGPP_NS_START
 struct SimpleTestCaseRunner
 	: public TestCaseRunner
 {
-	void run(TestFixtureDesc*, TestCase*, TestCaseResultCollector*);
+	void run(TestCase*, TestCaseResultCollector*);
 };
 
 TESTNGPP_NS_END

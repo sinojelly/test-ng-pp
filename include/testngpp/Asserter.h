@@ -24,8 +24,11 @@
 #include <testngpp/utils/Formatter.h>
 #include <sstream>
 
-#ifdef _MSC_VER
+#if defined(__GNUC__)
+#define TESTNGPP_TYPEOF(expr) typeof(expr)
+#else
 #include <boost/typeof/typeof.hpp>
+#define TESTNGPP_TYPEOF(expr) BOOST_TYPEOF(expr)
 #endif
 
 TESTNGPP_NS_START
@@ -49,67 +52,29 @@ TESTNGPP_NS_START
    } \
 }while(0)
 
-#ifdef _MSC_VER
+#define __TESTNGPP_MAKE_STR(expr) " " #expr " "
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_EQUALS(expected, value) do { \
-   BOOST_TYPEOF(expected) __expected = (expected); \
-   BOOST_TYPEOF(value) _value = (value); \
-   if(__expected != _value) { \
+#define __TESTNGPP_ASSERT_EQUALITY(expected, expected_equality, value) do {\
+   TESTNGPP_TYPEOF(expected) __testngpp_expected = (expected); \
+   TESTNGPP_TYPEOF(value) __testngpp_value = (value); \
+   if(!(__testngpp_expected expected_equality __testngpp_value)) { \
       std::stringstream ss; \
-      ss << "expected (" #expected " == " #value "), but actually got (" \
-         << TESTNGPP_NS::toTypeAndValueString(__expected) \
-         << " != " \
-         << TESTNGPP_NS::toTypeAndValueString(_value) \
-         << ")"; \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
-   } \
-  }while(0)
-
-//////////////////////////////////////////////////////////////////
-#define TS_ASSERT_NOT_EQUALS(expected, value) do { \
-   BOOST_TYPEOF(expected) __expected = (expected); \
-   BOOST_TYPEOF(value) _value = (value); \
-   if(__expected == _value) {\
-      std::stringstream ss; \
-      ss << "expected (" #expected " != " #value "), but actually got (" \
-         << TESTNGPP_NS::toTypeAndValueString(__expected) \
-         << " == " \
-         << TESTNGPP_NS::toTypeAndValueString(_value) \
-         << ")"; \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
-   } \
-}while(0)
-#else
-//////////////////////////////////////////////////////////////////
-#define TS_ASSERT_EQUALS(expected, value) do { \
-   typeof(expected) __expected = (expected); \
-   typeof(value) __value = (value); \
-   if(__expected != __value) { \
-      std::stringstream ss; \
-      ss << "expected (" #expected " == " #value "), but actually got (" \
-         << TESTNGPP_NS::toTypeAndValueString(__expected) \
-         << " != " \
-         << TESTNGPP_NS::toTypeAndValueString(__value) \
+      ss << "expected (" #expected __TESTNGPP_MAKE_STR(expected_equality) #value "), but actually got (" \
+         << TESTNGPP_NS::toTypeAndValueString(__testngpp_expected) \
+         << __TESTNGPP_MAKE_STR(expected_equality) \
+         << TESTNGPP_NS::toTypeAndValueString(__testngpp_value) \
          << ")"; \
       throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_NOT_EQUALS(expected, value) do { \
-   typeof(expected) __expected = (expected); \
-   typeof(value) __value = (value); \
-   if(__expected == __value) {\
-      std::stringstream ss; \
-      ss << "expected (" #expected " != " #value "), but actually got (" \
-         << TESTNGPP_NS::toTypeAndValueString(__expected) \
-         << " == " \
-         << TESTNGPP_NS::toTypeAndValueString(__value) \
-         << ")"; \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
-   } \
-}while(0)
-#endif
+#define TS_ASSERT_EQUALS(expected, value) \
+   __TESTNGPP_ASSERT_EQUALITY(expected, ==, value) 
+
+//////////////////////////////////////////////////////////////////
+#define TS_ASSERT_NOT_EQUALS(expected, value) \
+   __TESTNGPP_ASSERT_EQUALITY(expected, !=, value) 
 
 //////////////////////////////////////////////////////////////////
 #define TS_ASSERT_THROWS(expr, except) do { \
@@ -127,13 +92,13 @@ TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
 #define TS_ASSERT_THROWS_ANYTHING(expr) do { \
-   bool testngpp_caught_exception = false; \
+   bool __testngpp_caught_exception = false; \
    try { \
       expr; \
    }catch(...){ \
-      testngpp_caught_exception = true; \
+      __testngpp_caught_exception = true; \
    } \
-   if(!testngpp_caught_exception) { \
+   if(!__testngpp_caught_exception) { \
       throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
          "expected " #expr " will throw an exception of any type, but actually not."); \
    } \

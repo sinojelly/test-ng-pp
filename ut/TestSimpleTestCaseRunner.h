@@ -70,7 +70,7 @@ public:
    {
       SimpleTestCaseRunner runner;
 
-      runner.run(f.desc, f.testcase[0], f.collector);
+      runner.run(f.testcase[0], f.collector);
 
       f.verify();
    }
