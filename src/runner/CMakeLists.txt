@@ -24,36 +24,41 @@ INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src .)
 
 SET(SANDBOX_SRCS
-  TestCaseSandboxResultReporter.cpp 
-  TestCaseSandboxResultDecoder.cpp 
-  Sandbox.cpp 
-  SandboxProcessor.cpp 
-  TestCaseSandboxHandler.cpp 
-  TestCaseSandbox.cpp 
-  PipeReadableChannel.cpp 
-  PipeWrittableChannel.cpp  
-  TestFixtureSandboxRunner.cpp 
+  sandbox/TestCaseSandboxResultReporter.cpp 
+  sandbox/TestCaseSandboxResultDecoder.cpp 
+  sandbox/Sandbox.cpp 
+  sandbox/SandboxProcessor.cpp 
+  sandbox/TestCaseSandboxHandler.cpp 
+  sandbox/TestCaseSandbox.cpp 
+  sandbox/TestFixtureSandboxRunner.cpp 
+
+  utils/PipeReadableChannel.cpp 
+  utils/PipeWrittableChannel.cpp  
 )
 
 SET(TESTNGRUNNER_LIB_SRCS
-  TestSuiteRunner.cpp 
-  SimpleTestCaseRunner.cpp 
-  TestFixtureRunnerWrapper.cpp 
-  ModuleTestSuiteLoader.cpp 
-  SimpleTestResultDispatcher.cpp 
-  SimpleTestResultReporter.cpp 
-  SimpleTestCaseResultReporter.cpp 
-  SimpleTestSuiteResultReporter.cpp
-  TestFixtureRunnerFactory.cpp 
-  SimpleTestFixtureRunner.cpp 
-  ModuleTestListenerLoader.cpp 
-  WildcardTestFilter.cpp 
-  OrCompositeTestFilter.cpp 
-  GeneralTestFilter.cpp 
-  TestFilterFactory.cpp 
-  TestCaseHierarchy.cpp
-  PosixFNMatcher.cpp 
- # TestRunner.cpp
+  runners/TestSuiteRunner.cpp 
+  runners/SimpleTestCaseRunner.cpp 
+  runners/TestFixtureRunnerWrapper.cpp 
+  runners/TestFixtureRunnerFactory.cpp 
+  runners/SimpleTestFixtureRunner.cpp 
+  runners/TestCaseHierarchy.cpp
+
+  loaders/ModuleTestSuiteLoader.cpp 
+  loaders/ModuleTestListenerLoader.cpp 
+
+  reports/SimpleTestResultDispatcher.cpp 
+  reports/SimpleTestResultReporter.cpp 
+  reports/SimpleTestCaseResultReporter.cpp 
+  reports/SimpleTestSuiteResultReporter.cpp
+
+  filters/WildcardTestFilter.cpp 
+  filters/OrCompositeTestFilter.cpp 
+  filters/GeneralTestFilter.cpp 
+  filters/TestFilterFactory.cpp 
+  filters/PosixFNMatcher.cpp 
+
+  #TestRunner.cpp
 )
 
 IF(NOT TESTNGPP_DISABLE_SANDBOX)
@@ -65,18 +70,18 @@ ENDIF(NOT TESTNGPP_DISABLE_SANDBOX)
 
 IF(TESTNGPP_USE_DLOPEN)
   SET(TESTNGRUNNER_LIB_SRCS ${TESTNGRUNNER_LIB_SRCS}
-      DLModuleLoader.cpp 
-      DLModuleLoaderFactory.cpp
+      loaders/DLModuleLoader.cpp 
+      loaders/DLModuleLoaderFactory.cpp
   )
 ELSEIF(TESTNGPP_USE_LTDL)
   SET(TESTNGRUNNER_LIB_SRCS ${TESTNGRUNNER_LIB_SRCS}
-      LTModuleLoader.cpp 
-      LTModuleLoaderFactory.cpp
+      loaders/LTModuleLoader.cpp 
+      loaders/LTModuleLoaderFactory.cpp
   )
 ELSEIF(TESTNGPP_USE_LOADLIBRARY)
   SET(TESTNGRUNNER_LIB_SRCS ${TESTNGRUNNER_LIB_SRCS}
-      Win32DllModuleLoader.cpp 
-      Win32DllModuleLoaderFactory.cpp
+      loaders/Win32DllModuleLoader.cpp 
+      loaders/Win32DllModuleLoaderFactory.cpp
   )
 ELSE(TESTNGPP_USE_DLOPEN)
   MESSAGE(FATAL_ERROR "No module loader found")

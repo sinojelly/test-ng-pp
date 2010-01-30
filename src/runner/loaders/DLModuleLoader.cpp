@@ -6,34 +6,37 @@
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/runner/DLModuleLoader.h>
-
+#include <testngpp/runner/StringList.h>
 
 TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 struct DLModuleLoaderImpl
 {
-    DLModuleLoaderImpl();
+    DLModuleLoaderImpl(const StringList* searchingPaths);
     ~DLModuleLoaderImpl();
 
-    const char* addSearchingPaths(
-        const std::list<std::string>& searchingPaths);
 
     void load(const std::string& modulePath);
-    void loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
-       const std::string& modulePath);
+    void loadUnderPaths(const std::string& modulePath);
 
     void unload();
 
     void* findSymbol(const std::string& symbol);
 
+    StringList::Type& getSearchingPaths() const;
+
+    const StringList* searchingPaths;
+    StringList dummyPaths;
+
     void* handle;
 };
 
 ////////////////////////////////////////////////////////
-DLModuleLoaderImpl::DLModuleLoaderImpl()
+DLModuleLoaderImpl::
+DLModuleLoaderImpl(const StringList* paths)
     : handle(0)
+    , searchingPaths(paths)
 {
 }
 ////////////////////////////////////////////////////////
@@ -44,6 +47,17 @@ DLModuleLoaderImpl::~DLModuleLoaderImpl()
         ::dlclose(handle);
         handle = 0;
     }
+}
+
+StringList::Type&
+DLModuleLoaderImpl::getSearchingPaths() const
+{
+   if(searchingPaths == 0)
+   {
+      return dummyPaths.get();
+   }
+
+   return searchingPaths->get();
 }
 
 /////////////////////////////////////////////////////////////////
@@ -74,11 +88,10 @@ namespace
 /////////////////////////////////////////////////////////////////
 void
 DLModuleLoaderImpl::loadUnderPaths \
-                 ( const std::list<std::string>& searchingPaths
-                 , const std::string& modulePath)
+                 ( const std::string& modulePath)
 {
-   std::list<std::string>::const_iterator i = searchingPaths.begin();
-   for(; i != searchingPaths.end(); i++)
+   std::list<std::string>::const_iterator i = getSearchingPaths().begin();
+   for(; i != getSearchingPaths().end(); i++)
    {
       handle = openModule(getFullPath(*i, modulePath));
       if(handle != 0)
@@ -87,22 +100,18 @@ DLModuleLoaderImpl::loadUnderPaths \
       }
    }
 
-   handle = openModule(modulePath);
-   if(handle == 0)
-   {
-      throw Error(::dlerror());
-   }
+   throw Error(::dlerror());
 }
 
 ////////////////////////////////////////////////////////
 void
 DLModuleLoaderImpl::load(const std::string& modulePath)
 {
-    handle = ::dlopen(modulePath.c_str(), RTLD_LAZY);
-    if(handle == 0)
-    {
-        throw Error(::dlerror());
-    }
+   handle = openModule(modulePath);
+   if(handle == 0)
+   {
+      loadUnderPaths(modulePath);
+   }
 }
 
 ////////////////////////////////////////////////////////
@@ -134,8 +143,8 @@ DLModuleLoaderImpl::findSymbol(const std::string& symbol)
 }
 
 ////////////////////////////////////////////////////////
-DLModuleLoader::DLModuleLoader()
-    : This(new DLModuleLoaderImpl())
+DLModuleLoader::DLModuleLoader(const StringList* searchingPaths)
+    : This(new DLModuleLoaderImpl(searchingPaths))
 {
 }
 
@@ -150,15 +159,6 @@ void
 DLModuleLoader::load(const std::string& modulePath)
 {
     This->load(modulePath);
-}
-
-////////////////////////////////////////////////////////
-void
-DLModuleLoader::loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
-       const std::string& modulePath)
-{
-    This->loadUnderPaths(searchingPaths, modulePath);
 }
 
 ////////////////////////////////////////////////////////

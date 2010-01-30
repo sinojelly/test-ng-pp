@@ -4,6 +4,7 @@
 
 #include <testngpp/testngpp.h>
 #include <testngpp/runner/ModuleLoader.h>
+#include <testngpp/runner/SearchingPaths.h>
 
 
 TESTNGPP_NS_START
@@ -12,14 +13,11 @@ struct LTModuleLoaderImpl;
 
 struct LTModuleLoader : public ModuleLoader
 {
-   LTModuleLoader();
+   LTModuleLoader(const SearchingPaths* searchingPaths);
+
    ~LTModuleLoader(); 
 
 	void load(const std::string& modulePath);
-
-	void loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
-       const std::string& modulePath);
 
    void unload();
 

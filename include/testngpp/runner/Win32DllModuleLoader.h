@@ -12,14 +12,10 @@ struct Win32DllModuleLoaderImpl;
 
 struct Win32DllModuleLoader : public ModuleLoader
 {
-   Win32DllModuleLoader();
+   Win32DllModuleLoader(const SearchingPaths* searchingPaths);
    ~Win32DllModuleLoader(); 
 
 	void load(const std::string& modulePath);
-
-	void loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
-       const std::string& modulePath);
 
    void unload();
 
