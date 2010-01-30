@@ -51,6 +51,7 @@ SET(TESTNGRUNNER_LIB_SRCS
   reports/SimpleTestResultReporter.cpp 
   reports/SimpleTestCaseResultReporter.cpp 
   reports/SimpleTestSuiteResultReporter.cpp
+  reports/SimpleTestResultManager.cpp
 
   filters/WildcardTestFilter.cpp 
   filters/OrCompositeTestFilter.cpp 

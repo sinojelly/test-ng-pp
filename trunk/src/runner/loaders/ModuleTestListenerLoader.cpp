@@ -27,7 +27,8 @@ struct ModuleTestListenerLoaderImpl
    void destroyArgs();
    void destroyListener();
 
-	void load( TestResultReporter* resultReporter
+	void load( const StringList& searchingPaths
+            , TestResultReporter* resultReporter
 				, TestSuiteResultReporter* suiteResultReporter
 				, TestCaseResultReporter* caseResultReporter);
 
@@ -170,11 +171,12 @@ namespace
 ///////////////////////////////////////////////////////////////
 void
 ModuleTestListenerLoaderImpl::
-load( TestResultReporter* resultReporter
+load( const StringList& searchingPaths
+    , TestResultReporter* resultReporter
     , TestSuiteResultReporter* suiteResultReporter
     , TestCaseResultReporter* caseResultReporter)
 {
-   loader->load(getListenerSharedObjectName(name));
+   loader->load(searchingPaths, getListenerSharedObjectName(name));
 
    typedef TestListener* (*TestListenerCreater) \
                   ( TestResultReporter* \
@@ -199,7 +201,8 @@ load( TestResultReporter* resultReporter
 /////////////////////////////////////////////////////////////////
 TestListener*
 ModuleTestListenerLoader::
-load( const std::string& cl
+load( const StringList& searchingPaths
+    , const std::string& cl
     , TestResultReporter* resultReporter
     , TestSuiteResultReporter* suiteResultReporter
     , TestCaseResultReporter* caseResultReporter)
@@ -210,7 +213,7 @@ load( const std::string& cl
 
    __TESTNGPP_TRY
    {
-      This->load(resultReporter, suiteResultReporter, caseResultReporter);
+      This->load(searchingPaths, resultReporter, suiteResultReporter, caseResultReporter);
       std::cout << "OK" << std::endl;
    }
    __TESTNGPP_CATCH(Error& e)

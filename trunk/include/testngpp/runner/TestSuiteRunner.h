@@ -5,6 +5,7 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
+#include <testngpp/runner/StringList.h>
 
 TESTNGPP_NS_START
 
@@ -19,7 +20,8 @@ struct TestSuiteRunner
 	TestSuiteRunner(TestSuiteLoader*, TestFixtureRunner* );
 	~TestSuiteRunner();
 
-	void run( const std::string& path
+	void run( const StringList& searchingPaths
+           , const std::string& path
            , TestResultCollector*
            , const TestFilter*);
 

@@ -19,7 +19,8 @@ struct ModuleTestListenerLoader : public TestListenerLoader
    ~ModuleTestListenerLoader();
 
    TestListener*
-   load( const std::string& commandLine
+   load( const StringList& SearchingPaths
+       , const std::string& commandLine
        , TestResultReporter* resultReporter
        , TestSuiteResultReporter* suiteResultReporter
        , TestCaseResultReporter* caseResultReporter);

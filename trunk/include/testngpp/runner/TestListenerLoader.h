@@ -5,6 +5,7 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
+#include <testngpp/runner/StringList.h>
 
 TESTNGPP_NS_START
 
@@ -17,7 +18,8 @@ struct TestListenerLoader
 {
    virtual
    TestListener*
-   load( const std::string& commandLine
+   load( const StringList& searchingPaths
+       , const std::string& commandLine
        , TestResultReporter* resultReporter
        , TestSuiteResultReporter* suiteResultReporter
        , TestCaseResultReporter* caseResultReporter) = 0;
