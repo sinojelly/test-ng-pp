@@ -10,9 +10,9 @@ TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 ModuleLoader*
-ModuleLoaderFactory::create(const StringList* searchingPaths)
+ModuleLoaderFactory::create()
 {
-    return new DLModuleLoader(searchingPaths);
+    return new DLModuleLoader();
 }
 
 ////////////////////////////////////////////////////////

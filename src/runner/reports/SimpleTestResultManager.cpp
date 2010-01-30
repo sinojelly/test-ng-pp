@@ -4,115 +4,110 @@
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
-#include <testngpp/runner/TestSuiteRunner.h>
-#include <testngpp/runner/LTTestSuiteLoader.h>
-#include <testngpp/runner/LTTestListenerLoader.h>
 #include <testngpp/runner/SimpleTestResultDispatcher.h>
 #include <testngpp/runner/SimpleTestResultReporter.h>
 #include <testngpp/runner/SimpleTestCaseResultReporter.h>
 #include <testngpp/runner/SimpleTestSuiteResultReporter.h>
-#include <testngpp/runner/TestFixtureRunnerFactory.h>
+
+#include <testngpp/runner/TestListenerLoader.h>
+#include <testngpp/runner/TestListenerLoaderFactory.h>
+
 #include <testngpp/runner/InternalError.h>
-#include <testngpp/runner/TestRunner.h>
-#include <testngpp/runner/TestFilter.h>
-#include <testngpp/runner/TestFilterFactory.h>
-#include <testngpp/runner/ModuleLoaderFactory.h>
+
+#include <testngpp/runner/SimpleTestResultManager.h>
 
 TESTNGPP_NS_START
 
-struct TestRunnerImpl
+struct SimpleTestResultManagerImpl
 {
-   typedef std::list<TestListenerLoader*> Listeners;
+   typedef std::list<TestListenerLoader*> Loaders;
 
-   Listeners listeners;
+   Loaders loaders;
+
+   TestListenerLoaderFactory* loaderFactory;
 
    SimpleTestResultReporter* reporter;
    SimpleTestSuiteResultReporter* suiteReporter;
    SimpleTestCaseResultReporter* caseReporter;
+
    SimpleTestResultDispatcher* dispatcher;
 
-   TestRunnerImpl();
-   ~TestRunnerImpl();
+   SimpleTestResultManagerImpl(TestListenerLoaderFactory* factory);
+   ~SimpleTestResultManagerImpl();
 
-   
-   void loadListener(TestRunnerContext* context, \
-            const TestRunner::StringList& searchingPaths,
-            const std::string& listenerName);
+   void loadListener \
+            ( const StringList& searchingPaths
+            , const std::string& listenerName);
 
-   void loadListeners(TestRunnerContext* context, \
-            const TestRunner::StringList& searchingPaths,
-            const TestRunner::StringList& listenerNames);
+   void loadListeners \
+            ( const StringList& searchingPaths \
+            , const StringList& listenerNames);
 
    void clearListeners();
-
-   ModuleLoader* createModuleLoader();
 };
 
 ///////////////////////////////////////////////////////
-TestRunnerImpl::TestRunnerImpl()
-   : caseReporter(new SimpleTestCaseResultReporter())
-   , dispatcher(new SimpleTestResultDispatcher())
+SimpleTestResultManagerImpl::
+SimpleTestResultManagerImpl(TestListenerLoaderFactory* factory)
+   : loaderFactory(factory)
 {
+   dispatcher = new SimpleTestResultDispatcher();
+
+   caseReporter = new SimpleTestCaseResultReporter();
    suiteReporter = new SimpleTestSuiteResultReporter(caseReporter);
    reporter = new SimpleTestResultReporter(suiteReporter);
+
    dispatcher->registerTestCaseListener(caseReporter);
    dispatcher->registerTestSuiteListener(suiteReporter);
    dispatcher->registerListener(reporter);
 }
 
 ///////////////////////////////////////////////////////
-void TestRunnerImpl::clearListeners()
+void SimpleTestResultManagerImpl::clearListeners()
 {
-   Listeners::iterator i = listeners.begin();
-   for(; i != listeners.end(); i++)
+   Loaders::iterator i = loaders.begin();
+   for(; i != loaders.end(); i++)
    {
       delete (*i);
    }
 
-   listeners.clear();
+   loaders.clear();
 }
 
 ///////////////////////////////////////////////////////
-TestRunnerImpl::~TestRunnerImpl()
+SimpleTestResultManagerImpl::
+~SimpleTestResultManagerImpl()
 {
-   delete dispatcher;
+   delete suiteReporter;
    delete caseReporter;
    delete reporter;
    
+   delete dispatcher;
+
    clearListeners();
 }
 
 ///////////////////////////////////////////////////////
-ModuleLoader*
-TestRunnerImpl::createModuleLoader()
-{
-   ModuleLoader* moduleLoader = ModuleLoaderFactory::create();
-   if(moduleLoader == 0)
-   {
-      throw Error("cannot create module loader");
-   }
-
-   return moduleLoader;
-}
-
-///////////////////////////////////////////////////////
 void
-TestRunnerImpl::
-loadListener( TestRunnerContext* context
-            , const TestRunner::StringList& searchingPaths
-            , const std::string& listenerName)
+SimpleTestResultManagerImpl::
+loadListener( const StringList& searchingPaths
+            , const std::string& cl)
 {
    __TESTNGPP_TRY
    {
-      TestListenerLoader* loader = \
-         new LTTestListenerLoader(createModuleLoader(), listenerName);
-      loader->load(context, searchingPaths);
-      listeners.push_back(loader);
+      TestListenerLoader* loader = loaderFactory->create();
+      TestListener* listener = \
+         loader->load( searchingPaths, cl \
+                     , reporter \
+                     , suiteReporter \
+                     , caseReporter);
+      dispatcher->registerListener(listener);
+      loaders.push_back(loader);
    }
    __TESTNGPP_CATCH(Error& e)
    {
       std::cerr << "error occured while loading listener " 
-                << listenerName 
+                << cl
                 << " : " 
                 << e.what() << std::endl;
    }
@@ -121,56 +116,29 @@ loadListener( TestRunnerContext* context
 
 ///////////////////////////////////////////////////////
 void
-TestRunnerImpl::
-loadListeners( TestRunnerContext* context \
-             , const TestRunner::StringList& searchingPaths
-             , const TestRunner::StringList& listenerNames)
+SimpleTestResultManager::
+load( const StringList& searchingPaths
+    , const StringList& listenerNames)
 {
-   TestRunner::StringList::const_iterator i = listenerNames.begin();
-   for(; i != listenerNames.end(); i++)
+   StringList::Type::const_iterator i = listenerNames.get().begin();
+   for(; i != listenerNames.get().end(); i++)
    {
-      loadListener(context, searchingPaths, *i);
+      This->loadListener(searchingPaths, *i);
    }
 }
 
 ///////////////////////////////////////////////////////
-TestRunner::TestRunner()
-   : This(new TestRunnerImpl())
+SimpleTestResultManager::
+SimpleTestResultManager(TestListenerLoaderFactory* loaderFactory)
+   : This(new SimpleTestResultManagerImpl(loaderFactory))
 {
 }
 
 ///////////////////////////////////////////////////////
-TestRunner::~TestRunner()
+SimpleTestResultManager::
+~SimpleTestResultManager()
 {
    delete This;
-}
-
-///////////////////////////////////////////////////////
-TestResultReporter* 
-TestRunner::getTestResultReporter() const
-{
-   return This->reporter;
-}
-
-///////////////////////////////////////////////////////
-TestSuiteResultReporter* 
-TestRunner::getTestSuiteResultReporter() const
-{
-   return This->suiteReporter;
-}
-
-///////////////////////////////////////////////////////
-TestCaseResultReporter* 
-TestRunner::getTestCaseResultReporter() const
-{
-   return This->caseReporter;
-}
-
-///////////////////////////////////////////////////////
-void
-TestRunner::registerTestListener(TestListener* listener)
-{
-   This->dispatcher->registerListener(listener);
 }
 
 ///////////////////////////////////////////////////////

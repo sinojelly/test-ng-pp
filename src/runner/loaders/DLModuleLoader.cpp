@@ -6,37 +6,32 @@
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/runner/DLModuleLoader.h>
-#include <testngpp/runner/StringList.h>
 
 TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
 struct DLModuleLoaderImpl
 {
-    DLModuleLoaderImpl(const StringList* searchingPaths);
+    DLModuleLoaderImpl();
     ~DLModuleLoaderImpl();
 
-
-    void load(const std::string& modulePath);
-    void loadUnderPaths(const std::string& modulePath);
+    void load( const StringList& searchingPaths \
+             , const std::string& modulePath);
+    void loadInSearchingPaths
+             ( const StringList& searchingPaths \
+             , const std::string& modulePath);
 
     void unload();
 
     void* findSymbol(const std::string& symbol);
-
-    StringList::Type& getSearchingPaths() const;
-
-    const StringList* searchingPaths;
-    StringList dummyPaths;
 
     void* handle;
 };
 
 ////////////////////////////////////////////////////////
 DLModuleLoaderImpl::
-DLModuleLoaderImpl(const StringList* paths)
+DLModuleLoaderImpl()
     : handle(0)
-    , searchingPaths(paths)
 {
 }
 ////////////////////////////////////////////////////////
@@ -47,17 +42,6 @@ DLModuleLoaderImpl::~DLModuleLoaderImpl()
         ::dlclose(handle);
         handle = 0;
     }
-}
-
-StringList::Type&
-DLModuleLoaderImpl::getSearchingPaths() const
-{
-   if(searchingPaths == 0)
-   {
-      return dummyPaths.get();
-   }
-
-   return searchingPaths->get();
 }
 
 /////////////////////////////////////////////////////////////////
@@ -87,11 +71,13 @@ namespace
 
 /////////////////////////////////////////////////////////////////
 void
-DLModuleLoaderImpl::loadUnderPaths \
-                 ( const std::string& modulePath)
+DLModuleLoaderImpl::loadInSearchingPaths
+                 ( const StringList& searchingPaths
+                 , const std::string& modulePath)
 {
-   std::list<std::string>::const_iterator i = getSearchingPaths().begin();
-   for(; i != getSearchingPaths().end(); i++)
+   StringList::Type::const_iterator i = \
+       searchingPaths.get().begin();
+   for(; i != searchingPaths.get().end(); i++)
    {
       handle = openModule(getFullPath(*i, modulePath));
       if(handle != 0)
@@ -105,12 +91,13 @@ DLModuleLoaderImpl::loadUnderPaths \
 
 ////////////////////////////////////////////////////////
 void
-DLModuleLoaderImpl::load(const std::string& modulePath)
+DLModuleLoaderImpl::load( const StringList& searchingPaths
+                        , const std::string& modulePath)
 {
    handle = openModule(modulePath);
    if(handle == 0)
    {
-      loadUnderPaths(modulePath);
+      loadInSearchingPaths(searchingPaths, modulePath);
    }
 }
 
@@ -143,8 +130,8 @@ DLModuleLoaderImpl::findSymbol(const std::string& symbol)
 }
 
 ////////////////////////////////////////////////////////
-DLModuleLoader::DLModuleLoader(const StringList* searchingPaths)
-    : This(new DLModuleLoaderImpl(searchingPaths))
+DLModuleLoader::DLModuleLoader()
+    : This(new DLModuleLoaderImpl())
 {
 }
 
@@ -156,9 +143,10 @@ DLModuleLoader::~DLModuleLoader()
 
 ////////////////////////////////////////////////////////
 void
-DLModuleLoader::load(const std::string& modulePath)
+DLModuleLoader::load( const StringList& searchingPaths
+                    , const std::string& modulePath)
 {
-    This->load(modulePath);
+    This->load(searchingPaths, modulePath);
 }
 
 ////////////////////////////////////////////////////////

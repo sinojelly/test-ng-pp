@@ -18,7 +18,10 @@ struct ModuleTestSuiteLoader : public TestSuiteLoader
    ModuleTestSuiteLoader(ModuleLoader* loader);
    ~ModuleTestSuiteLoader();
 
-	TestSuiteDesc* load(const std::string& path, TestSuiteDescEntryNameGetter* nameGetter);
+	TestSuiteDesc*
+   load( const StringList& searchingPaths
+       , const std::string& path
+       , TestSuiteDescEntryNameGetter* nameGetter);
 
    void unload();
 

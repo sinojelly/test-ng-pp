@@ -2,9 +2,8 @@
 #ifndef __TESTNGPP_TEST_SUITE_LOADER_H
 #define __TESTNGPP_TEST_SUITE_LOADER_H
 
-#include <string>
-
 #include <testngpp/testngpp.h>
+#include <testngpp/runner/StringList.h>
 
 TESTNGPP_NS_START
 
@@ -13,7 +12,10 @@ struct TestSuiteDescEntryNameGetter;
 
 struct TestSuiteLoader
 {
-	virtual TestSuiteDesc* load(const std::string& path, TestSuiteDescEntryNameGetter* getter) = 0;
+   virtual TestSuiteDesc*
+   load( const StringList& searchingPaths
+       , const std::string& path
+       , TestSuiteDescEntryNameGetter* nameGetter) = 0;
 
    virtual void unload() = 0;
 

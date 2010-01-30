@@ -16,8 +16,10 @@ struct ModuleTestSuiteLoaderImpl
    
    ~ModuleTestSuiteLoaderImpl();
 
-   TestSuiteDesc* load(const std::string& path,
-      TestSuiteDescEntryNameGetter* nameGetter);
+   TestSuiteDesc*
+   load( const StringList& searchingPaths \
+       , const std::string& path \
+       , TestSuiteDescEntryNameGetter* nameGetter);
 
    void unload();
 
@@ -43,7 +45,8 @@ ModuleTestSuiteLoaderImpl::~ModuleTestSuiteLoaderImpl()
 ///////////////////////////////////////////////////////////////
 TestSuiteDesc*
 ModuleTestSuiteLoaderImpl::
-load( const std::string& path
+load( const StringList& searchingPaths
+    , const std::string& path
     , TestSuiteDescEntryNameGetter* nameGetter)
 {
    if(loader == 0)
@@ -51,7 +54,7 @@ load( const std::string& path
       throw Error("Internal Error");
    }
 
-   loader->load(path);
+   loader->load(searchingPaths, path);
  
    typedef TestSuiteDesc* (*TestSuiteDescGetter)();
 
@@ -82,10 +85,11 @@ ModuleTestSuiteLoader::~ModuleTestSuiteLoader()
 /////////////////////////////////////////////////////////////////
 TestSuiteDesc*
 ModuleTestSuiteLoader::
-load( const std::string& path
+load( const StringList& searchingPaths
+    , const std::string& path
     , TestSuiteDescEntryNameGetter* nameGetter)
 {
-   return This->load(path, nameGetter);
+   return This->load(searchingPaths, path, nameGetter);
 }
 
 /////////////////////////////////////////////////////////////////

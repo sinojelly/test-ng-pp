@@ -25,7 +25,9 @@ struct TestSuiteRunnerImpl : public TestSuiteDescEntryNameGetter
 		: fixtureRunner(runner), suiteLoader(loader)
    {}
 
-	TestSuiteDesc* load(const std::string& path
+	TestSuiteDesc* load
+         ( const StringList& searchingPaths
+         , const std::string& path
          , TestResultCollector* resultCollector);
 
 	void runAllFixtures(TestSuiteDesc* desc
@@ -34,7 +36,8 @@ struct TestSuiteRunnerImpl : public TestSuiteDescEntryNameGetter
 
 	void runAllFixtures(TestSuiteDesc* desc, const TestFilter* filter);
 
-	void run( const std::string& path
+	void run( const StringList& searchingPaths
+           , const std::string& path
            , TestResultCollector* resultCollector
    		  , const TestFilter* filter);
 
@@ -60,12 +63,14 @@ TestSuiteRunner::~TestSuiteRunner()
 
 /////////////////////////////////////////////////////////////////
 TestSuiteDesc*
-TestSuiteRunnerImpl::load(const std::string& path
+TestSuiteRunnerImpl::load
+   ( const StringList& searchingPaths
+   , const std::string& path
    , TestResultCollector* resultCollector)
 {
    __TESTNGPP_TRY
    {
-     return suiteLoader->load(path, this);
+     return suiteLoader->load(searchingPaths, path, this);
    }
    __TESTNGPP_CATCH(std::exception& e)
    {
@@ -94,11 +99,13 @@ TestSuiteRunnerImpl::runAllFixtures(TestSuiteDesc* desc
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunnerImpl::run(const std::string& path
+TestSuiteRunnerImpl::run
+   ( const StringList& searchingPaths
+   , const std::string& path
    , TestResultCollector* resultCollector
    , const TestFilter* filter)
 {
-   TestSuiteDesc* desc = load(path, resultCollector);
+   TestSuiteDesc* desc = load(searchingPaths, path, resultCollector);
    if(desc == 0)
    {
       return;
@@ -113,11 +120,13 @@ TestSuiteRunnerImpl::run(const std::string& path
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunner::run(const std::string& path
+TestSuiteRunner::run
+   ( const StringList& searchingPaths
+   , const std::string& path
    , TestResultCollector* resultCollector
    , const TestFilter* filter)
 {
-   This->run(path, resultCollector, filter);
+   This->run(searchingPaths, path, resultCollector, filter);
 }
 
 /////////////////////////////////////////////////////////////////

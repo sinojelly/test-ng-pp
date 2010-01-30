@@ -5,18 +5,17 @@
 #include <testngpp/testngpp.h>
 #include <testngpp/runner/ModuleLoader.h>
 
-
 TESTNGPP_NS_START
 
-struct StringList;
 struct DLModuleLoaderImpl;
 
 struct DLModuleLoader : public ModuleLoader
 {
-   DLModuleLoader(const StringList* searchingPaths);
+   DLModuleLoader();
    ~DLModuleLoader(); 
 
-	void load(const std::string& modulePath);
+	void load( const StringList& searchingPaths \
+            , const std::string& modulePath);
    void unload();
 
    void* findSymbol(const std::string& symbol);
