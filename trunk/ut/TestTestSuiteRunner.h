@@ -152,9 +152,10 @@ public:
            .after("start");
 
       ////////////////////////////////////////////////////
-      TestSuiteRunner runner(suiteLoader, fixtureRunner);
+      TestSuiteRunner runner(suiteLoader, fixtureRunner, collector);
+      StringList searchingPaths;
 
-      runner.run(file, collector, filter);
+      runner.run(searchingPaths, file, filter);
 
       ////////////////////////////////////////////////////
       verify();
@@ -177,11 +178,12 @@ public:
            .expects(never());
 
       ////////////////////////////////////////////////////
-      TestSuiteRunner runner(suiteLoader, fixtureRunner);
+      TestSuiteRunner runner(suiteLoader, fixtureRunner, collector);
+      StringList searchingPaths;
 
-      runner.run(file, collector, filter);
-
+      runner.run(searchingPaths, file, filter);
       ////////////////////////////////////////////////////
+
       verify();
    }
 };

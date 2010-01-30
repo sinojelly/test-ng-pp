@@ -32,7 +32,7 @@ public:
 
    void testShouldReturnAWildcardFilterIfNoFilterOptionsSpecified()
    {
-      std::list<std::string> filterOptions;
+      StringList filterOptions;
 
       const TestFilter* filter = TestFilterFactory::getFilter(filterOptions);
 
@@ -60,8 +60,8 @@ public:
 
    void testShouldReturnACapableFilterIfThereAreFilterOptionsSpecified()
    {
-      std::list<std::string> filterOptions;
-      filterOptions.push_back("Fixture1:testcase0");
+      StringList filterOptions;
+      filterOptions.add("Fixture1:testcase0");
 
       const TestFilter* filter = TestFilterFactory::getFilter(filterOptions);
 
