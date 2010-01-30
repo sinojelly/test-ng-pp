@@ -5,6 +5,7 @@
 
 #include <testngpp/runner/TestRunner.h>
 #include <testngpp/utils/OptionList.h>
+#include <testngpp/utils/StringList.h>
 
 USING_TESTNGPP_NS
 
@@ -45,7 +46,7 @@ void showOptions(const OptionList& options)
 ////////////////////////////////////////////////////////////
 static
 void getSpecifiedOptions( const std::string& option
-                        , TestRunner::StringList& results
+                        , StringList& results
                         , OptionList& options)
 {
    OptionList::Options::const_iterator i = options.options.begin();
@@ -53,7 +54,7 @@ void getSpecifiedOptions( const std::string& option
    {
       if(i->first == option && i->second.size() > 0)
       {
-         results.push_back(i->second);
+         results.add(i->second);
       }
    }
 }
@@ -109,23 +110,23 @@ unsigned int getMaxConcurrent(OptionList& options)
 }
 ////////////////////////////////////////////////////////////
 static
-void getListeners(TestRunner::StringList& listeners
-                        , OptionList& options)
+void getListeners( StringList& listeners
+                 , OptionList& options)
 {
    getSpecifiedOptions("l", listeners, options);
 }
 
 ////////////////////////////////////////////////////////////
 static
-void getSearchingPathsOfListeners( TestRunner::StringList& paths
-                                , OptionList& options)
+void getSearchingPathsOfListeners( StringList& paths
+                                 , OptionList& options)
 {
    getSpecifiedOptions("L", paths, options);
 }
 
 ////////////////////////////////////////////////////////////
 static
-void getSpecifiedFixtures( TestRunner::StringList& fixtures
+void getSpecifiedFixtures( StringList& fixtures
                          , OptionList& options)
 {
    getSpecifiedOptions("f", fixtures, options);
@@ -152,13 +153,13 @@ int main(int argc, char* argv[])
 
    //showOptions(options);
    
-   TestRunner::StringList listeners;
+   StringList listeners;
    getListeners(listeners, options);   
 
-   TestRunner::StringList searchingPathsOfListeners;
+   StringList searchingPathsOfListeners;
    getSearchingPathsOfListeners(searchingPathsOfListeners, options);   
 
-   TestRunner::StringList fixtures;
+   StringList fixtures;
 	getSpecifiedFixtures(fixtures, options);
 
    bool usesSandbox = useSandbox(options);

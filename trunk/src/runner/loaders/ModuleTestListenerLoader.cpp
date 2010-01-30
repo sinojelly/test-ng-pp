@@ -10,7 +10,6 @@
 #include <testngpp/utils/StringToOptions.h>
 
 #include <testngpp/runner/TestListener.h>
-#include <testngpp/runner/TestRunnerContext.h>
 #include <testngpp/runner/ModuleLoader.h>
 
 #include <testngpp/runner/ModuleTestListenerLoader.h>

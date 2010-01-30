@@ -3,7 +3,6 @@
 #include <testngpp/runner/ModuleLoaderFactory.h>
 
 #include <testngpp/runner/DLModuleLoader.h>
-#include <testngpp/runner/StringList.h>
 
 TESTNGPP_NS_START
 

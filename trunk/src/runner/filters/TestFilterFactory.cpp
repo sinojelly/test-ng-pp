@@ -25,15 +25,15 @@ namespace
 ////////////////////////////////////////////////////////
 const TestFilter*
 TestFilterFactory::
-getFilter(const std::list<std::string>& filterOptions)
+getFilter(const StringList& filterOptions)
 {
-   if(filterOptions.size() == 0)
+   if(filterOptions.get().size() == 0)
       return new WildcardTestFilter();
 
    OrCompositeTestFilter* orFilter = new OrCompositeTestFilter();
 
-   std::list<std::string>::const_iterator i = filterOptions.begin();
-   for(; i != filterOptions.end(); i++)
+   StringList::Type::const_iterator i = filterOptions.get().begin();
+   for(; i != filterOptions.get().end(); i++)
    {
       TestFilter* filter = 0;
 

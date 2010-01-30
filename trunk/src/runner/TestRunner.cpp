@@ -5,48 +5,43 @@
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/runner/TestSuiteRunner.h>
-#include <testngpp/runner/LTTestSuiteLoader.h>
-#include <testngpp/runner/TestListenerLoader.h>
-#include <testngpp/runner/SimpleTestResultDispatcher.h>
-#include <testngpp/runner/SimpleTestResultReporter.h>
-#include <testngpp/runner/SimpleTestCaseResultReporter.h>
-#include <testngpp/runner/SimpleTestSuiteResultReporter.h>
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
 #include <testngpp/runner/InternalError.h>
-#include <testngpp/runner/TestRunner.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFilterFactory.h>
-#include <testngpp/runner/ModuleLoaderFactory.h>
+#include <testngpp/runner/ModuleTestListenerLoaderFactory.h>
+#include <testngpp/runner/ModuleTestSuiteLoaderFactory.h>
+#include <testngpp/runner/SimpleTestResultManager.h>
+#include <testngpp/runner/TestResultManager.h>
+
+#include <testngpp/runner/TestRunner.h>
 
 TESTNGPP_NS_START
 
 struct TestRunnerImpl
 {
-   TestSuiteLoader* loader;
    TestFixtureRunner * fixtureRunner;
    TestSuiteRunner * suiteRunner;
+
+   TestResultManager *resultManager;
+
    bool hasFailures;
 
    TestRunnerImpl();
    ~TestRunnerImpl();
    
    void createSuiteRunner(bool useSandbox, unsigned int maxConcurrent);
-   void runTestSuite( const std::string& suitePath
+
+   void runTestSuite( const StringList& searchingPaths
+                    , const std::string& suitePath
                     , const TestFilter* filter);
-   void runTests( const TestRunner::StringList& suites,
-                  const TestFilter* filter);
 
-   void loadListener(TestRunnerContext* context, \
-            const TestRunner::StringList& searchingPaths,
-            const std::string& listenerName);
+   void runTests( const StringList& searchingPaths
+                , const StringList& suites
+                , const TestFilter* filter);
 
-   void loadListeners(TestRunnerContext* context, \
-            const TestRunner::StringList& searchingPaths,
-            const TestRunner::StringList& listenerNames);
-
-   void clearListeners();
-
-   ModuleLoader* createModuleLoader();
+   void loadListeners( const StringList& searchingPaths
+                     , const StringList& listeners);
 };
 
 ///////////////////////////////////////////////////////
@@ -74,16 +69,14 @@ TestRunnerImpl::~TestRunnerImpl()
 }
 
 ///////////////////////////////////////////////////////
-ModuleLoader*
-TestRunnerImpl::createModuleLoader()
+void
+TestRunnerImpl::loadListeners
+   ( const StringList& searchingPaths
+   , const StringList& listeners)
 {
-   ModuleLoader* moduleLoader = ModuleLoaderFactory::create();
-   if(moduleLoader == 0)
-   {
-      throw Error("cannot create module loader");
-   }
+   resultManager = new SimpleTestResultManager(new ModuleTestListenerLoaderFactory());
 
-   return moduleLoader;
+   resultManager->load(searchingPaths, listeners);
 }
 
 ///////////////////////////////////////////////////////
@@ -93,17 +86,19 @@ TestRunnerImpl::createSuiteRunner(bool useSandbox, unsigned int maxConcurrent)
    fixtureRunner = TestFixtureRunnerFactory:: \
          createInstance(useSandbox, maxConcurrent);
 
-   suiteRunner = new TestSuiteRunner(loader, fixtureRunner);
+   TestSuiteLoader* loader = ModuleTestSuiteLoaderFactory().create();
+   suiteRunner = new TestSuiteRunner(loader, fixtureRunner, resultManager->getResultCollector());
 }
 
 ///////////////////////////////////////////////////////
 void TestRunnerImpl::runTestSuite
-          ( const std::string& suitePath
+          ( const StringList& searchingPaths
+          , const std::string& suitePath
           , const TestFilter* filter)
 {
    __TESTNGPP_TRY
    {
-     suiteRunner->run(suitePath, dispatcher, filter);
+     suiteRunner->run(searchingPaths, suitePath, filter);
    }
    __TESTNGPP_CATCH(Error& e)
    {
@@ -120,21 +115,21 @@ void TestRunnerImpl::runTestSuite
 
 ///////////////////////////////////////////////////////
 void
-TestRunnerImpl::runTests(const TestRunner::StringList& suites,
-                         const TestFilter* filter)
+TestRunnerImpl::runTests( const StringList& searchingPaths
+                        , const StringList& suites
+                        , const TestFilter* filter)
 {
-   dispatcher->startTest();
+   resultManager->startTest();
 
-   TestRunner::StringList::const_iterator i = suites.begin();
-   for(; i != suites.end(); i++)
+   StringList::Type::const_iterator i = suites.get().begin();
+   for(; i != suites.get().end(); i++)
    {
-      runTestSuite(*i, filter);
+      runTestSuite(searchingPaths, *i, filter);
    }
 
-   dispatcher->endTest();
+   resultManager->endTest();
 
-   if(reporter->getNumberOfUnsuccessfulTestCases() > 0 || 
-      reporter->getNumberOfUnloadableSuites() > 0)
+   if(resultManager->hasFailure())
    {
       hasFailures = true;
    }
@@ -153,47 +148,21 @@ TestRunner::~TestRunner()
 }
 
 ///////////////////////////////////////////////////////
-TestResultReporter* 
-TestRunner::getTestResultReporter() const
-{
-   return This->reporter;
-}
-
-///////////////////////////////////////////////////////
-TestSuiteResultReporter* 
-TestRunner::getTestSuiteResultReporter() const
-{
-   return This->suiteReporter;
-}
-
-///////////////////////////////////////////////////////
-TestCaseResultReporter* 
-TestRunner::getTestCaseResultReporter() const
-{
-   return This->caseReporter;
-}
-
-///////////////////////////////////////////////////////
-void
-TestRunner::registerTestListener(TestListener* listener)
-{
-   This->dispatcher->registerListener(listener);
-}
-
-///////////////////////////////////////////////////////
 int
 TestRunner::runTests( bool useSandbox
                     , unsigned int maxConcurrent
-                    , const TestRunner::StringList& suitePaths
-                    , const TestRunner::StringList& listenerNames
-                    , const TestRunner::StringList& searchingPathsOfListeners
-                    , const TestRunner::StringList& fixtures)
+                    , const StringList& suitePaths
+                    , const StringList& listenerNames
+                    , const StringList& searchingPaths
+                    , const StringList& fixtures)
 {
    This->createSuiteRunner(useSandbox, maxConcurrent);
-   This->loadListeners(this, searchingPathsOfListeners, listenerNames);
+
+   This->loadListeners(searchingPaths, listenerNames);
+
    const TestFilter* filter = TestFilterFactory::getFilter(fixtures);
 
-   This->runTests(suitePaths, filter);
+   This->runTests(searchingPaths, suitePaths, filter);
 
    TestFilterFactory::returnFilter(filter);
 
