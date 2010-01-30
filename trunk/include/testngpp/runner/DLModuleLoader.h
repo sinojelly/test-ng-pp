@@ -8,19 +8,15 @@
 
 TESTNGPP_NS_START
 
+struct StringList;
 struct DLModuleLoaderImpl;
 
 struct DLModuleLoader : public ModuleLoader
 {
-   DLModuleLoader();
+   DLModuleLoader(const StringList* searchingPaths);
    ~DLModuleLoader(); 
 
 	void load(const std::string& modulePath);
-
-	void loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
-       const std::string& modulePath);
-
    void unload();
 
    void* findSymbol(const std::string& symbol);

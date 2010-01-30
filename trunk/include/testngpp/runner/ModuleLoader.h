@@ -13,11 +13,6 @@ TESTNGPP_NS_START
 struct ModuleLoader
 {
 	virtual void load(const std::string& modulePath) = 0;
-
-	virtual void loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
-       const std::string& modulePath) = 0;
-
    virtual void unload() = 0;
 
    virtual void* findSymbol(const std::string& symbol) = 0;

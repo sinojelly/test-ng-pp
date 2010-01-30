@@ -8,10 +8,11 @@
 TESTNGPP_NS_START
 
 struct ModuleLoader;
+struct StringList;
 
 struct ModuleLoaderFactory
 {
-    static ModuleLoader* create();
+    static ModuleLoader* create(const StringList* searchingPaths);
 };
 
 TESTNGPP_NS_END
