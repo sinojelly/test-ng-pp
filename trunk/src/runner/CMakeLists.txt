@@ -39,21 +39,21 @@ SET(TESTNGRUNNER_LIB_SRCS
   TestSuiteRunner.cpp 
   SimpleTestCaseRunner.cpp 
   TestFixtureRunnerWrapper.cpp 
-  TestSuiteLoader.cpp 
+  ModuleTestSuiteLoader.cpp 
   SimpleTestResultDispatcher.cpp 
   SimpleTestResultReporter.cpp 
   SimpleTestCaseResultReporter.cpp 
   SimpleTestSuiteResultReporter.cpp
   TestFixtureRunnerFactory.cpp 
   SimpleTestFixtureRunner.cpp 
-  TestListenerLoader.cpp 
+  ModuleTestListenerLoader.cpp 
   WildcardTestFilter.cpp 
   OrCompositeTestFilter.cpp 
   GeneralTestFilter.cpp 
   TestFilterFactory.cpp 
   TestCaseHierarchy.cpp
   PosixFNMatcher.cpp 
-  TestRunner.cpp
+ # TestRunner.cpp
 )
 
 IF(NOT TESTNGPP_DISABLE_SANDBOX)
