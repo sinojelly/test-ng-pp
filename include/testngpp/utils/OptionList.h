@@ -6,6 +6,7 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
+#include <testngpp/utils/StringList.h>
 
 TESTNGPP_NS_START
 
@@ -13,7 +14,7 @@ struct OptionList
 {
    typedef std::pair<std::string, std::string> Option;
    typedef std::list<Option> Options;
-   typedef std::list<std::string> Args;
+   typedef StringList Args;
 
    Options options;
    Args args;
