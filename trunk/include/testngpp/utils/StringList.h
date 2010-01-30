@@ -19,6 +19,12 @@ struct StringList
    void add(const std::string& elem)
    { elems.push_back(elem); }
 
+   void clear()
+   { elems.clear(); }
+
+   size_t size() const
+   { return elems.size(); }
+
 private:
    Type elems;
 };

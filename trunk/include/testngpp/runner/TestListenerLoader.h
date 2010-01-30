@@ -5,7 +5,7 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
-#include <testngpp/runner/StringList.h>
+#include <testngpp/utils/StringList.h>
 
 TESTNGPP_NS_START
 

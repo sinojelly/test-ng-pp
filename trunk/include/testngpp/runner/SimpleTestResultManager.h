@@ -12,9 +12,14 @@ struct SimpleTestResultManagerImpl;
 struct SimpleTestResultManager : public TestResultManager
 {
    void load( const StringList& searchingPaths
-            , const StringList& clOfListners) = 0;
+            , const StringList& clOfListners);
 
    bool hasFailure() const;
+
+   void startTest();
+   void endTest();
+
+   TestResultCollector* getResultCollector() const;
 
    SimpleTestResultManager(TestListenerLoaderFactory* );
    ~SimpleTestResultManager();

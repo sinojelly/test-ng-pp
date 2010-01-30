@@ -2,9 +2,11 @@
 #define __TESTNGPP_TEST_RESULT_MANAGER_H__
 
 #include <testngpp/testngpp.h>
-#include <testngpp/runner/StringList.h>
+#include <testngpp/utils/StringList.h>
 
 TESTNGPP_NS_START
+
+struct TestResultCollector;
 
 struct TestResultManager
 {
@@ -13,6 +15,11 @@ struct TestResultManager
          , const StringList& clOfListners) = 0;
 
    virtual bool hasFailure() const = 0;
+
+   virtual void startTest() = 0;
+   virtual void endTest() = 0;
+
+   virtual TestResultCollector* getResultCollector() const = 0;
 
    virtual ~TestResultManager() {}
 };

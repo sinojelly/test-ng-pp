@@ -3,7 +3,7 @@
 #define __TESTNGPP_TEST_SUITE_LOADER_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/runner/StringList.h>
+#include <testngpp/utils/StringList.h>
 
 TESTNGPP_NS_START
 

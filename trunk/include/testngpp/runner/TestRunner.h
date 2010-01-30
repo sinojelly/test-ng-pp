@@ -6,26 +6,17 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestRunnerContext.h>
+#include <testngpp/utils/StringList.h>
 
 TESTNGPP_NS_START
 
 struct TestRunnerImpl;
 
 struct TestRunner
-   : public TestRunnerContext
 {
-   typedef std::list<std::string> StringList;
-
 public:
    TestRunner();
    ~TestRunner();
-
-   TestResultReporter* getTestResultReporter() const;
-   TestSuiteResultReporter* getTestSuiteResultReporter() const;
-   TestCaseResultReporter* getTestCaseResultReporter() const;
-
-   void registerTestListener(TestListener* listener);
 
    int runTests( bool useSandboxRunner
                , unsigned int maxConcurrent
