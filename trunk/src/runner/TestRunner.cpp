@@ -50,6 +50,7 @@ TestRunnerImpl::TestRunnerImpl()
    , suiteRunner(0)
    , hasFailures(false)
 {
+   resultManager = new SimpleTestResultManager(new ModuleTestListenerLoaderFactory());
 }
 
 ///////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ TestRunnerImpl::loadListeners
    ( const StringList& searchingPaths
    , const StringList& listeners)
 {
-   resultManager = new SimpleTestResultManager(new ModuleTestListenerLoaderFactory());
+
 
    resultManager->load(searchingPaths, listeners);
 }
