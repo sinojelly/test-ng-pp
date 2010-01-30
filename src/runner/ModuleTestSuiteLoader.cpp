@@ -1,22 +1,20 @@
 
 #include <testngpp/Error.h>
 
-#include <testngpp/runner/LTTestSuiteLoader.h>
+#include <testngpp/runner/ModuleTestSuiteLoader.h>
 #include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
 #include <testngpp/runner/ModuleLoaderFactory.h>
 #include <testngpp/runner/ModuleLoader.h>
 
 TESTNGPP_NS_START
 
-struct LTTestSuiteLoaderImpl
+struct ModuleTestSuiteLoaderImpl
 {
-   LTTestSuiteLoaderImpl()
-      : loader(0)
+   ModuleTestSuiteLoaderImpl(ModuleLoader* moduleLoader)
+      : loader(moduleLoader)
    {}
    
-   ~LTTestSuiteLoaderImpl();
-
-   ModuleLoader* getLoader();
+   ~ModuleTestSuiteLoaderImpl();
 
    TestSuiteDesc* load(const std::string& path,
       TestSuiteDescEntryNameGetter* nameGetter);
@@ -27,19 +25,8 @@ struct LTTestSuiteLoaderImpl
 };
 
 ///////////////////////////////////////////////////////////////
-ModuleLoader*
-LTTestSuiteLoaderImpl::getLoader()
-{
-   if(loader == 0)
-   {
-      loader = ModuleLoaderFactory::create();
-   }
-
-   return loader;
-}
-///////////////////////////////////////////////////////////////
 void
-LTTestSuiteLoaderImpl::unload()
+ModuleTestSuiteLoaderImpl::unload()
 {
    if(loader != 0)
    {
@@ -48,24 +35,28 @@ LTTestSuiteLoaderImpl::unload()
    }
 }
 ///////////////////////////////////////////////////////////////
-LTTestSuiteLoaderImpl::~LTTestSuiteLoaderImpl()
+ModuleTestSuiteLoaderImpl::~ModuleTestSuiteLoaderImpl()
 {
    unload();
 }
 
-
 ///////////////////////////////////////////////////////////////
 TestSuiteDesc*
-LTTestSuiteLoaderImpl::
+ModuleTestSuiteLoaderImpl::
 load( const std::string& path
     , TestSuiteDescEntryNameGetter* nameGetter)
 {
-   getLoader()->load(path);
+   if(loader == 0)
+   {
+      throw Error("Internal Error");
+   }
+
+   loader->load(path);
  
    typedef TestSuiteDesc* (*TestSuiteDescGetter)();
 
    TestSuiteDescGetter getter = (TestSuiteDescGetter) \
-       getLoader()->findSymbol(nameGetter->getDescEntryName());
+       loader->findSymbol(nameGetter->getDescEntryName());
 
    TestSuiteDesc* desc = getter();
    if(desc == 0)
@@ -77,20 +68,20 @@ load( const std::string& path
 }
 
 ///////////////////////////////////////////////////////////////
-LTTestSuiteLoader::LTTestSuiteLoader()
-   : This(new LTTestSuiteLoaderImpl())
+ModuleTestSuiteLoader::ModuleTestSuiteLoader(ModuleLoader* loader)
+   : This(new ModuleTestSuiteLoaderImpl(loader))
 {
 }
 
 ///////////////////////////////////////////////////////////////
-LTTestSuiteLoader::~LTTestSuiteLoader()
+ModuleTestSuiteLoader::~ModuleTestSuiteLoader()
 {
    delete This;
 }
 
 /////////////////////////////////////////////////////////////////
 TestSuiteDesc*
-LTTestSuiteLoader::
+ModuleTestSuiteLoader::
 load( const std::string& path
     , TestSuiteDescEntryNameGetter* nameGetter)
 {
@@ -98,7 +89,7 @@ load( const std::string& path
 }
 
 /////////////////////////////////////////////////////////////////
-void LTTestSuiteLoader::unload()
+void ModuleTestSuiteLoader::unload()
 {
    This->unload();
 }
