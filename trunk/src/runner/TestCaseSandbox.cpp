@@ -124,11 +124,10 @@ TestCaseSandbox::cleanup()
 TestCaseSandbox*
 TestCaseSandbox::createInstance(EnvironmentCleaner* cleaner, \
           TestCase* testcase, \
-          TestFixtureDesc* fixture, \
           TestCaseRunner* runner,
           TestCaseResultCollector* collector)
 {
-   TestCaseSandboxHandler handler(testcase, fixture, runner);
+   TestCaseSandboxHandler handler(testcase, runner);
    Sandbox* sandbox = Sandbox::createInstance(cleaner, &handler);
    if(sandbox == 0)
    {

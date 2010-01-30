@@ -35,7 +35,7 @@ SimpleTestFixtureRunnerImpl::run(TestFixtureDesc* fixture
       TestCase* testcase = fixture->getTestCase(i);
       if(filter->isCaseMatch((const TestCaseInfoReader*)testcase))
       {
-         caseRunner->run(fixture, testcase, resultCollector);
+         caseRunner->run(testcase, resultCollector);
       }
    }
 }

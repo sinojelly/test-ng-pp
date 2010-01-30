@@ -17,15 +17,13 @@ TESTNGPP_NS_START
 struct TestCaseSandboxHandlerImpl
 {
    TestCaseSandboxHandlerImpl(TestCase* tc,
-          TestFixtureDesc* tfd,
           TestCaseRunner* tcRunner)
-      : testcase(tc), fixture(tfd), runner(tcRunner)
+      : testcase(tc), runner(tcRunner)
    {}
 
 	void handle(ChannelId channelId);
 
    TestCase* testcase;
-   TestFixtureDesc* fixture;
    TestCaseRunner* runner;
 };
 
@@ -39,7 +37,7 @@ TestCaseSandboxHandlerImpl::handle(ChannelId channelId)
    
    __TESTNGPP_DO
    {
-      runner->run(fixture, testcase, reporter);
+      runner->run(testcase, reporter);
    }
    __TESTNGPP_CLEANUP
    {
@@ -50,9 +48,8 @@ TestCaseSandboxHandlerImpl::handle(ChannelId channelId)
 
 //////////////////////////////////////////////////////
 TestCaseSandboxHandler::TestCaseSandboxHandler(TestCase* testcase,
-          TestFixtureDesc* fixture,
           TestCaseRunner* runner)
-   : This(new TestCaseSandboxHandlerImpl(testcase, fixture, runner))
+   : This(new TestCaseSandboxHandlerImpl(testcase, runner))
 {
 }
 

@@ -9,14 +9,12 @@
 TESTNGPP_NS_START
 
 struct TestCase;
-struct TestFixtureDesc;
 struct TestCaseRunner;
 struct TestCaseSandboxHandlerImpl;
 
 struct TestCaseSandboxHandler : public SandboxHandler
 {
    TestCaseSandboxHandler(TestCase* testcase, 
-          TestFixtureDesc* fixture, 
           TestCaseRunner* runner);
 
    ~TestCaseSandboxHandler();

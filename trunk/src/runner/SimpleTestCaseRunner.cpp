@@ -20,8 +20,8 @@ TESTNGPP_NS_START
       collector->addCaseError(testcase, "Unknown Exception"); \
    }
 
-void SimpleTestCaseRunner::run(TestFixtureDesc* desc
-      , TestCase* testcase
+void SimpleTestCaseRunner::run
+      ( TestCase* testcase
       , TestCaseResultCollector* collector)
 {
    collector->startTestCase(testcase);

@@ -14,7 +14,6 @@ TESTNGPP_NS_START
 struct TestCaseInfoReader;
 struct EnvironmentCleaner;
 struct TestCase;
-struct TestFixtureDesc;
 struct TestCaseRunner;
 struct TestCaseResultCollector;
 struct TestCaseSandboxImpl;
@@ -35,7 +34,6 @@ struct TestCaseSandbox
 	static TestCaseSandbox*
 	createInstance(EnvironmentCleaner* cleaner, \
           TestCase* testcase, \
-          TestFixtureDesc* fixture, \
           TestCaseRunner* runner,
           TestCaseResultCollector* collector);
 
