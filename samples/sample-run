@@ -1,5 +1,5 @@
 #!/bin/bash
 
-../src/runner/testngpp-runner libsample.so \
+../src/runner/testngpp-runner libsample \
    -L../src/listeners -l"testngppxmllistener result.xml" -l"testngppstdoutlistener -c" \
    -fTest*:testcase1 -f:testcase2 -f*:* -c100 $@
