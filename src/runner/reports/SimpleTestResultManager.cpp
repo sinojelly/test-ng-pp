@@ -128,6 +128,34 @@ load( const StringList& searchingPaths
 }
 
 ///////////////////////////////////////////////////////
+void
+SimpleTestResultManager::startTest()
+{
+   This->dispatcher->startTest();
+}
+
+///////////////////////////////////////////////////////
+void
+SimpleTestResultManager::endTest()
+{
+   This->dispatcher->endTest();
+}
+
+///////////////////////////////////////////////////////
+bool
+SimpleTestResultManager::hasFailure() const
+{
+   return This->reporter->getNumberOfUnsuccessfulTestCases() > 0 ||
+          This->reporter->getNumberOfUnloadableSuites() > 0;
+}
+///////////////////////////////////////////////////////
+TestResultCollector*
+SimpleTestResultManager::getResultCollector() const
+{
+   return This->dispatcher;
+}
+
+///////////////////////////////////////////////////////
 SimpleTestResultManager::
 SimpleTestResultManager(TestListenerLoaderFactory* loaderFactory)
    : This(new SimpleTestResultManagerImpl(loaderFactory))

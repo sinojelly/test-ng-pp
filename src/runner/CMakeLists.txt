@@ -45,7 +45,9 @@ SET(TESTNGRUNNER_LIB_SRCS
   runners/TestCaseHierarchy.cpp
 
   loaders/ModuleTestSuiteLoader.cpp 
+  loaders/ModuleTestSuiteLoaderFactory.cpp 
   loaders/ModuleTestListenerLoader.cpp 
+  loaders/ModuleTestListenerLoaderFactory.cpp 
 
   reports/SimpleTestResultDispatcher.cpp 
   reports/SimpleTestResultReporter.cpp 
@@ -59,7 +61,7 @@ SET(TESTNGRUNNER_LIB_SRCS
   filters/TestFilterFactory.cpp 
   filters/PosixFNMatcher.cpp 
 
-  #TestRunner.cpp
+  TestRunner.cpp
 )
 
 IF(NOT TESTNGPP_DISABLE_SANDBOX)

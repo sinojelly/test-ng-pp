@@ -67,7 +67,7 @@ OptionList::parse(int argc, char** argv, const char* optstr)
         break;
       }
 
-      args.push_back(argv[0]);
+      args.add(argv[0]);
    }
 }
 

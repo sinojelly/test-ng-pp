@@ -1,5 +1,6 @@
 
 #include <testngpp/ExceptionKeywords.h>
+#include <testngpp/Error.h>
 
 #include <testngpp/internal/TestSuiteDesc.h>
 
@@ -21,37 +22,38 @@ namespace
 /////////////////////////////////////////////////////////////////
 struct TestSuiteRunnerImpl : public TestSuiteDescEntryNameGetter
 {
-   TestSuiteRunnerImpl(TestFixtureRunner* runner, TestSuiteLoader* loader)
-		: fixtureRunner(runner), suiteLoader(loader)
+   TestSuiteRunnerImpl( TestSuiteLoader* loader
+                      , TestFixtureRunner* runner
+                      , TestResultCollector* collector)
+      : fixtureRunner(runner)
+      , suiteLoader(loader)
+      , resultCollector(collector)
    {}
 
 	TestSuiteDesc* load
          ( const StringList& searchingPaths
-         , const std::string& path
-         , TestResultCollector* resultCollector);
-
-	void runAllFixtures(TestSuiteDesc* desc
-   		, TestResultCollector* resultCollector
-         , const TestFilter* filter);
+         , const std::string& path);
 
 	void runAllFixtures(TestSuiteDesc* desc, const TestFilter* filter);
 
 	void run( const StringList& searchingPaths
            , const std::string& path
-           , TestResultCollector* resultCollector
    		  , const TestFilter* filter);
 
    std::string getDescEntryName() const
    { return testngppTestSuiteDescGetter; }
 
    TestFixtureRunner* fixtureRunner;
+   TestResultCollector* resultCollector;
    TestSuiteLoader* suiteLoader;
 };
 
 /////////////////////////////////////////////////////////////////
-TestSuiteRunner::TestSuiteRunner(TestSuiteLoader* loader
-   , TestFixtureRunner* runner)
-	: This(new TestSuiteRunnerImpl(runner, loader))
+TestSuiteRunner::TestSuiteRunner
+   ( TestSuiteLoader* loader
+   , TestFixtureRunner* runner
+   , TestResultCollector* collector)
+	: This(new TestSuiteRunnerImpl(loader, runner, collector))
 {
 }
 
@@ -65,12 +67,11 @@ TestSuiteRunner::~TestSuiteRunner()
 TestSuiteDesc*
 TestSuiteRunnerImpl::load
    ( const StringList& searchingPaths
-   , const std::string& path
-   , TestResultCollector* resultCollector)
+   , const std::string& path)
 {
    __TESTNGPP_TRY
    {
-     return suiteLoader->load(searchingPaths, path, this);
+      return suiteLoader->load(searchingPaths, path, this);
    }
    __TESTNGPP_CATCH(std::exception& e)
    {
@@ -84,7 +85,6 @@ TestSuiteRunnerImpl::load
 /////////////////////////////////////////////////////////////////
 void
 TestSuiteRunnerImpl::runAllFixtures(TestSuiteDesc* desc
-   , TestResultCollector* resultCollector
    , const TestFilter* filter)
 {
    for(unsigned int i=0; i<desc->getNumberOfTestFixtures(); i++)
@@ -102,17 +102,16 @@ void
 TestSuiteRunnerImpl::run
    ( const StringList& searchingPaths
    , const std::string& path
-   , TestResultCollector* resultCollector
    , const TestFilter* filter)
 {
-   TestSuiteDesc* desc = load(searchingPaths, path, resultCollector);
+   TestSuiteDesc* desc = load(searchingPaths, path);
    if(desc == 0)
    {
       return;
    }
 
    resultCollector->startTestSuite(desc);
-	runAllFixtures(desc, resultCollector, filter);
+	runAllFixtures(desc, filter);
    resultCollector->endTestSuite(desc);
 
    suiteLoader->unload();
@@ -123,10 +122,9 @@ void
 TestSuiteRunner::run
    ( const StringList& searchingPaths
    , const std::string& path
-   , TestResultCollector* resultCollector
    , const TestFilter* filter)
 {
-   This->run(searchingPaths, path, resultCollector, filter);
+   This->run(searchingPaths, path, filter);
 }
 
 /////////////////////////////////////////////////////////////////
