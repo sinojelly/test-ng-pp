@@ -14,6 +14,7 @@ struct SimpleTestCaseResultReporterImpl
    bool informedError;
    bool informedFailure;
    bool informedCrashed;
+   bool informedSkipped;
    bool finished;
 
    SimpleTestCaseResultReporterImpl()
@@ -21,6 +22,7 @@ struct SimpleTestCaseResultReporterImpl
       , informedError(false)
       , informedFailure(false)
       , informedCrashed(false)
+      , informedSkipped(false)
       , finished(false)
    {}
 };
@@ -40,13 +42,14 @@ SimpleTestCaseResultReporter::~SimpleTestCaseResultReporter()
 
 ///////////////////////////////////////////////////////////
 unsigned int
-SimpleTestCaseResultReporter::getTestCaseResult(TestCaseInfoReader* testcase) const
+SimpleTestCaseResultReporter::getTestCaseResult(const TestCaseInfoReader* testcase) const
 {
    if(testcase == This->testcase && This->finished) 
    {
       if(This->informedCrashed) return TestCaseResultReporter::TR_CRASHED;
       if(This->informedError) return TestCaseResultReporter::TR_ERROR;
       if(This->informedFailure) return TestCaseResultReporter::TR_FAILED;
+      if(This->informedSkipped) return TestCaseResultReporter::TR_SKIPPED;
 
       return TestCaseResultReporter::TR_SUCCESS;
    }
@@ -56,7 +59,20 @@ SimpleTestCaseResultReporter::getTestCaseResult(TestCaseInfoReader* testcase) co
 
 ///////////////////////////////////////////////////////////
 void SimpleTestCaseResultReporter::
-addCaseCrash(TestCaseInfoReader* testcase)
+addCaseSkipped(const TestCaseInfoReader* testcase)
+{
+   if(This->testcase != testcase)
+   {
+      return;
+   }
+
+   This->finished = true;
+   This->informedSkipped = true;
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestCaseResultReporter::
+addCaseCrash(const TestCaseInfoReader* testcase)
 {
    if(This->testcase != testcase)
    {
@@ -69,7 +85,7 @@ addCaseCrash(TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestCaseResultReporter::
-addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
+addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
    if(This->testcase != testcase)
    {
@@ -81,7 +97,7 @@ addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestCaseResultReporter::
-addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
    if(This->testcase != testcase)
    {
@@ -93,14 +109,14 @@ addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestCaseResultReporter::
-startTestCase(TestCaseInfoReader* testcase)
+startTestCase(const TestCaseInfoReader* testcase)
 {
    if(This->testcase != 0 && !This->finished)
    {
       throw Error(TESTNGPP_INTERNAL_ERROR(2001));
    }
 
-   This->testcase = testcase;
+   This->testcase = const_cast<TestCaseInfoReader*>(testcase);
    This->informedError = false;
    This->informedFailure = false;
    This->informedCrashed = false;
@@ -109,7 +125,7 @@ startTestCase(TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestCaseResultReporter::
-endTestCase(TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase)
 {
    if(This->testcase != testcase)
    {

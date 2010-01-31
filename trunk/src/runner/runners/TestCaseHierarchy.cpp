@@ -15,34 +15,34 @@ namespace {
 
 struct Hierarchy
 {
-   Hierarchy(TestCase* rootCase)
+   Hierarchy(const TestCase* rootCase)
       : root(rootCase)
       , specified(false)
    {}
 
-   void addTestCase(TestCase* testcase);
+   void addTestCase(const TestCase* testcase);
 
 private:
    typedef std::list<Hierarchy> Successors;
    typedef Successors::iterator Iterator;
 
 private:
-   TestCase*  root;
+   const TestCase*  root;
    bool       specified;
    Successors successors;
 
 private:
    Hierarchy&
    addDirectSuccessor
-         ( TestCase* testcase );
+         ( const TestCase* testcase );
 
    bool
    addSuccessor
-         (TestCase* testcase );
+         ( const TestCase* testcase );
 
    void
    getSuccessors
-         ( TestCase* testcase
+         ( const TestCase* testcase
          , TestCaseContainer* container );
 
    void
@@ -51,7 +51,7 @@ private:
 public:
    void
    getDirectSuccessors
-         ( TestCase* testcase
+         ( const TestCase* testcase
          , TestCaseContainer* container );
 };
 
@@ -70,7 +70,7 @@ putDirectSuccessorsToContainer
 ///////////////////////////////////////////////////////
 void Hierarchy::
 getSuccessors
-     ( TestCase* testcase
+     ( const TestCase* testcase
      , TestCaseContainer* container)
 {
    Successors::iterator i = successors.begin();
@@ -83,7 +83,7 @@ getSuccessors
 ///////////////////////////////////////////////////////
 void Hierarchy::
 getDirectSuccessors
-      ( TestCase* testcase
+      ( const TestCase* testcase
       , TestCaseContainer* container)
 {
    if(testcase == root)
@@ -97,7 +97,9 @@ getDirectSuccessors
 
 ///////////////////////////////////////////////////////
 Hierarchy&
-Hierarchy::addDirectSuccessor(TestCase* testcase)
+Hierarchy::
+addDirectSuccessor
+      ( const TestCase* testcase )
 {
    Iterator i = successors.begin();
    for(; i != successors.end(); i++)
@@ -113,9 +115,11 @@ Hierarchy::addDirectSuccessor(TestCase* testcase)
 
 ///////////////////////////////////////////////////////
 bool
-Hierarchy::addSuccessor(TestCase* testcase)
+Hierarchy::
+addSuccessor
+      ( const TestCase* testcase )
 {
-   TestCase* test = testcase;
+   const TestCase* test = testcase;
 
    while(test != 0)
    {
@@ -131,7 +135,8 @@ Hierarchy::addSuccessor(TestCase* testcase)
 
 ///////////////////////////////////////////////////////
 void
-Hierarchy::addTestCase(TestCase* testcase)
+Hierarchy::addTestCase
+     ( const TestCase* testcase )
 {
    if(root == testcase)
    {
@@ -190,7 +195,7 @@ TestCaseHierarchy::~TestCaseHierarchy()
 ///////////////////////////////////////////////////////
 void TestCaseHierarchy::
 getDirectSuccessors
-      ( TestCase* testcase
+      ( const TestCase* testcase
       , TestCaseContainer* container)
 {
    This->root.getDirectSuccessors(testcase, container);

@@ -61,31 +61,37 @@ SimpleTestResultReporter::~SimpleTestResultReporter()
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-addCaseCrash(TestCaseInfoReader* testcase)
+addCaseCrash(const TestCaseInfoReader* testcase)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
+addCaseSkipped(const TestCaseInfoReader* testcase)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
+addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-startTestCase(TestCaseInfoReader*)
+addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-endTestCase(TestCaseInfoReader*)
+startTestCase(const TestCaseInfoReader*)
+{
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultReporter::
+endTestCase(const TestCaseInfoReader*)
 {
 }
 

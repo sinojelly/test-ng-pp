@@ -14,12 +14,13 @@ struct TestCaseInfoReader;
 
 struct TestCaseResultCollector
 {
-   virtual void addCaseCrash(TestCaseInfoReader*) = 0;
-	virtual void addCaseError(TestCaseInfoReader*, const std::string&) = 0;
-	virtual void addCaseFailure(TestCaseInfoReader*, const AssertionFailure&)  = 0;
+   virtual void addCaseCrash(const TestCaseInfoReader*) = 0;
+	virtual void addCaseError(const TestCaseInfoReader*, const std::string&) = 0;
+	virtual void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&)  = 0;
+	virtual void addCaseSkipped(const TestCaseInfoReader*)  = 0;
 
-   virtual void startTestCase(TestCaseInfoReader*) = 0;
-   virtual void endTestCase(TestCaseInfoReader*) = 0;
+   virtual void startTestCase(const TestCaseInfoReader*) = 0;
+   virtual void endTestCase(const TestCaseInfoReader*) = 0;
 
 	virtual ~TestCaseResultCollector() {}
 };

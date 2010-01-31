@@ -23,9 +23,13 @@ public:
 
    void
    getDirectSuccessors
-         ( TestCase* testcase
+         ( const TestCase* testcase
          , TestCaseContainer* container);
 
+   void
+   getSuccessors
+         ( const TestCase* testcase
+         , TestCaseContainer* container);
 private:
    TestCaseHierarchyImpl *This;
 };

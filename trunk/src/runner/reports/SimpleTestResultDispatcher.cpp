@@ -21,11 +21,13 @@ struct SimpleTestResultDispatcherImpl
    CaseListeners caseListeners;
    SuiteListeners suiteListeners;
 
-   void addCaseCrash(TestCaseInfoReader*);
-   void addCaseError(TestCaseInfoReader*, const std::string&);
-   void addCaseFailure(TestCaseInfoReader*, const AssertionFailure&);
-   void startTestCase(TestCaseInfoReader*);
-   void endTestCase(TestCaseInfoReader*);
+   void addCaseCrash(const TestCaseInfoReader*);
+   void addCaseSkipped(const TestCaseInfoReader*);
+   void addCaseError(const TestCaseInfoReader*, const std::string&);
+   void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
+
+   void startTestCase(const TestCaseInfoReader*);
+   void endTestCase(const TestCaseInfoReader*);
 
    void startTestFixture(TestFixtureInfoReader*);
    void endTestFixture(TestFixtureInfoReader*);
@@ -108,7 +110,7 @@ unregisterTestSuiteListener(TestSuiteListener* listener)
 
 ///////////////////////////////////////////////////////////
 template <typename T>
-void notifyAddCaseCrash(T& listeners, TestCaseInfoReader* testcase)
+void notifyAddCaseCrash(T& listeners, const TestCaseInfoReader* testcase)
 {
    typename T::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
@@ -118,7 +120,7 @@ void notifyAddCaseCrash(T& listeners, TestCaseInfoReader* testcase)
 }
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcherImpl::
-addCaseCrash(TestCaseInfoReader* testcase)
+addCaseCrash(const TestCaseInfoReader* testcase)
 {
    notifyAddCaseCrash(caseListeners, testcase);
    notifyAddCaseCrash(suiteListeners, testcase);
@@ -127,15 +129,42 @@ addCaseCrash(TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcher::
-addCaseCrash(TestCaseInfoReader* testcase)
+addCaseCrash(const TestCaseInfoReader* testcase)
 {
    This->addCaseCrash(testcase);
 }
 
 ///////////////////////////////////////////////////////////
 template <typename T>
+void notifyAddCaseSkipped(T& listeners, const TestCaseInfoReader* testcase)
+{
+   typename T::iterator i = listeners.begin();
+   for(; i != listeners.end(); i++)
+   {
+      (*i)->addCaseSkipped(testcase);
+   }
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultDispatcherImpl::
+addCaseSkipped(const TestCaseInfoReader* testcase)
+{
+   notifyAddCaseSkipped(caseListeners, testcase);
+   notifyAddCaseSkipped(suiteListeners, testcase);
+   notifyAddCaseSkipped(listeners, testcase);
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultDispatcher::
+addCaseSkipped(const TestCaseInfoReader* testcase)
+{
+   This->addCaseSkipped(testcase);
+}
+
+///////////////////////////////////////////////////////////
+template <typename T>
 void notifyAddCaseError(T& listeners, 
-   TestCaseInfoReader* testcase, const std::string& msg)
+   const TestCaseInfoReader* testcase, const std::string& msg)
 {
    typename T::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
@@ -145,7 +174,7 @@ void notifyAddCaseError(T& listeners,
 }
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcherImpl::
-addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
+addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
    notifyAddCaseError(caseListeners, testcase, msg);
    notifyAddCaseError(suiteListeners, testcase, msg);
@@ -154,7 +183,7 @@ addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcher::
-addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
+addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
    This->addCaseError(testcase, msg);
 }
@@ -162,7 +191,7 @@ addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
 ///////////////////////////////////////////////////////////
 template <typename T>
 void notifyAddCaseFailure(T& listeners, 
-   TestCaseInfoReader* testcase, const AssertionFailure& failure)
+   const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
    typename T::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
@@ -172,7 +201,7 @@ void notifyAddCaseFailure(T& listeners,
 }
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcherImpl::
-addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
    notifyAddCaseFailure(caseListeners, testcase, failure);
    notifyAddCaseFailure(suiteListeners, testcase, failure);
@@ -181,14 +210,14 @@ addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcher::
-addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
    This->addCaseFailure(testcase, failure);
 }
 
 ///////////////////////////////////////////////////////////
 template <typename T>
-void notifyStartCase(T& listeners, TestCaseInfoReader* testcase)
+void notifyStartCase(T& listeners, const TestCaseInfoReader* testcase)
 {
    typename T::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
@@ -199,7 +228,7 @@ void notifyStartCase(T& listeners, TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcherImpl::
-startTestCase(TestCaseInfoReader* testcase)
+startTestCase(const TestCaseInfoReader* testcase)
 {
    notifyStartCase(caseListeners, testcase);
    notifyStartCase(suiteListeners, testcase);
@@ -208,14 +237,14 @@ startTestCase(TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcher::
-startTestCase(TestCaseInfoReader* testcase)
+startTestCase(const TestCaseInfoReader* testcase)
 {
    This->startTestCase(testcase);
 }
 
 ///////////////////////////////////////////////////////////
 template <typename T>
-void notifyEndCase(T& listeners, TestCaseInfoReader* testcase)
+void notifyEndCase(T& listeners, const TestCaseInfoReader* testcase)
 {
    typename T::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
@@ -226,7 +255,7 @@ void notifyEndCase(T& listeners, TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcherImpl::
-endTestCase(TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase)
 {
    notifyEndCase(caseListeners, testcase);
    notifyEndCase(suiteListeners, testcase);
@@ -235,7 +264,7 @@ endTestCase(TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcher::
-endTestCase(TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase)
 {
    This->endTestCase(testcase);
 }
