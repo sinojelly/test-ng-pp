@@ -2,7 +2,7 @@
 #include <testngpp/internal/TestCase.h>
 
 #include <testngpp/runner/SimpleTestHierarchyRunner.h>
-#include <testngpp/runner/TestCaseHierarchy.h>
+#include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseFilter.h>
@@ -16,7 +16,7 @@ struct SimpleTestHierarchyRunnerImpl
       : caseRunner(runner)
    {}
 
-	void run(TestCaseHierarchy* hierarchy
+	void run(TestHierarchyHandler* hierarchy
       , TestFixtureResultCollector* resultCollector);
 
    TestCaseRunner* caseRunner;
@@ -24,7 +24,7 @@ struct SimpleTestHierarchyRunnerImpl
 
 ///////////////////////////////////////////////////////
 void
-SimpleTestHierarchyRunnerImpl::run(TestCaseHierarchy* fixture
+SimpleTestHierarchyRunnerImpl::run(TestHierarchyHandler* fixture
         , TestFixtureResultCollector* resultCollector)
 {
 #if 0
@@ -55,7 +55,7 @@ SimpleTestHierarchyRunner::~SimpleTestHierarchyRunner()
 
 ///////////////////////////////////////////////////////
 void
-SimpleTestHierarchyRunner::run(TestCaseHierarchy* hierarchy
+SimpleTestHierarchyRunner::run(TestHierarchyHandler* hierarchy
       , TestFixtureResultCollector* resultCollector)
 {
    This->run(hierarchy, resultCollector);

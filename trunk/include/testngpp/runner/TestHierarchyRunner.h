@@ -6,12 +6,12 @@
 
 TESTNGPP_NS_START
 
-struct TestCaseHierarchy;
+struct TestHierarchyHandler;
 struct TestFixtureResultCollector;
 
 struct TestHierarchyRunner
 {
-	virtual void run ( TestCaseHierarchy*
+	virtual void run ( TestHierarchyHandler*
                     , TestFixtureResultCollector* ) = 0;
 
    virtual ~TestHierarchyRunner() {}

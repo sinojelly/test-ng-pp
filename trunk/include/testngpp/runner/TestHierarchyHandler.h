@@ -6,14 +6,16 @@
 
 TESTNGPP_NS_START
 
-struct TestCaseHierarchy;
+struct TestFixtureDesc;
+struct TestCaseFilter;
 struct TestFixtureResultCollector;
 struct TestHierarchyHandlerImpl;
 
 struct TestHierarchyHandler
 {
    TestHierarchyHandler
-         ( TestCaseHierarchy* hierarchy
+         ( TestFixtureDesc* fixture
+         , const TestCaseFilter* filter
          , TestFixtureResultCollector* collector);
 
    ~TestHierarchyHandler();

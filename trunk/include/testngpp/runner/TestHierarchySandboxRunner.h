@@ -19,7 +19,7 @@ struct TestHierarchySandboxRunner
 
    ~TestHierarchySandboxRunner();
 
-	void run ( TestCaseHierarchy*
+	void run ( TestHierarchyHandler*
             , TestFixtureResultCollector*);
 
 private:

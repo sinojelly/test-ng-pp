@@ -7,7 +7,7 @@
 
 #include <testngpp/runner/TestFixtureRunner.h>
 #include <testngpp/runner/TestHierarchyRunner.h>
-#include <testngpp/runner/TestCaseHierarchy.h>
+#include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestCaseFilter.h>
@@ -60,13 +60,14 @@ run( TestFixtureDesc* desc
    , TestFixtureResultCollector* collector
    , const TestCaseFilter* filter)
 {
-   TestCaseHierarchy* hierarchy = new TestCaseHierarchy(desc, filter);
+   TestHierarchyHandler* handler = \
+      new TestHierarchyHandler(desc, filter, collector);
 
    collector->startTestFixture(desc);
 
    __TESTNGPP_TRY
    {
-      hierarchyRunner->run(hierarchy, collector);
+      hierarchyRunner->run(handler, collector);
    }
    __TESTNGPP_CATCH(Error& e)
    {
@@ -80,7 +81,7 @@ run( TestFixtureDesc* desc
 
    collector->endTestFixture(desc);
 
-   delete hierarchy;
+   delete handler;
 }
 
 
