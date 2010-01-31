@@ -19,6 +19,8 @@ struct TestCaseSandboxResultDecoder
 
    ~TestCaseSandboxResultDecoder();
 
+   bool hasError() const;
+
 	bool decode();
 
 	void flush(bool crashed);

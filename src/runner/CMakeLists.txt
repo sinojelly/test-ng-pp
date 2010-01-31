@@ -30,7 +30,7 @@ SET(SANDBOX_SRCS
   sandbox/SandboxProcessor.cpp 
   sandbox/TestCaseSandboxHandler.cpp 
   sandbox/TestCaseSandbox.cpp 
-  sandbox/TestFixtureSandboxRunner.cpp 
+  sandbox/TestHierarchySandboxRunner.cpp 
 
   utils/PipeReadableChannel.cpp 
   utils/PipeWrittableChannel.cpp  
@@ -39,10 +39,11 @@ SET(SANDBOX_SRCS
 SET(TESTNGRUNNER_LIB_SRCS
   runners/TestSuiteRunner.cpp 
   runners/SimpleTestCaseRunner.cpp 
-  runners/TestFixtureRunnerWrapper.cpp 
+  runners/TestFixtureRunner.cpp 
   runners/TestFixtureRunnerFactory.cpp 
-  runners/SimpleTestFixtureRunner.cpp 
+  runners/SimpleTestHierarchyRunner.cpp 
   runners/TestCaseHierarchy.cpp
+  runners/TestHierarchyHandler.cpp
 
   loaders/ModuleTestSuiteLoader.cpp 
   loaders/ModuleTestSuiteLoaderFactory.cpp 

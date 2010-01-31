@@ -48,6 +48,9 @@ struct TestCaseSandboxImpl
          delete decoder;
    }
 
+   bool hasSucceeded() const
+   { return !decoder->hasError(); }
+
    Sandbox* sandbox;
    TestCaseSandboxResultDecoder* decoder;
    bool finished;
@@ -99,6 +102,12 @@ TestCaseSandbox::~TestCaseSandbox()
 ChannelId TestCaseSandbox::getChannelId() const
 {
    return This->getChannelId();
+}
+
+////////////////////////////////////////////////////////
+bool TestCaseSandbox::hasSucceeded() const
+{
+   return This->hasSucceeded();
 }
 
 ////////////////////////////////////////////////////////

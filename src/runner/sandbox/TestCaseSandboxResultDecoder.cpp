@@ -48,6 +48,9 @@ struct TestCaseSandboxResultDecoderImpl
       { delete channel; }
    }
 
+   bool hasError() const
+   { return errorReceived || failureReceived || crashInformed; }
+
    ReadableChannel* channel;
    TestCaseInfoReader* testcase;
    TestCaseResultCollector* collector;
@@ -268,6 +271,12 @@ TestCaseSandboxResultDecoder::~TestCaseSandboxResultDecoder()
 bool TestCaseSandboxResultDecoder::decode()
 {
    return This->decode();
+}
+
+/////////////////////////////////////////////////////////////////////////
+bool TestCaseSandboxResultDecoder::hasError() const
+{
+   return This->hasError();
 }
 
 /////////////////////////////////////////////////////////////////////////

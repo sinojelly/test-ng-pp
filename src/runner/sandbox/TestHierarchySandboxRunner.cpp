@@ -6,10 +6,11 @@
 #include <algorithm>
 #include <string.h>
 
-#include <testngpp/internal/TestFixtureDesc.h>
 #include <testngpp/internal/TestCase.h>
 
-#include <testngpp/runner/TestFixtureSandboxRunner.h>
+#include <testngpp/runner/TestCaseHierarchy.h>
+#include <testngpp/runner/TestHierarchySandboxRunner.h>
+#include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
@@ -17,40 +18,43 @@
 #include <testngpp/runner/TestCaseSandbox.h>
 #include <testngpp/runner/EnvironmentCleaner.h>
 #include <testngpp/runner/TestCaseFilter.h>
+#include <testngpp/runner/TestCaseContainer.h>
+
 
 TESTNGPP_NS_START
 
 ///////////////////////////////////////////////////////
-struct TestFixtureSandboxRunnerImpl : public EnvironmentCleaner
+struct TestHierarchySandboxRunnerImpl 
+   : public EnvironmentCleaner
 {
    typedef std::list<TestCaseSandbox*> List;
 
-	TestFixtureSandboxRunnerImpl(unsigned int maxCurrentProcess, TestCaseRunner* runner)
+	TestHierarchySandboxRunnerImpl(unsigned int maxCurrentProcess, TestCaseRunner* runner)
       : maxProcess(maxCurrentProcess), caseRunner(runner), index(0)
    {}
 
-	~TestFixtureSandboxRunnerImpl()
+	~TestHierarchySandboxRunnerImpl()
    {
       cleanUp();
    }
 
-	void run(TestFixtureDesc* fixture
+	void run(TestCaseHierarchy* hierarchy
       , TestFixtureResultCollector* resultCollector
       , const TestCaseFilter* filter);
 
    void setupListeners();
-   void createSandbox( TestFixtureDesc* fixture, unsigned int i
+   void createSandbox( TestCaseHierarchy* hierarchy, unsigned int i
              , TestFixtureResultCollector* resultCollector);
 
 
-   void createSandboxes(TestFixtureDesc* fixture
+   void createSandboxes(TestCaseHierarchy* hierarchy
              , TestFixtureResultCollector* resultCollector
              , const TestCaseFilter* filter);
 
    void cleanUpDeadSandboxes();
 
-   void process(TestFixtureDesc* fixture);
-   void handleEvent(int nfds, TestFixtureDesc* fixture);
+   void process(TestCaseHierarchy* hierarchy);
+   void handleEvent(int nfds, TestCaseHierarchy* hierarchy);
 
    void cleanUp();
 
@@ -72,7 +76,7 @@ namespace
 }
 
 ////////////////////////////////////////////////////
-void TestFixtureSandboxRunnerImpl::cleanUp()
+void TestHierarchySandboxRunnerImpl::cleanUp()
 {
    std::for_each(sandboxes.begin(), sandboxes.end(), removeSandbox);
    sandboxes.clear();
@@ -88,7 +92,7 @@ namespace
 }
 
 ////////////////////////////////////////////////////
-void TestFixtureSandboxRunnerImpl::cleanUpDeadSandboxes()
+void TestHierarchySandboxRunnerImpl::cleanUpDeadSandboxes()
 {
    while(1)
    {
@@ -105,38 +109,45 @@ void TestFixtureSandboxRunnerImpl::cleanUpDeadSandboxes()
 }
 
 ////////////////////////////////////////////////////
-void TestFixtureSandboxRunnerImpl::
-createSandbox( TestFixtureDesc* fixture, unsigned int i
+void TestHierarchySandboxRunnerImpl::
+createSandbox( TestCaseHierarchy* hierarchy, unsigned int i
              , TestFixtureResultCollector* resultCollector)
 {
+#if 0
    TestCaseSandbox* sandbox = \
-         TestCaseSandbox::createInstance( this, fixture->getTestCase(i)
-                                        , caseRunner, resultCollector);
+         TestCaseSandbox::createInstance
+               ( this, hierarchy->getTestCase(i)
+               , caseRunner, resultCollector);
+
    sandboxes.push_back(sandbox);
+#endif
 }
 
 ////////////////////////////////////////////////////
-void TestFixtureSandboxRunnerImpl::
-createSandboxes( TestFixtureDesc* fixture
-               , TestFixtureResultCollector* resultCollector
-               , const TestCaseFilter* filter)
+void TestHierarchySandboxRunnerImpl::
+createSandboxes
+      ( TestCaseHierarchy* hierarchy
+      , TestFixtureResultCollector* resultCollector
+      , const TestCaseFilter* filter)
 {
-   unsigned int numberOfTestCases = fixture->getNumberOfTestCases();
+#if 0
+   unsigned int numberOfTestCases = hierarchy->getNumberOfTestCases();
    unsigned int i = index;
    for(; i < numberOfTestCases && sandboxes.size() < maxProcess; i++)
    {
-      if(filter->isCaseMatch((const TestCaseInfoReader*)fixture->getTestCase(i)))
+      if(filter->isCaseMatch((const TestCaseInfoReader*)hierarchy->getTestCase(i)))
       {
-         createSandbox(fixture, i, resultCollector);
+         createSandbox(hierarchy, i, resultCollector);
       }
    }
 
    index = i;
+#endif
 }
 
 
 /////////////////////////////////////////////////////
-void TestFixtureSandboxRunnerImpl::setupListeners()
+void TestHierarchySandboxRunnerImpl::setupListeners()
 {
    FD_ZERO(&fds);
    maxfd = 0;
@@ -158,7 +169,8 @@ namespace
    }
 }
 ///////////////////////////////////////////////////////
-void TestFixtureSandboxRunnerImpl::handleEvent(int nfds, TestFixtureDesc* fixture)
+void TestHierarchySandboxRunnerImpl::
+handleEvent(int nfds, TestCaseHierarchy* hierarchy)
 {
    List::iterator i = sandboxes.begin();
    for(; i != sandboxes.end(); i++)
@@ -177,7 +189,8 @@ void TestFixtureSandboxRunnerImpl::handleEvent(int nfds, TestFixtureDesc* fixtur
 }
 
 ///////////////////////////////////////////////////////
-void TestFixtureSandboxRunnerImpl::process(TestFixtureDesc* fixture)
+void TestHierarchySandboxRunnerImpl::
+process(TestCaseHierarchy* hierarchy)
 {
    setupListeners();
 
@@ -191,50 +204,51 @@ void TestFixtureSandboxRunnerImpl::process(TestFixtureDesc* fixture)
       throw Error(strerror(errno));
    }
 
-   handleEvent(nfds, fixture);
+   handleEvent(nfds, hierarchy);
 }
 
 ///////////////////////////////////////////////////////
 void
-TestFixtureSandboxRunnerImpl::run(TestFixtureDesc* fixture
-        , TestFixtureResultCollector* resultCollector
-        , const TestCaseFilter* filter)
+TestHierarchySandboxRunnerImpl::
+run( TestCaseHierarchy* hierarchy
+   , TestFixtureResultCollector* resultCollector
+   , const TestCaseFilter* filter)
 {
    index = 0;
 
    while(1)
    {
-      createSandboxes(fixture, resultCollector, filter);
+      createSandboxes(hierarchy, resultCollector, filter);
       if(sandboxes.size() == 0)
       {
          break;
       }
 
-      process(fixture);
+      process(hierarchy);
    }
 }
 
 ///////////////////////////////////////////////////////
-TestFixtureSandboxRunner::TestFixtureSandboxRunner(
+TestHierarchySandboxRunner::TestHierarchySandboxRunner(
      unsigned int maxCurrentProcess
    , TestCaseRunner* caseRunner)
-   : This(new TestFixtureSandboxRunnerImpl(maxCurrentProcess, caseRunner))
+   : This(new TestHierarchySandboxRunnerImpl(maxCurrentProcess, caseRunner))
 {
 }
 
 ///////////////////////////////////////////////////////
-TestFixtureSandboxRunner::~TestFixtureSandboxRunner()
+TestHierarchySandboxRunner::~TestHierarchySandboxRunner()
 {
    delete This;
 }
 
 ///////////////////////////////////////////////////////
 void
-TestFixtureSandboxRunner::run(TestFixtureDesc* fixture
+TestHierarchySandboxRunner::run(TestCaseHierarchy* hierarchy
       , TestFixtureResultCollector* resultCollector
       , const TestCaseFilter* filter)
 {
-   This->run(fixture, resultCollector, filter);
+   This->run(hierarchy, resultCollector, filter);
 }
 
 ///////////////////////////////////////////////////////

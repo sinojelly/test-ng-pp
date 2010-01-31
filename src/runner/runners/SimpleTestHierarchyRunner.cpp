@@ -1,8 +1,8 @@
 
-#include <testngpp/internal/TestFixtureDesc.h>
 #include <testngpp/internal/TestCase.h>
 
-#include <testngpp/runner/SimpleTestFixtureRunner.h>
+#include <testngpp/runner/SimpleTestHierarchyRunner.h>
+#include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseFilter.h>
@@ -10,13 +10,13 @@
 TESTNGPP_NS_START
 
 ///////////////////////////////////////////////////////
-struct SimpleTestFixtureRunnerImpl 
+struct SimpleTestHierarchyRunnerImpl 
 {
-	SimpleTestFixtureRunnerImpl(TestCaseRunner* runner)
+	SimpleTestHierarchyRunnerImpl(TestCaseRunner* runner)
       : caseRunner(runner)
    {}
 
-	void run(TestFixtureDesc* fixture
+	void run(TestCaseHierarchy* hierarchy
       , TestFixtureResultCollector* resultCollector
       , const TestCaseFilter* filter);
 
@@ -25,10 +25,11 @@ struct SimpleTestFixtureRunnerImpl
 
 ///////////////////////////////////////////////////////
 void
-SimpleTestFixtureRunnerImpl::run(TestFixtureDesc* fixture
+SimpleTestHierarchyRunnerImpl::run(TestCaseHierarchy* fixture
         , TestFixtureResultCollector* resultCollector
         , const TestCaseFilter* filter)
 {
+#if 0
    unsigned int numberOfTestCases = fixture->getNumberOfTestCases();
    for(unsigned int i=0; i<numberOfTestCases; i++)
    {
@@ -38,27 +39,29 @@ SimpleTestFixtureRunnerImpl::run(TestFixtureDesc* fixture
          caseRunner->run(testcase, resultCollector);
       }
    }
+#endif
 }
 
 ///////////////////////////////////////////////////////
-SimpleTestFixtureRunner::SimpleTestFixtureRunner(TestCaseRunner* caseRunner)
-   : This(new SimpleTestFixtureRunnerImpl(caseRunner))
+SimpleTestHierarchyRunner::
+SimpleTestHierarchyRunner(TestCaseRunner* caseRunner)
+   : This(new SimpleTestHierarchyRunnerImpl(caseRunner))
 {
 }
 
 ///////////////////////////////////////////////////////
-SimpleTestFixtureRunner::~SimpleTestFixtureRunner()
+SimpleTestHierarchyRunner::~SimpleTestHierarchyRunner()
 {
    delete This;
 }
 
 ///////////////////////////////////////////////////////
 void
-SimpleTestFixtureRunner::run(TestFixtureDesc* fixture
+SimpleTestHierarchyRunner::run(TestCaseHierarchy* hierarchy
       , TestFixtureResultCollector* resultCollector
       , const TestCaseFilter* filter)
 {
-   This->run(fixture, resultCollector, filter);
+   This->run(hierarchy, resultCollector, filter);
 }
 
 ///////////////////////////////////////////////////////

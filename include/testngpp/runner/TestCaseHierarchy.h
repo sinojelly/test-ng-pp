@@ -1,4 +1,7 @@
 
+#ifndef __TESTNGPP_TESTCASE_HEIRARCHY_H
+#define __TESTNGPP_TESTCASE_HEIRARCHY_H
+
 #include <testngpp/testngpp.h>
 
 TESTNGPP_NS_START
@@ -6,19 +9,28 @@ TESTNGPP_NS_START
 struct TestCaseHierarchyImpl;
 struct TestFixtureDesc;
 struct TestCaseFilter;
+struct TestCaseContainer;
 
 struct TestCaseHierarchy
 {
+public:
+
    TestCaseHierarchy
-      ( const TestFixtureDesc* fixture
-      , const TestCaseFilter* filter);
+         ( const TestFixtureDesc* fixture
+         , const TestCaseFilter* filter);
 
    ~TestCaseHierarchy();
+
+   void
+   getDirectSuccessors
+         ( TestCase* testcase
+         , TestCaseContainer* container);
 
 private:
    TestCaseHierarchyImpl *This;
 };
 
-
 TESTNGPP_NS_END
+
+#endif
 
