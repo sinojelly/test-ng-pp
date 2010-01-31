@@ -90,8 +90,8 @@ loadUnderPaths
       ( const StringList& searchingPaths
       , const std::string& modulePath)
 {
-   std::list<std::string>::const_iterator i = searchingPaths.begin();
-   for(; i != searchingPaths.end(); i++)
+   std::list<std::string>::const_iterator i = searchingPaths.get().begin();
+   for(; i != searchingPaths.get().end(); i++)
    {
       handle = openModule(getFullPath(*i, modulePath));
       if(handle != 0)

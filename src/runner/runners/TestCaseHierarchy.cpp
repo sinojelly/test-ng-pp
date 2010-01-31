@@ -36,7 +36,7 @@ private:
    addDirectSuccessor
          ( const TestCase* testcase );
 
-   bool
+   void
    addSuccessor
          ( const TestCase* testcase );
 
@@ -207,7 +207,7 @@ addDirectSuccessor
 }
 
 ///////////////////////////////////////////////////////
-bool
+void
 Hierarchy::
 addSuccessor
       ( const TestCase* testcase )

@@ -181,7 +181,7 @@ int real_main(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-   ResourceCheckPoint rcp = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+   TESTNGPP_RCP rcp = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
    int code = real_main(argc, argv);
 
