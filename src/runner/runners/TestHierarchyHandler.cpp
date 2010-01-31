@@ -5,6 +5,8 @@
 
 #include <testngpp/internal/TestCase.h>
 
+#include <testngpp/internal/TestFixtureDesc.h>
+
 #include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestCaseContainer.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
@@ -48,7 +50,8 @@ struct TestHierarchyHandlerImpl
    : public TestCaseContainer
 {
    TestHierarchyHandlerImpl
-         ( TestCaseHierarchy* hierarchy
+         ( TestFixtureDesc* fixture 
+         , const TestCaseFilter* filter
          , TestFixtureResultCollector* collector);
 
    ~TestHierarchyHandlerImpl();
@@ -75,17 +78,18 @@ private:
    typedef std::pair<const TestCase*, bool> ValueType;
    std::list<ValueType> schedTestCases;
 
-   TestCaseHierarchy* hierarchy;
-   TestFixtureResultCollector* collector;
+   TestCaseHierarchy* hierarchy; // Y
+   TestFixtureResultCollector* collector; // X
 };
 
 
 ///////////////////////////////////////////////////
 TestHierarchyHandlerImpl::
 TestHierarchyHandlerImpl
-   ( TestCaseHierarchy* testHierarchy
+   ( TestFixtureDesc* fixtureDesc 
+   , const TestCaseFilter* filter
    , TestFixtureResultCollector* resultCollector)
-   : hierarchy(testHierarchy)
+   : hierarchy(new TestCaseHierarchy(fixtureDesc, filter))
    , collector(resultCollector)
 {
    hierarchy->getDirectSuccessors(0, this);
@@ -95,6 +99,7 @@ TestHierarchyHandlerImpl
 TestHierarchyHandlerImpl::
 ~TestHierarchyHandlerImpl()
 {
+   delete hierarchy;
 }
 
 ///////////////////////////////////////////////////
@@ -167,9 +172,10 @@ testDone
 ///////////////////////////////////////////////////
 TestHierarchyHandler::
 TestHierarchyHandler
-   ( TestCaseHierarchy* hierarchy
+   ( TestFixtureDesc* fixtureDesc 
+   , const TestCaseFilter*  filter
    , TestFixtureResultCollector* collector)
-   : This(new TestHierarchyHandlerImpl(hierarchy, collector))
+   : This(new TestHierarchyHandlerImpl(fixtureDesc, filter, collector))
 {
 }
 

@@ -10,7 +10,6 @@
 
 #include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestHierarchySandboxRunner.h>
-#include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
@@ -42,7 +41,7 @@ struct TestHierarchySandboxRunnerImpl
       cleanUp();
    }
 
-	void run(TestCaseHierarchy* hierarchy
+	void run(TestHierarchyHandler* hierarchy
       , TestFixtureResultCollector* resultCollector);
 
    void setupListeners();
@@ -207,12 +206,9 @@ process(TestHierarchyHandler* handler)
 ///////////////////////////////////////////////////////
 void
 TestHierarchySandboxRunnerImpl::
-run( TestCaseHierarchy* hierarchy
+run( TestHierarchyHandler* handler
    , TestFixtureResultCollector* resultCollector)
 {
-   TestHierarchyHandler* handler = \
-       new TestHierarchyHandler(hierarchy, resultCollector);
-
    index = 0;
 
    while(1)
@@ -225,8 +221,6 @@ run( TestCaseHierarchy* hierarchy
 
       process(handler);
    }
-
-   delete handler;
 }
 
 ///////////////////////////////////////////////////////
@@ -245,10 +239,10 @@ TestHierarchySandboxRunner::~TestHierarchySandboxRunner()
 
 ///////////////////////////////////////////////////////
 void
-TestHierarchySandboxRunner::run(TestCaseHierarchy* hierarchy
+TestHierarchySandboxRunner::run(TestHierarchyHandler* handler
       , TestFixtureResultCollector* resultCollector)
 {
-   This->run(hierarchy, resultCollector);
+   This->run(handler, resultCollector);
 }
 
 ///////////////////////////////////////////////////////
