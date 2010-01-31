@@ -42,6 +42,7 @@ namespace
       if(--ref == 0)
       {
          delete caseRunner;
+         caseRunner = 0;
       }
    }
    
