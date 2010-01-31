@@ -7,6 +7,7 @@
 #include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestCaseFilter.h>
 #include <testngpp/runner/TestCaseRunner.h>
+#include <testngpp/runner/TestCaseContainer.h>
 
 TESTNGPP_NS_START
 
@@ -31,12 +32,68 @@ private:
    Successors successors;
 
 private:
-   Hierarchy& addDirectSuccessor(TestCase* testcase);
+   Hierarchy&
+   addDirectSuccessor
+         ( TestCase* testcase );
 
-   bool addSuccessor(TestCase* testcase);
+   bool
+   addSuccessor
+         (TestCase* testcase );
 
-   void run(TestCaseRunner* runner);
+   void
+   getSuccessors
+         ( TestCase* testcase
+         , TestCaseContainer* container );
+
+   void
+   putDirectSuccessorsToContainer
+         ( TestCaseContainer* container );
+public:
+   void
+   getDirectSuccessors
+         ( TestCase* testcase
+         , TestCaseContainer* container );
 };
+
+///////////////////////////////////////////////////////
+void Hierarchy::
+putDirectSuccessorsToContainer
+      ( TestCaseContainer* container )
+{
+   Successors::iterator i = successors.begin();
+   for(; i != successors.end(); i++)
+   {
+      container->addTestCase((*i).root, (*i).specified);
+   }
+}
+
+///////////////////////////////////////////////////////
+void Hierarchy::
+getSuccessors
+     ( TestCase* testcase
+     , TestCaseContainer* container)
+{
+   Successors::iterator i = successors.begin();
+   for(; i != successors.end(); i++)
+   {
+      (*i).getDirectSuccessors(testcase, container);
+   }
+}
+
+///////////////////////////////////////////////////////
+void Hierarchy::
+getDirectSuccessors
+      ( TestCase* testcase
+      , TestCaseContainer* container)
+{
+   if(testcase == root)
+   {
+      putDirectSuccessorsToContainer(container);
+      return;
+   }
+
+   getSuccessors(testcase, container);
+}
 
 ///////////////////////////////////////////////////////
 Hierarchy&
@@ -131,6 +188,13 @@ TestCaseHierarchy::~TestCaseHierarchy()
 }
 
 ///////////////////////////////////////////////////////
+void TestCaseHierarchy::
+getDirectSuccessors
+      ( TestCase* testcase
+      , TestCaseContainer* container)
+{
+   This->root.getDirectSuccessors(testcase, container);
+}
 
 TESTNGPP_NS_END
 

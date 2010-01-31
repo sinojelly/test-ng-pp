@@ -24,12 +24,16 @@ struct TestCaseSandbox
    ChannelId getChannelId() const;
 
    void handle() throw (Error, EOFError);
+   
+   bool hasSucceeded() const;
 
    bool isDead() const;
 
    void cleanup();
 
    ~TestCaseSandbox();
+
+public:
 
 	static TestCaseSandbox*
 	createInstance(EnvironmentCleaner* cleaner, \

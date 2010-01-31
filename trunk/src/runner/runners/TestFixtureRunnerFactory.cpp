@@ -1,11 +1,11 @@
 
-#include <testngpp/runner/TestFixtureRunnerWrapper.h>
-#include <testngpp/runner/SimpleTestFixtureRunner.h>
+#include <testngpp/runner/TestFixtureRunner.h>
+#include <testngpp/runner/SimpleTestHierarchyRunner.h>
 #include <testngpp/runner/SimpleTestCaseRunner.h>
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
 
 #if !defined(TESTNGPP_DISABLE_SANDBOX) || !TESTNGPP_DISABLE_SANDBOX
-#include <testngpp/runner/TestFixtureSandboxRunner.h>
+#include <testngpp/runner/TestHierarchySandboxRunner.h>
 #endif
 
 TESTNGPP_NS_START
@@ -54,8 +54,8 @@ namespace
          maxConcurrent = 1;
       }
 
-      return new TestFixtureRunnerWrapper( \
-                  new TestFixtureSandboxRunner( \
+      return new TestFixtureRunner( \
+                  new TestHierarchySandboxRunner( \
                      maxConcurrent, createTestCaseRunner()));
    }
 #endif
@@ -63,8 +63,8 @@ namespace
    TestFixtureRunner*
    createSimpleInstance()
    {
-      return new TestFixtureRunnerWrapper( \
-                  new SimpleTestFixtureRunner( \
+      return new TestFixtureRunner( \
+                  new SimpleTestHierarchyRunner( \
                        createTestCaseRunner()));
    }
 }
