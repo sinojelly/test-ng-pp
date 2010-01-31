@@ -8,13 +8,11 @@ TESTNGPP_NS_START
 
 struct TestCaseHierarchy;
 struct TestFixtureResultCollector;
-struct TestCaseFilter;
 
 struct TestHierarchyRunner
 {
 	virtual void run ( TestCaseHierarchy*
-                    , TestFixtureResultCollector*
-                    , const TestCaseFilter* ) = 0;
+                    , TestFixtureResultCollector* ) = 0;
 
    virtual ~TestHierarchyRunner() {}
 };

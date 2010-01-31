@@ -9,7 +9,6 @@ TESTNGPP_NS_START
 ///////////////////////////////////////////////////////
 struct SimpleTestHierarchyRunnerImpl;
 struct TestFixtureResultCollector;
-struct TestCaseFilter;
 struct TestCaseRunner;
 
 struct SimpleTestHierarchyRunner : public TestHierarchyRunner
@@ -18,8 +17,7 @@ struct SimpleTestHierarchyRunner : public TestHierarchyRunner
 	~SimpleTestHierarchyRunner();
 
 	void run( TestCaseHierarchy* 
-           , TestFixtureResultCollector* 
-           , const TestCaseFilter* );
+           , TestFixtureResultCollector*);
 
 private:
    SimpleTestHierarchyRunnerImpl * This;

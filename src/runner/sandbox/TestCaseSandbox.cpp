@@ -26,7 +26,7 @@ TESTNGPP_NS_START
 struct TestCaseSandboxImpl
 {
    TestCaseSandboxImpl()
-     : sandbox(0), decoder(0), finished(false)
+     : testcase(0), sandbox(0), decoder(0), finished(false)
    {}
 
    SandboxId getSandboxId() const
@@ -51,6 +51,7 @@ struct TestCaseSandboxImpl
    bool hasSucceeded() const
    { return !decoder->hasError(); }
 
+   const TestCase* testcase;
    Sandbox* sandbox;
    TestCaseSandboxResultDecoder* decoder;
    bool finished;
@@ -110,6 +111,12 @@ bool TestCaseSandbox::hasSucceeded() const
    return This->hasSucceeded();
 }
 
+const TestCase*
+TestCaseSandbox::getTestCase() const
+{
+   return This->testcase;
+}
+
 ////////////////////////////////////////////////////////
 void
 TestCaseSandbox::handle() throw (EOFError, Error)
@@ -132,7 +139,7 @@ TestCaseSandbox::cleanup()
 ////////////////////////////////////////////////////////
 TestCaseSandbox*
 TestCaseSandbox::createInstance(EnvironmentCleaner* cleaner, \
-          TestCase* testcase, \
+          const TestCase* testcase, \
           TestCaseRunner* runner,
           TestCaseResultCollector* collector)
 {
@@ -151,6 +158,7 @@ TestCaseSandbox::createInstance(EnvironmentCleaner* cleaner, \
             , testcase
             , collector);
 
+   tcSandbox->This->testcase = testcase;
    tcSandbox->This->sandbox = sandbox;
 
    return tcSandbox;

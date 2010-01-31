@@ -65,7 +65,7 @@ run( TestFixtureDesc* desc
 
    __TESTNGPP_TRY
    {
-      hierarchyRunner->run(hierarchy, collector, filter);
+      hierarchyRunner->run(hierarchy, collector);
    }
    __TESTNGPP_CATCH(Error& e)
    {

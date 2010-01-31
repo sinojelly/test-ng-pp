@@ -20,8 +20,7 @@ struct TestHierarchySandboxRunner
    ~TestHierarchySandboxRunner();
 
 	void run ( TestCaseHierarchy*
-            , TestFixtureResultCollector*
-            , const TestCaseFilter*); 
+            , TestFixtureResultCollector*);
 
 private:
    TestHierarchySandboxRunnerImpl* This;

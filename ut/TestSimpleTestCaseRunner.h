@@ -36,16 +36,16 @@ public:
 
       MOCK_METHOD(f.collector, startTestCase)
          .defaults()
-         .with(eq(testcase));
+         .with(eq((const TestCaseInfoReader*)testcase));
 
       MOCK_METHOD(f.collector, endTestCase)
          .defaults()
-         .with(eq(testcase));
+         .with(eq((const TestCaseInfoReader*)testcase));
 
       MOCK_METHOD(f.collector, startTestCase)
          .expects(once())
          .before(f.fixture, "setUp")
-         .with(eq(testcase))
+         .with(eq((const TestCaseInfoReader*)testcase))
          .id("startTestCase");
 
       MOCK_METHOD(f.fixture, tearDown)
@@ -55,7 +55,7 @@ public:
 
       MOCK_METHOD(f.collector, endTestCase)
          .expects(once())
-         .with(eq(testcase))
+         .with(eq((const TestCaseInfoReader*)testcase))
          .after(f.fixture, "tearDown");
    }
 

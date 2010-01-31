@@ -25,6 +25,8 @@ struct TestCaseSandbox
 
    void handle() throw (Error, EOFError);
    
+   const TestCase* getTestCase() const;
+
    bool hasSucceeded() const;
 
    bool isDead() const;
@@ -37,7 +39,7 @@ public:
 
 	static TestCaseSandbox*
 	createInstance(EnvironmentCleaner* cleaner, \
-          TestCase* testcase, \
+          const TestCase* testcase, \
           TestCaseRunner* runner,
           TestCaseResultCollector* collector);
 

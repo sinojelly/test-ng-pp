@@ -25,12 +25,14 @@
 
 MOCKCPP_NS_START
 
+struct ObjectNameGetter;
 struct IndexInvokableGetter;
 struct VirtualTableImpl;
 
 struct VirtualTable
 {
    VirtualTable( IndexInvokableGetter* getter
+               , ObjectNameGetter* nameGetter
                , unsigned int numberOfVptr
                , const std::type_info&);
 

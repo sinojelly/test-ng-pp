@@ -22,7 +22,7 @@ struct TestHierarchyHandler
 
    unsigned int numberOfTestCasesInSched() const;
  
-   TestCase* getTestCase(unsigned int index) const;
+   const TestCase* getTestCase(unsigned int index) const;
 
 private:
    TestHierarchyHandlerImpl * This;

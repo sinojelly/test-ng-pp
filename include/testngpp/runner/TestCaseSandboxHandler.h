@@ -14,8 +14,9 @@ struct TestCaseSandboxHandlerImpl;
 
 struct TestCaseSandboxHandler : public SandboxHandler
 {
-   TestCaseSandboxHandler(TestCase* testcase, 
-          TestCaseRunner* runner);
+   TestCaseSandboxHandler
+         ( const TestCase* testcase
+         , TestCaseRunner* runner);
 
    ~TestCaseSandboxHandler();
 

@@ -23,7 +23,9 @@
 #include <mockcpp/Asserter.h>
 #include <mockcpp/OutputStringStream.h>
 #include <mockcpp/MethodInfoReader.h>
+#include <mockcpp/ObjNameGetter.h>
 #include <mockcpp/VirtualTableUtils.h>
+
 
 MOCKCPP_NS_START
 
@@ -40,6 +42,7 @@ namespace
 struct VirtualTableImpl
 {
 	VirtualTableImpl( IndexInvokableGetter* getter
+                   , ObjectNameGetter* nameGetter
                    , unsigned int numberOfVptr
                    , const std::type_info& info);
    ~VirtualTableImpl();
@@ -55,6 +58,7 @@ struct VirtualTableImpl
    void** vtbl;
    unsigned int numberOfVptr;
    IndexInvokableGetter* indexInvokableGetter;
+   ObjectNameGetter* nameGetter;
    bool expectsBeingDeleted;
    bool expectsKeepAlive;
    bool deleted;
@@ -125,24 +129,34 @@ VirtualTableImpl::validateIndexOfVptr(unsigned int index)
 /////////////////////////////////////////////////////////////////
 namespace
 {
+   VirtualTableImpl*
+   getVirtualTableImpl(void* caller, unsigned int vptrIndex)
+   {
+      void** vptr = &((void**)caller)[-(int)vptrIndex];
+      VirtualTableImpl* pThis = (VirtualTableImpl*)vptr[MOCKCPP_MAX_INHERITANCE];
+      pThis->validateVptr(vptr);
+      return pThis;
+   }
+
    struct MethodHolderDummy {};
 
-#if 0
    template <int VPTRIndex, int VTBLIndex, typename T>
-#endif
    struct DefaultMethodHolder
    {
       void method()
       {
+         VirtualTableImpl* pThis = getVirtualTableImpl((void*)this, VPTRIndex);
+
          oss_t oss;
          oss << "The method you are invoking is not " 
              << "specified by mocker" 
-#if 0
              << " ("
+             << pThis->nameGetter->getName()
+             << "["
              << VPTRIndex << ":" 
-             << VTBLIndex << ")."
-#endif
-         ;
+             << VTBLIndex << "])." ;
+
+
 
          MOCKCPP_FAIL(oss.str());
       }
@@ -151,83 +165,36 @@ namespace
 
 /////////////////////////////////////////////////////////////////
 #define MOCKCPP_SET_DEFAULT_METHOD(I, J) do {\
-   vtbl[getRealVtblIndex(I, J)] = getAddrOfMethod(&DefaultMethodHolder<I, J, MethodHolderDummy>::method); \
+   if(numberOfVptr > I) \
+   { \
+     vtbl[getRealVtblIndex(I, J)] = getAddrOfMethod(&DefaultMethodHolder<I, J, MethodHolderDummy>::method); \
+   } \
 }while(0)
 
 /////////////////////////////////////////////////////////////////
 void
 VirtualTableImpl::reset()
 {
-   // FIXME: In order to used as a dummy object, default behavior might 
-   // change.
-   void * defaultMethodAddr = getAddrOfMethod(&DefaultMethodHolder::method);
-   for(unsigned int i=0; i<numberOfVptr; i++)
-   {
-      for(unsigned int j=0; j<MOCKCPP_MAX_VTBL_SIZE;j++)
-      {
-         vtbl[getRealVtblIndex(i,j)] = defaultMethodAddr;
-      }
-   }
-  
+   #include <mockcpp/DefaultMethodAddrGetterDef.h>
+
    expectsBeingDeleted = false;
    expectsKeepAlive = false;
    deleted = false;
-#if 0
-   if(numberOfVptr > 0)
-   {
-      MOCKCPP_SET_DEFAULT_METHOD(0, 0); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 1); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 2); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 3); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 4); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 5); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 6); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 7); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 8); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 9); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 10); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 11); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 12); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 13); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 14); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 15); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 16); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 17); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 18); 
-      MOCKCPP_SET_DEFAULT_METHOD(0, 19); 
-   }
 
-   if(numberOfVptr > 1)
-   {
-      MOCKCPP_SET_DEFAULT_METHOD(1, 0); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 1); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 2); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 3); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 4); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 5); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 6); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 7); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 8); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 9); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 10); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 11); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 12); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 13); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 14); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 15); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 16); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 17); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 18); 
-      MOCKCPP_SET_DEFAULT_METHOD(1, 19); 
-    }
-#endif
 }
 
 /////////////////////////////////////////////////////////////////
-VirtualTableImpl::VirtualTableImpl(IndexInvokableGetter* getter
-     , unsigned int numberOfVPTR, const std::type_info& refTypeInfo)
-     : numberOfVptr(numberOfVPTR), indexInvokableGetter(getter)
-     , expectsBeingDeleted(false), expectsKeepAlive(false)
+VirtualTableImpl::VirtualTableImpl
+     ( IndexInvokableGetter* getter
+     , ObjectNameGetter * objNameGetter
+     , unsigned int numberOfVPTR
+     , const std::type_info& refTypeInfo)
+
+     : numberOfVptr(numberOfVPTR)
+     , indexInvokableGetter(getter)
+     , nameGetter(objNameGetter)
+     , expectsBeingDeleted(false)
+     , expectsKeepAlive(false)
 {
    if(numberOfVptr == 0)
    {
@@ -266,9 +233,16 @@ VirtualTableImpl::~VirtualTableImpl()
 }
 
 /////////////////////////////////////////////////////////////////
-VirtualTable::VirtualTable(IndexInvokableGetter* getter
-    , unsigned int numberOfVptr, const std::type_info& info)
-    : This(new VirtualTableImpl(getter, numberOfVptr, info))
+VirtualTable::VirtualTable
+    ( IndexInvokableGetter* invokableGetter
+    , ObjectNameGetter* nameGetter
+    , unsigned int numberOfVptr
+    , const std::type_info& info)
+    : This( new VirtualTableImpl
+               ( invokableGetter
+               , nameGetter
+               , numberOfVptr
+               , info))
 {}
 
 /////////////////////////////////////////////////////////////////
@@ -295,15 +269,6 @@ VirtualTable::addMethod(void* methodAddr, unsigned int indexOfVtbl, unsigned int
 /////////////////////////////////////////////////////////////////
 namespace
 {
-   VirtualTableImpl*
-   getVirtualTableImpl(void* caller, unsigned int vptrIndex)
-   {
-      void** vptr = &((void**)caller)[-(int)vptrIndex];
-      VirtualTableImpl* pThis = (VirtualTableImpl*)vptr[MOCKCPP_MAX_INHERITANCE];
-      pThis->validateVptr(vptr);
-      return pThis;
-   }
-
    struct DummyClass {};
 
    template <unsigned int VPTRIndex, typename T = DummyClass >
