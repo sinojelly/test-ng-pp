@@ -20,21 +20,23 @@
 #define __TESTNGPP_ASSERTION_FAILURE_H
 
 #include <string>
+#include <exception>
 
 #include <testngpp/testngpp.h>
 
 TESTNGPP_NS_START
 
-struct AssertionFailure
+struct AssertionFailure : public std::exception
 {
 	AssertionFailure( const std::string& file
                    , unsigned int line
                    , const std::string& msg);
-	~AssertionFailure();
+	~AssertionFailure() throw()
+   {}
 
 	const std::string& getFileName() const;
    unsigned int getLineOfFile() const;
-	const std::string& what() const;
+	const char* what() const throw();
 
 private:
 	std::string fileName;

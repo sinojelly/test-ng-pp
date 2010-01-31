@@ -26,9 +26,6 @@ AssertionFailure::AssertionFailure(const std::string& file
 	: fileName(file), lineNumber(line), errMsg(msg)
 {}
 
-//////////////////////////////////////////////////////////
-AssertionFailure::~AssertionFailure()
-{}
 
 //////////////////////////////////////////////////////////
 bool operator==(const AssertionFailure& lhs, const AssertionFailure& rhs) 
@@ -50,9 +47,9 @@ unsigned int AssertionFailure::getLineOfFile() const
 }
 
 //////////////////////////////////////////////////////////
-const std::string& AssertionFailure::what() const
+const char* AssertionFailure::what() const throw()
 {
-	return errMsg;
+	return errMsg.c_str();
 }
 
 //////////////////////////////////////////////////////////

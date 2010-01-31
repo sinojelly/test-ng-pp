@@ -67,6 +67,11 @@ TestRunnerImpl::~TestRunnerImpl()
       TestFixtureRunnerFactory::
            destroyInstance(fixtureRunner);
    }
+
+   if(resultManager != 0)
+   {
+      delete resultManager;
+   }
 }
 
 ///////////////////////////////////////////////////////

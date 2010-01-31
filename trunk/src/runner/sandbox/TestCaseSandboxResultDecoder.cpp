@@ -51,9 +51,10 @@ struct TestCaseSandboxResultDecoderImpl
    bool hasError() const
    { return errorReceived || failureReceived || crashInformed; }
 
-   ReadableChannel* channel;
-   const TestCaseInfoReader* testcase;
-   TestCaseResultCollector* collector;
+   ReadableChannel* channel; // Y
+
+   const TestCaseInfoReader* testcase; // X
+   TestCaseResultCollector* collector; // X
 
    typedef std::list<std::string> Errors;
    typedef std::list<AssertionFailure> Failures;

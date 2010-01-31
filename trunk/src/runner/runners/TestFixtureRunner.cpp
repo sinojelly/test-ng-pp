@@ -24,7 +24,7 @@ struct TestFixtureRunnerImpl
            , TestFixtureResultCollector* collector
            , const TestCaseFilter* filter);
 
-   TestHierarchyRunner* hierarchyRunner;
+   TestHierarchyRunner* hierarchyRunner; // Y
 };
 
 /////////////////////////////////////////////////////////////////
@@ -38,6 +38,7 @@ TestFixtureRunnerImpl(TestHierarchyRunner* runner)
 TestFixtureRunnerImpl::
 ~TestFixtureRunnerImpl()
 {
+   delete hierarchyRunner;
 }
 
 /////////////////////////////////////////////////////////////////

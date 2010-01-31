@@ -30,6 +30,11 @@ struct TestSuiteRunnerImpl : public TestSuiteDescEntryNameGetter
       , resultCollector(collector)
    {}
 
+   ~TestSuiteRunnerImpl()
+   {
+      delete suiteLoader;
+   }
+
 	TestSuiteDesc* load
          ( const StringList& searchingPaths
          , const std::string& path);
@@ -43,9 +48,9 @@ struct TestSuiteRunnerImpl : public TestSuiteDescEntryNameGetter
    std::string getDescEntryName() const
    { return testngppTestSuiteDescGetter; }
 
-   TestFixtureRunner* fixtureRunner;
-   TestResultCollector* resultCollector;
-   TestSuiteLoader* suiteLoader;
+   TestFixtureRunner* fixtureRunner;     // X
+   TestResultCollector* resultCollector; // X
+   TestSuiteLoader* suiteLoader;         // Y
 };
 
 /////////////////////////////////////////////////////////////////

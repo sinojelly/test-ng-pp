@@ -78,6 +78,7 @@ void SimpleTestResultManagerImpl::clearListeners()
 SimpleTestResultManagerImpl::
 ~SimpleTestResultManagerImpl()
 {
+   delete loaderFactory;
    delete suiteReporter;
    delete caseReporter;
    delete reporter;

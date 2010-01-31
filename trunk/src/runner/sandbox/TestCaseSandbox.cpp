@@ -51,9 +51,9 @@ struct TestCaseSandboxImpl
    bool hasSucceeded() const
    { return !decoder->hasError(); }
 
-   const TestCase* testcase;
-   Sandbox* sandbox;
-   TestCaseSandboxResultDecoder* decoder;
+   const TestCase* testcase; // X
+   Sandbox* sandbox; // Y
+   TestCaseSandboxResultDecoder* decoder; // Y
    bool finished;
 };
 
