@@ -29,10 +29,9 @@ struct SkippedTestCases
          ( const TestCase* testcase
          , bool userSpecified)
    {
-      if(userSpecified)
+      if(!userSpecified)
          return;
 
-      std::cout << "SKIP" << std::endl;
       collector->startTestCase(testcase);
       collector->addCaseSkipped(testcase);
       collector->endTestCase(testcase);
@@ -111,7 +110,8 @@ getTestCase(unsigned int index) const
    std::list<ValueType>::const_iterator iter = \
       schedTestCases.begin();
 
-   for(int i=0; i < index; i++, iter++);
+   for(int i=0; i < index; i++)
+      iter++;
 
    return (*iter).first;
 }
@@ -139,7 +139,6 @@ handleDoneTestCases
    }
    else
    {
-      std::cout << "failed, so find skipped testcases" << std::endl;
       SkippedTestCases skippedTestCases(collector);
       hierarchy->getSuccessors(testcase, &skippedTestCases);
    }

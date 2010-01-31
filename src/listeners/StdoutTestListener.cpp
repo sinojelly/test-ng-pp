@@ -368,8 +368,17 @@ void ColorfulStdoutTestListener::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
    This->switchTextColorToFail();
-   std::cout << "[ SKIPPED ]" << std::endl;
+   std::cout << "[ SKIPPED ]";
    This->restoreTextColor();
+   std::cout << testcase->getFileName() 
+             << ":" 
+             << testcase->getLineOfFile() 
+             << ":" 
+             << testcase->getNameOfFixture() 
+             << ":" 
+             << testcase->getName()
+             << ": Test is skipped due to the failure of depended test case." 
+             << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
@@ -434,12 +443,7 @@ endTestCase(const TestCaseInfoReader* testcase)
       This->restoreTextColor();  
       break;
    case TestCaseResultReporter::TR_SKIPPED:
-	   This->switchTextColorToFail();
-	   std::cout << "[ SKIPPED ]" << std::endl;
-      This->restoreTextColor();  
-      break;
    case TestCaseResultReporter::TR_FAILED:
-       break;
    case TestCaseResultReporter::TR_ERROR:
        break;
    case TestCaseResultReporter::TR_UNKNOWN:

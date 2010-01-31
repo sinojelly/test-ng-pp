@@ -148,7 +148,8 @@ void XMLTestListenerImpl::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
 	endTestCase(testcase);
-	testCaseElement->element("skipped");
+	testCaseElement->element("skipped")
+      .text("test case is skipped due to the failure of depended test case.");
 }
 
 ///////////////////////////////////////////////////////////
