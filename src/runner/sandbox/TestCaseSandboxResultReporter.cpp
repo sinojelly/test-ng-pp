@@ -25,7 +25,7 @@ struct TestCaseSandboxResultReporterImpl
 	void startTestCase(const TestCaseInfoReader* testCase);
 	void endTestCase(const TestCaseInfoReader* testCase);
 
-   WrittableChannel* channel;
+   WrittableChannel* channel; // Y
 };
 
 /////////////////////////////////////////////////////////////////////////

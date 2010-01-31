@@ -29,8 +29,12 @@ struct TestHierarchySandboxRunnerImpl
 {
    typedef std::list<TestCaseSandbox*> List;
 
-	TestHierarchySandboxRunnerImpl(unsigned int maxCurrentProcess, TestCaseRunner* runner)
-      : maxProcess(maxCurrentProcess), caseRunner(runner), index(0)
+	TestHierarchySandboxRunnerImpl
+      ( unsigned int maxCurrentProcess
+      , TestCaseRunner* runner)
+      : maxProcess(maxCurrentProcess)
+      , caseRunner(runner)
+      , index(0)
    {}
 
 	~TestHierarchySandboxRunnerImpl()
@@ -221,6 +225,8 @@ run( TestCaseHierarchy* hierarchy
 
       process(handler);
    }
+
+   delete handler;
 }
 
 ///////////////////////////////////////////////////////

@@ -6,6 +6,8 @@
 #include <testngpp/runner/TestRunner.h>
 #include <testngpp/utils/OptionList.h>
 #include <testngpp/utils/StringList.h>
+#include <testngpp/ResourceCheckPoint.h>
+#include <testngpp/ExceptionKeywords.h>
 
 USING_TESTNGPP_NS
 
@@ -139,8 +141,9 @@ bool useSandbox(OptionList& options)
    return getFlagOption("s", options);
 }
 
+
 ////////////////////////////////////////////////////////////
-int main(int argc, char* argv[])
+int real_main(int argc, char* argv[])
 {
    OptionList options;
 
@@ -170,6 +173,30 @@ int main(int argc, char* argv[])
       maxConcurrent = getMaxConcurrent(options);
    }
 
+
+
    return TestRunner().runTests(useSandbox(options), maxConcurrent, options.args, listeners
                          , searchingPathsOfListeners, fixtures);
+}
+
+int main(int argc, char* argv[])
+{
+   ResourceCheckPoint rcp = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+
+   int code = real_main(argc, argv);
+
+   try
+   {
+     TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(rcp);
+   }
+   catch(std::exception& error)
+   {
+      std::cerr << error.what() << std::endl;
+   }
+   catch(...)
+   {
+      std::cout << "unknown exception" << std::endl;
+   }
+  
+   return code;
 }
