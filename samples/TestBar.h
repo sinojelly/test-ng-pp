@@ -110,26 +110,40 @@ struct TestBar1 : public TESTCPP_NS::TestFixture
 {
     void setUp()
     {
-       std::cout << "TestBar1::setUp" << std::endl;
     }
     
     void tearDown()
     {
-       std::cout << "TestBar1::tearDown()" << std::endl;
     }
 
-    // @test(id=1)
+    // @test(id=1, depends=4)
     void case0()
     {
        TS_ASSERT(false);
     }
 
-    // @test(depends=1)
+    // @test(id=2, depends=1)
     void case1()
     {
        TS_ASSERT(true);
     }
+
+    // @test(depends=2)
+    TEST(case3)
+    {}
 			
+
+    // @test(id=4)
+    TEST(case4)
+    {
+       TS_ASSERT(true);
+    }
+
+    // @test(depends=4)
+    TEST(case5)
+    {
+       TS_ASSERT(true);
+    }
 };
 
 class TestBar2 : public TestFixture
