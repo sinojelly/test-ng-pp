@@ -257,6 +257,12 @@ void StdoutTestListener::endTest()
       {
          std::cout << " crashed: "  << This->resultReporter->getNumberOfCrashedTestCases();
       }
+
+      if(This->resultReporter->getNumberOfSkippedTestCases() > 0)
+      {
+         std::cout << " skipped: "  << This->resultReporter->getNumberOfSkippedTestCases();
+      }
+
       std::cout << std::endl 
                 << " success rate: " << rate << '%' << std::endl;
    }
@@ -575,29 +581,41 @@ void ColorfulStdoutTestListener::endTest()
       if(This->resultReporter->getNumberOfFailedTestCases() > 0)
       {
          std::cout << " failed: ";
+
          This->switchTextColorToFail();
-	     std::cout << This->resultReporter->getNumberOfFailedTestCases();
+	      std::cout << This->resultReporter->getNumberOfFailedTestCases();
          This->restoreTextColor();  
       }
 
       if(This->resultReporter->getNumberOfErrorTestCases() > 0)
       {
-		 std::cout << " error: " ;
+		   std::cout << " error: " ;
+
          This->switchTextColorToFail();
-	     std::cout << This->resultReporter->getNumberOfErrorTestCases();
+	      std::cout << This->resultReporter->getNumberOfErrorTestCases();
          This->restoreTextColor();  
       }
 
       if(This->resultReporter->getNumberOfCrashedTestCases() > 0)
       {
          std::cout << " crashed: ";
-		 This->switchTextColorToFail();
-	     std::cout << This->resultReporter->getNumberOfCrashedTestCases();
+
+		   This->switchTextColorToFail();
+	      std::cout << This->resultReporter->getNumberOfCrashedTestCases();
+         This->restoreTextColor();  
+      }
+
+      if(This->resultReporter->getNumberOfSkippedTestCases() > 0)
+      {
+         std::cout << " skipped: ";
+
+		   This->switchTextColorToFail();
+	      std::cout << This->resultReporter->getNumberOfSkippedTestCases();
          This->restoreTextColor();  
       }
 
       std::cout << std::endl << " success rate: ";
-	  This->switchTextColorToFail();
+	   This->switchTextColorToFail();
       std::cout << rate << '%' << std::endl;
       This->restoreTextColor();
    }

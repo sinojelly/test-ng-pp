@@ -65,7 +65,7 @@ int
 SimpleTestSuiteResultReporterImpl::
 getNumberOfUnsuccessfulCases() const
 {
-   return numberOfCrashedCases + numberOfErrorCases + numberOfFailedCases;
+   return numberOfCrashedCases + numberOfErrorCases + numberOfFailedCases + numberOfSkippedCases;
 }
 
 ///////////////////////////////////////////////////////////
@@ -99,7 +99,6 @@ addCaseCrash(const TestCaseInfoReader* testcase)
 void SimpleTestSuiteResultReporter::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
-   This->numberOfSkippedCases++;
 }
 
 ///////////////////////////////////////////////////////////
@@ -187,6 +186,7 @@ startTestSuite(TestSuiteInfoReader* suite)
 
    This->numberOfSuccessfulCases = 0;
    This->numberOfCrashedCases = 0;
+   This->numberOfSkippedCases = 0;
    This->numberOfErrorCases = 0;
    This->numberOfFailedCases = 0;
    This->numberOfFixtureErrors = 0;
@@ -333,6 +333,18 @@ getNumberOfSuiteErrors(TestSuiteInfoReader* suite) const
    return -1;
 }
 
+///////////////////////////////////////////////////////////
+int
+SimpleTestSuiteResultReporter::
+getNumberOfSkippedTestCases(TestSuiteInfoReader* suite) const
+{
+   if(This->readable(suite))
+   {
+      return This->numberOfSkippedCases;
+   }
+
+   return -1;
+}
 ///////////////////////////////////////////////////////////
 
 TESTNGPP_NS_END

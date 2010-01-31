@@ -24,6 +24,7 @@ struct SimpleTestResultReporter
    unsigned int getNumberOfUnsuccessfulTestCases() const;
    unsigned int getNumberOfFailedTestCases() const;
    unsigned int getNumberOfErrorTestCases() const;
+   unsigned int getNumberOfSkippedTestCases() const;
    unsigned int getNumberOfCrashedTestCases() const;
    unsigned int getNumberOfLoadedSuites() const;
    unsigned int getNumberOfUnloadableSuites() const;

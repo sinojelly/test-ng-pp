@@ -12,6 +12,7 @@ struct SimpleTestResultReporterImpl
 {
    unsigned int numberOfSuccessfulCases;
    unsigned int numberOfCrashedCases;
+   unsigned int numberOfSkippedCases;
    unsigned int numberOfErrorCases;
    unsigned int numberOfFailedCases;
    unsigned int numberOfLoadedSuites;
@@ -23,6 +24,7 @@ struct SimpleTestResultReporterImpl
 
    SimpleTestResultReporterImpl(TestSuiteResultReporter* suiteReporter)
       : numberOfCrashedCases(0)
+      , numberOfSkippedCases(0)
       , numberOfErrorCases(0)
       , numberOfFailedCases(0)
       , numberOfSuccessfulCases(0)
@@ -141,6 +143,9 @@ endTestSuite(TestSuiteInfoReader* suite)
 
    This->numberOfFailedCases += \
           This->suiteResultReporter->getNumberOfFailedTestCases(suite);
+
+   This->numberOfSkippedCases += \
+          This->suiteResultReporter->getNumberOfSkippedTestCases(suite);
 }
 
 ///////////////////////////////////////////////////////////
@@ -206,6 +211,14 @@ SimpleTestResultReporter::
 getNumberOfErrorTestCases() const
 {
    return This->numberOfErrorCases;
+}
+
+///////////////////////////////////////////////////////////
+unsigned int
+SimpleTestResultReporter::
+getNumberOfSkippedTestCases() const
+{
+   return This->numberOfSkippedCases;
 }
 
 ///////////////////////////////////////////////////////////

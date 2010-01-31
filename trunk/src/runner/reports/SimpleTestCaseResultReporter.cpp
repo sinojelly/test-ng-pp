@@ -121,6 +121,7 @@ startTestCase(const TestCaseInfoReader* testcase)
    This->informedFailure = false;
    This->informedCrashed = false;
    This->finished = false;
+   This->informedSkipped = false;
 }
 
 ///////////////////////////////////////////////////////////
