@@ -30,9 +30,9 @@ struct PipeReadableChannel: public ReadableChannel
    PipeReadableChannel(int pipeFd, bool autoClose=true);
    ~PipeReadableChannel();
 
-   unsigned char readByte() throw (Error, EOFError); 
-   int readInt() throw (Error, EOFError); 
-   std::string readString() throw (Error, EOFError); 
+   unsigned char readByte() TESTNGPP_THROW (Error, EOFError); 
+   int readInt() TESTNGPP_THROW (Error, EOFError); 
+   std::string readString() TESTNGPP_THROW (Error, EOFError); 
 
    void close();
 

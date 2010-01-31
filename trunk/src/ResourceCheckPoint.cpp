@@ -73,7 +73,7 @@ ResourceCheckPoint testngppSetCheckPoint()
 
 //////////////////////////////////////////////////////////////////
 void testngppVerifyCheckPoint(const ResourceCheckPoint& rcp
-      , const char* file, unsigned int line) throw (Error, AssertionFailure)
+      , const char* file, unsigned int line) TESTNGPP_THROW(Error, AssertionFailure)
 {
    if(rcp.memory != allocatedSize)
    {
@@ -111,7 +111,7 @@ namespace
 }
 
 //////////////////////////////////////////////////////////////////
-static void* allocateMemory(size_t size) throw (std::bad_alloc)
+static void* allocateMemory(size_t size) TESTNGPP_THROW(std::bad_alloc)
 {
 
    BlockHeader* header = (BlockHeader*)::malloc(
@@ -135,7 +135,7 @@ static void* allocateMemory(size_t size) throw (std::bad_alloc)
 }
 
 //////////////////////////////////////////////////////////////////
-static void freeMemory(void* p) throw (Error)
+static void freeMemory(void* p) TESTNGPP_THROW(Error)
 {
    if(p == 0)
    {
@@ -170,13 +170,13 @@ TESTNGPP_NS_END
 USING_TESTNGPP_NS
 
 //////////////////////////////////////////////////////////////////
-void* operator new (size_t size) throw (std::bad_alloc)
+void* operator new (size_t size) TESTNGPP_THROW(std::bad_alloc)
 {
     return allocateMemory(size);
 }
 
 //////////////////////////////////////////////////////////////////
-void* operator new [] (size_t size) throw (std::bad_alloc)
+void* operator new [] (size_t size) TESTNGPP_THROW(std::bad_alloc)
 {
     return allocateMemory(size);
 }

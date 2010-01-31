@@ -31,9 +31,9 @@ struct Error : public std::exception
    Error(const std::string& msg)
 		: reason(msg)
    {}
-   ~Error() throw() {}
+   ~Error() TESTNGPP_THROW() {}
 
-   const char* what() const throw()
+   const char* what() const TESTNGPP_THROW()
    {
       return reason.c_str();
    }
