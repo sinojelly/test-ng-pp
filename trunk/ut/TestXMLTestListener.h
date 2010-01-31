@@ -43,10 +43,12 @@ public:
 			.METHOD(TestSuiteInfoReader::getName)
 			.stubs()
 			.will(returnValue(std::string("Suite 1")));
+
 		testSuiteInfoReader
 			.METHOD(TestSuiteInfoReader::getNumberOfTestCases)
 			.stubs()
 			.will(returnValue((unsigned int)66));
+   
 		testSuiteInfoReader
 			.METHOD(TestSuiteInfoReader::getNumberOfTestFixtures)
 			.stubs()
@@ -57,6 +59,12 @@ public:
 			.stubs()
 			.with(eq((TestSuiteInfoReader*) testSuiteInfoReader))
 			.will(returnValue(11));
+
+    testSuiteResultReporter
+			.METHOD(TestSuiteResultReporter::getNumberOfSkippedTestCases)
+      .stubs()
+      .will(returnValue((unsigned int)2));
+
 		testSuiteResultReporter
 			.METHOD(TestSuiteResultReporter::getNumberOfErrorTestCases)
 			.stubs()
@@ -109,7 +117,7 @@ public:
 		std::string expected =
 "<?xml version=\"1.0\"?>\n\
 <testsuites>\n\
-  <testsuite name=\"Suite 1\" tests=\"66\" fixtures=\"6\" crashes=\"11\" errors=\"22\" failures=\"33\">\n\
+  <testsuite name=\"Suite 1\" tests=\"66\" fixtures=\"6\" crashes=\"11\" skips=\"2\" errors=\"22\" failures=\"33\">\n\
     <testcase name=\"Test 1\" fixture=\"Fixture 1\" time=\"0\" filename=\"Test-1.cpp\">\n\
     </testcase>\n\
     <testcase name=\"Test 2\" fixture=\"Fixture 2\" time=\"0\" filename=\"Test-2.cpp\">\n\
