@@ -16,20 +16,21 @@ TESTNGPP_NS_START
 //////////////////////////////////////////////////////
 struct TestCaseSandboxHandlerImpl
 {
-   TestCaseSandboxHandlerImpl(TestCase* tc,
+   TestCaseSandboxHandlerImpl(const TestCase* tc,
           TestCaseRunner* tcRunner)
       : testcase(tc), runner(tcRunner)
    {}
 
 	void handle(ChannelId channelId);
 
-   TestCase* testcase;
+   const TestCase* testcase;
    TestCaseRunner* runner;
 };
 
 //////////////////////////////////////////////////////
 void
-TestCaseSandboxHandlerImpl::handle(ChannelId channelId)
+TestCaseSandboxHandlerImpl::
+handle(ChannelId channelId)
 {
    TestCaseResultCollector* reporter = \
          new TestCaseSandboxResultReporter( \
@@ -37,7 +38,7 @@ TestCaseSandboxHandlerImpl::handle(ChannelId channelId)
    
    __TESTNGPP_DO
    {
-      runner->run(testcase, reporter);
+      runner->run(const_cast<TestCase*>(testcase), reporter);
    }
    __TESTNGPP_CLEANUP
    {
@@ -47,21 +48,25 @@ TestCaseSandboxHandlerImpl::handle(ChannelId channelId)
 }
 
 //////////////////////////////////////////////////////
-TestCaseSandboxHandler::TestCaseSandboxHandler(TestCase* testcase,
-          TestCaseRunner* runner)
+TestCaseSandboxHandler::
+TestCaseSandboxHandler
+   ( const TestCase* testcase
+   , TestCaseRunner* runner)
    : This(new TestCaseSandboxHandlerImpl(testcase, runner))
 {
 }
 
 //////////////////////////////////////////////////////
-TestCaseSandboxHandler::~TestCaseSandboxHandler()
+TestCaseSandboxHandler::
+~TestCaseSandboxHandler()
 {
    delete This;
 }
 
 //////////////////////////////////////////////////////
 void
-TestCaseSandboxHandler::handle(ChannelId channelId)
+TestCaseSandboxHandler::
+handle(ChannelId channelId)
 {
    This->handle(channelId);
 }

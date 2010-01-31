@@ -40,11 +40,13 @@ struct XMLTestListener
                      , std::ostream& os);
    ~XMLTestListener();
 
-   void addCaseCrash(TestCaseInfoReader*);
-   void addCaseError(TestCaseInfoReader*, const std::string&);
-   void addCaseFailure(TestCaseInfoReader*, const AssertionFailure&);
-   void startTestCase(TestCaseInfoReader*);
-   void endTestCase(TestCaseInfoReader*);
+   void addCaseCrash(const TestCaseInfoReader*);
+   void addCaseSkipped(const TestCaseInfoReader*);
+   void addCaseError(const TestCaseInfoReader*, const std::string&);
+   void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
+
+   void startTestCase(const TestCaseInfoReader*);
+   void endTestCase(const TestCaseInfoReader*);
 
    void startTestFixture(TestFixtureInfoReader*);
    void endTestFixture(TestFixtureInfoReader*);

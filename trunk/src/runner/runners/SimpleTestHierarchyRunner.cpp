@@ -17,8 +17,7 @@ struct SimpleTestHierarchyRunnerImpl
    {}
 
 	void run(TestCaseHierarchy* hierarchy
-      , TestFixtureResultCollector* resultCollector
-      , const TestCaseFilter* filter);
+      , TestFixtureResultCollector* resultCollector);
 
    TestCaseRunner* caseRunner;
 };
@@ -26,8 +25,7 @@ struct SimpleTestHierarchyRunnerImpl
 ///////////////////////////////////////////////////////
 void
 SimpleTestHierarchyRunnerImpl::run(TestCaseHierarchy* fixture
-        , TestFixtureResultCollector* resultCollector
-        , const TestCaseFilter* filter)
+        , TestFixtureResultCollector* resultCollector)
 {
 #if 0
    unsigned int numberOfTestCases = fixture->getNumberOfTestCases();
@@ -58,10 +56,9 @@ SimpleTestHierarchyRunner::~SimpleTestHierarchyRunner()
 ///////////////////////////////////////////////////////
 void
 SimpleTestHierarchyRunner::run(TestCaseHierarchy* hierarchy
-      , TestFixtureResultCollector* resultCollector
-      , const TestCaseFilter* filter)
+      , TestFixtureResultCollector* resultCollector)
 {
-   This->run(hierarchy, resultCollector, filter);
+   This->run(hierarchy, resultCollector);
 }
 
 ///////////////////////////////////////////////////////

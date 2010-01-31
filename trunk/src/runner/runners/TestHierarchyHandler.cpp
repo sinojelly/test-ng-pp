@@ -1,6 +1,7 @@
 
 #include <utility>
 #include <list>
+#include <iostream>
 
 #include <testngpp/internal/TestCase.h>
 
@@ -8,6 +9,8 @@
 #include <testngpp/runner/TestCaseContainer.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/InternalError.h>
+
 
 TESTNGPP_NS_START
 
@@ -29,6 +32,7 @@ struct SkippedTestCases
       if(userSpecified)
          return;
 
+      std::cout << "SKIP" << std::endl;
       collector->startTestCase(testcase);
       collector->addCaseSkipped(testcase);
       collector->endTestCase(testcase);
@@ -58,9 +62,10 @@ struct TestHierarchyHandlerImpl
          ( const TestCase* testcase
          , bool hasSucceeded);
 
-   unsigned int numberOfTestCasesInSched() const;
+   unsigned int numberOfTestCasesInSched() const
+   { return schedTestCases.size(); }
  
-   TestCase* getTestCase(unsigned int index) const;
+   const TestCase* getTestCase(unsigned int index) const;
 
 private:
    void handleDoneTestCases
@@ -69,7 +74,7 @@ private:
 
 private:
    typedef std::pair<const TestCase*, bool> ValueType;
-   std::list<ValueType> shedTestCases;
+   std::list<ValueType> schedTestCases;
 
    TestCaseHierarchy* hierarchy;
    TestFixtureResultCollector* collector;
@@ -84,6 +89,7 @@ TestHierarchyHandlerImpl
    : hierarchy(testHierarchy)
    , collector(resultCollector)
 {
+   hierarchy->getDirectSuccessors(0, this);
 }
 
 ///////////////////////////////////////////////////
@@ -93,15 +99,34 @@ TestHierarchyHandlerImpl::
 }
 
 ///////////////////////////////////////////////////
+const TestCase*
+TestHierarchyHandlerImpl::
+getTestCase(unsigned int index) const
+{
+   if(index >= schedTestCases.size())
+   {
+      TESTNGPP_INTERNAL_ERROR(2010);
+   }
+
+   std::list<ValueType>::const_iterator iter = \
+      schedTestCases.begin();
+
+   for(int i=0; i < index; i++, iter++);
+
+   return (*iter).first;
+}
+
+///////////////////////////////////////////////////
 void
 TestHierarchyHandlerImpl::
 addTestCase
    ( const TestCase* testcase
    , bool userSpecified)
 {
-   shedTestCases.push_back(ValueType(testcase, userSpecified));
+   schedTestCases.push_back(ValueType(testcase, userSpecified));
 }
 
+///////////////////////////////////////////////////
 void
 TestHierarchyHandlerImpl::
 handleDoneTestCases
@@ -114,8 +139,9 @@ handleDoneTestCases
    }
    else
    {
+      std::cout << "failed, so find skipped testcases" << std::endl;
       SkippedTestCases skippedTestCases(collector);
-      hierarchy->getDirectSuccessors(testcase, &skippedTestCases);
+      hierarchy->getSuccessors(testcase, &skippedTestCases);
    }
 
 }
@@ -127,16 +153,56 @@ testDone
    ( const TestCase* testcase
    , bool hasSucceeded)
 {
-   std::list<ValueType>::iterator i = shedTestCases.begin();
-   for(; i != shedTestCases.end(); i++)
+   std::list<ValueType>::iterator i = schedTestCases.begin();
+   for(; i != schedTestCases.end(); i++)
    {
       if((*i).first == testcase)
       {
-         shedTestCases.erase(i);
+         schedTestCases.erase(i);
          handleDoneTestCases(testcase, hasSucceeded);
          return;
       }
    }
+}
+
+///////////////////////////////////////////////////
+TestHierarchyHandler::
+TestHierarchyHandler
+   ( TestCaseHierarchy* hierarchy
+   , TestFixtureResultCollector* collector)
+   : This(new TestHierarchyHandlerImpl(hierarchy, collector))
+{
+}
+
+///////////////////////////////////////////////////
+TestHierarchyHandler::
+~TestHierarchyHandler()
+{
+   delete This;
+}
+
+///////////////////////////////////////////////////
+void
+TestHierarchyHandler::
+testDone(const TestCase* testcase, bool hasSucceeded)
+{
+   return This->testDone(testcase, hasSucceeded);
+}
+
+///////////////////////////////////////////////////
+unsigned int
+TestHierarchyHandler::
+numberOfTestCasesInSched() const
+{
+   return This->numberOfTestCasesInSched();
+}
+
+///////////////////////////////////////////////////
+const TestCase*
+TestHierarchyHandler::
+getTestCase(unsigned int index) const
+{
+   return This->getTestCase(index);
 }
 
 ///////////////////////////////////////////////////

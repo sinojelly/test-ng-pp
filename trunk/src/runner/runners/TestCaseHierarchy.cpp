@@ -40,17 +40,42 @@ private:
    addSuccessor
          ( const TestCase* testcase );
 
-   void
-   getSuccessors
+   bool
+   findAndGetDirectSuccessors
          ( const TestCase* testcase
          , TestCaseContainer* container );
+
+   bool
+   findAndGetSuccessors
+         ( const TestCase* testcase
+         , TestCaseContainer* container );
+
+   bool 
+   doGetDirectSuccessors
+         ( const TestCase* testcase
+         , TestCaseContainer* container);
+
+   bool 
+   doGetSuccessors
+         ( const TestCase* testcase
+         , TestCaseContainer* container);
 
    void
    putDirectSuccessorsToContainer
          ( TestCaseContainer* container );
+
+   void 
+   putSuccessorsToContainer
+         ( TestCaseContainer* container );
+
 public:
    void
    getDirectSuccessors
+         ( const TestCase* testcase
+         , TestCaseContainer* container );
+
+   void
+   getSuccessors
          ( const TestCase* testcase
          , TestCaseContainer* container );
 };
@@ -68,16 +93,36 @@ putDirectSuccessorsToContainer
 }
 
 ///////////////////////////////////////////////////////
-void Hierarchy::
-getSuccessors
+bool Hierarchy::
+findAndGetDirectSuccessors
      ( const TestCase* testcase
      , TestCaseContainer* container)
 {
    Successors::iterator i = successors.begin();
    for(; i != successors.end(); i++)
    {
-      (*i).getDirectSuccessors(testcase, container);
+      if((*i).doGetDirectSuccessors(testcase, container))
+      {
+         return true;
+      }
    }
+
+   return false;
+}
+
+///////////////////////////////////////////////////////
+bool Hierarchy::
+doGetDirectSuccessors
+      ( const TestCase* testcase
+      , TestCaseContainer* container)
+{
+   if(testcase == root)
+   {
+      putDirectSuccessorsToContainer(container);
+      return true;
+   }
+
+   return findAndGetDirectSuccessors(testcase, container);
 }
 
 ///////////////////////////////////////////////////////
@@ -86,13 +131,61 @@ getDirectSuccessors
       ( const TestCase* testcase
       , TestCaseContainer* container)
 {
-   if(testcase == root)
+   doGetDirectSuccessors(testcase, container);
+}
+
+///////////////////////////////////////////////////////
+void Hierarchy::
+putSuccessorsToContainer
+      ( TestCaseContainer* container )
+{
+   Successors::iterator i = successors.begin();
+   for(; i != successors.end(); i++)
    {
-      putDirectSuccessorsToContainer(container);
-      return;
+      container->addTestCase((*i).root, (*i).specified);
+      (*i).putSuccessorsToContainer(container);
+   }
+}
+
+///////////////////////////////////////////////////////
+bool Hierarchy::
+findAndGetSuccessors
+     ( const TestCase* testcase
+     , TestCaseContainer* container)
+{
+   Successors::iterator i = successors.begin();
+   for(; i != successors.end(); i++)
+   {
+      if((*i).doGetSuccessors(testcase, container))
+      {
+         return true;
+      }
    }
 
-   getSuccessors(testcase, container);
+   return false;
+}
+///////////////////////////////////////////////////////
+bool Hierarchy::
+doGetSuccessors
+      ( const TestCase* testcase
+      , TestCaseContainer* container)
+{
+   if(testcase == root)
+   {
+      putSuccessorsToContainer(container);
+      return true;
+   }
+
+   return findAndGetSuccessors(testcase, container);
+}
+
+///////////////////////////////////////////////////////
+void Hierarchy::
+getSuccessors
+      ( const TestCase* testcase
+      , TestCaseContainer* container)
+{
+   doGetSuccessors(testcase, container);
 }
 
 ///////////////////////////////////////////////////////
@@ -165,7 +258,6 @@ TestCaseHierarchyImpl::TestCaseHierarchyImpl
    , const TestCaseFilter* filter)
    : root(0)
 {
-
    unsigned int numberOfTestCases = fixture->getNumberOfTestCases();
    for(unsigned int i=0; i<numberOfTestCases; i++)
    {
@@ -190,6 +282,15 @@ TestCaseHierarchy::TestCaseHierarchy
 TestCaseHierarchy::~TestCaseHierarchy()
 {
    delete This;
+}
+
+///////////////////////////////////////////////////////
+void TestCaseHierarchy::
+getSuccessors
+      ( const TestCase* testcase
+      , TestCaseContainer* container)
+{
+   This->root.getSuccessors(testcase, container);
 }
 
 ///////////////////////////////////////////////////////

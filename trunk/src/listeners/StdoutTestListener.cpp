@@ -54,7 +54,15 @@ StdoutTestListener::~StdoutTestListener()
 
 ///////////////////////////////////////////////////////////
 void StdoutTestListener::
-addCaseCrash(TestCaseInfoReader* testcase)
+addCaseSkipped(const TestCaseInfoReader* testcase)
+{
+   std::cout << "S";
+   std::cout.flush();
+}
+
+///////////////////////////////////////////////////////////
+void StdoutTestListener::
+addCaseCrash(const TestCaseInfoReader* testcase)
 {
    std::cout << "C";
    std::cout.flush();
@@ -72,7 +80,7 @@ addCaseCrash(TestCaseInfoReader* testcase)
 }
 ///////////////////////////////////////////////////////////
 void StdoutTestListener::
-addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
+addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
    std::cerr << std::endl
              << testcase->getFileName() 
@@ -88,7 +96,7 @@ addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
 
 ///////////////////////////////////////////////////////////
 void StdoutTestListener::
-addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
    std::cerr << std::endl
              << failure.getFileName()
@@ -105,13 +113,13 @@ addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
 
 ///////////////////////////////////////////////////////////
 void StdoutTestListener::
-startTestCase(TestCaseInfoReader*)
+startTestCase(const TestCaseInfoReader*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void StdoutTestListener::
-endTestCase(TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase)
 {
    switch(This->caseResultReporter->getTestCaseResult(testcase))
    {
@@ -123,6 +131,9 @@ endTestCase(TestCaseInfoReader* testcase)
       break;
    case TestCaseResultReporter::TR_ERROR:
       std::cout << "E"; 
+      break;
+   case TestCaseResultReporter::TR_SKIPPED:
+      std::cout << "S"; 
       break;
    case TestCaseResultReporter::TR_UNKNOWN:
       throw Error(TESTNGPP_INTERNAL_ERROR(3001));
@@ -337,7 +348,7 @@ ColorfulStdoutTestListener::~ColorfulStdoutTestListener()
 
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::
-addCaseCrash(TestCaseInfoReader* testcase)
+addCaseCrash(const TestCaseInfoReader* testcase)
 {
    This->switchTextColorToFail();
    std::cout << "[ CRASHED ]";
@@ -354,10 +365,20 @@ addCaseCrash(TestCaseInfoReader* testcase)
 }
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::
-addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
+addCaseSkipped(const TestCaseInfoReader* testcase)
+{
+   This->switchTextColorToFail();
+   std::cout << "[ SKIPPED ]" << std::endl;
+   This->restoreTextColor();
+}
+
+///////////////////////////////////////////////////////////
+void ColorfulStdoutTestListener::
+addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
    This->switchTextColorToFail();
    std::cout << "[   ERROR ]";
+
    This->restoreTextColor();
    std::cout << testcase->getFileName() 
              << ":" 
@@ -372,7 +393,7 @@ addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
 
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::
-addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
    This->switchTextColorToFail();
    std::cout << "[  FAILED ]";
@@ -392,7 +413,7 @@ addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
 
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::
-startTestCase(TestCaseInfoReader* testcase)
+startTestCase(const TestCaseInfoReader* testcase)
 {  
    This->switchTextColorToSucc();
    std::cout << "[ RUN     ]";
@@ -403,15 +424,20 @@ startTestCase(TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void ColorfulStdoutTestListener::
-endTestCase(TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase)
 {
    switch(This->caseResultReporter->getTestCaseResult(testcase))
    {
    case TestCaseResultReporter::TR_SUCCESS:
 	   This->switchTextColorToSucc();
 	   std::cout << "[      OK ]" << std::endl;
-       This->restoreTextColor();  
-       break;
+      This->restoreTextColor();  
+      break;
+   case TestCaseResultReporter::TR_SKIPPED:
+	   This->switchTextColorToFail();
+	   std::cout << "[ SKIPPED ]" << std::endl;
+      This->restoreTextColor();  
+      break;
    case TestCaseResultReporter::TR_FAILED:
        break;
    case TestCaseResultReporter::TR_ERROR:

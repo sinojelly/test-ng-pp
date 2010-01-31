@@ -7,7 +7,7 @@ template = '''
 
 #include <cxxtest/TestSuite.h>
 
-#include <mockcpp.hpp>
+#include <mockcpp/mockcpp.hpp>
 
 #include <testngpp/ResourceCheckPoint.h>
 

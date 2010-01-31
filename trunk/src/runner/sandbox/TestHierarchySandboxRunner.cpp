@@ -17,8 +17,8 @@
 #include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseSandbox.h>
 #include <testngpp/runner/EnvironmentCleaner.h>
-#include <testngpp/runner/TestCaseFilter.h>
 #include <testngpp/runner/TestCaseContainer.h>
+#include <testngpp/runner/TestHierarchyHandler.h>
 
 
 TESTNGPP_NS_START
@@ -39,22 +39,20 @@ struct TestHierarchySandboxRunnerImpl
    }
 
 	void run(TestCaseHierarchy* hierarchy
-      , TestFixtureResultCollector* resultCollector
-      , const TestCaseFilter* filter);
+      , TestFixtureResultCollector* resultCollector);
 
    void setupListeners();
-   void createSandbox( TestCaseHierarchy* hierarchy, unsigned int i
+   void createSandbox( TestHierarchyHandler* handler, unsigned int i
              , TestFixtureResultCollector* resultCollector);
 
 
-   void createSandboxes(TestCaseHierarchy* hierarchy
-             , TestFixtureResultCollector* resultCollector
-             , const TestCaseFilter* filter);
+   void createSandboxes(TestHierarchyHandler* handler 
+             , TestFixtureResultCollector* resultCollector);
 
-   void cleanUpDeadSandboxes();
+   void cleanUpDeadSandboxes(TestHierarchyHandler*);
 
-   void process(TestCaseHierarchy* hierarchy);
-   void handleEvent(int nfds, TestCaseHierarchy* hierarchy);
+   void process(TestHierarchyHandler* hierarchy);
+   void handleEvent(int nfds, TestHierarchyHandler* hierarchy);
 
    void cleanUp();
 
@@ -92,7 +90,8 @@ namespace
 }
 
 ////////////////////////////////////////////////////
-void TestHierarchySandboxRunnerImpl::cleanUpDeadSandboxes()
+void TestHierarchySandboxRunnerImpl::
+cleanUpDeadSandboxes(TestHierarchyHandler* handler)
 {
    while(1)
    {
@@ -102,6 +101,8 @@ void TestHierarchySandboxRunnerImpl::cleanUpDeadSandboxes()
          break;
       }
 
+      handler->testDone((*i)->getTestCase(), (*i)->hasSucceeded());
+
       (*i)->cleanup();
       delete *i;
       sandboxes.erase(i);
@@ -110,39 +111,31 @@ void TestHierarchySandboxRunnerImpl::cleanUpDeadSandboxes()
 
 ////////////////////////////////////////////////////
 void TestHierarchySandboxRunnerImpl::
-createSandbox( TestCaseHierarchy* hierarchy, unsigned int i
+createSandbox( TestHierarchyHandler* handler, unsigned int i
              , TestFixtureResultCollector* resultCollector)
 {
-#if 0
    TestCaseSandbox* sandbox = \
          TestCaseSandbox::createInstance
-               ( this, hierarchy->getTestCase(i)
+               ( this, handler->getTestCase(i)
                , caseRunner, resultCollector);
 
    sandboxes.push_back(sandbox);
-#endif
 }
 
 ////////////////////////////////////////////////////
 void TestHierarchySandboxRunnerImpl::
 createSandboxes
-      ( TestCaseHierarchy* hierarchy
-      , TestFixtureResultCollector* resultCollector
-      , const TestCaseFilter* filter)
+      ( TestHierarchyHandler* handler
+      , TestFixtureResultCollector* resultCollector)
 {
-#if 0
-   unsigned int numberOfTestCases = hierarchy->getNumberOfTestCases();
+   unsigned int numberOfTestCases = handler->numberOfTestCasesInSched();
    unsigned int i = index;
    for(; i < numberOfTestCases && sandboxes.size() < maxProcess; i++)
    {
-      if(filter->isCaseMatch((const TestCaseInfoReader*)hierarchy->getTestCase(i)))
-      {
-         createSandbox(hierarchy, i, resultCollector);
-      }
+      createSandbox(handler, i, resultCollector);
    }
 
    index = i;
-#endif
 }
 
 
@@ -170,7 +163,7 @@ namespace
 }
 ///////////////////////////////////////////////////////
 void TestHierarchySandboxRunnerImpl::
-handleEvent(int nfds, TestCaseHierarchy* hierarchy)
+handleEvent(int nfds, TestHierarchyHandler* handler)
 {
    List::iterator i = sandboxes.begin();
    for(; i != sandboxes.end(); i++)
@@ -185,12 +178,12 @@ handleEvent(int nfds, TestCaseHierarchy* hierarchy)
       }
    }
 
-   cleanUpDeadSandboxes();
+   cleanUpDeadSandboxes(handler);
 }
 
 ///////////////////////////////////////////////////////
 void TestHierarchySandboxRunnerImpl::
-process(TestCaseHierarchy* hierarchy)
+process(TestHierarchyHandler* handler)
 {
    setupListeners();
 
@@ -204,27 +197,29 @@ process(TestCaseHierarchy* hierarchy)
       throw Error(strerror(errno));
    }
 
-   handleEvent(nfds, hierarchy);
+   handleEvent(nfds, handler);
 }
 
 ///////////////////////////////////////////////////////
 void
 TestHierarchySandboxRunnerImpl::
 run( TestCaseHierarchy* hierarchy
-   , TestFixtureResultCollector* resultCollector
-   , const TestCaseFilter* filter)
+   , TestFixtureResultCollector* resultCollector)
 {
+   TestHierarchyHandler* handler = \
+       new TestHierarchyHandler(hierarchy, resultCollector);
+
    index = 0;
 
    while(1)
    {
-      createSandboxes(hierarchy, resultCollector, filter);
+      createSandboxes(handler, resultCollector);
       if(sandboxes.size() == 0)
       {
          break;
       }
 
-      process(hierarchy);
+      process(handler);
    }
 }
 
@@ -245,10 +240,9 @@ TestHierarchySandboxRunner::~TestHierarchySandboxRunner()
 ///////////////////////////////////////////////////////
 void
 TestHierarchySandboxRunner::run(TestCaseHierarchy* hierarchy
-      , TestFixtureResultCollector* resultCollector
-      , const TestCaseFilter* filter)
+      , TestFixtureResultCollector* resultCollector)
 {
-   This->run(hierarchy, resultCollector, filter);
+   This->run(hierarchy, resultCollector);
 }
 
 ///////////////////////////////////////////////////////

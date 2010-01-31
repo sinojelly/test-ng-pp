@@ -59,6 +59,7 @@ SET(UT_CASES
   TestTestSuiteRunner.h
   TestXMLTestListener.h 
   TestXMLBuilder.h
+  TestTestCaseHierarchy.h
 )
 
 IF(NOT TESTNGPP_DISABLE_SANDBOX)

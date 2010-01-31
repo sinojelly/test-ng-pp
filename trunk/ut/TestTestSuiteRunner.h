@@ -15,6 +15,7 @@
 
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/TestSuiteLoader.h>
+#include <testngpp/runner/TestHierarchyRunner.h>
 #include <testngpp/runner/TestFixtureRunner.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestResultCollector.h>
@@ -38,7 +39,7 @@ private:
    TestCase* testCases[2][2];
 
    MockObject<TestSuiteLoader> suiteLoader;
-   MockObject<TestFixtureRunner> fixtureRunner;
+   MockObject<TestHierarchyRunner> hierarchyRunner;
    MockObject<TestResultCollector> collector;
    MockObject<TestFilter> filter;
 
@@ -69,21 +70,21 @@ public:
            .defaults()
            .will(returnValue(true));
 
+      MOCK_METHOD(filter, isCaseMatch)
+           .defaults()
+           .will(returnValue(true));
+
       MOCK_METHOD(suiteLoader, load)
            .defaults()
-           .with(endWith(file))
+           .with(any(), endWith(file))
            .will(returnValue(suiteDesc));
 
       MOCK_METHOD(suiteLoader, unload)
            .defaults();
 
-      MOCK_METHOD(fixtureRunner, run)
+      MOCK_METHOD(hierarchyRunner, run)
            .defaults()
-           .with(eq(desc[0]), eq((TestFixtureResultCollector*)collector));
-
-      MOCK_METHOD(fixtureRunner, run)
-           .defaults()
-           .with(eq(desc[1]), eq((TestFixtureResultCollector*)collector));
+           .with(any(), eq((TestFixtureResultCollector*)collector));
 
       MOCK_METHOD(collector, startTestSuite)
            .defaults()
@@ -92,12 +93,31 @@ public:
       MOCK_METHOD(collector, endTestSuite)
            .defaults()
            .with(eq((TestSuiteInfoReader*)suiteDesc));
+
+      MOCK_METHOD(collector, startTestFixture)
+           .defaults()
+           .with(eq((TestFixtureInfoReader*)desc[0]));
+
+      MOCK_METHOD(collector, startTestFixture)
+           .defaults()
+           .with(eq((TestFixtureInfoReader*)desc[1]));
+
+      MOCK_METHOD(collector, endTestFixture)
+           .defaults()
+           .with(eq((TestFixtureInfoReader*)desc[0]));
+
+      MOCK_METHOD(collector, endTestFixture)
+           .defaults()
+           .with(eq((TestFixtureInfoReader*)desc[1]));
+
+      MOCK_METHOD(collector, addFixtureError)
+           .defaults();
    }
 
    void tearDown()
    {
       suiteLoader.reset();
-      fixtureRunner.reset();
+      hierarchyRunner.reset();
       collector.reset();
       filter.reset();
 
@@ -115,7 +135,7 @@ public:
    void verify()
    {
       suiteLoader.verify();
-      fixtureRunner.verify();
+      hierarchyRunner.verify();
       collector.verify();
    }
 
@@ -127,19 +147,15 @@ public:
 
       MOCK_METHOD(suiteLoader, load)
            .expects(once())
-           .with(endWith(file))
+           .with(any(), endWith(file))
            .will(returnValue(suiteDesc));
 
       MOCK_METHOD(suiteLoader, unload)
            .expects(once());
 
-      MOCK_METHOD(fixtureRunner, run)
+      MOCK_METHOD(hierarchyRunner, run)
            .expects(once())
-           .with(eq(desc[0]), eq((TestFixtureResultCollector*)collector));
-
-      MOCK_METHOD(fixtureRunner, run)
-           .expects(once())
-           .with(eq(desc[1]), eq((TestFixtureResultCollector*)collector));
+           .with(any(), eq((TestFixtureResultCollector*)collector));
 
       MOCK_METHOD(collector, startTestSuite)
            .expects(once())
@@ -151,8 +167,10 @@ public:
            .with(eq((TestSuiteInfoReader*)suiteDesc))
            .after("start");
 
+      TestFixtureRunner fixtureRunner(hierarchyRunner);
+
       ////////////////////////////////////////////////////
-      TestSuiteRunner runner(suiteLoader, fixtureRunner, collector);
+      TestSuiteRunner runner(suiteLoader, &fixtureRunner, collector);
       StringList searchingPaths;
 
       runner.run(searchingPaths, file, filter);
@@ -167,18 +185,19 @@ public:
 
       MOCK_METHOD(suiteLoader, load)
            .expects(once())
-           .with(endWith(file))
+           .with(any(), endWith(file))
            .will(throws(Error("File Not Found")));
 
       MOCK_METHOD(collector, addError)
            .expects(once())
            .with(contains("File Not Found"));
 
-      MOCK_METHOD(fixtureRunner, run)
+      MOCK_METHOD(hierarchyRunner, run)
            .expects(never());
 
+      TestFixtureRunner fixtureRunner(hierarchyRunner);
       ////////////////////////////////////////////////////
-      TestSuiteRunner runner(suiteLoader, fixtureRunner, collector);
+      TestSuiteRunner runner(suiteLoader, &fixtureRunner, collector);
       StringList searchingPaths;
 
       runner.run(searchingPaths, file, filter);

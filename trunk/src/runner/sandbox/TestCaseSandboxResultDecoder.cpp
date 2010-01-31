@@ -34,7 +34,7 @@ struct TestCaseSandboxResultDecoderImpl
    void flush(bool crashed);
 
    TestCaseSandboxResultDecoderImpl(ReadableChannel* ch
-             , TestCaseInfoReader* tc
+             , const TestCaseInfoReader* tc
              , TestCaseResultCollector* rc)
       : channel(ch), testcase(tc), collector(rc)
       , startReceived(false), endReceived(false)
@@ -52,7 +52,7 @@ struct TestCaseSandboxResultDecoderImpl
    { return errorReceived || failureReceived || crashInformed; }
 
    ReadableChannel* channel;
-   TestCaseInfoReader* testcase;
+   const TestCaseInfoReader* testcase;
    TestCaseResultCollector* collector;
 
    typedef std::list<std::string> Errors;
@@ -255,7 +255,7 @@ bool TestCaseSandboxResultDecoderImpl::decode()
 
 /////////////////////////////////////////////////////////////////////////
 TestCaseSandboxResultDecoder::TestCaseSandboxResultDecoder(ReadableChannel* channel
-             , TestCaseInfoReader* testcase
+             , const TestCaseInfoReader* testcase
              , TestCaseResultCollector* collector)
    : This(new TestCaseSandboxResultDecoderImpl(channel, testcase, collector))
 {
