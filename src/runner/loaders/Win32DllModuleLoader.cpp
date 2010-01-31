@@ -6,6 +6,7 @@
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
+#include <testngpp/utils/StringList.h>
 #include <testngpp/runner/Win32DllModuleLoader.h>
 
 
@@ -17,12 +18,12 @@ struct Win32DllModuleLoaderImpl
     Win32DllModuleLoaderImpl();
     ~Win32DllModuleLoaderImpl();
 
-    const char* addSearchingPaths(
-        const std::list<std::string>& searchingPaths);
-
-    void load(const std::string& modulePath);
     void loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
+       const StringList& searchingPaths, \
+       const std::string& modulePath);
+
+    void load( \
+       const StringList& searchingPaths, \
        const std::string& modulePath);
 
     void unload();
@@ -84,9 +85,10 @@ namespace
 
 /////////////////////////////////////////////////////////////////
 void
-Win32DllModuleLoaderImpl::loadUnderPaths \
-                 ( const std::list<std::string>& searchingPaths
-                 , const std::string& modulePath)
+Win32DllModuleLoaderImpl::
+loadUnderPaths
+      ( const StringList& searchingPaths
+      , const std::string& modulePath)
 {
    std::list<std::string>::const_iterator i = searchingPaths.begin();
    for(; i != searchingPaths.end(); i++)
@@ -98,17 +100,19 @@ Win32DllModuleLoaderImpl::loadUnderPaths \
       }
    }
 
-   load(modulePath);
+   throw Error("Can't open module " + modulePath);
 }
 
 ////////////////////////////////////////////////////////
 void
-Win32DllModuleLoaderImpl::load(const std::string& modulePath)
+Win32DllModuleLoaderImpl::
+load( const StringList& searchingPaths
+    , const std::string& modulePath)
 {
     handle = openModule(modulePath.c_str());
     if(handle == 0)
     {
-        throw Error("Can't open module " + modulePath);
+       loadUnderPaths(searchingPaths, modulePath);
     }
 }
 
@@ -153,20 +157,14 @@ Win32DllModuleLoader::~Win32DllModuleLoader()
     delete This;
 }
 
-////////////////////////////////////////////////////////
-void
-Win32DllModuleLoader::load(const std::string& modulePath)
-{
-    This->load(modulePath);
-}
 
 ////////////////////////////////////////////////////////
 void
-Win32DllModuleLoader::loadUnderPaths( \
-       const std::list<std::string>& searchingPaths, \
-       const std::string& modulePath)
+Win32DllModuleLoader::
+load( const StringList& searchingPaths
+    , const std::string& modulePath)
 {
-    This->loadUnderPaths(searchingPaths, modulePath);
+    This->load(searchingPaths, modulePath);
 }
 
 ////////////////////////////////////////////////////////
