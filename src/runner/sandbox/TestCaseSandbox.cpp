@@ -37,7 +37,7 @@ struct TestCaseSandboxImpl
      return sandbox->getChannelId();
    }
 
-   void handle() throw (EOFError, Error);
+   void handle() TESTNGPP_THROW(EOFError, Error);
 
    ~TestCaseSandboxImpl()
    {
@@ -58,7 +58,7 @@ struct TestCaseSandboxImpl
 };
 
 ////////////////////////////////////////////////////////
-void TestCaseSandboxImpl::handle() throw (EOFError, Error)
+void TestCaseSandboxImpl::handle() TESTNGPP_THROW(EOFError, Error)
 {
    if(sandbox->isDead())
    {
@@ -119,7 +119,7 @@ TestCaseSandbox::getTestCase() const
 
 ////////////////////////////////////////////////////////
 void
-TestCaseSandbox::handle() throw (EOFError, Error)
+TestCaseSandbox::handle() TESTNGPP_THROW(EOFError, Error)
 {
    This->handle();
 }

@@ -31,12 +31,12 @@ struct AssertionFailure : public std::exception
 	AssertionFailure( const std::string& file
                    , unsigned int line
                    , const std::string& msg);
-	~AssertionFailure() throw()
+	~AssertionFailure() TESTNGPP_THROW()
    {}
 
 	const std::string& getFileName() const;
    unsigned int getLineOfFile() const;
-	const char* what() const throw();
+	const char* what() const TESTNGPP_THROW();
 
 private:
 	std::string fileName;

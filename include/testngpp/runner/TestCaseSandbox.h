@@ -23,7 +23,7 @@ struct TestCaseSandbox
    SandboxId getSandboxId() const;
    ChannelId getChannelId() const;
 
-   void handle() throw (Error, EOFError);
+   void handle() TESTNGPP_THROW(Error, EOFError);
    
    const TestCase* getTestCase() const;
 

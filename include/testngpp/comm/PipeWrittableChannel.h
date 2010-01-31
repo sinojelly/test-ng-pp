@@ -32,9 +32,9 @@ struct PipeWrittableChannel
    PipeWrittableChannel(int channelFd);
    ~PipeWrittableChannel();
 
-   void writeByte(const unsigned char byte) throw (Error);
-   void writeInt(const unsigned int value) throw (Error);
-   void writeString(const std::string& str) throw (Error);
+   void writeByte(const unsigned char byte) TESTNGPP_THROW (Error);
+   void writeInt(const unsigned int value) TESTNGPP_THROW (Error);
+   void writeString(const std::string& str) TESTNGPP_THROW (Error);
 
    void close();
 

@@ -49,7 +49,7 @@ unsigned int AssertionFailure::getLineOfFile() const
 }
 
 //////////////////////////////////////////////////////////
-const char* AssertionFailure::what() const throw()
+const char* AssertionFailure::what() const TESTNGPP_THROW()
 {
 	return errMsg.c_str();
 }

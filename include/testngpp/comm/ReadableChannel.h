@@ -30,9 +30,9 @@ TESTNGPP_NS_START
 
 struct ReadableChannel
 {
-   virtual unsigned char readByte() throw (Error, EOFError) = 0;
-   virtual int readInt() throw (Error, EOFError) = 0;
-   virtual std::string readString() throw (Error, EOFError) = 0;
+   virtual unsigned char readByte() TESTNGPP_THROW (Error, EOFError) = 0;
+   virtual int readInt() TESTNGPP_THROW (Error, EOFError) = 0;
+   virtual std::string readString() TESTNGPP_THROW (Error, EOFError) = 0;
 
    virtual void close() = 0;
 

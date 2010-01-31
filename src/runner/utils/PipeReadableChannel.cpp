@@ -40,7 +40,7 @@ static void readFromPipe(int fd, void* buf, size_t size)
    }
 }
 //////////////////////////////////////////////////////////////////
-unsigned char PipeReadableChannel::readByte() throw (Error, EOFError)
+unsigned char PipeReadableChannel::readByte() TESTNGPP_THROW(Error, EOFError)
 {
    unsigned char byte;
 
@@ -50,7 +50,7 @@ unsigned char PipeReadableChannel::readByte() throw (Error, EOFError)
 }
 
 //////////////////////////////////////////////////////////////////
-int PipeReadableChannel::readInt() throw (Error, EOFError)
+int PipeReadableChannel::readInt() TESTNGPP_THROW(Error, EOFError)
 {
    int value;
 
@@ -60,7 +60,7 @@ int PipeReadableChannel::readInt() throw (Error, EOFError)
 }
 
 //////////////////////////////////////////////////////////////////
-std::string PipeReadableChannel::readString() throw (Error, EOFError)
+std::string PipeReadableChannel::readString() TESTNGPP_THROW(Error, EOFError)
 {
    std::stringstream ss;
 

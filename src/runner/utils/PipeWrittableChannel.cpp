@@ -44,19 +44,19 @@ static void writeBuf(int fd, const void* buf, size_t size)
 }
 
 //////////////////////////////////////////////////////////
-void PipeWrittableChannel::writeByte(const unsigned char byte) throw (Error)
+void PipeWrittableChannel::writeByte(const unsigned char byte) TESTNGPP_THROW(Error)
 {
    writeBuf(fd, (const void*)&byte, 1);
 }
 
 //////////////////////////////////////////////////////////
-void PipeWrittableChannel::writeInt(const unsigned int value) throw (Error)
+void PipeWrittableChannel::writeInt(const unsigned int value) TESTNGPP_THROW(Error)
 {
    writeBuf(fd, (const void*)&value, sizeof(value));
 }
 
 //////////////////////////////////////////////////////////
-void PipeWrittableChannel::writeString(const std::string& str) throw (Error)
+void PipeWrittableChannel::writeString(const std::string& str) TESTNGPP_THROW(Error)
 {
    writeBuf(fd, (const void*)str.c_str(), str.size() + 1);
 }
