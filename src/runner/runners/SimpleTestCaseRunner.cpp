@@ -10,20 +10,25 @@ TESTNGPP_NS_START
    catch(AssertionFailure& failure) \
    { \
       collector->addCaseFailure(testcase, failure); \
+      hasFailure = true; \
    } \
    catch(std::exception& e) \
    { \
       collector->addCaseError(testcase, e.what()); \
+      hasFailure = true; \
    } \
    catch(...) \
    { \
       collector->addCaseError(testcase, "Unknown Exception"); \
+      hasFailure = true; \
    }
 
-void SimpleTestCaseRunner::run
+bool SimpleTestCaseRunner::run
       ( TestCase* testcase
       , TestCaseResultCollector* collector)
 {
+   bool hasFailure = false;
+
    collector->startTestCase(testcase);
 
    __RUN({
@@ -36,6 +41,8 @@ void SimpleTestCaseRunner::run
    });
 
    collector->endTestCase(testcase);
+
+   return !hasFailure;
 }
 
 TESTNGPP_NS_END
