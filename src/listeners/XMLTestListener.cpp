@@ -29,6 +29,7 @@
  attribute tests { xsd:integer },
  attribute fixtures { xsd:integer },
  attribute crashes { xsd:integer },
+ attribute skips { xsd:integer },
  attribute errors { xsd:integer },
  attribute failures { xsd:integer },
  element testcase*
@@ -118,6 +119,7 @@ endTestSuite(TestSuiteInfoReader* suite)
 		.attribute("tests", toValStr(suite->getNumberOfTestCases()))
 		.attribute("fixtures", toValStr(suite->getNumberOfTestFixtures()))
 		.attribute("crashes", toValStr(testSuiteResultReporter->getNumberOfCrashedTestCases(suite)))
+		.attribute("skips",   toValStr(testSuiteResultReporter->getNumberOfSkippedTestCases(suite)))
 		.attribute("errors", toValStr(testSuiteResultReporter->getNumberOfErrorTestCases(suite)))
 		.attribute("failures", toValStr(testSuiteResultReporter->getNumberOfFailedTestCases(suite)));
 }

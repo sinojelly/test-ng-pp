@@ -25,6 +25,7 @@ struct SimpleTestSuiteResultReporter
    int getNumberOfUnsuccessfulTestCases(TestSuiteInfoReader*) const;
    int getNumberOfFailedTestCases(TestSuiteInfoReader*) const;
    int getNumberOfErrorTestCases(TestSuiteInfoReader*) const;
+   int getNumberOfSkippedTestCases(TestSuiteInfoReader*) const;
    int getNumberOfCrashedTestCases(TestSuiteInfoReader*) const;
    int getNumberOfFixtureErrors(TestSuiteInfoReader*) const;
    int getNumberOfFixtureFailures(TestSuiteInfoReader*) const;
