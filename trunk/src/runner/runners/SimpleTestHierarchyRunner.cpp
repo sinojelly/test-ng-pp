@@ -19,7 +19,7 @@ struct SimpleTestHierarchyRunnerImpl
 	void run(TestHierarchyHandler* hierarchy
       , TestFixtureResultCollector* resultCollector);
 
-   TestCaseRunner* caseRunner;
+   TestCaseRunner* caseRunner; // X
 };
 
 ///////////////////////////////////////////////////////

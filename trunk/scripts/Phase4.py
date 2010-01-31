@@ -75,6 +75,7 @@ static struct %s
    void tearDown()
    {
       belongedFixture->tearDown();
+      delete belongedFixture;
    }
 
    void run(bool runDepends=false)
