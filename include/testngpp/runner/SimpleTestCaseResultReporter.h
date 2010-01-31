@@ -18,13 +18,15 @@ struct SimpleTestCaseResultReporter
 	SimpleTestCaseResultReporter();
 	~SimpleTestCaseResultReporter();
 
-   unsigned int getTestCaseResult(TestCaseInfoReader*) const;
+   unsigned int getTestCaseResult(const TestCaseInfoReader*) const;
 
-   void addCaseError(TestCaseInfoReader*, const std::string&);
-   void addCaseCrash(TestCaseInfoReader*);
-   void addCaseFailure(TestCaseInfoReader*, const AssertionFailure&);
-   void startTestCase(TestCaseInfoReader*);
-   void endTestCase(TestCaseInfoReader*);
+   void addCaseError(const TestCaseInfoReader*, const std::string&);
+   void addCaseCrash(const TestCaseInfoReader*);
+   void addCaseSkipped(const TestCaseInfoReader*);
+   void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
+
+   void startTestCase(const TestCaseInfoReader*);
+   void endTestCase(const TestCaseInfoReader*);
 
 private:
    SimpleTestCaseResultReporterImpl * This;

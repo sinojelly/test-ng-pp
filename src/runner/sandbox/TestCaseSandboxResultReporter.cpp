@@ -20,10 +20,10 @@ struct TestCaseSandboxResultReporterImpl
    ~TestCaseSandboxResultReporterImpl()
    { delete channel; }
 
-	void addCaseError(TestCaseInfoReader* testCase, const std::string& msg);
-	void addCaseFailure(TestCaseInfoReader* testCase, const AssertionFailure& failure);
-	void startTestCase(TestCaseInfoReader* testCase);
-	void endTestCase(TestCaseInfoReader* testCase);
+	void addCaseError(const TestCaseInfoReader* testCase, const std::string& msg);
+	void addCaseFailure(const TestCaseInfoReader* testCase, const AssertionFailure& failure);
+	void startTestCase(const TestCaseInfoReader* testCase);
+	void endTestCase(const TestCaseInfoReader* testCase);
 
    WrittableChannel* channel;
 };
@@ -39,7 +39,7 @@ namespace
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporterImpl::
-addCaseError(TestCaseInfoReader* testCase, const std::string& msg)
+addCaseError(const TestCaseInfoReader* testCase, const std::string& msg)
 {
 	channel->writeByte(errorCmd);
    channel->writeString(msg);
@@ -47,7 +47,7 @@ addCaseError(TestCaseInfoReader* testCase, const std::string& msg)
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporterImpl::
-addCaseFailure(TestCaseInfoReader* testCase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testCase, const AssertionFailure& failure)
 {
 	channel->writeByte(failureCmd);
    channel->writeString(failure.getFileName());
@@ -57,14 +57,14 @@ addCaseFailure(TestCaseInfoReader* testCase, const AssertionFailure& failure)
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporterImpl::
-startTestCase(TestCaseInfoReader* testCase)
+startTestCase(const TestCaseInfoReader* testCase)
 {
 	channel->writeByte(startCmd);
 }
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporterImpl::
-endTestCase(TestCaseInfoReader* testCase)
+endTestCase(const TestCaseInfoReader* testCase)
 {
 	channel->writeByte(endCmd);
 }
@@ -84,28 +84,28 @@ TestCaseSandboxResultReporter::~TestCaseSandboxResultReporter()
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporter::
-addCaseError(TestCaseInfoReader* testCase, const std::string& msg)
+addCaseError(const TestCaseInfoReader* testCase, const std::string& msg)
 {
 	This->addCaseError(testCase, msg);
 }
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporter::
-addCaseFailure(TestCaseInfoReader* testCase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testCase, const AssertionFailure& failure)
 {
 	This->addCaseFailure(testCase, failure);
 }
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporter::
-startTestCase(TestCaseInfoReader* testCase)
+startTestCase(const TestCaseInfoReader* testCase)
 {
 	This->startTestCase(testCase);
 }
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporter::
-endTestCase(TestCaseInfoReader* testCase)
+endTestCase(const TestCaseInfoReader* testCase)
 {
 	This->endTestCase(testCase);
 }

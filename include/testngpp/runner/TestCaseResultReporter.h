@@ -15,10 +15,11 @@ struct TestCaseResultReporter
       TR_FAILED  = 1,
       TR_ERROR   = 2,
       TR_CRASHED = 3,
-      TR_UNKNOWN = 4
+      TR_SKIPPED = 4,
+      TR_UNKNOWN = 5
    };
    
-   virtual unsigned int getTestCaseResult(TestCaseInfoReader*) const = 0;
+   virtual unsigned int getTestCaseResult(const TestCaseInfoReader*) const = 0;
 
    virtual ~TestCaseResultReporter() {}
 };

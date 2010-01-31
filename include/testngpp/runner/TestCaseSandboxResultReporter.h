@@ -16,12 +16,13 @@ struct TestCaseSandboxResultReporter
    TestCaseSandboxResultReporter(WrittableChannel* channel);
    ~TestCaseSandboxResultReporter();
 
-   void addCaseCrash(TestCaseInfoReader*) {}
-   void addCaseError(TestCaseInfoReader*, const std::string&); 
-   void addCaseFailure(TestCaseInfoReader*, const AssertionFailure&);
+   void addCaseCrash(const TestCaseInfoReader*) {}
+   void addCaseSkipped(const TestCaseInfoReader*) {}
+   void addCaseError(const TestCaseInfoReader*, const std::string&); 
+   void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
 
-   void startTestCase(TestCaseInfoReader*); 
-   void endTestCase(TestCaseInfoReader*);
+   void startTestCase(const TestCaseInfoReader*); 
+   void endTestCase(const TestCaseInfoReader*);
 
 private:
    TestCaseSandboxResultReporterImpl* This;

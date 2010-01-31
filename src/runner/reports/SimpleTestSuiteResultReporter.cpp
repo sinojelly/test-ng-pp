@@ -12,6 +12,7 @@ struct SimpleTestSuiteResultReporterImpl
 {
    int numberOfSuccessfulCases;
    int numberOfCrashedCases;
+   int numberOfSkippedCases;
    int numberOfErrorCases;
    int numberOfFailedCases;
    int numberOfFixtureErrors;
@@ -89,32 +90,39 @@ SimpleTestSuiteResultReporter::~SimpleTestSuiteResultReporter()
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-addCaseCrash(TestCaseInfoReader* testcase)
+addCaseCrash(const TestCaseInfoReader* testcase)
 {
    This->numberOfCrashedCases++;
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-addCaseError(TestCaseInfoReader* testcase, const std::string& msg)
+addCaseSkipped(const TestCaseInfoReader* testcase)
+{
+   This->numberOfSkippedCases++;
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestSuiteResultReporter::
+addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-addCaseFailure(TestCaseInfoReader* testcase, const AssertionFailure& failure)
+addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-startTestCase(TestCaseInfoReader*)
+startTestCase(const TestCaseInfoReader*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-endTestCase(TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase)
 {
    switch(This->caseResultReporter->getTestCaseResult(testcase))
    {
@@ -129,6 +137,9 @@ endTestCase(TestCaseInfoReader* testcase)
       break;
    case TestCaseResultReporter::TR_CRASHED:
       This->numberOfCrashedCases++;
+      break;
+   case TestCaseResultReporter::TR_SKIPPED:
+      This->numberOfSkippedCases++;
       break;
    case TestCaseResultReporter::TR_UNKNOWN:
    default:

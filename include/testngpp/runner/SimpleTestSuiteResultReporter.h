@@ -31,11 +31,13 @@ struct SimpleTestSuiteResultReporter
    int getNumberOfSuiteErrors(TestSuiteInfoReader*) const;
 
    ////////////////////////////////////////////////////////////
-   void addCaseError(TestCaseInfoReader*, const std::string&);
-   void addCaseCrash(TestCaseInfoReader*);
-   void addCaseFailure(TestCaseInfoReader*, const AssertionFailure&);
-   void startTestCase(TestCaseInfoReader*);
-   void endTestCase(TestCaseInfoReader*);
+   void addCaseError(const TestCaseInfoReader*, const std::string&);
+   void addCaseCrash(const TestCaseInfoReader*);
+   void addCaseSkipped(const TestCaseInfoReader*);
+   void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
+
+   void startTestCase(const TestCaseInfoReader*);
+   void endTestCase(const TestCaseInfoReader*);
 
    void startTestFixture(TestFixtureInfoReader*);
    void endTestFixture(TestFixtureInfoReader*);
