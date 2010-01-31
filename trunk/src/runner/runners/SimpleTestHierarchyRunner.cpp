@@ -24,20 +24,15 @@ struct SimpleTestHierarchyRunnerImpl
 
 ///////////////////////////////////////////////////////
 void
-SimpleTestHierarchyRunnerImpl::run(TestHierarchyHandler* fixture
+SimpleTestHierarchyRunnerImpl::run(TestHierarchyHandler* hierarchy
         , TestFixtureResultCollector* resultCollector)
 {
-#if 0
-   unsigned int numberOfTestCases = fixture->getNumberOfTestCases();
-   for(unsigned int i=0; i<numberOfTestCases; i++)
+   while(hierarchy->numberOfTestCasesInSched() > 0)
    {
-      TestCase* testcase = fixture->getTestCase(i);
-      if(filter->isCaseMatch((const TestCaseInfoReader*)testcase))
-      {
-         caseRunner->run(testcase, resultCollector);
-      }
+      TestCase* testcase = const_cast<TestCase*>(hierarchy->getTestCase(0));
+      bool result = caseRunner->run(testcase, resultCollector);
+      hierarchy->testDone(testcase, result);
    }
-#endif
 }
 
 ///////////////////////////////////////////////////////

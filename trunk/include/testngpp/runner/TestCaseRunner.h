@@ -12,7 +12,7 @@ struct TestCaseResultCollector;
 
 struct TestCaseRunner
 {
-	virtual void run(TestCase*, TestCaseResultCollector*) = 0;
+	virtual bool run(TestCase*, TestCaseResultCollector*) = 0;
 
    virtual ~TestCaseRunner() {}
 };
