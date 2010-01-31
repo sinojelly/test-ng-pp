@@ -44,7 +44,7 @@ struct ResourceCheckPoint
 ///////////////////////////////////////////////////////////
 ResourceCheckPoint testngppSetCheckPoint();
 void testngppVerifyCheckPoint(const ResourceCheckPoint& rcp
-        , const char*, unsigned int) throw (Error, AssertionFailure);
+        , const char*, unsigned int)  TESTNGPP_THROW(Error, AssertionFailure);
 
 ///////////////////////////////////////////////////////////
 #define TESTNGPP_SET_RESOURCE_CHECK_POINT() \

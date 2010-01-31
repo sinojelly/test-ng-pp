@@ -115,7 +115,7 @@ getTestCase(unsigned int index) const
    std::list<ValueType>::const_iterator iter = \
       schedTestCases.begin();
 
-   for(int i=0; i < index; i++)
+   for(unsigned int i=0; i < index; i++)
       iter++;
 
    return (*iter).first;

@@ -37,5 +37,10 @@
 #define DLL_EXPORT 
 #endif
 
+#ifdef _MSC_VER
+#define TESTNGPP_THROW(...) 
+#else
+#define TESTNGPP_THROW(...) throw(__VA_ARGS__)
 #endif
 
+#endif
