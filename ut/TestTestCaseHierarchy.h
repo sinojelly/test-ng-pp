@@ -1,5 +1,7 @@
 
 
+#include <iostream>
+
 #include <cxxtest/TestSuite.h>
 
 #include <mockcpp/mockcpp.hpp>
@@ -72,18 +74,28 @@ public:
         .with(eq((const TestCaseInfoReader*)f.testCases[0][0]))
         .will(returnValue(false));
 
+
+
       hierarchy = new TestCaseHierarchy (f.fixtureDesc[0], filter);
+
 
    }
    void tearDown()
    {
+      delete hierarchy;
+
       filter.verify();
 
-      delete hierarchy;
+      filter.reset();
 
       f.tearDown();
 
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      try {
+        TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      }catch(std::exception& ex)
+      {
+         std::cout << ex.what() << std::endl;
+      }
    }
 
 

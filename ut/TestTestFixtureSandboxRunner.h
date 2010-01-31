@@ -7,7 +7,8 @@
 #include <TestFixtureDef.h>
 
 #include <testngpp/runner/TestHierarchySandboxRunner.h>
-#include <testngpp/runner/TestCaseHierarchy.h>
+#include <testngpp/runner/TestHierarchyRunner.h>
+#include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/SimpleTestCaseRunner.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseFilter.h>
@@ -88,7 +89,7 @@ public:
 
       SimpleTestCaseRunner caseRunner;
       TestHierarchySandboxRunner runner(2, &caseRunner);
-      TestCaseHierarchy hierarchy(&myTestFixtureDesc, filter);
+      TestHierarchyHandler hierarchy(&myTestFixtureDesc, filter, collector);
       runner.run(&hierarchy, collector);
    }
 };

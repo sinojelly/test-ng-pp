@@ -16,6 +16,8 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
+#include <string>
+
 #include <testngpp/AssertionFailure.h>
 
 TESTNGPP_NS_START
@@ -32,7 +34,7 @@ bool operator==(const AssertionFailure& lhs, const AssertionFailure& rhs)
 {
    return lhs.getFileName() == rhs.getFileName() &&
           lhs.getLineOfFile() == rhs.getLineOfFile() &&
-          lhs.what() == rhs.what();
+          std::string(lhs.what()) == std::string(rhs.what());
 }
 //////////////////////////////////////////////////////////
 const std::string& AssertionFailure::getFileName() const
