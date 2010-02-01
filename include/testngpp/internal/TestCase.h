@@ -67,6 +67,10 @@ struct TestCase
    virtual void tearDown() = 0;
    virtual void run(bool runDepends=false) = 0;
 
+   virtual bool hasTags() const { return false; }
+
+   virtual bool hasTag(const std::string& tag) const { return false; }
+
    void runDependedTestCase()
    {
       if(depends == 0)

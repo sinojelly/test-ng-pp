@@ -4,6 +4,8 @@ import re
 from Message import *
 
 blank_re = re.compile( r'^\s*$', re.UNICODE)
+tags_re1 = re.compile( r'^\"(?P<tags>[A-Za-z0-9_\s]*)\"$', re.UNICODE)
+tags_re2 = re.compile( r'^(?P<tags>[A-Za-z0-9_\s]*)$', re.UNICODE)
 
 def is_blank(str):
    return blank_re.match(str)
@@ -17,10 +19,8 @@ class TestCase:
       self.scope            = scope
       self.file             = file
       self.line             = line
-      self.id               = None
-      self.depend           = None
-      self.groups           = []
-      self.tags             = {"id":None, "depends":None, "tags":[]}
+      self.annotations      = {"id":None, "depends":None, "tags":[]}
+      self.tags_parsed      = None
 
       self.tag              = tag
       self.depends          = None
@@ -28,6 +28,30 @@ class TestCase:
 
       self.parse_tag(self.tag)
 
+   ########################################
+   def parse_tags(self):
+      tags = self.annotations['tags']
+      matched = tags_re1.match(tags)
+      if not matched:
+         matched = tags_re2.match(tags)
+
+      if matched:
+         self.annotations['tags'] = ["\""+tag+"\""  for tag in re.split(r'\s+', matched.group("tags"))]
+         return self.annotations['tags']
+
+      fatal(self.file, self.line, "invalid annoation attribute value of \"tags\"")
+
+   ########################################
+   def get_tags(self):
+      if self.tags_parsed:
+         return self.annotations['tags']
+
+      self.tags_parsed = True
+      if len(self.annotations['tags']) == 0:
+         return self.annotations['tags']
+
+      return self.parse_tags()
+      
    ########################################
    def set_scope(self, scope):
       self.scope = scope
@@ -42,7 +66,7 @@ class TestCase:
 
    ########################################
    def matches_id(self, id):
-      return id != None and self.tags["id"] == id
+      return id != None and self.annotations["id"] == id
 
    ########################################
    def report_cyclic_depend_error(self):
@@ -51,12 +75,12 @@ class TestCase:
 
    ########################################
    def __get_depends(self):
-      if self.tags["depends"] == None:
+      if self.annotations["depends"] == None:
          return None
 
-      depends = self.scope.find_testcase_with_id(self.tags["depends"]) 
+      depends = self.scope.find_testcase_with_id(self.annotations["depends"]) 
       if depends == None:
-         raw_fatal(self.file, self.line, "no testcase was specified with id=" + self.tags["depends"])
+         raw_fatal(self.file, self.line, "no testcase was specified with id=" + self.annotations["depends"])
 
       return depends
 
@@ -69,11 +93,11 @@ class TestCase:
      
    ########################################
    def __setitem__(self, key, value):
-      self.tags[key] = value
+      self.annotations[key] = value
 
    ########################################
    def __getitem__(self, key):
-      return self.tags[key]
+      return self.annotations[key]
 
    ########################################
    def parse_tag(self, tag):
@@ -89,6 +113,8 @@ class TestCase:
    def parse_attrs(self, tag, attrs):
       for attr in attrs:
          self.parse_attr(tag, attr)
+
+      self.get_tags()
 
    ########################################
    def report_dup_key(self, tag, key):
