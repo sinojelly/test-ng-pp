@@ -45,6 +45,17 @@ def get_depends_var(fixture, testcase):
 def get_fixture_id(fixture):
    return fixture.get_id()
 
+def testcase_has_tags(testcase):
+   if len(testcase.get_tags()) > 0:
+      return "true";
+   return "false"
+
+def get_testcase_tags(testcase):
+   result = ",".join(testcase.get_tags())
+   if result == "":
+      return "0"
+   return result
+
 ################################################
 testcase_template = '''
 static struct %s 
@@ -91,6 +102,21 @@ static struct %s
       return belongedFixture;
    }
 
+   bool hasTags() const
+   {
+      return %s;
+   }
+
+   bool hasTag(const std::string& tag) const
+   {
+      static const char* tags[] = {%s};
+      for(unsigned i=0; i<%d; i++)
+      {
+         if(std::string(tags[i]) == tag)
+            return true;
+      }
+      return false;
+   }
 private:
    %s* belongedFixture; 
 } %s ;
@@ -117,11 +143,15 @@ class TestCaseDefGenerator:
          get_fixture_id(self.fixture), \
          get_fixture_id(self.fixture), \
          get_testcase_name(self.testcase), \
+         testcase_has_tags(self.testcase), \
+         get_testcase_tags(self.testcase), \
+         len(self.testcase.get_tags()), \
          get_fixture_id(self.fixture), \
          get_testcase_instance_name(self.fixture, self.testcase) \
          )
       output(testcase_def, self.file)
 
+   #############################################
    def generate(self):
       if self.testcase.has_been_generated():
          return
