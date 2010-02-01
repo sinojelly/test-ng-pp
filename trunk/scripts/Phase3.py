@@ -45,7 +45,7 @@ class GlobalParser:
       return is_fixture_def(content)
 
    def handle_tag(self, tag):
-      warning(self.file, tag, "useless tag definition @" + tag.get_tag())
+      warning(self.file, tag, "useless annotation @" + tag.get_tag())
 
    def verify_scope(self, tag):
       return True

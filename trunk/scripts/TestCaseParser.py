@@ -24,7 +24,7 @@ class TestCaseParser:
    #######################################################
    def verify_testcase_tag(self, tag):
       if tag != None and tag.get_tag() != "test":
-         warning(self.file, tag, "unknown tag @" + tag.get_tag())
+         warning(self.file, tag, "unknown annotation @" + tag.get_tag())
 
    #######################################################
    def get_container(self):
@@ -91,6 +91,6 @@ class TestCaseParser:
 
    #######################################################
    def handle_tag(self, tag):
-      warning(self.file, tag, "tag is not allowed in testcase definition")
+      warning(self.file, tag, "annotation is not allowed in testcase definition")
 
 ##########################################################
