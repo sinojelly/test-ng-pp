@@ -20,7 +20,7 @@ class TestCase:
       self.id               = None
       self.depend           = None
       self.groups           = []
-      self.tags             = {"id":None, "depends":None, "groups":[]}
+      self.tags             = {"id":None, "depends":None, "tags":[]}
 
       self.tag              = tag
       self.depends          = None
@@ -92,16 +92,16 @@ class TestCase:
 
    ########################################
    def report_dup_key(self, tag, key):
-      fatal(self.file, tag, "invalid tag attribute definition, duplicated \""+key+"\"")
+      fatal(self.file, tag, "invalid annotation attribute definition, duplicated \""+key+"\"")
 
    ########################################
    def parse_attr(self, tag, attr):
       kv = re.split("\s*=\s*", attr)
       if len(kv) != 2:
-         fatal(self.file, tag, "invalid tag attribute definition, use key=value pair")
+         fatal(self.file, tag, "invalid annotation attribute definition, use key=value pair")
 
       if is_blank(kv[0]) or is_blank(kv[1]):
-         fatal(self.file, tag, "invalid tag attribute definition, key or value cannot be null")
+         fatal(self.file, tag, "invalid annotation attribute definition, key or value cannot be null")
 
       self.set_key_value(tag, kv[0], kv[1])
 
@@ -113,7 +113,7 @@ class TestCase:
 
          self[key] = value
       except KeyError:
-         fatal(self.file, tag, "invalid tag attribute definition, undefined key \""+key+"\"")
+         fatal(self.file, tag, "invalid annotation attribute definition, undefined key \""+key+"\"")
      
    ########################################
    def show(self):

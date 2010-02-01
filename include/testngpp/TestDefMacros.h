@@ -28,5 +28,8 @@
 #define TEST(...) void __TESTNGPP_LINENAME(test_) (void)
 #define FIXTURE(cut, ...) struct Test##cut: public TESTNGPP_NS::TestFixture
 
+#define SETUP() void setUp()
+#define TEARDOWN() void tearDown()
+
 #endif
 
