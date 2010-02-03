@@ -77,6 +77,9 @@ SET(TESTNGRUNNER_LIB_SRCS
   filters/TestFilterFactory.cpp 
   filters/PosixFNMatcher.cpp 
 
+  tags/AndCompositeTestCaseFilter.cpp 
+  tags/OrCompositeTestCaseFilter.cpp 
+
   TestRunner.cpp
 )
 
