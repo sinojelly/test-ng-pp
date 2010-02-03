@@ -79,6 +79,7 @@ SET(TESTNGRUNNER_LIB_SRCS
 
   tags/AndCompositeTestCaseFilter.cpp 
   tags/OrCompositeTestCaseFilter.cpp 
+  tags/NotTestCaseFilter.cpp 
   tags/GeneralTagsFilter.cpp 
 
   TestRunner.cpp
