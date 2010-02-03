@@ -233,7 +233,7 @@ fnmatch_check_finals(const char                  *pattern,
    return FNM_NOMATCH;
 }
 
-int
+DLL_EXPORT int
 fnmatch(const char *pattern,
 	const char *string,
 	int         flags)

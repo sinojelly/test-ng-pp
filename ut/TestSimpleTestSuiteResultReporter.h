@@ -36,7 +36,7 @@ public:
       MockObject<TestCaseInfoReader> caseInfoReader;
       MockObject<TestSuiteInfoReader> suiteInfoReader;
 
-      caseReporter.METHOD(TestCaseResultReporter::getTestCaseResult)
+      MOCK_METHOD(caseReporter, getTestCaseResult)
                   .stubs()
                   .will(returnValue((unsigned int)testngpp::TestCaseResultReporter::TR_CRASHED));
 
