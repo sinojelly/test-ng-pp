@@ -107,12 +107,12 @@ static struct %s
       return %s;
    }
 
-   bool hasTag(const std::string& tag) const
+   bool tagsMatch(const NameMatcher* matcher) const
    {
       static const char* tags[] = {%s};
       for(unsigned i=0; i<%d; i++)
       {
-         if(std::string(tags[i]) == tag)
+         if(matcher->matches(tags[i]))
             return true;
       }
       return false;
@@ -363,7 +363,8 @@ def get_suite_getter_name():
 dep_headers = [
    "internal/TestCase.h",
    "internal/TestFixtureDesc.h",
-   "internal/TestSuiteDesc.h"
+   "internal/TestSuiteDesc.h",
+   "internal/NameMatcher.h"
 ]
 
 ################################################

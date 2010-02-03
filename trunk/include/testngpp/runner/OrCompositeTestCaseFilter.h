@@ -7,7 +7,7 @@
 
 TESTNGPP_NS_START
 
-struct TestCaseInfoReader;
+struct TestCase;
 struct OrCompositeTestCaseFilterImpl;
 
 ////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ struct OrCompositeTestCaseFilter
    ~OrCompositeTestCaseFilter();
 
    void addFilter(const TestCaseFilter* filter, bool isComposite);
-   bool isCaseMatch(const TestCaseInfoReader* testcase) const;
+   bool isCaseMatch(const TestCase* testcase) const;
 
 private:
    OrCompositeTestCaseFilterImpl * This;

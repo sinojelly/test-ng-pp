@@ -85,17 +85,19 @@ public:
 
    void testShouldMatchesATestcaseIfAnyOfAddedFiltersMatchesIt()
    {
+      const TestCase* tc = (const TestCase*)(const TestCaseInfoReader*)testcase;
       filter2.METHOD(TestFilter::isCaseMatch)
          .stubs()
-         .with(eq((const TestCaseInfoReader*)testcase))
+         .with(eq(tc))
          .will(returnValue(true));
 
-      TS_ASSERT(filter->isCaseMatch(testcase));
+      TS_ASSERT(filter->isCaseMatch(tc));
    }
 
    void testShouldNotMatchATestcaseIfAllAddedFiltersClaimsNotMatch()
    {
-      TS_ASSERT(!filter->isCaseMatch(testcase));
+      const TestCase* tc = (const TestCase*)(const TestCaseInfoReader*)testcase;
+      TS_ASSERT(!filter->isCaseMatch(tc));
    }
 
    void testShouldDeleteAllTestFiltersWhichAreAddedAsComposite()
