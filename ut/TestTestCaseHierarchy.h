@@ -71,13 +71,11 @@ public:
 
       MOCK_METHOD(filter, isCaseMatch)
         .stubs()
-        .with(eq((const TestCaseInfoReader*)f.testCases[0][0]))
+        .with(eq((const TestCase*)f.testCases[0][0]))
         .will(returnValue(false));
 
 
-
       hierarchy = new TestCaseHierarchy (f.fixtureDesc[0], filter);
-
 
    }
    void tearDown()

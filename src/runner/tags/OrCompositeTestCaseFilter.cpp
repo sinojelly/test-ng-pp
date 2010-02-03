@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include <testngpp/runner/OrCompositeTestCaseFilter.h>
-#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestCase.h>
 
 TESTNGPP_NS_START
 
@@ -18,7 +18,7 @@ struct OrCompositeTestCaseFilterImpl
    ~OrCompositeTestCaseFilterImpl();
 
    void addFilter(const TestCaseFilter* filter, bool isComposite);
-   bool isCaseMatch(const TestCaseInfoReader* testcase) const;
+   bool isCaseMatch(const TestCase* testcase) const;
 };
 
 ////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ OrCompositeTestCaseFilter::
 
 ////////////////////////////////////////////////////
 bool OrCompositeTestCaseFilterImpl::
-isCaseMatch(const TestCaseInfoReader* testcase) const
+isCaseMatch(const TestCase* testcase) const
 {
    Filters::const_iterator i = filters.begin();
    for(; i != filters.end(); i++)
@@ -70,7 +70,7 @@ addFilter(const TestCaseFilter* filter, bool isComposite)
 
 ////////////////////////////////////////////////////
 bool OrCompositeTestCaseFilter::
-isCaseMatch(const TestCaseInfoReader* testcase) const
+isCaseMatch(const TestCase* testcase) const
 {
    return This->isCaseMatch(testcase);
 }

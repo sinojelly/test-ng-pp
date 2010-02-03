@@ -52,7 +52,7 @@ public:
       testcase.METHOD(TestCaseInfoReader::getName)
              .stubs().will(returnValue(std::string("stupidNameOrWhatever")));
 
-      TS_ASSERT(filter->isCaseMatch(testcase));
+      TS_ASSERT(filter->isCaseMatch((const TestCase*)(const TestCaseInfoReader*)testcase));
 
       //////////////////////////////////////////////////
       TestFilterFactory::returnFilter(filter);
@@ -90,28 +90,6 @@ public:
               .stubs().will(returnValue(std::string("Fixture1")));
 
       TS_ASSERT(filter->isFixtureMatch(fixture1));
-
-      //////////////////////////////////////////////////
-      MockObject<TestCaseInfoReader> testcase0;
-
-      testcase0.METHOD(TestCaseInfoReader::getNameOfFixture)
-              .stubs().will(returnValue(std::string("Fixture0")));
-
-      testcase0.METHOD(TestCaseInfoReader::getName)
-              .stubs().will(returnValue(std::string("testcase0")));
-
-      TS_ASSERT(!filter->isCaseMatch(testcase0));
-
-      //////////////////////////////////////////////////
-      MockObject<TestCaseInfoReader> testcase1;
-
-      testcase1.METHOD(TestCaseInfoReader::getNameOfFixture)
-              .stubs().will(returnValue(std::string("Fixture1")));
-
-      testcase1.METHOD(TestCaseInfoReader::getName)
-              .stubs().will(returnValue(std::string("testcase0")));
-
-      TS_ASSERT(filter->isCaseMatch(testcase1));
 
       //////////////////////////////////////////////////
       TestFilterFactory::returnFilter(filter);

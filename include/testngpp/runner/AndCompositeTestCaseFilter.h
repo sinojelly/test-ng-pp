@@ -18,7 +18,7 @@ struct AndCompositeTestCaseFilter
    ~AndCompositeTestCaseFilter();
 
    void addFilter(const TestCaseFilter* filter, bool isComposite);
-   bool isCaseMatch(const TestCaseInfoReader* testcase) const;
+   bool isCaseMatch(const TestCase* testcase) const;
 
 private:
    AndCompositeTestCaseFilterImpl * This;
