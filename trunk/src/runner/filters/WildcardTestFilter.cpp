@@ -13,7 +13,7 @@ isFixtureMatch(const TestFixtureInfoReader* fixture) const
 
 ////////////////////////////////////////////////////
 bool WildcardTestFilter::
-isCaseMatch(const TestCaseInfoReader* testcase) const
+isCaseMatch(const TestCase* testcase) const
 {
    return true;
 }

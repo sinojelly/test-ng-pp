@@ -17,7 +17,7 @@ struct GeneralTestFilter
    ~GeneralTestFilter();
 
    bool isFixtureMatch(const TestFixtureInfoReader* fixture) const;
-   bool isCaseMatch(const TestCaseInfoReader* testcase) const;
+   bool isCaseMatch(const TestCase* testcase) const;
 
 private:
    GeneralTestFilterImpl * This;

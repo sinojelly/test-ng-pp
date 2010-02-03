@@ -1,9 +1,10 @@
 
 #include <testngpp/runner/TestFilter.h>
-#include <testngpp/runner/NameMatcher.h>
 #include <testngpp/runner/GeneralTestFilter.h>
+
+#include <testngpp/internal/NameMatcher.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
-#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestCase.h>
 
 TESTNGPP_NS_START
 
@@ -49,7 +50,7 @@ isFixtureMatch(const TestFixtureInfoReader* fixture) const
 
 ////////////////////////////////////////////////////
 bool GeneralTestFilter::
-isCaseMatch(const TestCaseInfoReader* testcase) const
+isCaseMatch(const TestCase* testcase) const
 {
    return This->fixtureMatcher->matches(testcase->getNameOfFixture())
       &&  This->caseMatcher->matches(testcase->getName());
