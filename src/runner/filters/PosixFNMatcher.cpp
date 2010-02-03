@@ -1,6 +1,8 @@
 
 #ifndef _MSC_VER
 #include <fnmatch.h>
+#else
+#include "Win32Fnmatch.h"
 #endif
 
 #include <testngpp/runner/PosixFNMatcher.h>
@@ -17,9 +19,7 @@ PosixFNMatcher(const std::string& namePattern)
 ////////////////////////////////////////////////////
 namespace
 {
-#ifndef _MSC_VER
    const int flags = FNM_CASEFOLD; 
-#endif
 }
 
 ////////////////////////////////////////////////////
@@ -31,11 +31,7 @@ matches(const std::string& name) const
      return false;
   }
 
-#ifdef _MSC_VER
-  return  true;
-#else
   return ::fnmatch(pattern.c_str(), name.c_str(), flags) == 0;
-#endif
 }
 
 ////////////////////////////////////////////////////////
