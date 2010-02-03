@@ -18,7 +18,7 @@ struct OrCompositeTestFilter
    void addFilter(const TestFilter* filter, bool isComposite = false);
 
    bool isFixtureMatch(const TestFixtureInfoReader* fixture) const;
-   bool isCaseMatch(const TestCaseInfoReader* testcase) const;
+   bool isCaseMatch(const TestCase* testcase) const;
 
 private:
    OrCompositeTestFilterImpl * This;

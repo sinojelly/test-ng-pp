@@ -5,12 +5,12 @@
 
 TESTNGPP_NS_START
 
-struct TestCaseInfoReader;
+struct TestCase;
 
 ////////////////////////////////////////////////////
 struct TestCaseFilter
 {
-   virtual bool isCaseMatch(const TestCaseInfoReader* testcase) const = 0;
+   virtual bool isCaseMatch(const TestCase* testcase) const = 0;
 
    virtual ~TestCaseFilter() {}
 };

@@ -4,7 +4,7 @@
 
 #include <testngpp/runner/OrCompositeTestFilter.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
-#include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TestCase.h>
 
 TESTNGPP_NS_START
 
@@ -20,7 +20,7 @@ struct OrCompositeTestFilterImpl
 
    void addFilter(const TestFilter* filter, bool isComposite);
    bool isFixtureMatch(const TestFixtureInfoReader* fixture) const;
-   bool isCaseMatch(const TestCaseInfoReader* testcase) const;
+   bool isCaseMatch(const TestCase* testcase) const;
 };
 
 ////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ isFixtureMatch(const TestFixtureInfoReader* fixture) const
 
 ////////////////////////////////////////////////////
 bool OrCompositeTestFilterImpl::
-isCaseMatch(const TestCaseInfoReader* testcase) const
+isCaseMatch(const TestCase* testcase) const
 {
    Filters::const_iterator i = filters.begin();
    for(; i != filters.end(); i++)
@@ -92,7 +92,7 @@ isFixtureMatch(const TestFixtureInfoReader* fixture) const
 
 ////////////////////////////////////////////////////
 bool OrCompositeTestFilter::
-isCaseMatch(const TestCaseInfoReader* testcase) const
+isCaseMatch(const TestCase* testcase) const
 {
    return This->isCaseMatch(testcase);
 }

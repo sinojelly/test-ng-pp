@@ -23,6 +23,7 @@
 #include <string>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/NameMatcher.h>
 
 TESTNGPP_NS_START
 
@@ -69,7 +70,7 @@ struct TestCase
 
    virtual bool hasTags() const { return false; }
 
-   virtual bool hasTag(const std::string& tag) const { return false; }
+   virtual bool tagsMatch(const NameMatcher*) const { return false; }
 
    void runDependedTestCase()
    {

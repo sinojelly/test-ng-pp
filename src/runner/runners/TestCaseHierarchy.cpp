@@ -262,7 +262,7 @@ TestCaseHierarchyImpl::TestCaseHierarchyImpl
    for(unsigned int i=0; i<numberOfTestCases; i++)
    {
       TestCase* testcase = fixture->getTestCase(i);
-      if(filter->isCaseMatch((const TestCaseInfoReader*)testcase))
+      if(filter->isCaseMatch(testcase))
       {
          root.addTestCase(testcase);
       }
