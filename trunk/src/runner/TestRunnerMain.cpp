@@ -173,8 +173,6 @@ int real_main(int argc, char* argv[])
       maxConcurrent = getMaxConcurrent(options);
    }
 
-
-
    return TestRunner().runTests(useSandbox(options), maxConcurrent, options.args, listeners
                          , searchingPathsOfListeners, fixtures);
 }
@@ -195,7 +193,7 @@ int main(int argc, char* argv[])
    }
    catch(...)
    {
-      std::cout << "unknown exception" << std::endl;
+      std::cerr << "unknown exception" << std::endl;
    }
   
    return code;
