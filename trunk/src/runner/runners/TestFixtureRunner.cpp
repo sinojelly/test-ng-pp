@@ -15,6 +15,7 @@
 
 TESTNGPP_NS_START
 
+/////////////////////////////////////////////////////////////////
 struct TestFixtureRunnerImpl
 {
    TestFixtureRunnerImpl(TestHierarchyRunner* runner);
