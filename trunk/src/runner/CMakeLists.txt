@@ -59,6 +59,9 @@ SET(TESTNGRUNNER_LIB_SRCS
   runners/SimpleTestHierarchyRunner.cpp 
   runners/TestCaseHierarchy.cpp
   runners/TestHierarchyHandler.cpp
+  runners/TestSuiteContext.cpp
+  runners/TestFixtureContext.cpp
+  runners/TestRunnerContext.cpp
 
   loaders/ModuleTestSuiteLoader.cpp 
   loaders/ModuleTestSuiteLoaderFactory.cpp 

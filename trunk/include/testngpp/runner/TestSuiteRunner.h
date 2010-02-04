@@ -5,26 +5,22 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
-#include <testngpp/utils/StringList.h>
 
 TESTNGPP_NS_START
 
-struct TestSuiteLoader;
-struct TestFilter;
+struct TestSuiteContext;
 struct TestFixtureRunner;
 struct TestResultCollector;
+
 struct TestSuiteRunnerImpl;
 
 struct TestSuiteRunner
 {
-	TestSuiteRunner( TestSuiteLoader*
-                  , TestFixtureRunner*
+	TestSuiteRunner( TestFixtureRunner*
                   , TestResultCollector* );
 	~TestSuiteRunner();
 
-	void run( const StringList& searchingPaths
-           , const std::string& path
-           , const TestFilter*);
+	void run(TestSuiteContext*);
 
 private:
 	TestSuiteRunnerImpl* This;

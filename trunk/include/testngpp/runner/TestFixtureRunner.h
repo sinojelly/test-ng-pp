@@ -6,7 +6,7 @@
 
 TESTNGPP_NS_START
 
-struct TestFixtureDesc;
+struct TestFixtureContext;
 struct TestFixtureResultCollector;
 struct TestHierarchyRunner;
 struct TestCaseFilter;
@@ -17,7 +17,7 @@ struct TestFixtureRunner
    TestFixtureRunner(TestHierarchyRunner* runner);
    ~TestFixtureRunner();
 
-	void run ( TestFixtureDesc*
+	void run ( TestFixtureContext *
             , TestFixtureResultCollector*
             , const TestCaseFilter*);
 

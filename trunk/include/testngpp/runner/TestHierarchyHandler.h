@@ -8,6 +8,7 @@ TESTNGPP_NS_START
 
 struct TestFixtureDesc;
 struct TestCaseFilter;
+struct FixtureTagsFilter;
 struct TestFixtureResultCollector;
 struct TestHierarchyHandlerImpl;
 
@@ -16,6 +17,7 @@ struct TestHierarchyHandler
    TestHierarchyHandler
          ( TestFixtureDesc* fixture
          , const TestCaseFilter* filter
+         , FixtureTagsFilter* tagsFilter
          , TestFixtureResultCollector* collector);
 
    ~TestHierarchyHandler();
