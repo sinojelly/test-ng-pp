@@ -1,64 +1,40 @@
 
-#include <testngpp/ExceptionKeywords.h>
-#include <testngpp/Error.h>
-
 #include <testngpp/internal/TestSuiteDesc.h>
 
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/TestFilter.h>
-#include <testngpp/runner/TestSuiteLoader.h>
 #include <testngpp/runner/TestFixtureRunner.h>
 #include <testngpp/runner/TestResultCollector.h>
-#include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
+#include <testngpp/runner/TestSuiteContext.h>
 
 TESTNGPP_NS_START
 
 /////////////////////////////////////////////////////////////////
-namespace
+struct TestSuiteRunnerImpl 
 {
-   const std::string testngppTestSuiteDescGetter("___testngpp_test_suite_desc_getter");
-}
-
-/////////////////////////////////////////////////////////////////
-struct TestSuiteRunnerImpl : public TestSuiteDescEntryNameGetter
-{
-   TestSuiteRunnerImpl( TestSuiteLoader* loader
-                      , TestFixtureRunner* runner
+   TestSuiteRunnerImpl( TestFixtureRunner* runner
                       , TestResultCollector* collector)
       : fixtureRunner(runner)
-      , suiteLoader(loader)
       , resultCollector(collector)
    {}
 
    ~TestSuiteRunnerImpl()
    {
-      delete suiteLoader;
    }
 
-	TestSuiteDesc* load
-         ( const StringList& searchingPaths
-         , const std::string& path);
+	void runAllFixtures();
 
-	void runAllFixtures(TestSuiteDesc* desc, const TestFilter* filter);
-
-	void run( const StringList& searchingPaths
-           , const std::string& path
-   		  , const TestFilter* filter);
-
-   std::string getDescEntryName() const
-   { return testngppTestSuiteDescGetter; }
+	void run(TestSuiteContext* suite);
 
    TestFixtureRunner* fixtureRunner;     // X
    TestResultCollector* resultCollector; // X
-   TestSuiteLoader* suiteLoader;         // Y
 };
 
 /////////////////////////////////////////////////////////////////
 TestSuiteRunner::TestSuiteRunner
-   ( TestSuiteLoader* loader
-   , TestFixtureRunner* runner
+   ( TestFixtureRunner* runner
    , TestResultCollector* collector)
-	: This(new TestSuiteRunnerImpl(loader, runner, collector))
+	: This(new TestSuiteRunnerImpl(runner, collector))
 {
 }
 
@@ -69,29 +45,10 @@ TestSuiteRunner::~TestSuiteRunner()
 }
 
 /////////////////////////////////////////////////////////////////
-TestSuiteDesc*
-TestSuiteRunnerImpl::load
-   ( const StringList& searchingPaths
-   , const std::string& path)
-{
-   __TESTNGPP_TRY
-   {
-      return suiteLoader->load(searchingPaths, path, this);
-   }
-   __TESTNGPP_CATCH(std::exception& e)
-   {
-      resultCollector->addError("test suite \"" + path + "\" can't be loaded : " + e.what());
-   }
-   __TESTNGPP_END_TRY
-
-   return 0;
-}
-
-/////////////////////////////////////////////////////////////////
 void
-TestSuiteRunnerImpl::runAllFixtures(TestSuiteDesc* desc
-   , const TestFilter* filter)
+TestSuiteRunnerImpl::runAllFixtures()
 {
+#if 0
    for(unsigned int i=0; i<desc->getNumberOfTestFixtures(); i++)
    {
       TestFixtureDesc* fixture = desc->getTestFixture(i);
@@ -100,36 +57,28 @@ TestSuiteRunnerImpl::runAllFixtures(TestSuiteDesc* desc
          fixtureRunner->run(fixture, resultCollector, filter);
       }
    }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunnerImpl::run
-   ( const StringList& searchingPaths
-   , const std::string& path
-   , const TestFilter* filter)
+TestSuiteRunnerImpl::
+run(TestSuiteContext* suite)
 {
-   TestSuiteDesc* desc = load(searchingPaths, path);
-   if(desc == 0)
-   {
-      return;
-   }
-
+#if 0
    resultCollector->startTestSuite(desc);
 	runAllFixtures(desc, filter);
    resultCollector->endTestSuite(desc);
+#endif
 
-   suiteLoader->unload();
 }
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunner::run
-   ( const StringList& searchingPaths
-   , const std::string& path
-   , const TestFilter* filter)
+TestSuiteRunner::
+run(TestSuiteContext* suite)
 {
-   This->run(searchingPaths, path, filter);
+   This->run(suite);
 }
 
 /////////////////////////////////////////////////////////////////

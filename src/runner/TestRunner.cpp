@@ -32,9 +32,8 @@ struct TestRunnerImpl
    
    void createSuiteRunner(bool useSandbox, unsigned int maxConcurrent);
 
-   void runTestSuite( const StringList& searchingPaths
-                    , const std::string& suitePath
-                    , const TestFilter* filter);
+   void runTestSuite
+      (TestSuiteContext* suite);
 
    void runTests( const StringList& searchingPaths
                 , const StringList& suites
@@ -42,6 +41,8 @@ struct TestRunnerImpl
 
    void loadListeners( const StringList& searchingPaths
                      , const StringList& listeners);
+
+   void loadSuites(const StringList& suites);
 };
 
 ///////////////////////////////////////////////////////
@@ -76,12 +77,11 @@ TestRunnerImpl::~TestRunnerImpl()
 
 ///////////////////////////////////////////////////////
 void
-TestRunnerImpl::loadListeners
+TestRunnerImpl::
+loadListeners
    ( const StringList& searchingPaths
    , const StringList& listeners)
 {
-
-
    resultManager->load(searchingPaths, listeners);
 }
 
@@ -92,19 +92,17 @@ TestRunnerImpl::createSuiteRunner(bool useSandbox, unsigned int maxConcurrent)
    fixtureRunner = TestFixtureRunnerFactory:: \
          createInstance(useSandbox, maxConcurrent);
 
-   TestSuiteLoader* loader = ModuleTestSuiteLoaderFactory().create();
-   suiteRunner = new TestSuiteRunner(loader, fixtureRunner, resultManager->getResultCollector());
+   //TestSuiteLoader* loader = ModuleTestSuiteLoaderFactory().create();
+   suiteRunner = new TestSuiteRunner(fixtureRunner, resultManager->getResultCollector());
 }
 
 ///////////////////////////////////////////////////////
 void TestRunnerImpl::runTestSuite
-          ( const StringList& searchingPaths
-          , const std::string& suitePath
-          , const TestFilter* filter)
+      (TestSuiteContext* suite)
 {
    __TESTNGPP_TRY
    {
-     suiteRunner->run(searchingPaths, suitePath, filter);
+     suiteRunner->run(suite);
    }
    __TESTNGPP_CATCH(Error& e)
    {
@@ -127,11 +125,13 @@ TestRunnerImpl::runTests( const StringList& searchingPaths
 {
    resultManager->startTest();
 
+#if 0
    StringList::Type::const_iterator i = suites.get().begin();
    for(; i != suites.get().end(); i++)
    {
       runTestSuite(searchingPaths, *i, filter);
    }
+#endif
 
    resultManager->endTest();
 

@@ -11,6 +11,7 @@
 #include <testngpp/runner/TestCaseContainer.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/FixtureTagsFilter.h>
 #include <testngpp/runner/InternalError.h>
 
 
@@ -23,8 +24,10 @@ struct SkippedTestCases
    : public TestCaseContainer
 {
    SkippedTestCases
-         ( TestFixtureResultCollector* resultCollector)
+         ( TestFixtureResultCollector* resultCollector
+         , FixtureTagsFilter* filter)
          : collector(resultCollector)
+         , tagsFilter(tagsFilter)
    {}
 
    void addTestCase
@@ -34,6 +37,9 @@ struct SkippedTestCases
       if(!userSpecified)
          return;
 
+      if(!tagsFilter->shouldReport(testcase))
+        return;
+
       collector->startTestCase(testcase);
       collector->addCaseSkipped(testcase);
       collector->endTestCase(testcase);
@@ -41,6 +47,7 @@ struct SkippedTestCases
 
 private:
    TestFixtureResultCollector* collector;
+   FixtureTagsFilter* tagsFilter;
 };
 
 }
@@ -52,6 +59,7 @@ struct TestHierarchyHandlerImpl
    TestHierarchyHandlerImpl
          ( TestFixtureDesc* fixture 
          , const TestCaseFilter* filter
+         , FixtureTagsFilter* tagsFilter
          , TestFixtureResultCollector* collector);
 
    ~TestHierarchyHandlerImpl();
@@ -80,6 +88,7 @@ private:
 
    TestCaseHierarchy* hierarchy; // Y
    TestFixtureResultCollector* collector; // X
+   FixtureTagsFilter* tagsFilter; // X
 };
 
 
@@ -88,9 +97,11 @@ TestHierarchyHandlerImpl::
 TestHierarchyHandlerImpl
    ( TestFixtureDesc* fixtureDesc 
    , const TestCaseFilter* filter
+   , FixtureTagsFilter* fixtureTagsFilter
    , TestFixtureResultCollector* resultCollector)
    : hierarchy(new TestCaseHierarchy(fixtureDesc, filter))
    , collector(resultCollector)
+   , tagsFilter(fixtureTagsFilter)
 {
    hierarchy->getDirectSuccessors(0, this);
 }
@@ -144,7 +155,7 @@ handleDoneTestCases
    }
    else
    {
-      SkippedTestCases skippedTestCases(collector);
+      SkippedTestCases skippedTestCases(collector, tagsFilter);
       hierarchy->getSuccessors(testcase, &skippedTestCases);
    }
 
@@ -172,10 +183,15 @@ testDone
 ///////////////////////////////////////////////////
 TestHierarchyHandler::
 TestHierarchyHandler
-   ( TestFixtureDesc* fixtureDesc 
-   , const TestCaseFilter*  filter
+   ( TestFixtureDesc* fixture
+   , const TestCaseFilter* filter
+   , FixtureTagsFilter* tagsFilter
    , TestFixtureResultCollector* collector)
-   : This(new TestHierarchyHandlerImpl(fixtureDesc, filter, collector))
+   : This( new TestHierarchyHandlerImpl
+         ( fixture
+         , filter
+         , tagsFilter
+         , collector))
 {
 }
 

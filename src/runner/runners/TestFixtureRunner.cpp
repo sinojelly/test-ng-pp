@@ -11,6 +11,8 @@
 #include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestCaseFilter.h>
+#include <testngpp/runner/FixtureTagsFilter.h>
+#include <testngpp/runner/TestFixtureContext.h>
 
 
 TESTNGPP_NS_START
@@ -21,7 +23,7 @@ struct TestFixtureRunnerImpl
    TestFixtureRunnerImpl(TestHierarchyRunner* runner);
    ~TestFixtureRunnerImpl();
 
-   void run( TestFixtureDesc* desc
+   void run( TestFixtureContext* context
            , TestFixtureResultCollector* collector
            , const TestCaseFilter* filter);
 
@@ -57,14 +59,14 @@ TestFixtureRunner::~TestFixtureRunner()
 
 /////////////////////////////////////////////////////////////////
 void TestFixtureRunnerImpl::
-run( TestFixtureDesc* desc
+run( TestFixtureContext* context
    , TestFixtureResultCollector* collector
    , const TestCaseFilter* filter)
 {
    TestHierarchyHandler* handler = \
-      new TestHierarchyHandler(desc, filter, collector);
+      new TestHierarchyHandler(context->getFixture(), filter, context->getTagsFilter(), collector);
 
-   collector->startTestFixture(desc);
+   collector->startTestFixture(context->getFixture());
 
    __TESTNGPP_TRY
    {
@@ -72,15 +74,15 @@ run( TestFixtureDesc* desc
    }
    __TESTNGPP_CATCH(Error& e)
    {
-      collector->addFixtureError(desc, e.what());
+      collector->addFixtureError(context->getFixture(), e.what());
    }
    __TESTNGPP_CATCH_ALL
    {
-      collector->addFixtureError(desc, "Unknown Error");
+      collector->addFixtureError(context->getFixture(), "Unknown Error");
    }
    __TESTNGPP_END_TRY
 
-   collector->endTestFixture(desc);
+   collector->endTestFixture(context->getFixture());
 
    delete handler;
 }
@@ -88,11 +90,11 @@ run( TestFixtureDesc* desc
 
 /////////////////////////////////////////////////////////////////
 void TestFixtureRunner::
-run( TestFixtureDesc* desc
+run( TestFixtureContext* context
    , TestFixtureResultCollector* collector
    , const TestCaseFilter* filter)
 {
-   return This->run(desc, collector, filter);
+   return This->run(context, collector, filter);
 }
 
 /////////////////////////////////////////////////////////////////
