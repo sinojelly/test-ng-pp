@@ -82,6 +82,7 @@ SET(TESTNGRUNNER_LIB_SRCS
   tags/NotTestCaseFilter.cpp 
   tags/GeneralTagsFilter.cpp 
   tags/TagsFilters.cpp 
+  tags/FixtureTagsFilter.cpp
 
   TestRunner.cpp
 )
