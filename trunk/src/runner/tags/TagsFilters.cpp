@@ -24,6 +24,8 @@ struct TagsFiltersImpl
    void startOnNext();
    bool shouldRun(const TestCase* testcase) const;
    bool shouldReport(const TestCase* testcase) const;
+   bool shouldStore(const TestCase* testcase) const;
+   bool hasBeenRunAlready(const TestCase* testcase) const;
 
    std::vector<TestCaseFilter*> filters;
    OrCompositeTestCaseFilter allTagsFilter;
@@ -101,6 +103,24 @@ shouldReport(const TestCase* testcase) const
 }
 
 ////////////////////////////////////////////////////////
+bool
+TagsFiltersImpl::
+shouldStore(const TestCase* testcase) const
+{
+   return !(filters[index]->isCaseMatch(testcase) ||
+          doneTagsFilter.isCaseMatch(testcase) ||
+          allTagsFilter.isCaseMatch(testcase));
+}
+
+////////////////////////////////////////////////////////
+bool
+TagsFiltersImpl::
+hasBeenRunAlready(const TestCase* testcase) const
+{
+   return doneTagsFilter.isCaseMatch(testcase);
+}
+
+////////////////////////////////////////////////////////
 TagsFilters::
 TagsFilters()
    : This(new TagsFiltersImpl())
@@ -144,6 +164,22 @@ TagsFilters::
 shouldReport(const TestCase* testcase) const
 {
    return This->shouldReport(testcase);
+}
+
+////////////////////////////////////////////////////////
+bool
+TagsFilters::
+shouldStore(const TestCase* testcase) const
+{
+   return This->shouldStore(testcase);
+}
+
+////////////////////////////////////////////////////////
+bool
+TagsFilters::
+hasBeenRunAlready(const TestCase* testcase) const
+{
+   return This->hasBeenRunAlready(testcase);
 }
 
 ////////////////////////////////////////////////////////
