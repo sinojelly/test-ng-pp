@@ -24,10 +24,11 @@ struct TagsFiltersImpl
 
    void addNextFilter(TaggableObjFilter*);
    bool startOnNext();
-   bool shouldRun(const Taggable* obj) const;
-   bool shouldReport(const Taggable* obj) const;
-   bool shouldStore(const Taggable* obj) const;
-   bool hasBeenRunAlready(const Taggable* obj) const;
+
+   bool shouldBeFilteredThisTime(const Taggable* obj) const;
+   bool shouldBeFiltered(const Taggable* obj) const;
+   bool isPreFiltered(const Taggable* obj) const;
+   bool hasBeenFiltered(const Taggable* obj) const;
 
    std::vector<TaggableObjFilter*> filters;
    OrCompositeTaggableFilter    allTagsFilter;
@@ -88,7 +89,7 @@ startOnNext()
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-shouldRun(const Taggable* obj) const
+shouldBeFilteredThisTime(const Taggable* obj) const
 {
    if(index >= filters.size())
    {
@@ -102,7 +103,7 @@ shouldRun(const Taggable* obj) const
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-shouldReport(const Taggable* obj) const
+shouldBeFiltered(const Taggable* obj) const
 {
    return allTagsFilter.matches(obj);
 }
@@ -110,17 +111,17 @@ shouldReport(const Taggable* obj) const
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-shouldStore(const Taggable* obj) const
+isPreFiltered(const Taggable* obj) const
 {
-   return !(filters[index]->matches(obj) ||
-          doneTagsFilter.matches(obj) ||
-          allTagsFilter.matches(obj));
+   return !filters[index]->matches(obj) &&
+          !doneTagsFilter.matches(obj)  && 
+           allTagsFilter.matches(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-hasBeenRunAlready(const Taggable* obj) const
+hasBeenFiltered(const Taggable* obj) const
 {
    return doneTagsFilter.matches(obj);
 }
@@ -158,33 +159,33 @@ startOnNext()
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-shouldRun(const Taggable* obj) const
+shouldBeFilteredThisTime(const Taggable* obj) const
 {
-   return This->shouldRun(obj);
+   return This->shouldBeFilteredThisTime(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-shouldReport(const Taggable* obj) const
+shouldBeFiltered(const Taggable* obj) const
 {
-   return This->shouldReport(obj);
+   return This->shouldBeFiltered(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-shouldStore(const Taggable* obj) const
+isPreFiltered(const Taggable* obj) const
 {
-   return This->shouldStore(obj);
+   return This->isPreFiltered(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-hasBeenRunAlready(const Taggable* obj) const
+hasBeenFiltered(const Taggable* obj) const
 {
-   return This->hasBeenRunAlready(obj);
+   return This->hasBeenFiltered(obj);
 }
 
 ////////////////////////////////////////////////////////

@@ -39,7 +39,7 @@ namespace
       
       bool operator()(const TestCase* testcase)
       {
-         return tagsFilters->hasBeenRunAlready(testcase);
+         return tagsFilters->hasBeenFiltered(testcase);
       }
 
       TagsFilters* tagsFilters;
@@ -80,7 +80,7 @@ bool
 FixtureTagsFilterImpl::
 shouldRun(const TestCase* testcase) const
 {
-   return tagsFilters->shouldRun(testcase) && 
+   return tagsFilters->shouldBeFilteredThisTime(testcase) && 
           !hasBeenRunAlready(testcase);
 }
 
@@ -89,7 +89,7 @@ bool
 FixtureTagsFilterImpl::
 shouldReport(const TestCase* testcase) const
 {
-   return tagsFilters->shouldReport(testcase);
+   return tagsFilters->shouldBeFiltered(testcase);
 }
 
 ////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ bool
 FixtureTagsFilterImpl::
 shouldStore(const TestCase* testcase) const
 {
-   return tagsFilters->shouldStore(testcase) &&
+   return tagsFilters->isPreFiltered(testcase) &&
           !hasBeenRunAlready(testcase);
 }
 

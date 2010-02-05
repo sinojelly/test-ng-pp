@@ -20,10 +20,10 @@ struct TagsFilters
 
    bool startOnNext();
 
-   bool shouldRun(const Taggable* ) const;
-   bool shouldReport(const Taggable* ) const;
-   bool shouldStore(const Taggable* ) const;
-   bool hasBeenRunAlready(const Taggable* ) const;
+   bool shouldBeFilteredThisTime(const Taggable* ) const;
+   bool shouldBeFiltered(const Taggable* ) const;
+   bool isPreFiltered(const Taggable* ) const;
+   bool hasBeenFiltered(const Taggable* ) const;
 
 private:
    TagsFiltersImpl * This;
