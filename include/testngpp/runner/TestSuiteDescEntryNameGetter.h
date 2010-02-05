@@ -11,6 +11,7 @@ TESTNGPP_NS_START
 struct TestSuiteDescEntryNameGetter
 {
 	virtual std::string getDescEntryName() const = 0;
+   virtual ~TestSuiteDescEntryNameGetter() {}
 };
 
 TESTNGPP_NS_END

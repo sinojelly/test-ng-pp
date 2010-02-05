@@ -1,7 +1,7 @@
 
-#include <testngpp/runner/TestCaseFilter.h>
+#include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/GeneralTagsFilter.h>
-#include <testngpp/internal/TestCase.h>
+#include <testngpp/internal/Taggable.h>
 #include <testngpp/internal/NameMatcher.h>
 
 TESTNGPP_NS_START
@@ -41,9 +41,9 @@ GeneralTagsFilter::~GeneralTagsFilter()
 
 ////////////////////////////////////////////////////
 bool GeneralTagsFilter::
-isCaseMatch(const TestCase* testcase) const
+matches(const Taggable* obj) const
 {
-   return testcase->tagsMatch(This->tagsMatcher);
+   return obj->tagsMatch(This->tagsMatcher);
 }
 
 ////////////////////////////////////////////////////////

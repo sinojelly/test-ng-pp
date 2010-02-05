@@ -89,7 +89,7 @@ public:
 
       SimpleTestCaseRunner caseRunner;
       TestHierarchySandboxRunner runner(2, &caseRunner);
-      TestHierarchyHandler hierarchy(&myTestFixtureDesc, filter, collector);
-      runner.run(&hierarchy, collector);
+//      TestHierarchyHandler hierarchy(&myTestFixtureDesc, filter, collector);
+//      runner.run(&hierarchy, collector);
    }
 };

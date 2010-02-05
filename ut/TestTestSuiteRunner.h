@@ -19,6 +19,8 @@
 #include <testngpp/runner/TestFixtureRunner.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestResultCollector.h>
+#include <testngpp/runner/TagsFilters.h>
+#include <testngpp/runner/TestSuiteContext.h>
 
 
 #include "MyTestCase.h"
@@ -142,7 +144,6 @@ public:
 
    void testShouldBeAbleToRunnAllTestFixtures()
    {
-
       std::string file("TestNothing");
 
       MOCK_METHOD(suiteLoader, load)
@@ -170,10 +171,10 @@ public:
       TestFixtureRunner fixtureRunner(hierarchyRunner);
 
       ////////////////////////////////////////////////////
-      TestSuiteRunner runner(suiteLoader, &fixtureRunner, collector);
-      StringList searchingPaths;
-
-      runner.run(searchingPaths, file, filter);
+      TestSuiteRunner runner(&fixtureRunner, collector);
+      TagsFilters tagsFilters;
+      TestSuiteContext context(suiteLoader, file, collector, &tagsFilters, filter);
+      runner.run(&context);
 
       ////////////////////////////////////////////////////
       verify();
@@ -196,11 +197,12 @@ public:
            .expects(never());
 
       TestFixtureRunner fixtureRunner(hierarchyRunner);
-      ////////////////////////////////////////////////////
-      TestSuiteRunner runner(suiteLoader, &fixtureRunner, collector);
-      StringList searchingPaths;
 
-      runner.run(searchingPaths, file, filter);
+      ////////////////////////////////////////////////////
+      TestSuiteRunner runner(&fixtureRunner, collector);
+      TagsFilters tagsFilters;
+      TestSuiteContext context(suiteLoader, file, collector, &tagsFilters, filter);
+      runner.run(&context);
       ////////////////////////////////////////////////////
 
       verify();

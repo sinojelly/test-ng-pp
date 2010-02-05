@@ -1,14 +1,16 @@
 
 #include <vector>
+#include <iostream>
 
-#include <testngpp/runner/AndCompositeTestCaseFilter.h>
-#include <testngpp/runner/OrCompositeTestCaseFilter.h>
-#include <testngpp/runner/NotTestCaseFilter.h>
+#include <testngpp/runner/AndCompositeTaggableFilter.h>
+#include <testngpp/runner/OrCompositeTaggableFilter.h>
+#include <testngpp/runner/NotCompositeTaggableFilter.h>
 
-#include <testngpp/runner/TestCaseFilter.h>
+#include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/TagsFilters.h>
 
-#include <testngpp/internal/TestCase.h>
+#include <testngpp/internal/Taggable.h>
+
 #include <testngpp/Error.h>
 
 
@@ -20,17 +22,17 @@ struct TagsFiltersImpl
    TagsFiltersImpl();
    ~TagsFiltersImpl();
 
-   void addNextFilter(TestCaseFilter*);
-   void startOnNext();
-   bool shouldRun(const TestCase* testcase) const;
-   bool shouldReport(const TestCase* testcase) const;
-   bool shouldStore(const TestCase* testcase) const;
-   bool hasBeenRunAlready(const TestCase* testcase) const;
+   void addNextFilter(TaggableObjFilter*);
+   bool startOnNext();
+   bool shouldRun(const Taggable* obj) const;
+   bool shouldReport(const Taggable* obj) const;
+   bool shouldStore(const Taggable* obj) const;
+   bool hasBeenRunAlready(const Taggable* obj) const;
 
-   std::vector<TestCaseFilter*> filters;
-   OrCompositeTestCaseFilter allTagsFilter;
-   OrCompositeTestCaseFilter doneTagsFilter; 
-   NotTestCaseFilter         notDoneFilter;
+   std::vector<TaggableObjFilter*> filters;
+   OrCompositeTaggableFilter    allTagsFilter;
+   OrCompositeTaggableFilter    doneTagsFilter; 
+   NotCompositeTaggableFilter   notDoneFilter;
    int index;
 };
 
@@ -38,6 +40,7 @@ struct TagsFiltersImpl
 TagsFiltersImpl::
 TagsFiltersImpl()
    : notDoneFilter(&doneTagsFilter, false)
+   , index(-1)
 {
 }
 
@@ -56,68 +59,70 @@ TagsFiltersImpl::
 ////////////////////////////////////////////////////////
 void
 TagsFiltersImpl::
-addNextFilter(TestCaseFilter* filter)
+addNextFilter(TaggableObjFilter* filter)
 {
    filters.push_back(filter);
    allTagsFilter.addFilter(filter, false);
 }
 
 ////////////////////////////////////////////////////////
-void
+bool
 TagsFiltersImpl::
 startOnNext() 
 {
    index++;
 
-   if(index > filters.size())
+   if(index >= filters.size())
    {
-      throw Error("internal error");
+      return false;
    }
 
    if(index > 0)
    {
      doneTagsFilter.addFilter(filters[index-1], false);
    }
+
+   return true;
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-shouldRun(const TestCase* testcase) const
+shouldRun(const Taggable* obj) const
 {
-   if(index > filters.size())
+   if(index >= filters.size())
    {
       throw Error("internal error");
    }
    
-   return filters[index]->isCaseMatch(testcase) &&
-          notDoneFilter.isCaseMatch(testcase);
+   return filters[index]->matches(obj) &&
+          notDoneFilter.matches(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-shouldReport(const TestCase* testcase) const
+shouldReport(const Taggable* obj) const
 {
-   return allTagsFilter.isCaseMatch(testcase);
+   return allTagsFilter.matches(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-shouldStore(const TestCase* testcase) const
+shouldStore(const Taggable* obj) const
 {
-   return !(filters[index]->isCaseMatch(testcase) ||
-          doneTagsFilter.isCaseMatch(testcase) ||
-          allTagsFilter.isCaseMatch(testcase));
+   return !(filters[index]->matches(obj) ||
+          doneTagsFilter.matches(obj) ||
+          allTagsFilter.matches(obj));
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
-hasBeenRunAlready(const TestCase* testcase) const
+hasBeenRunAlready(const Taggable* obj) const
 {
-   return doneTagsFilter.isCaseMatch(testcase);
+   return doneTagsFilter.matches(obj);
 }
 
 ////////////////////////////////////////////////////////
@@ -137,49 +142,49 @@ TagsFilters::
 ////////////////////////////////////////////////////////
 void
 TagsFilters::
-addNextFilter(TestCaseFilter* filter)
+addNextFilter(TaggableObjFilter* filter)
 {
    This->addNextFilter(filter);
 }
 
 ////////////////////////////////////////////////////////
-void
+bool
 TagsFilters::
 startOnNext() 
 {
-   This->startOnNext();
+   return This->startOnNext();
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-shouldRun(const TestCase* testcase) const
+shouldRun(const Taggable* obj) const
 {
-   return This->shouldRun(testcase);
+   return This->shouldRun(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-shouldReport(const TestCase* testcase) const
+shouldReport(const Taggable* obj) const
 {
-   return This->shouldReport(testcase);
+   return This->shouldReport(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-shouldStore(const TestCase* testcase) const
+shouldStore(const Taggable* obj) const
 {
-   return This->shouldStore(testcase);
+   return This->shouldStore(obj);
 }
 
 ////////////////////////////////////////////////////////
 bool
 TagsFilters::
-hasBeenRunAlready(const TestCase* testcase) const
+hasBeenRunAlready(const Taggable* obj) const
 {
-   return This->hasBeenRunAlready(testcase);
+   return This->hasBeenRunAlready(obj);
 }
 
 ////////////////////////////////////////////////////////

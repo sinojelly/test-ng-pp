@@ -22,10 +22,12 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
+#include <testngpp/internal/Taggable.h>
 
 TESTNGPP_NS_START
 
 struct TestCaseInfoReader
+   : public Taggable
 {
 	virtual const std::string& getName() const = 0;
 	virtual const std::string& getNameOfFixture() const = 0;

@@ -58,7 +58,6 @@ TestRunnerContextImpl
              , collector
              , tagsFilter
              , filter);
-
 }
 
 /////////////////////////////////////////////////////////////////
