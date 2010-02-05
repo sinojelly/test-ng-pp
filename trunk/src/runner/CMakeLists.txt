@@ -80,11 +80,13 @@ SET(TESTNGRUNNER_LIB_SRCS
   filters/TestFilterFactory.cpp 
   filters/PosixFNMatcher.cpp 
 
-  tags/AndCompositeTestCaseFilter.cpp 
-  tags/OrCompositeTestCaseFilter.cpp 
-  tags/NotTestCaseFilter.cpp 
+  tags/AndCompositeTaggableFilter.cpp 
+  tags/OrCompositeTaggableFilter.cpp 
+  tags/NotCompositeTaggableFilter.cpp 
   tags/GeneralTagsFilter.cpp 
+  tags/EmptyTagFilter.cpp 
   tags/TagsFilters.cpp 
+  tags/TagsParser.cpp 
   tags/FixtureTagsFilter.cpp
 
   TestRunner.cpp

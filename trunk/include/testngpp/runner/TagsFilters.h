@@ -6,8 +6,8 @@
 
 TESTNGPP_NS_START
 
-struct TestCaseFilter;
-struct TestCase;
+struct Taggable;
+struct TaggableObjFilter;
 struct TagsFiltersImpl;
 
 ////////////////////////////////////////////////////////
@@ -16,14 +16,14 @@ struct TagsFilters
    TagsFilters();
    ~TagsFilters();
 
-   void addNextFilter(TestCaseFilter*);
+   void addNextFilter(TaggableObjFilter*);
 
-   void startOnNext();
+   bool startOnNext();
 
-   bool shouldRun(const TestCase* testcase) const;
-   bool shouldReport(const TestCase* testcase) const;
-   bool shouldStore(const TestCase* testcase) const;
-   bool hasBeenRunAlready(const TestCase* testcase) const;
+   bool shouldRun(const Taggable* ) const;
+   bool shouldReport(const Taggable* ) const;
+   bool shouldStore(const Taggable* ) const;
+   bool hasBeenRunAlready(const Taggable* ) const;
 
 private:
    TagsFiltersImpl * This;

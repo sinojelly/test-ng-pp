@@ -50,9 +50,8 @@ private:
 
 private:
 
-   TestResultCollector* resultCollector; //X
    TestSuiteLoader* suiteLoader; // X
-
+   TestResultCollector* resultCollector; //X
 public:
 
    std::vector<TestFixtureContext*> fixtures;

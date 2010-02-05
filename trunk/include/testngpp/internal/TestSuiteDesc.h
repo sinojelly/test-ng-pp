@@ -57,9 +57,9 @@ struct TestSuiteDesc
    TestFixtureDesc* getTestFixture(unsigned int index) const;
 
 private:
+   std::string nameOfSuite;
    TestFixtureDesc** testFixtures;
    unsigned int numberOfFixtures;
-   std::string nameOfSuite;
    std::string fileName;
 };
 

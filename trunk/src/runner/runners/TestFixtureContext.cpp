@@ -17,6 +17,7 @@ struct TestFixtureContextImpl
    FixtureTagsFilter tagsFilter;
 };
 
+/////////////////////////////////////////////////////////////////
 TestFixtureContextImpl::
 TestFixtureContextImpl
       ( TestFixtureDesc* desc
@@ -28,8 +29,12 @@ TestFixtureContextImpl
 
 /////////////////////////////////////////////////////////////////
 TestFixtureContext::
-TestFixtureContext(TestFixtureDesc* desc, TagsFilters* filters)
-	: This(new TestFixtureContextImpl(desc, filters))
+TestFixtureContext
+      ( TestFixtureDesc* desc
+      , TagsFilters* filters)
+      : This( new TestFixtureContextImpl
+               ( desc
+               , filters))
 {
 }
 

@@ -2,28 +2,28 @@
 #include <list>
 #include <algorithm>
 
-#include <testngpp/runner/AndCompositeTestCaseFilter.h>
-#include <testngpp/internal/TestCase.h>
+#include <testngpp/runner/AndCompositeTaggableFilter.h>
+#include <testngpp/internal/Taggable.h>
 
 TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
-struct AndCompositeTestCaseFilterImpl
+struct AndCompositeTaggableFilterImpl
 {
-   typedef std::pair<const TestCaseFilter*, bool> ValueType;
+   typedef std::pair<const TaggableObjFilter*, bool> ValueType;
    typedef std::list<ValueType> Filters;
 
    Filters filters;
 
-   ~AndCompositeTestCaseFilterImpl();
+   ~AndCompositeTaggableFilterImpl();
 
-   void addFilter(const TestCaseFilter* filter, bool isComposite);
-   bool isCaseMatch(const TestCase* testcase) const;
+   void addFilter(const TaggableObjFilter* filter, bool isComposite);
+   bool matches(const Taggable* obj) const;
 };
 
 ////////////////////////////////////////////////////////
-AndCompositeTestCaseFilterImpl::
-~AndCompositeTestCaseFilterImpl()
+AndCompositeTaggableFilterImpl::
+~AndCompositeTaggableFilterImpl()
 {
    Filters::iterator i = filters.begin();
    for(; i != filters.end(); i++)
@@ -34,27 +34,27 @@ AndCompositeTestCaseFilterImpl::
 }
 
 ////////////////////////////////////////////////////////
-AndCompositeTestCaseFilter::
-AndCompositeTestCaseFilter()
-   : This(new AndCompositeTestCaseFilterImpl())
+AndCompositeTaggableFilter::
+AndCompositeTaggableFilter()
+   : This(new AndCompositeTaggableFilterImpl())
 {
 }
 
 ////////////////////////////////////////////////////////
-AndCompositeTestCaseFilter::
-~AndCompositeTestCaseFilter()
+AndCompositeTaggableFilter::
+~AndCompositeTaggableFilter()
 {
    delete This;
 }
 
 ////////////////////////////////////////////////////
-bool AndCompositeTestCaseFilterImpl::
-isCaseMatch(const TestCase* testcase) const
+bool AndCompositeTaggableFilterImpl::
+matches(const Taggable* obj) const
 {
    Filters::const_iterator i = filters.begin();
    for(; i != filters.end(); i++)
    {
-      if(!(*i).first->isCaseMatch(testcase))
+      if(!(*i).first->matches(obj))
          return false;
    }
 
@@ -62,22 +62,22 @@ isCaseMatch(const TestCase* testcase) const
 }
 
 ////////////////////////////////////////////////////
-void AndCompositeTestCaseFilterImpl::
-addFilter(const TestCaseFilter* filter, bool isComposite) 
+void AndCompositeTaggableFilterImpl::
+addFilter(const TaggableObjFilter* filter, bool isComposite) 
 {
    filters.push_back(ValueType(filter, isComposite));
 }
 
 ////////////////////////////////////////////////////
-bool AndCompositeTestCaseFilter::
-isCaseMatch(const TestCase* testcase) const
+bool AndCompositeTaggableFilter::
+matches(const Taggable* obj) const
 {
-   return This->isCaseMatch(testcase);
+   return This->matches(obj);
 }
 
 ////////////////////////////////////////////////////////
-void AndCompositeTestCaseFilter::
-addFilter(const TestCaseFilter* filter, bool isComposite) 
+void AndCompositeTaggableFilter::
+addFilter(const TaggableObjFilter* filter, bool isComposite) 
 {
    return This->addFilter(filter, isComposite);
 }

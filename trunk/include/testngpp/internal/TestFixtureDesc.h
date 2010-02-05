@@ -63,10 +63,10 @@ struct TestFixtureDesc
    }
 
 private:
-   TestCase** testCases;
-   unsigned int numberOfTestCases;
    std::string nameOfFixture;
    std::string nameOfFile;
+   TestCase** testCases;
+   unsigned int numberOfTestCases;
 };
 
 TESTNGPP_NS_END

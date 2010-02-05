@@ -3,23 +3,22 @@
 #define __TESTNGPP_GENERAL_TAGS_FILTER_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/runner/TestCaseFilter.h>
+#include <testngpp/runner/TaggableObjFilter.h>
 
 TESTNGPP_NS_START
 
 struct NameMatcher;
-struct TestCase;
 
 struct GeneralTagsFilterImpl;
 
 ////////////////////////////////////////////////////////
 struct GeneralTagsFilter
-   : public TestCaseFilter
+   : public TaggableObjFilter
 {
    GeneralTagsFilter(NameMatcher*);
    ~GeneralTagsFilter();
 
-   bool isCaseMatch(const TestCase* testcase) const;
+   bool matches(const Taggable* ) const;
 
 private:
    GeneralTagsFilterImpl * This;
