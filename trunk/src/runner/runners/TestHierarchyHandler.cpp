@@ -11,6 +11,7 @@
 #include <testngpp/runner/TestCaseContainer.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/runner/TestCaseFilter.h>
 #include <testngpp/runner/FixtureTagsFilter.h>
 #include <testngpp/runner/InternalError.h>
 
@@ -35,19 +36,11 @@ struct SkippedTestCases
          ( const TestCase* testcase
          , bool userSpecified)
    {
+      tagsFilter->testDone(testcase, false);
+  
       if(!userSpecified)
          return;
-
-      if(tagsFilter == 0)
-      {
-         TESTNGPP_INTERNAL_ERROR(2013);
-      }
-  
-      if(!tagsFilter->shouldReport(testcase))
-      {
-         return;
-      }
-   
+      
       collector->startTestCase(testcase);
       collector->addCaseSkipped(testcase);
       collector->endTestCase(testcase);
@@ -58,12 +51,36 @@ private:
    FixtureTagsFilter* tagsFilter;
 };
 
+   
+struct ComplexTestCaseFilter 
+      : public TestCaseFilter
+{
+   ComplexTestCaseFilter
+      ( FixtureTagsFilter* fixtureTagsFilter
+      , const TestCaseFilter* filter)
+      : fnMatcher(filter)
+      , tagsFilter(fixtureTagsFilter)
+   { }
+   
+   bool isCaseMatch(const TestCase* testcase) const
+   {
+      return fnMatcher->isCaseMatch(testcase) && \
+             tagsFilter->shouldRun(testcase);
+   }
+   
+private:
+   const TestCaseFilter* fnMatcher;
+   FixtureTagsFilter* tagsFilter;
+};
+
 }
    
 ///////////////////////////////////////////////////
 struct TestHierarchyHandlerImpl
    : public TestCaseContainer
 {
+   typedef TestHierarchyHandler::ValueType ValueType;
+   
    TestHierarchyHandlerImpl
          ( TestFixtureDesc* fixture 
          , const TestCaseFilter* filter
@@ -80,25 +97,27 @@ struct TestHierarchyHandlerImpl
          ( const TestCase* testcase
          , bool hasSucceeded);
 
+   bool shouldReport(const TestCase* testcase) const;
+   
    unsigned int numberOfTestCasesInSched() const
    { 
       return schedTestCases.size(); 
    }
  
-   const TestCase* getTestCase(unsigned int index) const;
+   ValueType getTestCase(unsigned int index) const;
 
-private:
    void handleDoneTestCases
          ( const TestCase* testcase
          , bool hasSucceeded);
 
-private:
-   typedef std::pair<const TestCase*, bool> ValueType;
+   
    std::list<ValueType> schedTestCases;
-
+   
    TestCaseHierarchy* hierarchy; // Y
+   const TestCaseFilter* nameFilter; // X
    TestFixtureResultCollector* collector; // X
    FixtureTagsFilter* tagsFilter; // X
+   ComplexTestCaseFilter* complexFilter; // Y
 };
 
 
@@ -109,10 +128,14 @@ TestHierarchyHandlerImpl
    , const TestCaseFilter* filter
    , FixtureTagsFilter* fixtureTagsFilter
    , TestFixtureResultCollector* resultCollector)
-   : hierarchy(new TestCaseHierarchy(fixtureDesc, filter))
+   : nameFilter(filter)
    , collector(resultCollector)
    , tagsFilter(fixtureTagsFilter)
+   , complexFilter(new ComplexTestCaseFilter(tagsFilter, filter))
 {
+   tagsFilter->startUp();
+   
+   hierarchy = new TestCaseHierarchy(fixtureDesc, complexFilter);
    hierarchy->getDirectSuccessors(0, this);
 }
 
@@ -121,10 +144,20 @@ TestHierarchyHandlerImpl::
 ~TestHierarchyHandlerImpl()
 {
    delete hierarchy;
+   delete complexFilter;
 }
 
 ///////////////////////////////////////////////////
-const TestCase*
+bool
+TestHierarchyHandlerImpl::
+shouldReport(const TestCase* testcase) const
+{
+   return tagsFilter->shouldReport(testcase) &&
+   nameFilter->isCaseMatch(testcase);
+}
+
+///////////////////////////////////////////////////
+TestHierarchyHandler::ValueType
 TestHierarchyHandlerImpl::
 getTestCase(unsigned int index) const
 {
@@ -134,7 +167,8 @@ getTestCase(unsigned int index) const
    for(unsigned int i=0; i < index; i++)
       iter++;
 
-   return (*iter).first;
+   bool userSpecified = shouldReport((*iter).first);
+   return ValueType((*iter).first, userSpecified);
 }
 
 ///////////////////////////////////////////////////
@@ -144,7 +178,18 @@ addTestCase
    ( const TestCase* testcase
    , bool userSpecified)
 {
-   schedTestCases.push_back(ValueType(testcase, userSpecified));
+   if(tagsFilter->hasFailed(testcase))
+   {
+      handleDoneTestCases(testcase, false);
+   }
+   else if(tagsFilter->hasSucceeded(testcase))
+   {
+      handleDoneTestCases(testcase, true);
+   }
+   else
+   {
+     schedTestCases.push_back(ValueType(testcase, userSpecified));
+   }
 }
 
 ///////////////////////////////////////////////////
@@ -154,6 +199,7 @@ handleDoneTestCases
    ( const TestCase* testcase
    , bool hasSucceeded)
 {
+   tagsFilter->testDone(testcase, hasSucceeded);
    if(hasSucceeded)
    {
       hierarchy->getDirectSuccessors(testcase, this);
@@ -223,7 +269,7 @@ numberOfTestCasesInSched() const
 }
 
 ///////////////////////////////////////////////////
-const TestCase*
+TestHierarchyHandler::ValueType
 TestHierarchyHandler::
 getTestCase(unsigned int index) const
 {

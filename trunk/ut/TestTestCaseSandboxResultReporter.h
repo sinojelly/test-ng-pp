@@ -130,7 +130,7 @@ public:
 
       reporter = new TestCaseSandboxResultReporter(wChannel);
      
-      decoder = new TestCaseSandboxResultDecoder(rChannel, testcase, collector);
+      decoder = new TestCaseSandboxResultDecoder(rChannel, testcase, collector, true);
 
       collector.METHOD(TestCaseResultCollector::startTestCase).defaults();
       collector.METHOD(TestCaseResultCollector::endTestCase).defaults();

@@ -116,7 +116,7 @@ void XMLTestListenerImpl::
 endTestSuite(TestSuiteInfoReader* suite)
 {
 	testSuiteElement->attribute("name", suite->getName())
-		.attribute("tests", toValStr(suite->getNumberOfTestCases()))
+		.attribute("tests", toValStr(testSuiteResultReporter->getNumberOfTestCases(suite)))
 		.attribute("fixtures", toValStr(suite->getNumberOfTestFixtures()))
 		.attribute("crashes", toValStr(testSuiteResultReporter->getNumberOfCrashedTestCases(suite)))
 		.attribute("skips",   toValStr(testSuiteResultReporter->getNumberOfSkippedTestCases(suite)))

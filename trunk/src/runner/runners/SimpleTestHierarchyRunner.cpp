@@ -29,8 +29,9 @@ SimpleTestHierarchyRunnerImpl::run(TestHierarchyHandler* hierarchy
 {
    for(unsigned int i = 0; i < hierarchy->numberOfTestCasesInSched(); i++)
    {
-      TestCase* testcase = const_cast<TestCase*>(hierarchy->getTestCase(i));
-      bool result = caseRunner->run(testcase, resultCollector);
+      TestHierarchyHandler::ValueType test = hierarchy->getTestCase(i);
+      TestCase* testcase = const_cast<TestCase*>(test.first);
+      bool result = caseRunner->run(testcase, test.second?resultCollector:0);
       hierarchy->testDone(testcase, result);
    }
 }

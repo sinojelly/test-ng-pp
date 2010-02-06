@@ -9,17 +9,17 @@ TESTNGPP_NS_START
 #define __RUN(block) try block \
    catch(AssertionFailure& failure) \
    { \
-      collector->addCaseFailure(testcase, failure); \
+      if(collector != 0) collector->addCaseFailure(testcase, failure); \
       hasFailure = true; \
    } \
    catch(std::exception& e) \
    { \
-      collector->addCaseError(testcase, e.what()); \
+      if(collector != 0)  collector->addCaseError(testcase, e.what()); \
       hasFailure = true; \
    } \
    catch(...) \
    { \
-      collector->addCaseError(testcase, "Unknown Exception"); \
+      if(collector != 0) collector->addCaseError(testcase, "Unknown Exception"); \
       hasFailure = true; \
    }
 
@@ -29,7 +29,7 @@ bool SimpleTestCaseRunner::run
 {
    bool hasFailure = false;
 
-   collector->startTestCase(testcase);
+   if(collector != 0) collector->startTestCase(testcase);
 
    __RUN({
       testcase->setUp();
@@ -40,7 +40,7 @@ bool SimpleTestCaseRunner::run
       testcase->tearDown();
    });
 
-   collector->endTestCase(testcase);
+   if(collector != 0) collector->endTestCase(testcase);
 
    return !hasFailure;
 }

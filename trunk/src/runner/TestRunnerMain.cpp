@@ -153,7 +153,7 @@ int real_main(int argc, char* argv[])
 {
    OptionList options;
 
-   options.parse(argc, argv, "f:L:l:c:s:t");
+   options.parse(argc, argv, "f:L:l:c:t:s");
 
    if(options.args.size() == 0)
    {

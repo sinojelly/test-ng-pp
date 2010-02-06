@@ -33,7 +33,6 @@ struct TagsFiltersImpl
    void handleMatchAll();
 
    std::vector<TaggableObjFilter*> filters;
-   char dummy[1000];
    OrCompositeTaggableFilter    allTagsFilter;
    OrCompositeTaggableFilter    doneTagsFilter; 
    NotCompositeTaggableFilter   notDoneFilter;

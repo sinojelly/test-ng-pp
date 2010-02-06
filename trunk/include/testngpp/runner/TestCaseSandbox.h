@@ -38,10 +38,12 @@ struct TestCaseSandbox
 public:
 
 	static TestCaseSandbox*
-	createInstance(EnvironmentCleaner* cleaner, \
-          const TestCase* testcase, \
-          TestCaseRunner* runner,
-          TestCaseResultCollector* collector);
+	createInstance
+         ( EnvironmentCleaner* cleaner
+         , const TestCase* testcase
+         , TestCaseRunner* runner
+         , TestCaseResultCollector* collector
+         , bool shouldReport);
 
 private:
 	TestCaseSandbox();

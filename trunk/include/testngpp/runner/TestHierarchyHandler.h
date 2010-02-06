@@ -2,6 +2,8 @@
 #ifndef __TESTNGPP_TEST_HIERARCHY_HANDLER_H
 #define __TESTNGPP_TEST_HIERARCHY_HANDLER_H
 
+#include <utility>
+
 #include <testngpp/testngpp.h>
 
 TESTNGPP_NS_START
@@ -10,10 +12,13 @@ struct TestFixtureDesc;
 struct TestCaseFilter;
 struct FixtureTagsFilter;
 struct TestFixtureResultCollector;
+struct TestCase;
 struct TestHierarchyHandlerImpl;
 
 struct TestHierarchyHandler
 {
+   typedef std::pair<const TestCase*, bool> ValueType;
+   
    TestHierarchyHandler
          ( TestFixtureDesc* fixture
          , const TestCaseFilter* filter
@@ -26,7 +31,7 @@ struct TestHierarchyHandler
 
    unsigned int numberOfTestCasesInSched() const;
  
-   const TestCase* getTestCase(unsigned int index) const;
+   ValueType getTestCase(unsigned int index) const;
 
 private:
    TestHierarchyHandlerImpl * This;

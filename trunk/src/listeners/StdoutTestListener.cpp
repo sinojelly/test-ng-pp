@@ -56,8 +56,6 @@ StdoutTestListener::~StdoutTestListener()
 void StdoutTestListener::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
-   std::cout << "S";
-   std::cout.flush();
 }
 
 ///////////////////////////////////////////////////////////
@@ -575,7 +573,7 @@ void ColorfulStdoutTestListener::endTest()
 
       std::cout << " success: ";
       This->switchTextColorToSucc();
-	  std::cout << successCases;
+      std::cout << successCases;
       This->restoreTextColor();          
       
       if(This->resultReporter->getNumberOfFailedTestCases() > 0)

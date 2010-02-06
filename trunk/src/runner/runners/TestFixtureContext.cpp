@@ -15,7 +15,7 @@ struct TestFixtureContextImpl
    ~TestFixtureContextImpl();
 
    TestFixtureDesc* fixture; // X
-   FixtureTagsFilter* tagsFilter;
+   FixtureTagsFilter* tagsFilter; // Y
 };
 
 /////////////////////////////////////////////////////////////////
@@ -28,6 +28,7 @@ TestFixtureContextImpl
 {
 }
 
+/////////////////////////////////////////////////////////////////
 TestFixtureContextImpl::
 ~TestFixtureContextImpl()
 {

@@ -13,9 +13,11 @@ struct TestCaseSandboxResultDecoderImpl;
 
 struct TestCaseSandboxResultDecoder
 {
-   TestCaseSandboxResultDecoder(ReadableChannel*
-             , const TestCaseInfoReader*
-             , TestCaseResultCollector*);
+   TestCaseSandboxResultDecoder
+         ( ReadableChannel*
+         , const TestCaseInfoReader*
+         , TestCaseResultCollector*
+         , bool);
 
    ~TestCaseSandboxResultDecoder();
 

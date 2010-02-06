@@ -35,11 +35,12 @@ struct TestCaseSandboxResultDecoderImpl
 
    TestCaseSandboxResultDecoderImpl(ReadableChannel* ch
              , const TestCaseInfoReader* tc
-             , TestCaseResultCollector* rc)
+             , TestCaseResultCollector* rc
+             , bool report)
       : channel(ch), testcase(tc), collector(rc)
       , startReceived(false), endReceived(false)
       , errorReceived(false), failureReceived(false)
-      , crashInformed(false)
+      , crashInformed(false), shouldReport(report)
    {}
 
    ~TestCaseSandboxResultDecoderImpl()
@@ -66,6 +67,7 @@ struct TestCaseSandboxResultDecoderImpl
    bool errorReceived;
    bool failureReceived;
    bool crashInformed;
+   bool shouldReport;
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -136,7 +138,7 @@ TestCaseSandboxResultDecoderImpl::flushEndEvent()
 void
 TestCaseSandboxResultDecoderImpl::flushRegularEvents()
 {
-   if(!startReceived)
+   if(!shouldReport || !startReceived)
    {
       return;
    }
@@ -255,10 +257,14 @@ bool TestCaseSandboxResultDecoderImpl::decode()
 }
 
 /////////////////////////////////////////////////////////////////////////
-TestCaseSandboxResultDecoder::TestCaseSandboxResultDecoder(ReadableChannel* channel
-             , const TestCaseInfoReader* testcase
-             , TestCaseResultCollector* collector)
-   : This(new TestCaseSandboxResultDecoderImpl(channel, testcase, collector))
+TestCaseSandboxResultDecoder::
+TestCaseSandboxResultDecoder
+      ( ReadableChannel* channel
+      , const TestCaseInfoReader* testcase
+      , TestCaseResultCollector* collector
+      , bool shouldReport)
+      : This(new TestCaseSandboxResultDecoderImpl
+          (channel, testcase, collector, shouldReport))
 {
 }
 
