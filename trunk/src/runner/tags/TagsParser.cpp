@@ -82,21 +82,19 @@ namespace
     {'*', TOKEN_STAR},
     {'$', TOKEN_DOLLAR},
     };
-    
+ 
+   bool isTokenChar(char c)
+   {
+      return !::isblank(c) && c != '\0' && c != '[' && c != ']' && c != '(' && c != ')';
+   }
    ///////////////////////////////////////////////////////////////
     Token
     parseToken(char** pStr, bool isBegin = false)
     {
        char* p = *pStr;
-       bool hasSpace = false;
-       if(isBegin)
-       {
-          hasSpace = true;
-       }
-       
+
        if(::isblank(*p))
        {
-          hasSpace = true;
           while(::isblank(*p)) p++;
        }
 
@@ -115,21 +113,19 @@ namespace
           }
        }
        
-       if(hasSpace)
-       {
-          for(unsigned int i=0; i<sizeof(indirectMap)/sizeof(indirectMap[0]); i++)
-          {
-             if(*p == indirectMap[i].c && (*(p+1) == 0 || ::isspace(*(p+1))))
-             {
-                p++; (*pStr) = p;
-                return Token(indirectMap[i].tokenType);
-             }
-          }
-       }
+
+      for(unsigned int i=0; i<sizeof(indirectMap)/sizeof(indirectMap[0]); i++)
+      {
+         if(*p == indirectMap[i].c && !isTokenChar(*(p+1)))
+         {
+            p++; (*pStr) = p;
+            return Token(indirectMap[i].tokenType);
+         }
+      }
        
        std::string tag("");
 
-       while(!::isblank(*p) && *p != '\0')
+       while(isTokenChar(*p))
        {
           tag.push_back(*p);
           p++;
@@ -258,13 +254,14 @@ namespace
                 }
                 break;
              case TOKEN_RP:
-                if(parseInScope)
+                if(parseInScope && numberOfTags > 0)
                 {
                    return; 
                 }
+
                 TESGNTPP_PARSE_TAGS_ERR();
              case TOKEN_EMPTY:
-                if(!parseInScope)
+                if(!parseInScope && numberOfTags > 0)
                 {
                    return; 
                 }
@@ -288,6 +285,12 @@ namespace
       try 
       {
          doParseOR(filter, pp, parseInScope, isStart);
+         if(filter->isEmpty())
+         {
+            delete filter;
+            
+            return 0;
+         }
       }
       catch (...)
       {
@@ -355,7 +358,8 @@ TagsParser::parse( const std::string& tagsSpec )
       delete tagsFilters;
       throw;
    }
-    
+   
+   
    return tagsFilters;
 }
 

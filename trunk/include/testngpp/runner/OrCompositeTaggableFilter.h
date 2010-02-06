@@ -18,6 +18,8 @@ struct OrCompositeTaggableFilter
    ~OrCompositeTaggableFilter();
 
    void addFilter(const TaggableObjFilter* filter, bool isComposite=true);
+   bool isEmpty() const;
+   
    bool matches(const Taggable* ) const;
 
 private:

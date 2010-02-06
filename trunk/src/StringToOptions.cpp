@@ -136,6 +136,10 @@ namespace
          case ParseState::END:
             argv[state.n - 1] = createArg(pArg, p);
             break;
+         case ParseState::NON:
+         case ParseState::IN:
+         default:
+               break;
          }
       }
 
