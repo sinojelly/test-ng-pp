@@ -84,5 +84,10 @@ addFilter(const TaggableObjFilter* filter, bool isComposite)
 }
 
 ////////////////////////////////////////////////////////
+bool OrCompositeTaggableFilter::
+isEmpty() const
+{
+   return This->filters.size() == 0;
+}
 
 TESTNGPP_NS_END

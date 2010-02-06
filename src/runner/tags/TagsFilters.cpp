@@ -29,6 +29,8 @@ struct TagsFiltersImpl
    bool shouldBeFiltered(const Taggable* obj) const;
    bool isPreFiltered(const Taggable* obj) const;
    bool hasBeenFiltered(const Taggable* obj) const;
+   
+   void handleMatchAll();
 
    std::vector<TaggableObjFilter*> filters;
    OrCompositeTaggableFilter    allTagsFilter;
@@ -49,7 +51,7 @@ TagsFiltersImpl()
 TagsFiltersImpl::
 ~TagsFiltersImpl()
 {
-   for(int i=0; i<filters.size(); i++)
+   for(unsigned int i=0; i<filters.size(); i++)
    {
      delete filters[i];
    }
@@ -63,7 +65,44 @@ TagsFiltersImpl::
 addNextFilter(TaggableObjFilter* filter)
 {
    filters.push_back(filter);
-   allTagsFilter.addFilter(filter, false);
+   
+   if(filter != 0)
+   {
+      allTagsFilter.addFilter(filter, false);
+   }
+}
+
+////////////////////////////////////////////////////////
+void
+TagsFiltersImpl::
+handleMatchAll()
+{
+   OrCompositeTaggableFilter* orFilter = new OrCompositeTaggableFilter();
+   
+   for(unsigned int i=0; i<filters.size(); i++)
+   {
+      if(filters[i] != 0)
+      {
+         orFilter->addFilter(filters[i], false);
+      }
+   }
+   
+   bool hasEmpty = false;
+   for(unsigned int i=0; i<filters.size(); i++)
+   {
+      if(filters[i] == 0)
+      {
+         filters[i] = new NotCompositeTaggableFilter(orFilter, !hasEmpty);
+         allTagsFilter.addFilter(filters[i], false);
+         hasEmpty = true;
+      }
+   }
+   
+   if(!hasEmpty)
+   {
+      delete orFilter;
+   }
+
 }
 
 ////////////////////////////////////////////////////////
@@ -73,14 +112,18 @@ startOnNext()
 {
    index++;
 
-   if(index >= filters.size())
+   if((unsigned int)index >= filters.size())
    {
       return false;
    }
 
    if(index > 0)
    {
-     doneTagsFilter.addFilter(filters[index-1], false);
+      doneTagsFilter.addFilter(filters[index-1], false);
+   }
+   else
+   {
+      handleMatchAll();
    }
 
    return true;
@@ -91,7 +134,7 @@ bool
 TagsFiltersImpl::
 shouldBeFilteredThisTime(const Taggable* obj) const
 {
-   if(index >= filters.size())
+   if((unsigned int)index >= filters.size())
    {
       throw Error("internal error");
    }
