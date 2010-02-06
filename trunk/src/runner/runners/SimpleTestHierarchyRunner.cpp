@@ -27,9 +27,9 @@ void
 SimpleTestHierarchyRunnerImpl::run(TestHierarchyHandler* hierarchy
         , TestFixtureResultCollector* resultCollector)
 {
-   while(hierarchy->numberOfTestCasesInSched() > 0)
+   for(unsigned int i = 0; i < hierarchy->numberOfTestCasesInSched(); i++)
    {
-      TestCase* testcase = const_cast<TestCase*>(hierarchy->getTestCase(0));
+      TestCase* testcase = const_cast<TestCase*>(hierarchy->getTestCase(i));
       bool result = caseRunner->run(testcase, resultCollector);
       hierarchy->testDone(testcase, result);
    }

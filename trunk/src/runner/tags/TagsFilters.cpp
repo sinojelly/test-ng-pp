@@ -1,6 +1,5 @@
 
 #include <vector>
-#include <iostream>
 
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
@@ -10,6 +9,7 @@
 #include <testngpp/runner/TagsFilters.h>
 
 #include <testngpp/internal/Taggable.h>
+#include <testngpp/runner/InternalError.h>
 
 #include <testngpp/Error.h>
 
@@ -33,6 +33,7 @@ struct TagsFiltersImpl
    void handleMatchAll();
 
    std::vector<TaggableObjFilter*> filters;
+   char dummy[1000];
    OrCompositeTaggableFilter    allTagsFilter;
    OrCompositeTaggableFilter    doneTagsFilter; 
    NotCompositeTaggableFilter   notDoneFilter;
@@ -87,22 +88,21 @@ handleMatchAll()
       }
    }
    
-   bool hasEmpty = false;
+   bool hasMatchAll = false;
    for(unsigned int i=0; i<filters.size(); i++)
    {
       if(filters[i] == 0)
       {
-         filters[i] = new NotCompositeTaggableFilter(orFilter, !hasEmpty);
+         filters[i] = new NotCompositeTaggableFilter(orFilter, !hasMatchAll);
          allTagsFilter.addFilter(filters[i], false);
-         hasEmpty = true;
+         hasMatchAll = true;
       }
    }
    
-   if(!hasEmpty)
+   if(!hasMatchAll)
    {
       delete orFilter;
    }
-
 }
 
 ////////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ shouldBeFilteredThisTime(const Taggable* obj) const
 {
    if((unsigned int)index >= filters.size())
    {
-      throw Error("internal error");
+      TESTNGPP_INTERNAL_ERROR(2014);
    }
    
    return filters[index]->matches(obj) &&

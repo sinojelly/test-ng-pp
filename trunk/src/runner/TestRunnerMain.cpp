@@ -25,6 +25,8 @@ void usage(const char * program)
              << std::endl
              << "   -f pattern       filter patterns "
              << std::endl
+             << "   -t pattern       tags filter pattern"
+             << std::endl
              << "   -c number        maximum # of concurrent sandboxes"
              << std::endl
              << "   -s               using sandbox runner"
@@ -33,6 +35,7 @@ void usage(const char * program)
    exit(1);
 }
 
+#if 0
 ////////////////////////////////////////////////////////////
 static 
 void showOptions(const OptionList& options)
@@ -45,6 +48,8 @@ void showOptions(const OptionList& options)
                 << ")" << std::endl;
    }
 }
+#endif
+
 ////////////////////////////////////////////////////////////
 static
 void getSpecifiedOptions( const std::string& option
@@ -110,6 +115,7 @@ unsigned int getMaxConcurrent(OptionList& options)
 
    return result;
 }
+
 ////////////////////////////////////////////////////////////
 static
 void getListeners( StringList& listeners
@@ -147,7 +153,7 @@ int real_main(int argc, char* argv[])
 {
    OptionList options;
 
-   options.parse(argc, argv, "f:L:l:c:s");
+   options.parse(argc, argv, "f:L:l:c:s:t");
 
    if(options.args.size() == 0)
    {
@@ -172,9 +178,11 @@ int real_main(int argc, char* argv[])
    {
       maxConcurrent = getMaxConcurrent(options);
    }
-
+   
+   std::string tagsFilterOption = getSingleOption("t", options, "*");
+                                                 
    return TestRunner().runTests(useSandbox(options), maxConcurrent, options.args, listeners
-                         , searchingPathsOfListeners, fixtures);
+                         , searchingPathsOfListeners, fixtures, tagsFilterOption);
 }
 
 int main(int argc, char* argv[])

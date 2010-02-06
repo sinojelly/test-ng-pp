@@ -3,6 +3,7 @@
 #include <testngpp/runner/GeneralTagsFilter.h>
 #include <testngpp/internal/Taggable.h>
 #include <testngpp/internal/NameMatcher.h>
+#include <testngpp/runner/InternalError.h>
 
 TESTNGPP_NS_START
 
@@ -43,6 +44,11 @@ GeneralTagsFilter::~GeneralTagsFilter()
 bool GeneralTagsFilter::
 matches(const Taggable* obj) const
 {
+   if(obj == 0 || This->tagsMatcher)
+   {
+      TESTNGPP_INTERNAL_ERROR(2016);
+   }
+      
    return obj->tagsMatch(This->tagsMatcher);
 }
 

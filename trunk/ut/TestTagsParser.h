@@ -29,7 +29,13 @@ public:
    
    void tearDown()
    {
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      try {
+       TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      }
+      catch(std::exception& ex)
+      {
+         std::cout << ex.what() << std::endl;
+      }
    }
 
    struct TaggableObj0 : public Taggable
@@ -579,6 +585,52 @@ public:
       TS_ASSERT(!filter->startOnNext());
       
       delete filter;  
+   }
+   
+   void testShouldBeAbleToHandleMatchAll()
+   {
+      std::string tagsSpec("*");
+      
+      TagsFilters* filter = TagsParser::parse(tagsSpec);
+      
+      TS_ASSERT(0 != filter);
+      
+      TaggableObj0 obj0; // $
+      TaggableObj1 obj1; // tag1
+      TaggableObj2 obj2; // tag2, tag4
+      TaggableObj3 obj3; // tag3, tag5
+      TaggableObj4 obj4; // tag2, tag5
+      
+      /////////////////////////////////////////////////////
+      TS_ASSERT(filter->startOnNext());
+      
+      TS_ASSERT(filter->shouldBeFilteredThisTime(&obj0));
+      TS_ASSERT(filter->shouldBeFiltered(&obj0));
+      TS_ASSERT(!filter->isPreFiltered(&obj0));
+      TS_ASSERT(!filter->hasBeenFiltered(&obj0));
+      
+      TS_ASSERT(filter->shouldBeFilteredThisTime(&obj1));
+      TS_ASSERT(filter->shouldBeFiltered(&obj1));
+      TS_ASSERT(!filter->isPreFiltered(&obj1));
+      TS_ASSERT(!filter->hasBeenFiltered(&obj1));
+      
+      TS_ASSERT(filter->shouldBeFilteredThisTime(&obj2));
+      TS_ASSERT(filter->shouldBeFiltered(&obj2));
+      TS_ASSERT(!filter->isPreFiltered(&obj2));
+      TS_ASSERT(!filter->hasBeenFiltered(&obj2));
+      
+      TS_ASSERT(filter->shouldBeFilteredThisTime(&obj3));
+      TS_ASSERT(filter->shouldBeFiltered(&obj3));
+      TS_ASSERT(!filter->isPreFiltered(&obj3));
+      TS_ASSERT(!filter->hasBeenFiltered(&obj3));
+      
+      TS_ASSERT(filter->shouldBeFilteredThisTime(&obj4));
+      TS_ASSERT(filter->shouldBeFiltered(&obj4));
+      TS_ASSERT(!filter->isPreFiltered(&obj4));
+      TS_ASSERT(!filter->hasBeenFiltered(&obj4));
+      
+      delete filter;
+      
    }
    
    void testDollarSignShouldNotBeUsedInAndGroup()

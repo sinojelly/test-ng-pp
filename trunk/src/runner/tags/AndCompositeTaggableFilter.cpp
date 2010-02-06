@@ -4,6 +4,7 @@
 
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/internal/Taggable.h>
+#include <testngpp/runner/InternalError.h>
 
 TESTNGPP_NS_START
 
@@ -54,6 +55,11 @@ matches(const Taggable* obj) const
    Filters::const_iterator i = filters.begin();
    for(; i != filters.end(); i++)
    {
+      if((*i).first == 0)
+      {
+         TESTNGPP_INTERNAL_ERROR(2015);
+      }
+      
       if(!(*i).first->matches(obj))
          return false;
    }

@@ -1,7 +1,6 @@
 #ifndef __TESTNGPP_TEST_RUNNER_H
 #define __TESTNGPP_TEST_RUNNER_H
 
-#include <list>
 #include <string>
 
 #include <testngpp/testngpp.h>
@@ -23,7 +22,8 @@ public:
                , const StringList& suitePaths
                , const StringList& listenerNames
                , const StringList& searchingPathsOfListeners
-               , const StringList& fixtures);
+               , const StringList& fixtures
+               , const std::string& tagsFilterOption);
 
 private:
    TestRunnerImpl * This;

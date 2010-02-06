@@ -49,7 +49,7 @@ NotCompositeTaggableFilter::
 ////////////////////////////////////////////////////
 bool NotCompositeTaggableFilterImpl::
 matches(const Taggable* obj) const
-{
+{   
    if(filter == 0)
      return true;
 

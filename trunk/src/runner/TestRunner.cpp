@@ -14,6 +14,7 @@
 #include <testngpp/runner/SimpleTestResultManager.h>
 #include <testngpp/runner/TestResultManager.h>
 #include <testngpp/runner/TagsFilters.h>
+#include <testngpp/runner/TagsParser.h>
 #include <testngpp/runner/TestRunnerContext.h>
 
 #include <testngpp/runner/TestRunner.h>
@@ -38,7 +39,7 @@ struct TestRunnerImpl
       , unsigned int maxConcurrent);
 
    void runTestSuite
-      (TestSuiteContext* suite);
+      (TestSuiteContext* suite, const TestFilter* filter);
 
    void runAllTests
       ( const StringList& suites
@@ -50,7 +51,7 @@ struct TestRunnerImpl
       , const StringList& listeners);
 
    void runAllSuites
-      ( TestRunnerContext* context);
+      ( TestRunnerContext* context, const TestFilter* filter);
 
    TestRunnerContext* 
    loadSuites
@@ -136,11 +137,11 @@ createSuiteRunner(bool useSandbox, unsigned int maxConcurrent)
 ///////////////////////////////////////////////////////
 void TestRunnerImpl::
 runTestSuite
-      (TestSuiteContext* suite)
+      (TestSuiteContext* suite, const TestFilter* filter)
 {
    __TESTNGPP_TRY
    {
-     suiteRunner->run(suite);
+     suiteRunner->run(suite, filter);
    }
    __TESTNGPP_CATCH(Error& e)
    {
@@ -159,11 +160,11 @@ runTestSuite
 void
 TestRunnerImpl::
 runAllSuites
-      ( TestRunnerContext* context)
+      ( TestRunnerContext* context, const TestFilter* filter)
 {
    for(unsigned int i=0; i<context->numberOfSuites(); i++)
    {
-      runTestSuite(context->getSuite(i));
+      runTestSuite(context->getSuite(i), filter);
    }
 }
 ///////////////////////////////////////////////////////
@@ -179,7 +180,7 @@ runAllTests
 
    while(tagsFilters->startOnNext())
    {
-      runAllSuites(context);
+      runAllSuites(context, filter);
    }
 
    delete context;
@@ -224,16 +225,21 @@ TestRunner::runTests( bool useSandbox
                     , const StringList& suitePaths
                     , const StringList& listenerNames
                     , const StringList& searchingPaths
-                    , const StringList& fixtures)
+                    , const StringList& fixtures
+                     , const std::string& tagsFilterOption)
 {
    This->createSuiteRunner(useSandbox, maxConcurrent);
 
    This->loadListeners(searchingPaths, listenerNames);
 
    const TestFilter* filter = TestFilterFactory::getFilter(fixtures);
+   
+   TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
 
-   This->runTests(suitePaths, 0, filter);
+   This->runTests(suitePaths, tagsFilter, filter);
 
+   delete tagsFilter;
+   
    TestFilterFactory::returnFilter(filter);
 
    return This->hasFailures ? -2 : 0;

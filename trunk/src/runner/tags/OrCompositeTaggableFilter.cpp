@@ -5,6 +5,13 @@
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
 #include <testngpp/internal/Taggable.h>
+#include <testngpp/runner/InternalError.h>
+
+#include <testngpp/runner/AndCompositeTaggableFilter.h>
+#include <testngpp/runner/NotCompositeTaggableFilter.h>
+
+#include <testngpp/runner/GeneralTagsFilter.h>
+#include <testngpp/runner/EmptyTagFilter.h>
 
 TESTNGPP_NS_START
 
@@ -52,11 +59,23 @@ OrCompositeTaggableFilter::
 bool OrCompositeTaggableFilterImpl::
 matches(const Taggable* obj) const
 {
+   if(obj == 0)
+   {
+      TESTNGPP_INTERNAL_ERROR(2011);
+   }
+   
    Filters::const_iterator i = filters.begin();
    for(; i != filters.end(); i++)
    {
+      if((*i).first == 0)
+      {
+         TESTNGPP_INTERNAL_ERROR(2012);
+      }
+      
       if((*i).first->matches(obj))
+      {
          return true;
+      }
    }
 
    return false;

@@ -1,5 +1,6 @@
 
 #include <list>
+#include <iostream>
 
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/FixtureTagsFilter.h>
