@@ -12,9 +12,10 @@ TESTNGPP_NS_START
 struct TestFixtureContextImpl
 {
    TestFixtureContextImpl(TestFixtureDesc* desc, TagsFilters* filters);
+   ~TestFixtureContextImpl();
 
    TestFixtureDesc* fixture; // X
-   FixtureTagsFilter tagsFilter;
+   FixtureTagsFilter* tagsFilter;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -23,8 +24,14 @@ TestFixtureContextImpl
       ( TestFixtureDesc* desc
       , TagsFilters* filters)
       : fixture(desc)
-      , tagsFilter(filters)
+      , tagsFilter(new FixtureTagsFilter(filters))
 {
+}
+
+TestFixtureContextImpl::
+~TestFixtureContextImpl()
+{
+   delete tagsFilter;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -58,7 +65,7 @@ FixtureTagsFilter*
 TestFixtureContext::
 getTagsFilter() const
 {
-   return &This->tagsFilter;
+   return This->tagsFilter;
 }
 
 /////////////////////////////////////////////////////////////////

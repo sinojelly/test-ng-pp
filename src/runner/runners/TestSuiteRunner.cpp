@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 #include <testngpp/internal/TestSuiteDesc.h>
 
 #include <testngpp/runner/TestSuiteRunner.h>
@@ -22,9 +24,9 @@ struct TestSuiteRunnerImpl
    {
    }
 
-	void runAllFixtures();
+   void runAllFixtures(TestSuiteContext* suite, const TestCaseFilter* filter);
 
-	void run(TestSuiteContext* suite);
+	void run(TestSuiteContext* suite, const TestCaseFilter* filter);
 
    TestFixtureRunner* fixtureRunner;     // X
    TestResultCollector* resultCollector; // X
@@ -46,39 +48,33 @@ TestSuiteRunner::~TestSuiteRunner()
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunnerImpl::runAllFixtures()
+TestSuiteRunnerImpl::
+runAllFixtures(TestSuiteContext* suite, const TestCaseFilter* filter)
 {
-#if 0
-   for(unsigned int i=0; i<desc->getNumberOfTestFixtures(); i++)
+   for(unsigned int i=0; i<suite->numberOfFixtures(); i++)
    {
-      TestFixtureDesc* fixture = desc->getTestFixture(i);
-      if(filter->isFixtureMatch((const TestFixtureInfoReader*)fixture))
-      {
-         fixtureRunner->run(fixture, resultCollector, filter);
-      }
+      TestFixtureContext* fixture = suite->getFixture(i);
+
+      fixtureRunner->run(fixture, resultCollector, filter);
    }
-#endif
 }
 
 /////////////////////////////////////////////////////////////////
 void
 TestSuiteRunnerImpl::
-run(TestSuiteContext* suite)
+run(TestSuiteContext* suite, const TestCaseFilter* filter)
 {
-#if 0
-   resultCollector->startTestSuite(desc);
-	runAllFixtures(desc, filter);
-   resultCollector->endTestSuite(desc);
-#endif
-
+   resultCollector->startTestSuite(suite->getSuite());
+	runAllFixtures(suite, filter);
+   resultCollector->endTestSuite(suite->getSuite());
 }
 
 /////////////////////////////////////////////////////////////////
 void
 TestSuiteRunner::
-run(TestSuiteContext* suite)
+run(TestSuiteContext* suite, const TestCaseFilter* filter)
 {
-   This->run(suite);
+   This->run(suite, filter);
 }
 
 /////////////////////////////////////////////////////////////////

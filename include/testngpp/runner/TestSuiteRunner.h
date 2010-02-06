@@ -9,6 +9,7 @@
 TESTNGPP_NS_START
 
 struct TestSuiteContext;
+struct TestCaseFilter;
 struct TestFixtureRunner;
 struct TestResultCollector;
 
@@ -20,8 +21,8 @@ struct TestSuiteRunner
                   , TestResultCollector* );
 	~TestSuiteRunner();
 
-	void run(TestSuiteContext*);
-
+   void run(TestSuiteContext* suite
+            , const TestCaseFilter* filter);
 private:
 	TestSuiteRunnerImpl* This;
 

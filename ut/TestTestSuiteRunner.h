@@ -174,7 +174,7 @@ public:
       TestSuiteRunner runner(&fixtureRunner, collector);
       TagsFilters tagsFilters;
       TestSuiteContext context(suiteLoader, file, collector, &tagsFilters, filter);
-      runner.run(&context);
+      runner.run(&context, filter);
 
       ////////////////////////////////////////////////////
       verify();
@@ -202,7 +202,7 @@ public:
       TestSuiteRunner runner(&fixtureRunner, collector);
       TagsFilters tagsFilters;
       TestSuiteContext context(suiteLoader, file, collector, &tagsFilters, filter);
-      runner.run(&context);
+      runner.run(&context, filter);
       ////////////////////////////////////////////////////
 
       verify();

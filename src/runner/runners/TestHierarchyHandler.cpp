@@ -27,8 +27,9 @@ struct SkippedTestCases
          ( TestFixtureResultCollector* resultCollector
          , FixtureTagsFilter* filter)
          : collector(resultCollector)
-         , tagsFilter(tagsFilter)
-   {}
+         , tagsFilter(filter)
+   {
+   }
 
    void addTestCase
          ( const TestCase* testcase
@@ -37,9 +38,16 @@ struct SkippedTestCases
       if(!userSpecified)
          return;
 
+      if(tagsFilter == 0)
+      {
+         TESTNGPP_INTERNAL_ERROR(2013);
+      }
+  
       if(!tagsFilter->shouldReport(testcase))
-        return;
-
+      {
+         return;
+      }
+   
       collector->startTestCase(testcase);
       collector->addCaseSkipped(testcase);
       collector->endTestCase(testcase);
@@ -73,7 +81,9 @@ struct TestHierarchyHandlerImpl
          , bool hasSucceeded);
 
    unsigned int numberOfTestCasesInSched() const
-   { return schedTestCases.size(); }
+   { 
+      return schedTestCases.size(); 
+   }
  
    const TestCase* getTestCase(unsigned int index) const;
 
@@ -118,11 +128,6 @@ const TestCase*
 TestHierarchyHandlerImpl::
 getTestCase(unsigned int index) const
 {
-   if(index >= schedTestCases.size())
-   {
-      TESTNGPP_INTERNAL_ERROR(2010);
-   }
-
    std::list<ValueType>::const_iterator iter = \
       schedTestCases.begin();
 
@@ -173,7 +178,6 @@ testDone
    {
       if((*i).first == testcase)
       {
-         schedTestCases.erase(i);
          handleDoneTestCases(testcase, hasSucceeded);
          return;
       }

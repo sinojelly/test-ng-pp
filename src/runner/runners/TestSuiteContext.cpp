@@ -14,6 +14,7 @@
 #include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
 
 #include <testngpp/runner/TestSuiteContext.h>
+#include <testngpp/runner/InternalError.h>
  
 TESTNGPP_NS_START
  
@@ -50,7 +51,7 @@ private:
 
 private:
 
-   TestSuiteLoader* suiteLoader; // X
+   TestSuiteLoader* suiteLoader; // Y
    TestResultCollector* resultCollector; //X
 public:
 
@@ -79,6 +80,7 @@ TestSuiteContextImpl::
 {
    unloadFixtures();
    suiteLoader->unload();
+   delete suiteLoader;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -158,7 +160,7 @@ getFixture(unsigned int index) const
 {
    if(index >= This->fixtures.size())
    {
-      return 0;
+      TESTNGPP_INTERNAL_ERROR(2017);
    }
 
    return This->fixtures[index];
