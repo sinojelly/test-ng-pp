@@ -138,10 +138,13 @@ TestCaseSandbox::cleanup()
 }
 ////////////////////////////////////////////////////////
 TestCaseSandbox*
-TestCaseSandbox::createInstance(EnvironmentCleaner* cleaner, \
-          const TestCase* testcase, \
-          TestCaseRunner* runner,
-          TestCaseResultCollector* collector)
+TestCaseSandbox::
+createInstance
+       ( EnvironmentCleaner* cleaner
+       , const TestCase* testcase
+       , TestCaseRunner* runner
+       , TestCaseResultCollector* collector
+       , bool shouldReport)
 {
    TestCaseSandboxHandler handler(testcase, runner);
    Sandbox* sandbox = Sandbox::createInstance(cleaner, &handler);
@@ -156,7 +159,8 @@ TestCaseSandbox::createInstance(EnvironmentCleaner* cleaner, \
          new TestCaseSandboxResultDecoder
             ( new PipeReadableChannel(sandbox->getChannelId())
             , testcase
-            , collector);
+            , collector
+            , shouldReport);
 
    tcSandbox->This->testcase = testcase;
    tcSandbox->This->sandbox = sandbox;

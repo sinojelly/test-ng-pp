@@ -226,14 +226,14 @@ TestRunner::runTests( bool useSandbox
                     , const StringList& listenerNames
                     , const StringList& searchingPaths
                     , const StringList& fixtures
-                     , const std::string& tagsFilterOption)
+                    , const std::string& tagsFilterOption)
 {
    This->createSuiteRunner(useSandbox, maxConcurrent);
 
    This->loadListeners(searchingPaths, listenerNames);
 
    const TestFilter* filter = TestFilterFactory::getFilter(fixtures);
-   
+
    TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
 
    This->runTests(suitePaths, tagsFilter, filter);

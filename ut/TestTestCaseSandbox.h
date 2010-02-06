@@ -75,7 +75,7 @@ public:
    {
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          f.testcase[0], &runner, f.collector);
+          f.testcase[0], &runner, f.collector, true);
       TS_ASSERT(sandbox != 0);
       ///////////////////////////////////////////////////////////
 
@@ -93,7 +93,7 @@ public:
 
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          f.testcase[0], &runner, f.collector);
+          f.testcase[0], &runner, f.collector, true);
 
       TS_ASSERT(sandbox != 0);
 
@@ -117,7 +117,7 @@ public:
 
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          f.testcase[0], &runner, f.collector);
+          f.testcase[0], &runner, f.collector, true);
       TS_ASSERT(sandbox != 0);
       //////////////////////////////////////////////////////////
 
@@ -135,7 +135,7 @@ public:
    {
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
-          f.testcase[0], &runner, f.collector);
+          f.testcase[0], &runner, f.collector, true);
       TS_ASSERT(sandbox != 0);
       ///////////////////////////////////////////////////////////
 

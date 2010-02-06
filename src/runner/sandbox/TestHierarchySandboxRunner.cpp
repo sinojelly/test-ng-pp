@@ -117,10 +117,14 @@ void TestHierarchySandboxRunnerImpl::
 createSandbox( TestHierarchyHandler* handler, unsigned int i
              , TestFixtureResultCollector* resultCollector)
 {
+   TestHierarchyHandler::ValueType testcase = handler->getTestCase(i);
    TestCaseSandbox* sandbox = \
          TestCaseSandbox::createInstance
-               ( this, handler->getTestCase(i)
-               , caseRunner, resultCollector);
+               ( this
+               , testcase.first
+               , caseRunner
+               , resultCollector
+               , testcase.second);
 
    sandboxes.push_back(sandbox);
 }

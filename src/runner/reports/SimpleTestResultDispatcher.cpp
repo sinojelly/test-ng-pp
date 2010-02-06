@@ -1,5 +1,6 @@
 
 #include <list>
+#include <iostream>
 
 #include <testngpp/runner/SimpleTestResultDispatcher.h>
 #include <testngpp/runner/TestCaseListener.h>

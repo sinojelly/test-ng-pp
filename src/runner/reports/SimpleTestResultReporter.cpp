@@ -39,7 +39,7 @@ unsigned int
 SimpleTestResultReporterImpl::
 getNumberOfUnsuccessfulCases() const
 {
-   return numberOfCrashedCases + numberOfErrorCases + numberOfFailedCases;
+   return numberOfCrashedCases + numberOfErrorCases + numberOfFailedCases + numberOfSkippedCases;
 }
 
 ///////////////////////////////////////////////////////////

@@ -10,7 +10,7 @@ TESTNGPP_NS_START
 struct SimpleTestCaseRunner
 	: public TestCaseRunner
 {
-	bool run(TestCase*, TestCaseResultCollector*);
+	bool run(TestCase*, TestCaseResultCollector* collector=0);
 };
 
 TESTNGPP_NS_END

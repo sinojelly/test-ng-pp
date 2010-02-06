@@ -20,9 +20,11 @@ struct FixtureTagsFilter
 
    bool shouldRun(const TestCase* testcase) const;
    bool shouldReport(const TestCase* testcase) const;
-
-   bool hasBeenRunAlready(const TestCase* testcase) const;
-   void testDone(const TestCase* testcase);
+   
+   bool hasSucceeded(const TestCase* testcase) const;
+   bool hasFailed(const TestCase* testcase) const;
+   
+   void testDone(const TestCase* testcase, bool);
 
 private:
    FixtureTagsFilterImpl* This;
