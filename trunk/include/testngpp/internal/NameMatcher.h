@@ -12,6 +12,8 @@ struct NameMatcher
 {
    virtual bool matches(const std::string& name) const = 0;
 
+   virtual void dump() const = 0;
+   
    virtual ~NameMatcher() {}
 };
 

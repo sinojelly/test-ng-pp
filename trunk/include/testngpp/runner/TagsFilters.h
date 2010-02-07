@@ -25,6 +25,7 @@ struct TagsFilters
    bool isPreFiltered(const Taggable* ) const;
    bool hasBeenFiltered(const Taggable* ) const;
 
+   void dump() const;
 private:
    TagsFiltersImpl * This;
 };

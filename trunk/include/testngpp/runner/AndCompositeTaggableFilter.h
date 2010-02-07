@@ -21,6 +21,8 @@ struct AndCompositeTaggableFilter
    void addFilter(const TaggableObjFilter* filter, bool isComposite=true);
    bool matches(const Taggable*) const;
 
+   void dump() const;
+   
 private:
    AndCompositeTaggableFilterImpl * This;
 

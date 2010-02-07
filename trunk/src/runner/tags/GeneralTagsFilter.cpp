@@ -53,5 +53,10 @@ matches(const Taggable* obj) const
 }
 
 ////////////////////////////////////////////////////////
+void GeneralTagsFilter::
+dump() const
+{
+   This->tagsMatcher->dump();
+}
 
 TESTNGPP_NS_END

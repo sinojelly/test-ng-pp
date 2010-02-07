@@ -11,6 +11,7 @@ struct EmptyTagFilter
    : public TaggableObjFilter
 {
    bool matches(const Taggable* ) const; 
+   void dump() const;
 };
 
 TESTNGPP_NS_END

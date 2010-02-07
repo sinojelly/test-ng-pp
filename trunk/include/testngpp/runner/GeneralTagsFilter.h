@@ -20,6 +20,7 @@ struct GeneralTagsFilter
 
    bool matches(const Taggable* ) const;
 
+   void dump() const;
 private:
    GeneralTagsFilterImpl * This;
 

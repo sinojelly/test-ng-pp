@@ -1,6 +1,7 @@
 
 #include <list>
 #include <algorithm>
+#include <iostream>
 
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/internal/Taggable.h>
@@ -89,5 +90,20 @@ addFilter(const TaggableObjFilter* filter, bool isComposite)
 }
 
 ////////////////////////////////////////////////////////
+void AndCompositeTaggableFilter::
+dump() const
+{
+   std::cout << "[";
+
+   AndCompositeTaggableFilterImpl::Filters::const_iterator i = This->filters.begin();
+   for(; i != This->filters.end(); i++)
+   {
+      (*i).first->dump();
+   }
+   
+   std::cout << "]";
+   
+   std::cout.flush();
+}
 
 TESTNGPP_NS_END

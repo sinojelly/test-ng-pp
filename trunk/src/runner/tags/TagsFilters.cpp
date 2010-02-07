@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <iostream>
 
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
@@ -32,6 +33,8 @@ struct TagsFiltersImpl
    
    void handleMatchAll();
 
+   void dump() const;
+   
    std::vector<TaggableObjFilter*> filters;
    OrCompositeTaggableFilter    allTagsFilter;
    OrCompositeTaggableFilter    doneTagsFilter; 
@@ -104,6 +107,30 @@ handleMatchAll()
    }
 }
 
+////////////////////////////////////////////////////////
+void
+TagsFiltersImpl::
+dump() const
+{
+   std::cout << "Tags Spec : ";
+   
+   for(unsigned int i=0; i<filters.size(); i++)
+   {
+      if(i > 0) std::cout << " > " ;
+      
+      if(filters[i] != 0)
+      {
+         filters[i]->dump();
+      }
+      else
+      {
+         std::cout << " * ";
+      }
+   }
+   
+   std::cout << std::endl;
+   
+}
 ////////////////////////////////////////////////////////
 bool
 TagsFiltersImpl::
@@ -231,5 +258,12 @@ hasBeenFiltered(const Taggable* obj) const
 }
 
 ////////////////////////////////////////////////////////
+void
+TagsFilters::
+dump() const
+{
+   This->dump();
+}
+
 
 TESTNGPP_NS_END

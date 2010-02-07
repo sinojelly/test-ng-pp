@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 #include <testngpp/runner/NotCompositeTaggableFilter.h>
 #include <testngpp/internal/Taggable.h>
 
@@ -64,5 +66,12 @@ matches(const Taggable* obj) const
 }
 
 ////////////////////////////////////////////////////////
+void NotCompositeTaggableFilter::
+dump() const
+{
+   std::cout << "^";
+   This->filter->dump();
+   std::cout.flush();
+}
 
 TESTNGPP_NS_END

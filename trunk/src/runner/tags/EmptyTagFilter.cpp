@@ -1,10 +1,13 @@
 
+#include <iostream>
+
 #include <testngpp/runner/EmptyTagFilter.h>
 #include <testngpp/internal/Taggable.h>
 #include <testngpp/runner/InternalError.h>
 
 TESTNGPP_NS_START
 
+/////////////////////////////////////////////
 bool
 EmptyTagFilter::
 matches(const Taggable* obj) const
@@ -15,6 +18,15 @@ matches(const Taggable* obj) const
    }
       
    return !obj->hasTags();
+}
+
+/////////////////////////////////////////////
+void
+EmptyTagFilter::
+dump() const
+{
+   std::cout << " $ ";
+   std::cout.flush();
 }
 
 TESTNGPP_NS_END

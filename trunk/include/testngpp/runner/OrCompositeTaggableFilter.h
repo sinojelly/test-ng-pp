@@ -22,6 +22,8 @@ struct OrCompositeTaggableFilter
    
    bool matches(const Taggable* ) const;
 
+   void dump() const;
+   
 private:
    OrCompositeTaggableFilterImpl * This;
 

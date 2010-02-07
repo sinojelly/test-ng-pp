@@ -1,6 +1,7 @@
 
 #include <list>
 #include <algorithm>
+#include <iostream>
 
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
@@ -107,6 +108,23 @@ bool OrCompositeTaggableFilter::
 isEmpty() const
 {
    return This->filters.size() == 0;
+}
+
+////////////////////////////////////////////////////////
+void OrCompositeTaggableFilter::
+dump() const
+{
+   std::cout << "(";
+   
+   OrCompositeTaggableFilterImpl::Filters::const_iterator i = This->filters.begin();
+   for(; i != This->filters.end(); i++)
+   {
+      (*i).first->dump();
+   }
+   
+   std::cout << ")";
+   
+   std::cout.flush();
 }
 
 TESTNGPP_NS_END
