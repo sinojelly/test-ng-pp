@@ -47,7 +47,7 @@ struct TestBar1 : public TESTCPP_NS::TestFixture
 class TestBar2 : public TestFixture
 {
 public:
-    // @test(tags="ft fast")
+    // @test
     void case20()
     {
        TS_ASSERT(true);

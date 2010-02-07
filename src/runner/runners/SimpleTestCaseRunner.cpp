@@ -9,16 +9,19 @@ TESTNGPP_NS_START
 #define __RUN(block) try block \
    catch(AssertionFailure& failure) \
    { \
+      if(!(reportSuccess || hasFailure)) collector->startTestCase(testcase); \
       collector->addCaseFailure(testcase, failure); \
       hasFailure = true; \
    } \
    catch(std::exception& e) \
    { \
+      if(!(reportSuccess || hasFailure)) collector->startTestCase(testcase); \
       collector->addCaseError(testcase, e.what()); \
       hasFailure = true; \
    } \
    catch(...) \
    { \
+      if(!(reportSuccess || hasFailure)) collector->startTestCase(testcase); \
       collector->addCaseError(testcase, "Unknown Exception"); \
       hasFailure = true; \
    }

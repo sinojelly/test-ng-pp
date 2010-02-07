@@ -238,7 +238,7 @@ TestRunner::runTests( bool useSandbox
    
    TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
    
-   //tagsFilter->dump();
+   tagsFilter->dump();
 
    This->runTests(suitePaths, tagsFilter, filter);
 
