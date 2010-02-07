@@ -85,11 +85,15 @@ struct XMLTestListenerImpl
    void startTestSuite(TestSuiteInfoReader* suite);
    void endTestSuite(TestSuiteInfoReader* suite);
 
+   void startTestCase(const TestCaseInfoReader* testcase);
    void endTestCase(const TestCaseInfoReader* testcase);
    void addCaseCrash(const TestCaseInfoReader* testcase);
    void addCaseSkipped(const TestCaseInfoReader* testcase);
    void addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure);
    void addCaseError(const TestCaseInfoReader* testcase, const std::string& msg);
+
+	XMLBuilder&
+   createTestCaseElem(const TestCaseInfoReader*);
 };
 
 ///////////////////////////////////////////////////////////
@@ -117,7 +121,7 @@ endTestSuite(TestSuiteInfoReader* suite)
 {
 	testSuiteElement->attribute("name", suite->getName())
 		.attribute("tests", toValStr(testSuiteResultReporter->getNumberOfTestCases(suite)))
-		.attribute("fixtures", toValStr(suite->getNumberOfTestFixtures()))
+		.attribute("fixtures", toValStr(testSuiteResultReporter->getNumberOfFixtures(suite)))
 		.attribute("crashes", toValStr(testSuiteResultReporter->getNumberOfCrashedTestCases(suite)))
 		.attribute("skips",   toValStr(testSuiteResultReporter->getNumberOfSkippedTestCases(suite)))
 		.attribute("errors", toValStr(testSuiteResultReporter->getNumberOfErrorTestCases(suite)))
@@ -125,23 +129,35 @@ endTestSuite(TestSuiteInfoReader* suite)
 }
 
 ///////////////////////////////////////////////////////////
-void XMLTestListenerImpl::
-endTestCase(const TestCaseInfoReader* testcase)
+XMLBuilder&
+XMLTestListenerImpl::
+createTestCaseElem(const TestCaseInfoReader* testcase)
 {
-	XMLBuilder& element = testSuiteElement->element("testcase")
+	return testSuiteElement->element("testcase")
 		.attribute("name", testcase->getName())
 		.attribute("fixture", testcase->getNameOfFixture())
 		.attribute("time", toValStr(0))
 		.attribute("filename", testcase->getFileName());
-	testCaseElement = &element;
+}
+
+///////////////////////////////////////////////////////////
+void XMLTestListenerImpl::
+startTestCase(const TestCaseInfoReader* testcase)
+{
+	testCaseElement = &(createTestCaseElem(testcase));
+}
+
+///////////////////////////////////////////////////////////
+void XMLTestListenerImpl::
+endTestCase(const TestCaseInfoReader* testcase)
+{
 }
 
 ///////////////////////////////////////////////////////////
 void XMLTestListenerImpl::
 addCaseCrash(const TestCaseInfoReader* testcase)
 {
-	endTestCase(testcase);
-	testCaseElement->element("crash")
+   testCaseElement->element("crash")
 		.text("test case crashed unexpectedly.");
 }
 
@@ -149,8 +165,7 @@ addCaseCrash(const TestCaseInfoReader* testcase)
 void XMLTestListenerImpl::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
-	endTestCase(testcase);
-	testCaseElement->element("skipped")
+   testCaseElement->element("skipped")
       .text("test case is skipped due to the failure of depended test case.");
 }
 
@@ -158,7 +173,6 @@ addCaseSkipped(const TestCaseInfoReader* testcase)
 void XMLTestListenerImpl::
 addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 {
-	endTestCase(testcase);
 	testCaseElement->element("error")
 		.text(msg);
 }
@@ -167,7 +181,6 @@ addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 void XMLTestListenerImpl::
 addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
-	endTestCase(testcase);
 	testCaseElement->element("failure")
 		.text(failure.what());
 }
@@ -222,6 +235,7 @@ addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failu
 void XMLTestListener::
 startTestCase(const TestCaseInfoReader* testcase)
 {
+   This->startTestCase(testcase);
 }
 
 ///////////////////////////////////////////////////////////

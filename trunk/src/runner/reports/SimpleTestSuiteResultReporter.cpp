@@ -15,8 +15,11 @@ struct SimpleTestSuiteResultReporterImpl
    int numberOfSkippedCases;
    int numberOfErrorCases;
    int numberOfFailedCases;
+
+   int numberOfFixtures;
    int numberOfFixtureErrors;
    int numberOfFixtureFailures;
+
    int numberOfSuiteErrors;
 
    int getNumberOfUnsuccessfulCases() const;
@@ -38,6 +41,7 @@ struct SimpleTestSuiteResultReporterImpl
       , caseResultReporter(caseReporter)
    {}
 
+   TestFixtureInfoReader* currentFixture;
    TestSuiteInfoReader* currentSuite;
    TestCaseResultReporter* caseResultReporter;
 
@@ -148,14 +152,21 @@ endTestCase(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-startTestFixture(TestFixtureInfoReader*)
+startTestFixture(TestFixtureInfoReader* fixture)
 {
+   This->currentFixture = fixture;
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-endTestFixture(TestFixtureInfoReader*)
+endTestFixture(TestFixtureInfoReader* fixture)
 {
+   if(This->currentFixture != fixture)
+   {
+      TESTNGPP_INTERNAL_ERROR(2019);
+   }
+
+   This->numberOfFixtures++;
 }
 
 ///////////////////////////////////////////////////////////
@@ -189,6 +200,8 @@ startTestSuite(TestSuiteInfoReader* suite)
    This->numberOfSkippedCases = 0;
    This->numberOfErrorCases = 0;
    This->numberOfFailedCases = 0;
+
+   This->numberOfFixtures = 0;
    This->numberOfFixtureErrors = 0;
    This->numberOfFixtureFailures = 0;
    This->numberOfSuiteErrors = 0;
@@ -341,6 +354,18 @@ getNumberOfSkippedTestCases(TestSuiteInfoReader* suite) const
    if(This->readable(suite))
    {
       return This->numberOfSkippedCases;
+   }
+
+   return -1;
+}
+///////////////////////////////////////////////////////////
+int
+SimpleTestSuiteResultReporter::
+getNumberOfFixtures(TestSuiteInfoReader* suite) const
+{
+   if(This->readable(suite))
+   {
+      return This->numberOfFixtures;
    }
 
    return -1;
