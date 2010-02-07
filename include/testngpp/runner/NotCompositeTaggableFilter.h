@@ -18,6 +18,8 @@ struct NotCompositeTaggableFilter
 
    bool matches(const Taggable*) const;
 
+   void dump() const;
+   
 private:
    NotCompositeTaggableFilterImpl * This;
 

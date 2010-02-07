@@ -204,6 +204,9 @@ namespace
         case TOKEN_LS:
             filter = parseAND(pp);
             break;
+        case TOKEN_DOLLAR:
+            filter = new EmptyTagFilter();
+            break;
         default:
             TESGNTPP_PARSE_TAGS_ERR();
         } 

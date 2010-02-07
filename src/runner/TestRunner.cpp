@@ -234,11 +234,26 @@ TestRunner::runTests( bool useSandbox
 
    const TestFilter* filter = TestFilterFactory::getFilter(fixtures);
 
+    __TESTNGPP_TRY
+   
    TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
+   
+   //tagsFilter->dump();
 
    This->runTests(suitePaths, tagsFilter, filter);
 
    delete tagsFilter;
+   
+   __TESTNGPP_CATCH(Error& e)
+   
+   std::cerr << e.what() << std::endl;
+   This->hasFailures = true;
+   
+   __TESTNGPP_CATCH_ALL
+   
+   This->hasFailures = true;
+   
+   __TESTNGPP_END_TRY
    
    TestFilterFactory::returnFilter(filter);
 

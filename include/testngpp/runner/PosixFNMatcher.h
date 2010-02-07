@@ -15,6 +15,7 @@ struct PosixFNMatcher
 
    bool matches(const std::string& name) const;
 
+   void dump() const;
 private:
 
    std::string pattern;

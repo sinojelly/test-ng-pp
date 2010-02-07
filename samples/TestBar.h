@@ -37,6 +37,10 @@ struct TestBar1 : public TESTCPP_NS::TestFixture
     {
        TS_ASSERT(true);
     }
+
+    // @test(depends=2, tags="ft slow empty")
+    TEST(case16)
+    {}
 };
 
 class TestBar2 : public TestFixture

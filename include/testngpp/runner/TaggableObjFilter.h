@@ -11,6 +11,8 @@ struct Taggable;
 struct TaggableObjFilter
 {
    virtual bool matches(const Taggable*) const = 0;
+   
+   virtual void dump() const = 0;
 
    virtual ~TaggableObjFilter() {}
 };

@@ -36,6 +36,7 @@ struct SkippedTestCases
          ( const TestCase* testcase
          , bool userSpecified)
    {
+//      std::cout << "TESTCASE " << testcase->getName() << " is SKIPPED" << std::endl;
       tagsFilter->testDone(testcase, false);
   
       if(!userSpecified)
@@ -180,14 +181,17 @@ addTestCase
 {
    if(tagsFilter->hasFailed(testcase))
    {
+//      std::cout << "TESTCASE " << testcase->getName() << " FAILED" << std::endl;      
       handleDoneTestCases(testcase, false);
    }
    else if(tagsFilter->hasSucceeded(testcase))
    {
+//      std::cout << "TESTCASE " << testcase->getName() << " SUCCEEDED" << std::endl;
       handleDoneTestCases(testcase, true);
    }
    else
    {
+//      std::cout << "TESTCASE " << testcase->getName() << " IS SCHED" << std::endl;
      schedTestCases.push_back(ValueType(testcase, userSpecified));
    }
 }
@@ -202,10 +206,12 @@ handleDoneTestCases
    tagsFilter->testDone(testcase, hasSucceeded);
    if(hasSucceeded)
    {
+//      std::cout << "TESTCASE " << testcase->getName() << " has been run successfully" << std::endl;
       hierarchy->getDirectSuccessors(testcase, this);
    }
    else
    {
+//      std::cout << "TESTCASE " << testcase->getName() << " failed to run " << std::endl;
       SkippedTestCases skippedTestCases(collector, tagsFilter);
       hierarchy->getSuccessors(testcase, &skippedTestCases);
    }

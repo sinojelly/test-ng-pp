@@ -1,4 +1,7 @@
 
+
+#include <iostream>
+
 #ifndef _MSC_VER
 #include <fnmatch.h>
 #else
@@ -35,5 +38,12 @@ matches(const std::string& name) const
 }
 
 ////////////////////////////////////////////////////////
+
+void PosixFNMatcher::
+dump() const
+{
+   std::cout << " " << pattern << " ";
+   std::cout.flush();
+}
 
 TESTNGPP_NS_END

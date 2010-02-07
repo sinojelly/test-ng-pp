@@ -1,6 +1,7 @@
 
 #include <list>
 #include <algorithm>
+#include <iostream>
 
 #include <testngpp/runner/OrCompositeTestFilter.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>

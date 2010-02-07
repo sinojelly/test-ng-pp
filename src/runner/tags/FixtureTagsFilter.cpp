@@ -101,9 +101,9 @@ bool
 FixtureTagsFilterImpl::
 shouldRun(const TestCase* testcase) const
 {
-   return tagsFilters->shouldBeFilteredThisTime(testcase) && 
-          !hasBeenRunAlready(testcase) &&
-          !hasFailedAlready(testcase);
+   return tagsFilters->shouldBeFilteredThisTime(testcase);
+//   && !hasBeenRunAlready(testcase) 
+//   && !hasFailedAlready(testcase);
 }
 
 ////////////////////////////////////////////////////////
@@ -130,11 +130,13 @@ store(const TestCase* testcase, bool hasSucceeded)
 {
    if(hasSucceeded && shouldStoreAsPreFiltered(testcase))
    {
+//      std::cout << "STORE " << testcase->getName() << " AS PRE-FILTERED" << std::endl;
       preRunTestCases.push_back(testcase);
    }
    
    if(!hasSucceeded && !hasFailedAlready(testcase))
    {
+//      std::cout << "STORE " << testcase->getName() << " AS FAILED" << std::endl;
       failedTestCases.push_back(testcase);
    }
 }
