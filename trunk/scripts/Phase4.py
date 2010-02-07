@@ -354,8 +354,7 @@ def get_suite_getter_name():
 dep_headers = [
    "internal/TestCase.h",
    "internal/TestFixtureDesc.h",
-   "internal/TestSuiteDesc.h",
-   "internal/NameMatcher.h"
+   "internal/TestSuiteDesc.h"
 ]
 
 ################################################
