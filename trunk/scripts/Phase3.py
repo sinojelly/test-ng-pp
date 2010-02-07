@@ -40,25 +40,44 @@ def is_fixture_def(line):
 class GlobalParser:
    def __init__(self, file):
       self.file = file
+      self.tag = None
 
+   #######################################################
    def is_elem_def(self, content):
       return is_fixture_def(content)
 
+   #######################################################
    def handle_tag(self, tag):
-      warning(self.file, tag, "useless annotation @" + tag.get_tag())
+      self.__report_useless_tag()
+      self.tag = tag
 
+   #######################################################
+   def __report_useless_tag(self):
+      if self.tag != None:
+         warning(self.file, self.tag, "useless tag definition @" + self.tag.get_tag())
+
+      self.tag = None
+
+   #######################################################
    def verify_scope(self, tag):
       return True
 
+   #######################################################
    def create_elem_parser(self, elem_name, scope, file, line):
-      return FixtureParser(elem_name, file, line)
+      tag = self.tag
+      self.tag = None
+      return FixtureParser(elem_name, file, line, tag)
 
+   #######################################################
    def get_type_name(self):
       return "fixture"
 
+   #######################################################
    def parse_line(self, line):
+      self.__report_useless_tag()
       return None
 
+   #######################################################
    def get_container(self):
       return None
 

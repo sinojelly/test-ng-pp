@@ -45,13 +45,9 @@ def get_depends_var(fixture, testcase):
 def get_fixture_id(fixture):
    return fixture.get_id()
 
-def testcase_has_tags(testcase):
-   if len(testcase.get_tags()) > 0:
-      return "true";
-   return "false"
-
-def get_testcase_tags(testcase):
-   result = ",".join(testcase.get_tags())
+def get_testcase_tags(testcase, fixture):
+   tags = list(set(testcase.get_tags()) | set(fixture.get_tags()))
+   result = ",".join(tags)
    if result == "":
       return "0"
    return result
@@ -139,8 +135,8 @@ class TestCaseDefGenerator:
          get_fixture_id(self.fixture), \
          get_fixture_id(self.fixture), \
          get_testcase_name(self.testcase), \
-         len(self.testcase.get_tags()), \
-         get_testcase_tags(self.testcase), \
+         len(self.testcase.get_tags() + self.fixture.get_tags()), \
+         get_testcase_tags(self.testcase, self.fixture), \
          get_fixture_id(self.fixture), \
          get_testcase_instance_name(self.fixture, self.testcase) \
          )

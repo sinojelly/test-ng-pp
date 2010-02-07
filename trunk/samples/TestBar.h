@@ -7,6 +7,7 @@
 
 USING_TESTCPP_NS
 
+// @ fixture(tags="bar")
 struct TestBar1 : public TESTCPP_NS::TestFixture
 {
     // @test(id=1, depends=4, tags="ft slow")

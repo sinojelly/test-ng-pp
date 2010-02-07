@@ -42,7 +42,7 @@ def might_be_testcase_def(line):
    
 ##########################################################
 class FixtureParser:
-   def __init__(self, name, file, line):
+   def __init__(self, name, file, line, tag):
       self.numberOfUnclosedBraces = 0
       self.begin = True
       self.end = None
@@ -51,7 +51,7 @@ class FixtureParser:
       self.line = line
       self.tag = None
 
-      self.container = Fixture(name, self.file, self.line)
+      self.container = Fixture(name, self.file, self.line, tag)
 
    #######################################################
    def get_container(self):
