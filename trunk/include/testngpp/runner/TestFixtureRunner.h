@@ -17,7 +17,7 @@ struct TestFixtureRunner
    TestFixtureRunner(TestHierarchyRunner* runner);
    ~TestFixtureRunner();
 
-	void run ( TestFixtureContext *
+   void run ( TestFixtureContext *
             , TestFixtureResultCollector*
             , const TestCaseFilter*);
 

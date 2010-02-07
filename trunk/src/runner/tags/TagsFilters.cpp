@@ -160,7 +160,7 @@ bool
 TagsFiltersImpl::
 shouldBeFilteredThisTime(const Taggable* obj) const
 {
-   if((unsigned int)index >= filters.size())
+   if(index < 0 || (unsigned int)index >= filters.size())
    {
       TESTNGPP_INTERNAL_ERROR(2014);
    }
