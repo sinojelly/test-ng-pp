@@ -1,5 +1,6 @@
 
 #include <list>
+#include <algorithm>
 #include <iostream>
 
 #include <testngpp/runner/TagsFilters.h>

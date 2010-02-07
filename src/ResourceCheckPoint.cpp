@@ -34,6 +34,10 @@
 
 #include <testngpp/ResourceCheckPoint.h>
 
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#endif
+
 TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
