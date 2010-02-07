@@ -44,21 +44,17 @@ public:
 			.stubs()
 			.will(returnValue(std::string("Suite 1")));
 
-		testSuiteInfoReader
-			.METHOD(TestSuiteInfoReader::getNumberOfTestCases)
-			.stubs()
-			.will(returnValue((unsigned int)66));
-   
-		testSuiteInfoReader
-			.METHOD(TestSuiteInfoReader::getNumberOfTestFixtures)
-			.stubs()
-			.will(returnValue((unsigned int)6));
-
 		testSuiteResultReporter
 			.METHOD(TestSuiteResultReporter::getNumberOfCrashedTestCases)
 			.stubs()
 			.with(eq((TestSuiteInfoReader*) testSuiteInfoReader))
 			.will(returnValue(11));
+
+		testSuiteResultReporter
+			.METHOD(TestSuiteResultReporter::getNumberOfFixtures)
+			.stubs()
+			.with(eq((TestSuiteInfoReader*) testSuiteInfoReader))
+			.will(returnValue(6));
 
       testSuiteResultReporter
 			.METHOD(TestSuiteResultReporter::getNumberOfSkippedTestCases)
