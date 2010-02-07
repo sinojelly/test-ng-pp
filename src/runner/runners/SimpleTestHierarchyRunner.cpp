@@ -31,7 +31,7 @@ SimpleTestHierarchyRunnerImpl::run(TestHierarchyHandler* hierarchy
    {
       TestHierarchyHandler::ValueType test = hierarchy->getTestCase(i);
       TestCase* testcase = const_cast<TestCase*>(test.first);
-      bool result = caseRunner->run(testcase, test.second?resultCollector:0);
+      bool result = caseRunner->run(testcase, resultCollector, test.second);
       hierarchy->testDone(testcase, result);
    }
 }

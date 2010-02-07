@@ -40,7 +40,7 @@ struct TestCaseSandboxResultDecoderImpl
       : channel(ch), testcase(tc), collector(rc)
       , startReceived(false), endReceived(false)
       , errorReceived(false), failureReceived(false)
-      , crashInformed(false), shouldReport(report)
+      , crashInformed(false), reportSuccess(report)
    {}
 
    ~TestCaseSandboxResultDecoderImpl()
@@ -67,7 +67,7 @@ struct TestCaseSandboxResultDecoderImpl
    bool errorReceived;
    bool failureReceived;
    bool crashInformed;
-   bool shouldReport;
+   bool reportSuccess;
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -138,8 +138,20 @@ TestCaseSandboxResultDecoderImpl::flushEndEvent()
 void
 TestCaseSandboxResultDecoderImpl::flushRegularEvents()
 {
-   if(!shouldReport || !startReceived)
+   if(!startReceived)
    {
+      return;
+   }
+
+   bool shouldReport = reportSuccess;
+
+   if( errorReceived || failureReceived || crashInformed)
+   {
+      shouldReport = true;
+   }
+
+   if(!shouldReport)
+   { 
       return;
    }
 
