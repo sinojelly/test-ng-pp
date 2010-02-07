@@ -3,17 +3,26 @@
 import sys
 
 from TestScope import TestScope
+from AnnotationParser import AnnotationParser
+from TagsParser import TagsParser
 
 ###########################################
 class Fixture:
    ########################################
-   def __init__(self, name, file, line):
+   def __init__(self, name, file, line, tag):
       self.id   = name[0]
       self.name = name[1]
       self.scope = TestScope("::", None, None)
       self.file = file
       self.line = line
+      self.annotations = AnnotationParser(tag, {"tags":[]}).parse()
+      self.annotations['tags'] = TagsParser(self.annotations['tags']).parse()
 
+   ########################################
+   def get_tags(self):
+      return self.annotations['tags']
+
+   ########################################
    def show(self):
       content = "FIXTURE("+self.get_name()+")"
       print content.encode('utf-8')
