@@ -6,7 +6,7 @@
 #include <testngpp/ResourceCheckPoint.h>
 
 #include <testngpp/runner/GeneralTestFilter.h>
-#include <testngpp/internal/NameMatcher.h>
+#include <testngpp/runner/NameMatcher.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
 

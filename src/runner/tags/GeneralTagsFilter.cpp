@@ -2,7 +2,7 @@
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/GeneralTagsFilter.h>
 #include <testngpp/internal/Taggable.h>
-#include <testngpp/internal/NameMatcher.h>
+#include <testngpp/runner/NameMatcher.h>
 #include <testngpp/runner/InternalError.h>
 
 TESTNGPP_NS_START
