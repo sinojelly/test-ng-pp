@@ -25,10 +25,12 @@
 // for error string
 #include <sstream>
 
+#if !defined(_MSC_VER)
 // for opened fd checking
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#endif
 
 #include <testngpp/ResourceCheckPoint.h>
 
@@ -42,6 +44,9 @@ namespace
 
 unsigned int getNumberOfOpenFiles()
 {
+#if defined(_MSC_VER)
+    return 0;
+#else
     unsigned int maxNumberOfOpenFiles = ::getdtablesize();
     unsigned int openedFiles = 0;
     for(unsigned int fd = 0; fd < maxNumberOfOpenFiles; fd++)
@@ -58,6 +63,7 @@ unsigned int getNumberOfOpenFiles()
     }
 
     return openedFiles;
+#endif
 }
 
 //////////////////////////////////////////////////////////////////

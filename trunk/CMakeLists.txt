@@ -40,7 +40,6 @@ ADD_SUBDIRECTORY(samples)
 
 IF(MSVC)
   SET(TESTNGPP_DISABLE_SANDBOX TRUE)
-  SET(TESTNGPP_DISABLE_RC      TRUE)
 ENDIF(MSVC)
 
 ########################################################
