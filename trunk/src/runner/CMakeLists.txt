@@ -50,6 +50,12 @@ SET(SANDBOX_SRCS
   utils/PipeWrittableChannel.cpp  
 )
 
+SET(WIN32_SANDBOX_SRCS
+   win32/Win32PipeWrittableChannel.cpp
+   win32/Win32PipeReadableChannel.cpp
+   win32/GetLastError.cpp
+)
+
 SET(TESTNGRUNNER_LIB_SRCS
   runners/TestSuiteRunner.cpp 
   runners/SimpleTestCaseRunner.cpp 
@@ -101,6 +107,7 @@ ENDIF(NOT TESTNGPP_DISABLE_SANDBOX)
 IF(MSVC)
   SET(TESTNGRUNNER_LIB_SRCS
      ${TESTNGRUNNER_LIB_SRCS}
+	 ${WIN32_SANDBOX_SRCS}
      filters/Win32Fnmatch.c
   )
 ENDIF(MSVC)
