@@ -102,8 +102,6 @@ FixtureTagsFilterImpl::
 shouldRun(const TestCase* testcase) const
 {
    return tagsFilters->shouldBeFilteredThisTime(testcase);
-//   && !hasBeenRunAlready(testcase) 
-//   && !hasFailedAlready(testcase);
 }
 
 ////////////////////////////////////////////////////////
