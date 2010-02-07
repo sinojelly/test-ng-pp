@@ -85,7 +85,7 @@ namespace
  
    bool isTokenChar(char c)
    {
-      return !::isblank(c) && c != '\0' && c != '[' && c != ']' && c != '(' && c != ')';
+      return !::isspace(c) && c != '\0' && c != '[' && c != ']' && c != '(' && c != ')';
    }
    ///////////////////////////////////////////////////////////////
     Token
@@ -93,9 +93,9 @@ namespace
     {
        char* p = *pStr;
 
-       if(::isblank(*p))
+       if(::isspace(*p))
        {
-          while(::isblank(*p)) p++;
+          while(::isspace(*p)) p++;
        }
 
        if(*p == '\0')
