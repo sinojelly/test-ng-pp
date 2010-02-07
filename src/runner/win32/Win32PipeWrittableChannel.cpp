@@ -25,7 +25,7 @@ static void writeBuf(HANDLE handle, const void* buf, size_t size)
 
    DWORD haveWritten = 0;
    bSuccess = WriteFile(handle, buf, size, &haveWritten, NULL);
-   if(bSuccess)
+   if(!bSuccess)
    {
       throwLastError();
    }

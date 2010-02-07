@@ -51,6 +51,7 @@ SET(SANDBOX_SRCS
 )
 
 SET(WIN32_SANDBOX_SRCS
+   sandbox/TestCaseSandboxResultReporter.cpp 
    win32/Win32PipeWrittableChannel.cpp
    win32/Win32PipeReadableChannel.cpp
    win32/GetLastError.cpp
@@ -140,6 +141,11 @@ ENDIF(MSVC)
 TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 
 ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp)
+
+IF(MSVC)
+   ADD_EXECUTABLE(testngpp-win32-testcase-runner win32/TestCaseSandboxRunnerMain.cpp)
+   TARGET_LINK_LIBRARIES(testngpp-win32-testcase-runner ${TESTNGPP_LIBRARY} testngpp-runner-lib)
+ENDIF(MSVC)
 
 # -Wl,--export-dynamic
 ADD_DEPENDENCIES(testngpp-runner testngpp-runner-lib)
