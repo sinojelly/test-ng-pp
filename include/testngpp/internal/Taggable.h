@@ -7,16 +7,14 @@
 
 TESTNGPP_NS_START
 
-struct NameMatcher;
-
 ////////////////////////////////////////////////////
 struct Taggable
 {
    virtual
-   bool hasTags() const = 0;
+   unsigned int numberOfTags() const = 0;
 
    virtual
-   bool tagsMatch(const NameMatcher* matcher) const = 0;
+   const char** getTags() const = 0;
 
    virtual ~Taggable() {}
 };

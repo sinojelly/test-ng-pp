@@ -40,70 +40,72 @@ public:
 
    struct TaggableObj0 : public Taggable
    {
-      bool hasTags() const
+      unsigned int numberOfTags() const
       {
-         return false;
+         return 0;
       }
       
-      bool tagsMatch(const NameMatcher* matcher) const
+      const char** getTags() const
       {
-         return false;
+         static const char* tags[] = {0};
+         return tags;
       }
    };
    
    struct TaggableObj1 : public Taggable
    {
-      bool hasTags() const
+      unsigned int numberOfTags() const
       {
-         return true;
+         return 1;
       }
       
-      bool tagsMatch(const NameMatcher* matcher) const
+      const char** getTags() const
       {
-         return matcher->matches("tag1");
+         static const char* tags[] = {"tag1"};
+         return tags;
       }
    };
 
    struct TaggableObj2 : public Taggable
    {
-      bool hasTags() const
+      unsigned int numberOfTags() const
       {
-         return true;
+         return 2;
       }
       
-      bool tagsMatch(const NameMatcher* matcher) const
+      const char** getTags() const
       {
-         return matcher->matches("tag2") ||
-                matcher->matches("tag4");
+         static const char* tags[] = {"tag2", "tag4"};
+         return tags;
       }
    };
 
    struct TaggableObj3 : public Taggable
    {
-      bool hasTags() const
+      unsigned int numberOfTags() const
       {
-         return true;
+         return 2;
       }
       
-      bool tagsMatch(const NameMatcher* matcher) const
+      const char** getTags() const
       {
-         return matcher->matches("tag3") ||
-                matcher->matches("tag5");
+         static const char* tags[] = {"tag3", "tag5"};
+         return tags;
       }
    };
    
    
    struct TaggableObj4 : public Taggable
    {
-      bool hasTags() const
+      unsigned int numberOfTags() const
       {
-         return true;
+         return 2;
       }
       
-      bool tagsMatch(const NameMatcher* matcher) const
+      const char** getTags() const
       {
-         return matcher->matches("tag2") ||
-         matcher->matches("tag5");
+         static const char* tags[] = {"tag2", "tag5"};
+         return tags;
       }
    };
    

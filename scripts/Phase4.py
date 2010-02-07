@@ -102,21 +102,17 @@ static struct %s
       return belongedFixture;
    }
 
-   bool hasTags() const
+   unsigned int numberOfTags() const
    {
       return %s;
    }
 
-   bool tagsMatch(const NameMatcher* matcher) const
+   const char** getTags() const
    {
       static const char* tags[] = {%s};
-      for(unsigned i=0; i<%d; i++)
-      {
-         if(matcher->matches(tags[i]))
-            return true;
-      }
-      return false;
+      return tags;
    }
+
 private:
    %s* belongedFixture; 
 } %s ;
@@ -143,9 +139,8 @@ class TestCaseDefGenerator:
          get_fixture_id(self.fixture), \
          get_fixture_id(self.fixture), \
          get_testcase_name(self.testcase), \
-         testcase_has_tags(self.testcase), \
-         get_testcase_tags(self.testcase), \
          len(self.testcase.get_tags()), \
+         get_testcase_tags(self.testcase), \
          get_fixture_id(self.fixture), \
          get_testcase_instance_name(self.fixture, self.testcase) \
          )

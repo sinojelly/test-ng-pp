@@ -70,7 +70,6 @@ SET(UT_CASES
   TestGeneralTestFilter.h 
   TestTestFilterFactory.h 
   TestOrCompositeTestFilter.h
-  TestTestSuiteRunner.h
   TestXMLTestListener.h 
   TestXMLBuilder.h
   TestTestCaseHierarchy.h
