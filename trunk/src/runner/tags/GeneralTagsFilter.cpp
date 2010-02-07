@@ -48,8 +48,17 @@ matches(const Taggable* obj) const
    {
       TESTNGPP_INTERNAL_ERROR(2016);
    }
-      
-   return obj->tagsMatch(This->tagsMatcher);
+   
+   const char** tags = obj->getTags();
+   for(unsigned int i=0; i<obj->numberOfTags(); i++)
+   {
+      if(This->tagsMatcher->matches(tags[i]))
+      {
+         return true;
+      }
+   }
+
+   return false;
 }
 
 ////////////////////////////////////////////////////////

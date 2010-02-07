@@ -17,7 +17,7 @@ matches(const Taggable* obj) const
       TESTNGPP_INTERNAL_ERROR(2016);
    }
       
-   return !obj->hasTags();
+   return obj->numberOfTags() == 0;
 }
 
 /////////////////////////////////////////////

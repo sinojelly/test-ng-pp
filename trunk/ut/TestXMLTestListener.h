@@ -60,10 +60,15 @@ public:
 			.with(eq((TestSuiteInfoReader*) testSuiteInfoReader))
 			.will(returnValue(11));
 
-    testSuiteResultReporter
+      testSuiteResultReporter
 			.METHOD(TestSuiteResultReporter::getNumberOfSkippedTestCases)
-      .stubs()
-      .will(returnValue((unsigned int)2));
+         .stubs()
+         .will(returnValue((unsigned int)2));
+
+      testSuiteResultReporter
+			.METHOD(TestSuiteResultReporter::getNumberOfTestCases)
+         .stubs()
+         .will(returnValue((unsigned int)66));
 
 		testSuiteResultReporter
 			.METHOD(TestSuiteResultReporter::getNumberOfErrorTestCases)

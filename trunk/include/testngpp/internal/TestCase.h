@@ -68,9 +68,13 @@ struct TestCase
    virtual void tearDown() = 0;
    virtual void run(bool runDepends=false) = 0;
 
-   virtual bool hasTags() const { return false; }
+   unsigned int numberOfTags() const { return 0; }
 
-   virtual bool tagsMatch(const NameMatcher*) const { return false; }
+   const char** getTags() const
+   {
+     static const char* tags[1] = {0};
+     return tags;
+   }
 
    void runDependedTestCase()
    {
