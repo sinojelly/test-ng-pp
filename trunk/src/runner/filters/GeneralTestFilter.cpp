@@ -1,8 +1,8 @@
 
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/GeneralTestFilter.h>
+#include <testngpp/runner/NameMatcher.h>
 
-#include <testngpp/internal/NameMatcher.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestCase.h>
 

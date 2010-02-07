@@ -8,7 +8,6 @@
 
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TagsParser.h>
-#include <testngpp/internal/NameMatcher.h>
 #include <testngpp/internal/Taggable.h>
 
 USING_MOCKCPP_NS

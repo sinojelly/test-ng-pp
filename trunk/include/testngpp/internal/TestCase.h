@@ -23,7 +23,6 @@
 #include <string>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
-#include <testngpp/internal/NameMatcher.h>
 
 TESTNGPP_NS_START
 

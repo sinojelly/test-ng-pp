@@ -3,7 +3,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/internal/NameMatcher.h>
+#include <testngpp/runner/NameMatcher.h>
 
 TESTNGPP_NS_START
 
