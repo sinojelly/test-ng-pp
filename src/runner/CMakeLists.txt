@@ -55,6 +55,8 @@ SET(WIN32_SANDBOX_SRCS
    win32/Win32PipeWrittableChannel.cpp
    win32/Win32PipeReadableChannel.cpp
    win32/GetLastError.cpp
+   win32/Win32TestHierarchySandboxRunner.cpp
+   win32/Win32Sandbox.cpp
 )
 
 SET(TESTNGRUNNER_LIB_SRCS

@@ -75,7 +75,6 @@ void runTest
 	TESTNGPP_NS::TestSuiteRunner* suiteRunner = \
 		new TESTNGPP_NS::TestSuiteRunner(fixtureRunner, collector);
 
-	std::cerr << "start to run" << std::endl;
 	if(!tagsFilter->startOnNext())
 	{
 		std::cerr << "internal error" << std::endl;
@@ -83,7 +82,6 @@ void runTest
 	////////////////////////////////////////////////////
     suiteRunner->run(context->getSuite(0), filter);
 	////////////////////////////////////////////////////
-	std::cerr << "end to run" << std::endl;
 
 	delete suiteRunner;
 	delete fixtureRunner;

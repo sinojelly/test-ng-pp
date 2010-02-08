@@ -52,9 +52,7 @@ struct TestCaseRunnerResultReporter
 
 	void startTestCase(const TestCaseInfoReader* testcase)
 	{
-		std::cerr << "start testcase : " << testcase->getName() << std::endl;
-
-		reporter->startTestCase(testcase);
+		reporter->endTestCase(testcase);
 	}
 
     void endTestCase(const TestCaseInfoReader* testcase)
@@ -65,17 +63,13 @@ struct TestCaseRunnerResultReporter
 	//////////////////////////////////////////////////////
 	void startTestFixture(TestFixtureInfoReader* fixture)
 	{
-		std::cerr << "start fixuture : " << fixture->getName() << std::endl;
 	}
 	void endTestFixture(TestFixtureInfoReader* fixture)
 	{
-		std::cerr << "end fixuture : " << fixture->getName() << std::endl;
 	}
 
 	void addFixtureError(TestFixtureInfoReader* fixture, const std::string& error)
 	{
-		std::cerr << "fixuture error : " << fixture->getName() 
-			<< " : " << error << std::endl;	
 	}
 	void addFixtureFailure(TestFixtureInfoReader* fixture, const AssertionFailure& failure) 
 	{
@@ -85,11 +79,9 @@ struct TestCaseRunnerResultReporter
 
 	void startTestSuite(TestSuiteInfoReader* suite)
 	{
-		std::cerr << "start suite : " << suite->getName() << std::endl;
 	}
 	void endTestSuite(TestSuiteInfoReader* suite) 
 	{
-		std::cerr << "end suite : " << suite->getName() << std::endl;
 	}
 	void addSuiteError(TestSuiteInfoReader*, const std::string& error)
 	{
@@ -98,11 +90,9 @@ struct TestCaseRunnerResultReporter
 
 	void startTest() 
 	{
-		std::cerr << "start test" << std::endl;
 	}
 	void endTest()
 	{
-		std::cerr << "end test" << std::endl;
 	}
 
 	void addError(const std::string& error)
