@@ -11,8 +11,9 @@ struct TestFixtureResultCollector;
 
 struct TestHierarchyRunner
 {
-	virtual void run ( TestHierarchyHandler*
-                    , TestFixtureResultCollector* ) = 0;
+	virtual void run 
+		( TestHierarchyHandler*
+        , TestFixtureResultCollector*) = 0;
 
    virtual ~TestHierarchyRunner() {}
 };

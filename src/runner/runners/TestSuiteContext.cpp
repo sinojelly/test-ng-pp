@@ -57,6 +57,7 @@ public:
 
    std::vector<TestFixtureContext*> fixtures;
    TestSuiteDesc* suite; //X
+   std::string suitePath;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -69,6 +70,8 @@ TestSuiteContextImpl
       , const TestFilter* filter)
       : suiteLoader(loader)
       , resultCollector(collector)
+	  , suite(0)
+	  , suitePath(path)
 {
    load(path);
    loadFixtures(tagsFilter, filter);
@@ -133,6 +136,7 @@ load( const std::string& path )
    __TESTNGPP_CATCH(std::exception& e)
    {
       resultCollector->addError("test suite \"" + path + "\" can't be loaded : " + e.what());
+	  throw;
    }
    __TESTNGPP_END_TRY
 }
@@ -166,6 +170,12 @@ getFixture(unsigned int index) const
    return This->fixtures[index];
 }
 
+const std::string&
+TestSuiteContext::
+getSuitePath() const
+{
+	return This->suitePath;
+}
 /////////////////////////////////////////////////////////////////
 TestSuiteContext::
 TestSuiteContext

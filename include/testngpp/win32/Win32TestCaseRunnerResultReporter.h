@@ -4,6 +4,7 @@
 
 #include <string>
 #include <iostream>
+#include <windows.h>
 
 #include <testngpp/testngpp.h>
 
@@ -20,8 +21,9 @@ struct TestCaseRunnerResultReporter
 	: public TestResultCollector
 {
 
-	TestCaseRunnerResultReporter(TestCaseResultCollector* caseReporter)
+	TestCaseRunnerResultReporter(HANDLE hSemaphore, TestCaseResultCollector* caseReporter)
 		: reporter(caseReporter)
+		, semaphore(hSemaphore)
 	{
 	}
 
@@ -33,31 +35,37 @@ struct TestCaseRunnerResultReporter
 	void addCaseCrash(const TestCaseInfoReader* testcase)
 	{
 		reporter->addCaseCrash(testcase);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
 	void addCaseError(const TestCaseInfoReader* testcase, const std::string& msg)
 	{
 		reporter->addCaseError(testcase, msg);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
 	void addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 	{
 		reporter->addCaseFailure(testcase, failure);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
 	void addCaseSkipped(const TestCaseInfoReader* testcase)
 	{
 		reporter->addCaseSkipped(testcase);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
 	void startTestCase(const TestCaseInfoReader* testcase)
 	{
-		reporter->endTestCase(testcase);
+		reporter->startTestCase(testcase);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
     void endTestCase(const TestCaseInfoReader* testcase)
 	{
 		reporter->endTestCase(testcase);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
 	//////////////////////////////////////////////////////
@@ -101,7 +109,9 @@ struct TestCaseRunnerResultReporter
 	}
 
 private:
+
     TestCaseResultCollector* reporter;
+    HANDLE semaphore;
 };
 
 TESTNGPP_NS_END

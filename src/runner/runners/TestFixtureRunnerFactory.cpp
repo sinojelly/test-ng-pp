@@ -5,7 +5,11 @@
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
 
 #if !defined(TESTNGPP_DISABLE_SANDBOX) || !TESTNGPP_DISABLE_SANDBOX
+#if defined(_MSC_VER)
+#include <testngpp/win32/Win32TestHierarchySandboxRunner.h>
+#else
 #include <testngpp/runner/TestHierarchySandboxRunner.h>
+#endif
 #endif
 
 TESTNGPP_NS_START
@@ -55,8 +59,12 @@ namespace
          maxConcurrent = 1;
       }
 
-      return new TestFixtureRunner( \
-                  new TestHierarchySandboxRunner( \
+      return new TestFixtureRunner( 
+#if defined(_MSC_VER)
+		          new Win32TestHierarchySandboxRunner(
+#else
+		          new TestHierarchySandboxRunner( 
+#endif
                      maxConcurrent, createTestCaseRunner()));
    }
 #endif

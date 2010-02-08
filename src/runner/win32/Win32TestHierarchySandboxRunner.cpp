@@ -1,17 +1,22 @@
 
 #include <list>
 #include <algorithm>
+#include <iostream>
+
+#include <windows.h>
 
 #include <testngpp/internal/TestCase.h>
 
 #include <testngpp/runner/TestCaseHierarchy.h>
-#include <testngpp/win32/Win32TestHierarchySandboxRunner.h>
+
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
 #include <testngpp/runner/TestFixtureResultCollector.h>
-#include <testngpp/win32/Win32TestCaseSandbox.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 
+#include <testngpp/win32/Win32ThrowLastError.h>
+#include <testngpp/win32/Win32TestCaseSandbox.h>
+#include <testngpp/win32/Win32TestHierarchySandboxRunner.h>
 
 TESTNGPP_NS_START
 
@@ -26,6 +31,7 @@ struct Win32TestHierarchySandboxRunnerImpl
       : maxProcess(maxCurrentProcess)
       , caseRunner(runner)
       , index(0)
+	  , handles(0)
    {}
 
 	~Win32TestHierarchySandboxRunnerImpl()
@@ -47,7 +53,7 @@ struct Win32TestHierarchySandboxRunnerImpl
    void cleanUpDeadSandboxes(TestHierarchyHandler*);
 
    void process(TestHierarchyHandler* hierarchy);
-   void handleEvent(int nfds, TestHierarchyHandler* hierarchy);
+   void handleEvent(unsigned int index, bool isDead, TestHierarchyHandler* handler);
 
    void cleanUp();
 
@@ -55,6 +61,7 @@ struct Win32TestHierarchySandboxRunnerImpl
    TestCaseRunner* caseRunner;
    unsigned int    index;
    List sandboxes;
+   HANDLE*         handles;
 };
 
 ////////////////////////////////////////////////////
@@ -71,6 +78,10 @@ void Win32TestHierarchySandboxRunnerImpl::cleanUp()
 {
    std::for_each(sandboxes.begin(), sandboxes.end(), removeSandbox);
    sandboxes.clear();
+   if(handles != 0)
+   {
+      delete [] handles;
+   }
 }
 
 ////////////////////////////////////////////////////
@@ -112,7 +123,8 @@ createSandbox
    TestHierarchyHandler::ValueType testcase = handler->getTestCase(i);
    Win32TestCaseSandbox* sandbox = \
          Win32TestCaseSandbox::createInstance
-               ( testcase.first
+               ( handler->getSuitePath()
+			   , testcase.first
                , caseRunner
                , resultCollector
                , testcase.second);
@@ -136,49 +148,57 @@ createSandboxes
    index = i;
 }
 
-
 /////////////////////////////////////////////////////
-void Win32TestHierarchySandboxRunnerImpl::setupListeners()
+void 
+Win32TestHierarchySandboxRunnerImpl::
+setupListeners()
 {
-#if 0
-   FD_ZERO(&fds);
-   maxfd = 0;
-
-   List::iterator i = sandboxes.begin();
-   for(; i != sandboxes.end(); i++)
+   if(handles != 0)
    {
-      FD_SET((*i)->getChannelId(), &fds);
-      maxfd = maxfd < (*i)->getChannelId() ? (*i)->getChannelId() : maxfd;
+      delete [] handles;
+	  handles = 0;
    }
-#endif   
+   
+   if(sandboxes.size() == 0)
+   {
+      return;
+   }
+   
+   handles = new HANDLE[sandboxes.size()*2];
+
+   int i = 0;
+   List::iterator iter = sandboxes.begin();
+   for(; iter != sandboxes.end(); iter++)
+   {
+	  handles[i++] = (*iter)->getEventId();
+      handles[i++] = (*iter)->getSandboxId();
+//	  std::cout << "sandbox id = " << (unsigned int)(*iter)->getSandboxId() << std::endl;
+//	  std::cout << "event   id = " << (unsigned int)(*iter)->getEventId()   << std::endl;
+   }
 }
 
 ///////////////////////////////////////////////////////
 namespace
 {
-   static void handleSandboxEvent(Win32TestCaseSandbox* sandbox)
+   static void handleSandboxEvent(Win32TestCaseSandbox* sandbox, bool isDead)
    {
-      sandbox->handle();
+      sandbox->handle(isDead);
    }
 }
 ///////////////////////////////////////////////////////
 void Win32TestHierarchySandboxRunnerImpl::
-handleEvent(int nfds, TestHierarchyHandler* handler)
+handleEvent(unsigned int index, bool isDead, TestHierarchyHandler* handler)
 {
-#if 0
    List::iterator i = sandboxes.begin();
    for(; i != sandboxes.end(); i++)
    {
-      if(FD_ISSET((*i)->getChannelId(), &fds))
+      if((*i)->getSandboxId() == handles[index*2+1])
       {
-         handleSandboxEvent(*i);
-         if(--nfds <= 0)
-         {
-            break;
-         }
+         handleSandboxEvent(*i, isDead);
+		 break;
       }
    }
-#endif
+
    cleanUpDeadSandboxes(handler);
 }
 
@@ -188,19 +208,26 @@ process(TestHierarchyHandler* handler)
 {
    setupListeners();
 
-#if 0   
-   int nfds = 0;
-   do{
-      nfds = ::select(maxfd + 1, &fds, 0, 0, 0);
-   }while(nfds == 0 || (nfds < 0 && errno == EAGAIN));
-
-   if(nfds < 0)
+   DWORD result = 
+      ::WaitForMultipleObjects
+	     ( sandboxes.size()*2
+		 , handles
+		 , FALSE
+		 , INFINITE);
+   if(result == WAIT_FAILED)
    {
-      throw Error(strerror(errno));
+      throwLastError();
    }
+   
+   if(WAIT_OBJECT_0 > result || result >= WAIT_OBJECT_0 + sandboxes.size() * 2)
+   {
+      throw Error("Invalid WaitForMultipleObjects result");
+   }   
 
-   handleEvent(nfds, handler);
-#endif   
+   handleEvent
+	   ( (result-WAIT_OBJECT_0)/2
+	   , (result-WAIT_OBJECT_0)%2>0 ? true : false
+	   , handler);
 }
 
 ///////////////////////////////////////////////////////
@@ -225,10 +252,12 @@ run( TestHierarchyHandler* handler
 
 ///////////////////////////////////////////////////////
 Win32TestHierarchySandboxRunner::
-Win32TestHierarchySandboxRunner(
-     unsigned int maxCurrentProcess
+Win32TestHierarchySandboxRunner
+   ( unsigned int maxCurrentProcess
    , TestCaseRunner* caseRunner)
-   : This(new Win32TestHierarchySandboxRunnerImpl(maxCurrentProcess, caseRunner))
+   : This(new Win32TestHierarchySandboxRunnerImpl
+      ( maxCurrentProcess
+	  , caseRunner))
 {
 }
 
@@ -242,8 +271,9 @@ Win32TestHierarchySandboxRunner::
 ///////////////////////////////////////////////////////
 void
 Win32TestHierarchySandboxRunner::
-run(TestHierarchyHandler* handler
-      , TestFixtureResultCollector* resultCollector)
+run
+   ( TestHierarchyHandler* handler
+   , TestFixtureResultCollector* resultCollector)
 {
    This->run(handler, resultCollector);
 }

@@ -61,6 +61,7 @@ static struct %s
       : TESTNGPP_NS::TestCase
         ( "%s"
         , "%s"
+		, "%s"
         , %s
         , "%s"
         , %d)
@@ -118,10 +119,11 @@ private:
 ################################################
 class TestCaseDefGenerator:
    #############################################
-   def __init__(self, file, testcase, fixture):
+   def __init__(self, file, suite, testcase, fixture):
       self.fixture = fixture
       self.testcase = testcase
       self.file = file
+      self.suite = suite 
    #############################################
    def __generate(self):
       testcase_def = testcase_template % ( \
@@ -129,6 +131,7 @@ class TestCaseDefGenerator:
          get_testcase_class_name(self.fixture, self.testcase), \
          self.testcase.get_name(), \
          self.fixture.get_name(), \
+		 self.suite, \
          get_depends_var(self.fixture, self.testcase), \
          get_file_name(self.testcase), \
          self.testcase.get_line_number(), \
@@ -149,7 +152,7 @@ class TestCaseDefGenerator:
 
       depends = self.testcase.get_depends()
       if depends:
-         TestCaseDefGenerator(self.file, depends, self.fixture).generate()
+         TestCaseDefGenerator(self.file, self.suite, depends, self.fixture).generate()
 
       self.__generate()
       self.testcase.mark_as_generated()
@@ -213,14 +216,15 @@ array_template_end = '''0
 ################################################
 class FixtureGenerator:
    #############################################
-   def __init__(self, file, fixture):
+   def __init__(self, file, suite, fixture):
       self.fixture = fixture
+      self.suite = suite
       self.file = file
 
    #############################################
    def generate_testcases(self):
       ScopesGenerator([self.fixture.get_scope()], self.file) \
-         .generate(lambda file, elem: TestCaseDefGenerator(file, elem, self.fixture))
+         .generate(lambda file, elem: TestCaseDefGenerator(file, self.suite, elem, self.fixture))
 
    #############################################
    def generate_testcase_array_content(self):
@@ -391,7 +395,7 @@ class SuiteGenerator:
    #############################################
    def generate_fixtures(self):
       ScopesGenerator(self.scopes, self.file) \
-         .generate(lambda file, elem: FixtureGenerator(file, elem) )
+         .generate(lambda file, elem: FixtureGenerator(file, self.suite, elem) )
 
    #############################################
    def generate_fixture_descs(self):

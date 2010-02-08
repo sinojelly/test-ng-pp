@@ -20,13 +20,15 @@ struct TestHierarchyHandler
    typedef std::pair<const TestCase*, bool> ValueType;
    
    TestHierarchyHandler
-         ( TestFixtureDesc* fixture
-         , const TestCaseFilter* filter
-         , FixtureTagsFilter* tagsFilter
-         , TestFixtureResultCollector* collector);
+	    ( const std::string& suitePath
+	    , TestFixtureDesc* fixture
+        , const TestCaseFilter* filter
+        , FixtureTagsFilter* tagsFilter
+        , TestFixtureResultCollector* collector);
 
    ~TestHierarchyHandler();
 
+   const std::string& getSuitePath() const;
    void testDone(const TestCase* testcase, bool hasSucceeded);
 
    unsigned int numberOfTestCasesInSched() const;

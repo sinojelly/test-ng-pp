@@ -27,6 +27,7 @@ struct TestSuiteContext
 
    ~TestSuiteContext();
 
+   const std::string& getSuitePath() const;
    TestSuiteDesc* getSuite() const;
    unsigned int numberOfFixtures() const;
    TestFixtureContext* getFixture(unsigned int index) const;

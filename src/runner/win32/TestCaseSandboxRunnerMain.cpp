@@ -15,7 +15,7 @@
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/TestFixtureRunner.h>
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
-#include <testngpp/win32/TestCaseRunnerResultReporter.h>
+#include <testngpp/win32/Win32TestCaseRunnerResultReporter.h>
 
 void usage()
 {
@@ -24,19 +24,20 @@ void usage()
 }
 
 TESTNGPP_NS::TestCaseRunnerResultReporter* 
-createCollector()
+createCollector(HANDLE hWrite, HANDLE hSemaphore)
 {
-   HANDLE hStdout; 
-   
-   hStdout = GetStdHandle(STD_OUTPUT_HANDLE);  
-   if (hStdout == INVALID_HANDLE_VALUE)
-   {		
-      ExitProcess(1); 
+   if(hWrite == 0)
+   {
+	   hWrite = GetStdHandle(STD_OUTPUT_HANDLE);  
+	   if (hWrite == INVALID_HANDLE_VALUE)
+	   {		
+		  ExitProcess(1); 
+	   }
    }
    
-   return new TESTNGPP_NS::TestCaseRunnerResultReporter(
+   return new TESTNGPP_NS::TestCaseRunnerResultReporter(hSemaphore,
 	         new TESTNGPP_NS::TestCaseSandboxResultReporter(
-	            new TESTNGPP_NS::Win32PipeWrittableChannel(hStdout)));
+	            new TESTNGPP_NS::Win32PipeWrittableChannel(hWrite)));
 }
 
 const TESTNGPP_NS::TestFilter*
@@ -97,16 +98,26 @@ void runTest
 
 int main(int argc, char* argv[])
 {
-   if(argc != 4)
+   if(argc != 6 && argc != 4)
    {
       usage(); 
    }
-    
+   
+   std::cout << "start to run " << std::endl;
    std::string suite(argv[1]);
    std::string fixture(argv[2]);
    std::string testcase(argv[3]);
    
-   runTest(createCollector(), suite, fixture, testcase);
-		
+   HANDLE hWrite = 0;
+   HANDLE hSemap = 0;
+   
+   if(argc == 6)
+   {
+      hWrite = (HANDLE)atoi(argv[4]);
+      hSemap = (HANDLE)atoi(argv[5]);
+   }
+
+   runTest(createCollector(hWrite, hSemap), suite, fixture, testcase);
+	
    return 0;
 }

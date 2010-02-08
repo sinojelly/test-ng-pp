@@ -14,7 +14,6 @@
 #include <testngpp/Win32/Win32Sandbox.h>
 #include <testngpp/win32/Win32TestCaseSandbox.h>
 
-
 TESTNGPP_NS_START
 
 ////////////////////////////////////////////////////////
@@ -34,10 +33,10 @@ struct Win32TestCaseSandboxImpl
 
    HANDLE getEventId() const
    {
-      return sandbox->getSandboxId();
+      return sandbox->getEventId();
    }
    
-   void handle() TESTNGPP_THROW(EOFError, Error);
+   void handle(bool) TESTNGPP_THROW(EOFError, Error);
 
    ~Win32TestCaseSandboxImpl()
    {
@@ -59,8 +58,20 @@ struct Win32TestCaseSandboxImpl
 
 ////////////////////////////////////////////////////////
 void Win32TestCaseSandboxImpl::
-handle() TESTNGPP_THROW(EOFError, Error)
+handle(bool isDead) TESTNGPP_THROW(EOFError, Error)
 {
+#if 0
+   if(isDead)
+   {
+      decoder->flush(true);
+
+      sandbox->die();
+
+      finished = true;
+	  return ;
+   }
+#endif
+
    if(sandbox->isDead())
    {
       return;
@@ -73,6 +84,7 @@ handle() TESTNGPP_THROW(EOFError, Error)
       {
          finished = true;
          decoder->flush(false);
+		 sandbox->die();
       }
    }
    __TESTNGPP_CATCH(EOFError&)
@@ -104,9 +116,17 @@ Win32TestCaseSandbox::
 ////////////////////////////////////////////////////////
 HANDLE 
 Win32TestCaseSandbox::
-getChannelId() const
+getEventId() const
 {
-   return This->getChannelId();
+   return This->getEventId();
+}
+
+////////////////////////////////////////////////////////
+HANDLE 
+Win32TestCaseSandbox::
+getSandboxId() const
+{
+   return This->getSandboxId();
 }
 
 ////////////////////////////////////////////////////////
@@ -127,9 +147,9 @@ getTestCase() const
 ////////////////////////////////////////////////////////
 void
 Win32TestCaseSandbox::
-handle() TESTNGPP_THROW(EOFError, Error)
+handle(bool isDead) TESTNGPP_THROW(EOFError, Error)
 {
-   This->handle();
+   This->handle(isDead);
 }
 
 ////////////////////////////////////////////////////////
@@ -150,12 +170,13 @@ cleanup()
 Win32TestCaseSandbox*
 Win32TestCaseSandbox::
 createInstance
-       ( const TestCase* testcase
+       ( const std::string& suitePath
+	   , const TestCase* testcase
        , TestCaseRunner* runner
        , TestCaseResultCollector* collector
        , bool shouldReport)
 {
-   Win32Sandbox* sandbox = Win32Sandbox::createInstance(testcase);
+   Win32Sandbox* sandbox = Win32Sandbox::createInstance(suitePath, testcase);
    
    Win32TestCaseSandbox* tcSandbox = new Win32TestCaseSandbox();
 
