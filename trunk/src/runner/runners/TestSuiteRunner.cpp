@@ -55,7 +55,7 @@ runAllFixtures(TestSuiteContext* suite, const TestCaseFilter* filter)
    {
       TestFixtureContext* fixture = suite->getFixture(i);
 
-      fixtureRunner->run(fixture, resultCollector, filter);
+	  fixtureRunner->run(fixture, resultCollector, filter, suite->getSuitePath());
    }
 }
 

@@ -1,5 +1,6 @@
 
 #include <sstream>
+#include <iostream>
 
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
@@ -113,13 +114,16 @@ namespace
 			, hRead
 			, GetCurrentProcess()
 			, &pipes[0]
-			, FILE_GENERIC_READ
+			, FILE_GENERIC_READ //DUPLICATE_SAME_ACCESS
 			, FALSE  // Should not be inherited
-			, DUPLICATE_CLOSE_SOURCE))
+			, DUPLICATE_CLOSE_SOURCE //DUPLICATE_SAME_ACCESS
+			))
       {
-	     ::CloseHandle(pipes[1]);
+	     //::CloseHandle(hRead);
 		 throwLastError();
-      }	 
+      }
+
+	  //::CloseHandle(hRead);
    }
    
    std::string getModulePath()
@@ -156,6 +160,9 @@ namespace
 	  STARTUPINFO startInfo;
 	  GetStartupInfo(&startInfo);
 	  
+//	  std::cout << modulePath << std::endl;
+//	  std::cout << oss.str() << std::endl;
+
 	  PROCESS_INFORMATION prcInfo;
 	  if(!CreateProcess
 	        ( (LPSTR)modulePath.c_str()
@@ -173,15 +180,10 @@ namespace
       }
       
 	  HANDLE hChild = ::OpenProcess
-		    ( SYNCHRONIZE | PROCESS_QUERY_INFORMATION | PROCESS_TERMINATE
+		    ( SYNCHRONIZE | PROCESS_QUERY_INFORMATION 
 			, FALSE
 			, prcInfo.dwProcessId); 
 	  if(0 == hChild)
-	  {
-	     throwLastError();
-	  }
-	  
-	  if(WAIT_FAILED == ::WaitForInputIdle(hChild, INFINITE))
 	  {
 	     throwLastError();
 	  }
@@ -212,7 +214,10 @@ namespace
 }
 ////////////////////////////////////////////////////////
 Win32Sandbox*
-Win32Sandbox::createInstance(const TestCase* testcase)
+Win32Sandbox::
+createInstance
+   ( const std::string& suitePath
+   , const TestCase* testcase)
 {
    HANDLE sockets[2];
 
@@ -238,7 +243,7 @@ Win32Sandbox::createInstance(const TestCase* testcase)
    {
       hSandbox = \
          createSandBoxProcess
-            ( testcase->getNameOfSuite()
+            ( suitePath
 		    , testcase->getNameOfFixture()
 		    , testcase->getName()
 		    , sockets[1]
@@ -248,6 +253,7 @@ Win32Sandbox::createInstance(const TestCase* testcase)
    {
       ::CloseHandle(sockets[0]);
 	  ::CloseHandle(hSemaphore);
+	  throw;
    }
    __TESTNGPP_FINALLY
    {
@@ -261,6 +267,8 @@ Win32Sandbox::createInstance(const TestCase* testcase)
    sandbox->This->sandboxId = hSandbox;
    sandbox->This->eventId   = hSemaphore;
 
+//   std::cout << "sandbox id = " << (unsigned int)hSandbox   << std::endl;
+//   std::cout << "event   id = " << (unsigned int)hSemaphore << std::endl;
    return sandbox;
 }
 

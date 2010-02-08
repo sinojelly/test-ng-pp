@@ -3,6 +3,7 @@
 #define __TESTNGPP_WIN32_SANDBOX_H
 
 #include <windows.h>
+#include <string>
 
 #include <testngpp/testngpp.h>
 
@@ -25,7 +26,9 @@ struct Win32Sandbox
    ~Win32Sandbox();
 
 	static Win32Sandbox*
-	createInstance(const TestCase* testcase);
+	createInstance
+	   ( const std::string& suitePath
+	   , const TestCase* testcase);
 
 private:
 	Win32Sandbox();

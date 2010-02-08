@@ -83,10 +83,11 @@ struct TestHierarchyHandlerImpl
    typedef TestHierarchyHandler::ValueType ValueType;
    
    TestHierarchyHandlerImpl
-         ( TestFixtureDesc* fixture 
-         , const TestCaseFilter* filter
-         , FixtureTagsFilter* tagsFilter
-         , TestFixtureResultCollector* collector);
+	   ( const std::string&
+	   , TestFixtureDesc* fixture 
+       , const TestCaseFilter* filter
+       , FixtureTagsFilter* tagsFilter
+       , TestFixtureResultCollector* collector);
 
    ~TestHierarchyHandlerImpl();
 
@@ -112,6 +113,7 @@ struct TestHierarchyHandlerImpl
          , bool hasSucceeded);
 
    
+   std::string suitePath;
    std::list<ValueType> schedTestCases;
    
    TestCaseHierarchy* hierarchy; // Y
@@ -125,11 +127,13 @@ struct TestHierarchyHandlerImpl
 ///////////////////////////////////////////////////
 TestHierarchyHandlerImpl::
 TestHierarchyHandlerImpl
-   ( TestFixtureDesc* fixtureDesc 
+   ( const std::string& path
+   , TestFixtureDesc* fixtureDesc 
    , const TestCaseFilter* filter
    , FixtureTagsFilter* fixtureTagsFilter
    , TestFixtureResultCollector* resultCollector)
-   : nameFilter(filter)
+   : suitePath(path)
+   , nameFilter(filter)
    , collector(resultCollector)
    , tagsFilter(fixtureTagsFilter)
    , complexFilter(new ComplexTestCaseFilter(tagsFilter, filter))
@@ -239,12 +243,14 @@ testDone
 ///////////////////////////////////////////////////
 TestHierarchyHandler::
 TestHierarchyHandler
-   ( TestFixtureDesc* fixture
+   ( const std::string& suitePath
+   , TestFixtureDesc* fixture
    , const TestCaseFilter* filter
    , FixtureTagsFilter* tagsFilter
    , TestFixtureResultCollector* collector)
    : This( new TestHierarchyHandlerImpl
-         ( fixture
+         ( suitePath
+		 , fixture
          , filter
          , tagsFilter
          , collector))
@@ -258,6 +264,13 @@ TestHierarchyHandler::
    delete This;
 }
 
+///////////////////////////////////////////////////
+const std::string& 
+TestHierarchyHandler::
+getSuitePath() const
+{
+	return This->suitePath;
+}
 ///////////////////////////////////////////////////
 void
 TestHierarchyHandler::

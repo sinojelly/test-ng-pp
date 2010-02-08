@@ -25,7 +25,8 @@ struct TestFixtureRunnerImpl
 
    void run( TestFixtureContext* context
            , TestFixtureResultCollector* collector
-           , const TestCaseFilter* filter);
+           , const TestCaseFilter* filter
+		   , const std::string& );
 
    TestHierarchyRunner* hierarchyRunner; // Y
 };
@@ -61,10 +62,16 @@ TestFixtureRunner::~TestFixtureRunner()
 void TestFixtureRunnerImpl::
 run( TestFixtureContext* context
    , TestFixtureResultCollector* collector
-   , const TestCaseFilter* filter)
+   , const TestCaseFilter* filter
+   , const std::string& suitePath)
 {
    TestHierarchyHandler* handler = \
-      new TestHierarchyHandler(context->getFixture(), filter, context->getTagsFilter(), collector);
+      new TestHierarchyHandler
+	     ( suitePath
+		 , context->getFixture()
+		 , filter
+		 , context->getTagsFilter()
+		 , collector);
 
    collector->startTestFixture(context->getFixture());
 
@@ -92,9 +99,10 @@ run( TestFixtureContext* context
 void TestFixtureRunner::
 run( TestFixtureContext* context
    , TestFixtureResultCollector* collector
-   , const TestCaseFilter* filter)
+   , const TestCaseFilter* filter
+   , const std::string& suitePath)
 {
-   return This->run(context, collector, filter);
+   return This->run(context, collector, filter, suitePath);
 }
 
 /////////////////////////////////////////////////////////////////

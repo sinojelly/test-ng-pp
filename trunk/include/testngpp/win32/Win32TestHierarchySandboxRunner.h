@@ -2,6 +2,8 @@
 #ifndef __TESTNGPP_WIN32_TEST_HIERARCHY_SANDBOX_RUNNER_H
 #define __TESTNGPP_WIN32_TEST_HIERARCHY_SANDBOX_RUNNER_H
 
+#include <string>
+
 #include <testngpp/testngpp.h>
 #include <testngpp/runner/TestHierarchyRunner.h>
 
