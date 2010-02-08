@@ -31,6 +31,8 @@ struct TestCaseInfoReader
 {
 	virtual const std::string& getName() const = 0;
 	virtual const std::string& getNameOfFixture() const = 0;
+	virtual const std::string& getNameOfSuite() const = 0;
+
 	virtual const std::string& getFileName() const = 0;
 	virtual const unsigned int getLineOfFile() const = 0;
 
