@@ -72,6 +72,7 @@ SET(TESTNGRUNNER_LIB_SRCS
   runners/TestSuiteContext.cpp
   runners/TestFixtureContext.cpp
   runners/TestRunnerContext.cpp
+  runners/TestCaseRunnerFactory.cpp
 
   loaders/ModuleTestSuiteLoader.cpp 
   loaders/ModuleTestSuiteLoaderFactory.cpp 
@@ -150,10 +151,10 @@ ENDIF(MSVC)
 
 TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 
-ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp)
+ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp TestCaseRunnerDieHandler.cpp)
 
 IF(MSVC)
-   ADD_EXECUTABLE(testngpp-win32-testcase-runner win32/TestCaseSandboxRunnerMain.cpp)
+   ADD_EXECUTABLE(testngpp-win32-testcase-runner win32/TestCaseSandboxRunnerMain.cpp TestCaseSandboxRunnerDieHandler.cpp)
    TARGET_LINK_LIBRARIES(testngpp-win32-testcase-runner ${TESTNGPP_LIBRARY} testngpp-runner-lib)
 ENDIF(MSVC)
 

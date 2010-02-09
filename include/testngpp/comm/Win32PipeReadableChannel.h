@@ -44,6 +44,7 @@ struct Win32PipeReadableChannel: public ReadableChannel
 private:
 
    HANDLE handle;
+   bool hasBeenClosed;
    bool shouldClose;
 };
 

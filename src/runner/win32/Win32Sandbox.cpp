@@ -261,12 +261,29 @@ createInstance
    }
    __TESTNGPP_DONE
 
+   HANDLE hEventId;
+   if(!::DuplicateHandle
+	   ( GetCurrentProcess()
+	   , hSemaphore
+	   , GetCurrentProcess()
+	   , &hEventId
+	   , DUPLICATE_SAME_ACCESS
+	   , FALSE
+	   ,DUPLICATE_SAME_ACCESS))
+   {
+	   ::CloseHandle(sockets[0]);
+	   ::CloseHandle(hSemaphore);
+	   ::CloseHandle(hSandbox);
+
+       throwLastError();
+   }
+
    Win32Sandbox * sandbox = new Win32Sandbox();
 
    sandbox->This->channelId = sockets[0];
    sandbox->This->sandboxId = hSandbox;
-   sandbox->This->eventId   = hSemaphore;
-
+   sandbox->This->eventId   = hEventId;
+			
 //   std::cout << "sandbox id = " << (unsigned int)hSandbox   << std::endl;
 //   std::cout << "event   id = " << (unsigned int)hSemaphore << std::endl;
    return sandbox;

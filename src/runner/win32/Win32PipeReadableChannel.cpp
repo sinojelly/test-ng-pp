@@ -12,7 +12,7 @@ TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
 Win32PipeReadableChannel::Win32PipeReadableChannel(HANDLE readableHandle, bool autoClose)
-   : handle(readableHandle), shouldClose(autoClose)
+   : handle(readableHandle), shouldClose(autoClose), hasBeenClosed(false)
 {}
 
 //////////////////////////////////////////////////////////////////
@@ -36,7 +36,14 @@ static void readFromPipe(HANDLE handle, unsigned char* buf, size_t size)
     
    if(!bSuccess)
    {
-      throwLastError();
+	   if(GetLastError() == ERROR_BROKEN_PIPE)
+	   {
+          throw EOFError();
+	   }
+	   else
+	   {
+		   throwLastError();
+	   }
    }
 }
 //////////////////////////////////////////////////////////////////
@@ -84,7 +91,11 @@ HANDLE Win32PipeReadableChannel::getHandle() const
 //////////////////////////////////////////////////////////////////
 void Win32PipeReadableChannel::close() 
 {
-   (void) ::CloseHandle(handle);
+	if(!hasBeenClosed)
+	{
+		(void) ::CloseHandle(handle);
+		hasBeenClosed = true;
+	}
 }
 
 //////////////////////////////////////////////////////////////////
