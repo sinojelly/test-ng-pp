@@ -30,6 +30,7 @@ struct TestBar1 : public TESTCPP_NS::TestFixture
     // @test(id=4, tags="it slow")
     TEST(case14)
     {
+	   //exit(-1);
        TS_ASSERT(true);
     }
 
@@ -41,7 +42,9 @@ struct TestBar1 : public TESTCPP_NS::TestFixture
 
     // @test(depends=2, tags="ft slow empty")
     TEST(case16)
-    {}
+    {
+	    exit(-1);
+	}
 };
 
 class TestBar2 : public TestFixture
@@ -50,6 +53,8 @@ public:
     // @test
     void case20()
     {
+	   char* p = 0;
+	   (*p) = 0;
        TS_ASSERT(true);
     }
 			

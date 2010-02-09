@@ -11,7 +11,8 @@
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
 #include <testngpp/runner/TestCaseResultCollector.h>
 
-#include <testngpp/Win32/Win32Sandbox.h>
+#include <testngpp/win32/Win32ThrowLastError.h>
+#include <testngpp/win32/Win32Sandbox.h>
 #include <testngpp/win32/Win32TestCaseSandbox.h>
 
 TESTNGPP_NS_START
@@ -36,7 +37,26 @@ struct Win32TestCaseSandboxImpl
       return sandbox->getEventId();
    }
    
-   void handle(bool) TESTNGPP_THROW(EOFError, Error);
+   void handle(bool) TESTNGPP_THROW(Error);
+
+   void decode() TESTNGPP_THROW(Error);
+   void doDecode() TESTNGPP_THROW(Error, EOFError);
+
+   void tryToDecodeOnDead() TESTNGPP_THROW(Error);
+
+   void handleDeadSandbox();
+
+   void die()
+   {
+	  if(!finished)
+      {
+         decoder->flush(true);
+      }
+
+      sandbox->die();
+
+      finished = true;
+   }
 
    ~Win32TestCaseSandboxImpl()
    {
@@ -58,47 +78,81 @@ struct Win32TestCaseSandboxImpl
 
 ////////////////////////////////////////////////////////
 void Win32TestCaseSandboxImpl::
-handle(bool isDead) TESTNGPP_THROW(EOFError, Error)
+doDecode() TESTNGPP_THROW(Error, EOFError)
 {
-#if 0
-   if(isDead)
-   {
-      decoder->flush(true);
-
-      sandbox->die();
-
-      finished = true;
-	  return ;
-   }
-#endif
-
-   if(sandbox->isDead())
-   {
-      return;
-   }
-
    __TESTNGPP_TRY
    {
-	   bool result = decoder->decode();
-      if(result && !finished)
+      if(decoder->decode() && !finished)
       {
          finished = true;
          decoder->flush(false);
 		 sandbox->die();
       }
    }
-   __TESTNGPP_CATCH(EOFError&)
+   __TESTNGPP_CATCH_ALL
    {
-      if(!finished)
-      {
-         decoder->flush(true);
-      }
-
-      sandbox->die();
-
-      finished = true;
+      die();
+	  throw;
    }
    __TESTNGPP_END_TRY
+}
+
+////////////////////////////////////////////////////////
+void Win32TestCaseSandboxImpl::
+decode() TESTNGPP_THROW(Error)
+{
+	__TESTNGPP_TRY
+	{
+		doDecode();
+	}__TESTNGPP_CATCH(EOFError&)
+	__TESTNGPP_END_TRY
+}
+
+void Win32TestCaseSandboxImpl::
+tryToDecodeOnDead() TESTNGPP_THROW(Error)
+{
+   DWORD result = 
+      ::WaitForSingleObject
+	     ( getEventId()
+		 , 1);
+   switch(result)
+   {
+   case WAIT_OBJECT_0:
+	   decode();
+	   break;
+   case WAIT_ABANDONED:
+   case WAIT_TIMEOUT:
+       die();
+	   break;
+   case WAIT_FAILED:
+	   die();
+	   throwLastError();
+   }
+}
+void Win32TestCaseSandboxImpl::
+handleDeadSandbox() TESTNGPP_THROW(Error)
+{
+	while(!sandbox->isDead())
+	{
+		tryToDecodeOnDead();
+	}
+}
+////////////////////////////////////////////////////////
+void Win32TestCaseSandboxImpl::
+handle(bool isDead) TESTNGPP_THROW(Error)
+{
+   if(sandbox->isDead())
+   {
+      return;
+   }
+
+   if(isDead)
+   {
+	   handleDeadSandbox();
+	   return;
+   }
+
+   decode();
 }
 
 ////////////////////////////////////////////////////////

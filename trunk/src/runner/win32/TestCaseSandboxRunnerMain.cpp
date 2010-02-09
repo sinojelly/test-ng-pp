@@ -4,6 +4,8 @@
 
 #include <windows.h>
 
+#include <testngpp/win32/Die.h>
+#include <testngpp/ExceptionKeywords.h>
 #include <testngpp/comm/Win32PipeWrittableChannel.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 #include <testngpp/runner/ModuleTestSuiteLoaderFactory.h>
@@ -50,7 +52,7 @@ createFilter
 	return TESTNGPP_NS::TestFilterFactory::getFilter(filterPattern);
 }
 
-void runTest
+int runTest
       ( TESTNGPP_NS::TestCaseRunnerResultReporter* collector
       , const std::string& suiteName
 	  , const std::string& fixtureName
@@ -58,23 +60,25 @@ void runTest
 {
 	const TESTNGPP_NS::TestFilter* filter = createFilter(fixtureName, testcaseName);
 	TESTNGPP_NS::TagsFilters* tagsFilter = TESTNGPP_NS::TagsParser::parse("*");
+    TESTNGPP_NS::TestFixtureRunner* fixtureRunner = 0;
+	TESTNGPP_NS::TestSuiteRunner* suiteRunner = 0;
+	TESTNGPP_NS::TestRunnerContext* context = 0;
 
 	TESTNGPP_NS::StringList suites;
 	suites.add(suiteName);
 
-	try {
-	TESTNGPP_NS::TestRunnerContext* context = \
-		new TESTNGPP_NS::TestRunnerContext
+	int result = 0;
+
+	__TESTNGPP_TRY
+
+	context = new TESTNGPP_NS::TestRunnerContext
             ( suites
             , collector
             , tagsFilter
             , filter);
 
-	TESTNGPP_NS::TestFixtureRunner* fixtureRunner = 
-		TESTNGPP_NS::TestFixtureRunnerFactory::createInstance(false, 1);
-
-	TESTNGPP_NS::TestSuiteRunner* suiteRunner = \
-		new TESTNGPP_NS::TestSuiteRunner(fixtureRunner, collector);
+	fixtureRunner = TESTNGPP_NS::TestFixtureRunnerFactory::createInstance(false, 1);
+	suiteRunner = new TESTNGPP_NS::TestSuiteRunner(fixtureRunner, collector);
 
 	if(!tagsFilter->startOnNext())
 	{
@@ -84,16 +88,36 @@ void runTest
     suiteRunner->run(context->getSuite(0), filter);
 	////////////////////////////////////////////////////
 
-	delete suiteRunner;
-	delete fixtureRunner;
-	delete tagsFilter;
-	}
-	catch(...)
-	{
-		std::cerr << "exception" << std::endl;
-	}
+	__TESTNGPP_CATCH(TESTNGPP_NS::Die&)
+	
+		exit(250);
 
+	__TESTNGPP_CATCH_ALL
+        
+		result = -1;
+
+	__TESTNGPP_FINALLY
+	
+		if(context != 0)
+		{
+			delete context;
+		}
+
+		if(suiteRunner != 0)
+		{
+			delete suiteRunner;
+		}
+		if(fixtureRunner != 0)
+		{
+			delete fixtureRunner;
+		}
+		
+	__TESTNGPP_DONE
+
+	delete tagsFilter;
 	TESTNGPP_NS::TestFilterFactory::returnFilter(filter);
+
+	return result;
 }
 
 int main(int argc, char* argv[])
@@ -117,7 +141,5 @@ int main(int argc, char* argv[])
       hSemap = (HANDLE)atoi(argv[5]);
    }
 
-   runTest(createCollector(hWrite, hSemap), suite, fixture, testcase);
-	
-   return 0;
+   return runTest(createCollector(hWrite, hSemap), suite, fixture, testcase);
 }
