@@ -20,6 +20,8 @@ struct OptionList
    Args args;
 
    void parse(int argc, char** argv, const char* optstr);
+   
+   bool hasOption(const std::string& flag);
 };
 
 TESTNGPP_NS_END
