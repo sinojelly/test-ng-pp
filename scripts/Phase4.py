@@ -1,5 +1,6 @@
 
 import os
+import codecs
 
 from Message import *
 
@@ -464,7 +465,7 @@ def phase4(fixture_files, target, scopes, encoding):
    verify_testcase_deps(scopes)
 
    try:
-      file = open(target, "w", encoding)
+      file = open(target, "w")
    except IOError:
       print >> sys.stderr, "open", target, "failed"
       sys.exit(1)
