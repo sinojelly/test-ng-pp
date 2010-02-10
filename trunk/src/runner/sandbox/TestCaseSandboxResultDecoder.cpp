@@ -178,6 +178,7 @@ TestCaseSandboxResultDecoderImpl::flush(bool crashed)
    if(crashed && !endReceived)
    {
       collector->addCaseCrash(testcase);
+      collector->endTestCase(testcase);
       crashInformed = true;
    }
 }
