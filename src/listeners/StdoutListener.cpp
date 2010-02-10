@@ -90,7 +90,7 @@ namespace
             ( ::GetStdHandle(STD_OUTPUT_HANDLE)
             , FOREGROUND_RED | FOREGROUND_INTENSITY);
    #else
-         os << "\33[31m";
+         os << "\033[1;31m";
    #endif
       }
       return os;
@@ -106,7 +106,7 @@ namespace
             ( ::GetStdHandle(STD_OUTPUT_HANDLE)
             , FOREGROUND_GREEN | FOREGROUND_INTENSITY);
    #else
-         os << "\33[32m";
+         os << "\033[1;32m";
    #endif
       }
       return os;
@@ -122,7 +122,7 @@ namespace
             ( ::GetStdHandle(STD_OUTPUT_HANDLE)
             , FOREGROUND_INTENSITY);
    #else
-         os << "\33[0m";
+         os << "\033[0m";
    #endif
       }
       return os;
@@ -138,7 +138,7 @@ namespace
          ( ::GetStdHandle(STD_OUTPUT_HANDLE)
           , FOREGROUND_INTENSITY);
    #else
-         os << "\33[36m";
+         os << "\33[1;36m";
    #endif
       }
       return os;
@@ -154,7 +154,7 @@ namespace
          ( ::GetStdHandle(STD_OUTPUT_HANDLE)
           , FOREGROUND_INTENSITY);
    #else
-         os << "\33[35m";
+         os << "\33[1;35m";
    #endif
       }
       return os;
@@ -497,8 +497,7 @@ reportCasesResult()
       
       std::cout 
          << " success rate: " << fail << rate << '%' << normal 
-         << std::endl << std::endl;
-              
+         << std::endl;
    }
    
 }
@@ -550,7 +549,7 @@ endTest()
    std::cout 
       << std::endl << std::endl
       << info 
-      << "====================Result===================="
+      << "====================RESULT===================="
       << normal 
       << std::endl;
      
@@ -559,21 +558,22 @@ endTest()
    {
       std::cout
          << succ
-         << "[  OK  ]"
+         << "[  OK  ] "
          << bookKeeper->getNumberOfTestCases()
          << normal
          << " cases from "
          << succ
          << bookKeeper->getNumberOfLoadedSuites()
          << normal
-         << "suites ran successfully."
+         << " suites ran successfully."
          << std::endl;
-     return;
    }
      
    reportSuitesResult();
 
    reportCasesResult();
+
+   std::cout << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
