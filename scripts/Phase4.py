@@ -5,13 +5,15 @@ from Message import *
 
 from Phase1Result import *
 
+output_encoding = 'utf-8'
+
 ################################################
 def output(content, file):
    if file == None:
       return
 
    lines = content + "\n"
-   file.writelines(lines.encode('utf-8'))
+   file.writelines(lines.encode(output_encoding))
 
 def get_base_name(file):
     return os.path.basename(file).split('.')[0]
@@ -61,7 +63,7 @@ static struct %s
       : TESTNGPP_NS::TestCase
         ( "%s"
         , "%s"
-		, "%s"
+        , "%s"
         , %s
         , "%s"
         , %d)
@@ -131,7 +133,7 @@ class TestCaseDefGenerator:
          get_testcase_class_name(self.fixture, self.testcase), \
          self.testcase.get_name(), \
          self.fixture.get_name(), \
-		 self.suite, \
+         self.suite, \
          get_depends_var(self.fixture, self.testcase), \
          get_file_name(self.testcase), \
          self.testcase.get_line_number(), \
@@ -268,7 +270,7 @@ class FixtureDescGenerator:
       fixture_desc_def = fixture_desc_template % ( \
           get_fixture_desc_var(self.fixture), \
           self.fixture.get_name(), \
-          self.fixture.get_file_name(), \
+          os.path.basename(self.fixture.get_file_name()), \
           get_testcase_array_var(self.fixture), \
           get_testcase_array_var(self.fixture), \
           get_testcase_array_var(self.fixture) )
@@ -441,7 +443,7 @@ class SuiteGenerator:
       self.generate_dep_headers()
 
       for header in self.fixture_files:
-         output("#include \"" + os.path.basename(header) + "\"", self.file)
+         output("#include <" + header + ">", self.file)
 
    #############################################
    def generate(self):
@@ -458,7 +460,7 @@ def verify_testcase_deps(scopes):
          .generate(lambda file, elem: TestCaseSeeker(elem) )
 
 ################################################
-def phase4(fixture_files, target, scopes):
+def phase4(fixture_files, target, scopes, encoding):
    verify_testcase_deps(scopes)
 
    try:
@@ -466,6 +468,9 @@ def phase4(fixture_files, target, scopes):
    except IOError:
       print >> sys.stderr, "open", target, "failed"
       sys.exit(1)
+
+   global output_encoding
+   output_encoding = encoding
 
    SuiteGenerator(scopes, file, get_base_name(target), fixture_files).generate()
 

@@ -38,7 +38,7 @@ def usage(longOpts):
 ##########################################################
 def getOpt(longOpts):
    try:
-      return getopt.getopt(sys.argv[1:], 'o:', getAssignableOptStrings(longOpts))
+      return getopt.getopt(sys.argv[1:], 'e:o:', getAssignableOptStrings(longOpts))
    except getopt.GetoptError, err:
       print >> sys.stderr, str(err)
       usage(longOpts)
@@ -52,16 +52,26 @@ def main():
    optlist, fixtures = getOpt(longOpts)
 
    target = None
+   encoding = 'utf-8'
 
    for o, a in optlist:
       if o == "-o":
          target = a
+      if o == "-e":
+         encoding = a
 
    if target == None:
       usage(longOpts)
       sys.exit(1)
 
-   process(target, fixtures)
+   absFixtures = []
+   for fixture in fixtures:
+      if os.path.isabs(fixture):
+         absFixtures.append(fixture)
+      else:
+         absFixtures.append(os.path.join(os.getcwd(), fixture))
+
+   process(target, absFixtures, encoding)
 
 ##########################################################
 if __name__ == "__main__":
