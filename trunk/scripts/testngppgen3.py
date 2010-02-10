@@ -33,12 +33,12 @@ def getUsageString(longOpts):
 
 ##########################################################
 def usage(longOpts):
-   print "Usage:", sys.argv[0], getUsageString(longOpts), "-o target testcase1 testcase2 ..."
+   print "Usage:", "testngppgen", getUsageString(longOpts), "-o target testcase1 testcase2 ..."
 
 ##########################################################
-def getOpt(longOpts):
+def getOpt(longOpts, argv):
    try:
-      return getopt.getopt(sys.argv[1:], 'e:o:', getAssignableOptStrings(longOpts))
+      return getopt.getopt(argv, 'e:o:', getAssignableOptStrings(longOpts))
    except getopt.GetoptError, err:
       print >> sys.stderr, str(err)
       usage(longOpts)
@@ -48,8 +48,8 @@ def getOpt(longOpts):
 longOpts = []
 
 ##########################################################
-def main():
-   optlist, fixtures = getOpt(longOpts)
+def generate(argv):
+   optlist, fixtures = getOpt(longOpts, argv)
 
    target = None
    encoding = 'utf-8'
@@ -75,5 +75,9 @@ def main():
 
 ##########################################################
 if __name__ == "__main__":
-   main()
+   if len(sys.argv) < 2:
+      usage(longOpts)
+      sys.exit(1)
+
+   generate(sys.argv[1:])
 
