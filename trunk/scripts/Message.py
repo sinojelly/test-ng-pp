@@ -6,7 +6,7 @@ from Phase1Result import *
 
 ####################################################################
 def message(file, line_number, type, msg):
-   return file + ":" + str(line_number) + ": " + type + ": " + msg
+   return os.path.basename(file) + ":" + str(line_number) + ": " + type + ": " + msg
 
 ####################################################################
 def raw_fatal(file, line_number, error):

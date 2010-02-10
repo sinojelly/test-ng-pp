@@ -537,8 +537,8 @@ def generateTarget(target, fixtureFiles, allFixtures):
 
 ##########################################################
 def process(target, fixtureFiles):
-   checkFixtureExistence(fixtureFiles)
 
+   checkFixtureExistence(fixtureFiles)
 
    for fixtureFile in fixtureFiles:
       processTestFixtureFile(fixtureFile)
@@ -564,7 +564,16 @@ def main():
       usage(longOpts)
       sys.exit(1)
 
-   process(target, fixtures)
+   absFixtures = []
+   for fixture in fixtures:
+      if os.path.isabs(fixture):
+         absFixtures.append(fixture)
+      else:
+         absFixtures.append(os.getcwd() + fixture)
+
+   print absFixtures
+
+   process(target, absFixtures)
 
 ##########################################################
 if __name__ == "__main__":

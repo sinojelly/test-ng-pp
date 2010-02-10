@@ -20,8 +20,8 @@ def trimCrlf(line):
    return line
 
 ##########################################################
-def getCleanLines(fixtureFile):
-   FILE = codecs.open( fixtureFile, "r", "utf-8" )
+def getCleanLines(fixtureFile, encoding):
+   FILE = codecs.open( fixtureFile, "r", encoding)
    lines = FILE.readlines()
 
    cleanLines= []
@@ -33,8 +33,8 @@ def getCleanLines(fixtureFile):
    return cleanLines
 
 ##########################################################
-def processTestFixtureFile(file):
-    return phase3(phase2(phase1(phase0(file, getCleanLines(file))), file), file)
+def processTestFixtureFile(file, encoding):
+    return phase3(phase2(phase1(phase0(file, getCleanLines(file, encoding))), file), file)
 
 ##########################################################
 def checkFixtureExistence(fixtureFiles):
@@ -45,12 +45,12 @@ def checkFixtureExistence(fixtureFiles):
 
 
 ##########################################################
-def process(target, fixture_files):
+def process(target, fixture_files, encoding):
    checkFixtureExistence(fixture_files)
 
    fixtures = []
    for file in fixture_files:
-      fixtures.append(processTestFixtureFile(file))
+      fixtures.append(processTestFixtureFile(file, encoding))
 
-   phase4(fixture_files, target, fixtures)
+   phase4(fixture_files, target, fixtures, encoding)
 
