@@ -464,7 +464,7 @@ def phase4(fixture_files, target, scopes, encoding):
    verify_testcase_deps(scopes)
 
    try:
-      file = open(target, "w")
+      file = open(target, "w", encoding)
    except IOError:
       print >> sys.stderr, "open", target, "failed"
       sys.exit(1)
