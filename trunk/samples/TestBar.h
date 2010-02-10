@@ -53,8 +53,8 @@ public:
     // @test
     void case20()
     {
-	   char* p = 0;
-	   (*p) = 0;
+	   //char* p = 0;
+	   //(*p) = 0;
        TS_ASSERT(true);
     }
 			

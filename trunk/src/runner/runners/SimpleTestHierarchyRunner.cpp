@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 #include <testngpp/internal/TestCase.h>
 
 #include <testngpp/runner/SimpleTestHierarchyRunner.h>

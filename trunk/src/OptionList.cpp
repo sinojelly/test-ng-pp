@@ -72,6 +72,18 @@ OptionList::parse(int argc, char** argv, const char* optstr)
 }
 
 ////////////////////////////////////////////////////
+bool 
+OptionList::hasOption(const std::string& flag)
+{
+   Options::const_iterator i = options.begin();
+   for(; i != options.end(); i++)
+   {
+      if(i->first == flag)
+         return true;
+   }
+   
+   return false;
+}
 
 TESTNGPP_NS_END
 

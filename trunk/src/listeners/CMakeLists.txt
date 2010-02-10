@@ -17,7 +17,7 @@ IF(CMAKE_SYSTEM_NAME MATCHES Linux)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES Linux)
 
 SET(STDOUTLISTENER_SRCS
-  StdoutTestListener.cpp
+  StdoutListener.cpp
 )
 
 SET(XMLLISTENER_SRCS
@@ -27,6 +27,7 @@ SET(XMLLISTENER_SRCS
 
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
 
+ADD_LIBRARY(testngpplistener MODULE StdoutTestListener.cpp)
 ADD_LIBRARY(testngppstdoutlistener MODULE ${STDOUTLISTENER_SRCS})
 ADD_LIBRARY(testngppxmllistener MODULE ${XMLLISTENER_SRCS})
 
@@ -39,3 +40,4 @@ SET_TARGET_PROPERTIES(testngppstdoutlistener testngppxmllistener
    PROPERTIES SUFFIX ".so")
 TARGET_LINK_LIBRARIES(testngppstdoutlistener ${TESTNGPP_LIBRARY})
 TARGET_LINK_LIBRARIES(testngppxmllistener ${TESTNGPP_LIBRARY})
+TARGET_LINK_LIBRARIES(testngpplistener ${TESTNGPP_LIBRARY})

@@ -67,16 +67,14 @@ public:
     // Success
     void testCase3() {}
 
-    // Fail
     void testCase4()
     {
-      TS_ASSERT_EQUALS(1, 2);
+      TS_ASSERT_EQUALS(2, 2);
     }
 
-    // Fail
     void testCase5()
     {
-      TS_ASSERT(std::string("abc") == std::string("abcd"));
+      TS_ASSERT(std::string("abc") == std::string("abc"));
     }
 
     // Fail
@@ -103,16 +101,14 @@ public:
       TS_ASSERT_THROWS_ANYTHING(testCase3());
     }
 
-    // Fail
     void testCase10()
     {
-      TS_ASSERT_THROWS_NOTHING(testCase6());
+      TS_ASSERT_THROWS_ANYTHING(testCase6());
     }
 
-    // Fail
     void testCase11()
     {
-      TS_ASSERT_THROWS(testCase3(), std::exception);
+      TS_ASSERT_THROWS_NOTHING(testCase3());
     }
 
 #if 0
