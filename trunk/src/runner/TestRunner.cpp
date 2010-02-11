@@ -243,35 +243,30 @@ TestRunner::runTests( bool useSandbox
                     , const std::string& tagsFilterOption)
 {
    This->createSuiteRunner(useSandbox, maxConcurrent);
-
    This->loadListeners(searchingPaths, listenerNames);
 
    const TestFilter* filter = TestFilterFactory::getFilter(fixtures);
 
-    __TESTNGPP_TRY
-   
-   TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
-   
-   tagsFilter->dump();
-
-   This->runTests(suitePaths, tagsFilter, filter);
-
-   delete tagsFilter;
-   
+   __TESTNGPP_TRY
+   {
+      TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
+      This->runTests(suitePaths, tagsFilter, filter);
+      delete tagsFilter;
+   }
    __TESTNGPP_CATCH(Error& e)
-   
-   std::cerr << e.what() << std::endl;
-   This->hasFailures = true;
-   
+   {
+      std::cerr << e.what() << std::endl;
+      This->hasFailures = true;
+   }
    __TESTNGPP_CATCH_ALL
-   
-   This->hasFailures = true;
-   
+   {
+      This->hasFailures = true;
+   }
    __TESTNGPP_END_TRY
    
    TestFilterFactory::returnFilter(filter);
 
-   return This->hasFailures ? -2 : 0;
+   return This->hasFailures ? -1 : 0;
 }
 
 ///////////////////////////////////////////////////////
