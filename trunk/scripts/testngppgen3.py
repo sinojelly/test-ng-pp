@@ -33,7 +33,9 @@ def getUsageString(longOpts):
 
 ##########################################################
 def usage(longOpts):
-   print "Usage:", "testngppgen", getUsageString(longOpts), "-o target testcase1 testcase2 ..."
+   print "Usage:", "testngppgen", \
+      getUsageString(longOpts), \
+      "[-i input-encoding] [-e output-encoding] -o target testcase1 testcase2 ..."
 
 ##########################################################
 def getOpt(longOpts, argv):
