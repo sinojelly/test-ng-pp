@@ -51,9 +51,52 @@ public:
     // @test
     void case20()
     {
-	   //char* p = 0;
-	   //(*p) = 0;
-       TS_ASSERT(true);
+	   char* p = 0;
+	   (*p) = 0;
+      TS_ASSERT(true);
     }
-			
+};
+
+// @fixutre(tags=succ)
+struct TestBar3 : public TESTCPP_NS::TestFixture
+{
+   // @test
+   void case30()
+   {}
+
+   // @test
+   void case31()
+   {}
+
+   // @test
+   void case32()
+   {}
+
+   // @test
+   void case33()
+   {}
+
+   // @test
+   void case34()
+   {}
+
+   // @test
+   void case35()
+   {}
+
+   // @test
+   void case36()
+   {}
+
+   // @test
+   void case37()
+   {}
+
+   // @test
+   void case38()
+   {}
+
+   // @test
+   void case39()
+   {}
 };

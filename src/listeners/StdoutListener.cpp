@@ -82,15 +82,21 @@ namespace
       {}
    };
 
+   #if defined(_MSC_VER)
+   void setTextColor(unsigned int color)
+   {
+      ::SetConsoleTextAttribute
+            ( ::GetStdHandle(STD_OUTPUT_HANDLE)
+            , color | FOREGROUND_INTENSITY);
+   }
+   #endif
    ////////////////////////////////////////////////////////
    std::ostream& switchToFail(std::ostream& os, bool colorful)
    {
       if(colorful)
       {
    #ifdef _MSC_VER
-         ::SetConsoleTextAttribute
-            ( ::GetStdHandle(STD_OUTPUT_HANDLE)
-            , FOREGROUND_RED | FOREGROUND_INTENSITY);
+         setTextColor( FOREGROUND_RED );
    #else
          os << "\033[1;31m";
    #endif
@@ -104,9 +110,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         ::SetConsoleTextAttribute
-            ( ::GetStdHandle(STD_OUTPUT_HANDLE)
-            , FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+         setTextColor( FOREGROUND_GREEN );
    #else
          os << "\033[1;32m";
    #endif
@@ -120,9 +124,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         ::SetConsoleTextAttribute
-            ( ::GetStdHandle(STD_OUTPUT_HANDLE)
-            , FOREGROUND_INTENSITY);
+         setTextColor(0);
    #else
          os << "\033[0m";
    #endif
@@ -136,9 +138,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         ::SetConsoleTextAttribute
-         ( ::GetStdHandle(STD_OUTPUT_HANDLE)
-          , FOREGROUND_INTENSITY);
+         setTextColor(0);
    #else
          os << "\33[1;36m";
    #endif
@@ -152,9 +152,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         ::SetConsoleTextAttribute
-         ( ::GetStdHandle(STD_OUTPUT_HANDLE)
-          , FOREGROUND_INTENSITY);
+         setTextColor(0);
    #else
          os << "\33[1;35m";
    #endif
@@ -473,10 +471,9 @@ startTagsFiltering(const TaggableObjFilter* filter)
 {
    if(!showTags) return;
 
-   std::cout
-      << std::endl << std::endl
-      << info << "{ " << filter->toString() << " }" 
-      << normal << std::endl;
+   std::cout << std::endl;
+   std::cout << info << "{ " << filter->toString() << " }" << normal;
+   std::cout << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
@@ -523,10 +520,8 @@ reportCasesResult()
       reportFailedNumber("crashed", bookKeeper->getNumberOfCrashedTestCases());
       reportFailedNumber("skipped", bookKeeper->getNumberOfSkippedTestCases());
       std::cout << std::endl; 
-      
-      std::cout 
-         << " success rate: " << fail << rate << '%' << normal 
-         << std::endl;
+      std::cout << " success rate: " << fail << rate << '%' << normal;
+      std::cout << std::endl;
    }
    
 }
