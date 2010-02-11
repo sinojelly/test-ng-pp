@@ -95,6 +95,14 @@ struct TestCaseRunnerResultReporter
 	{
 		std::cerr << "suite error : " << error << std::endl;
 	}
+	
+	void startTagsFiltering(const TaggableObjFilter*)
+	{
+	}
+   
+	void endTagsFiltering(const TaggableObjFilter*)
+	{
+	}
 
 	void startTest() 
 	{
