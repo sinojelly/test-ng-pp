@@ -96,7 +96,6 @@ SimpleTestSuiteResultReporter::~SimpleTestSuiteResultReporter()
 void SimpleTestSuiteResultReporter::
 addCaseCrash(const TestCaseInfoReader* testcase)
 {
-   This->numberOfCrashedCases++;
 }
 
 ///////////////////////////////////////////////////////////
