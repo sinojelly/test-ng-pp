@@ -38,7 +38,7 @@ def usage(longOpts):
 ##########################################################
 def getOpt(longOpts, argv):
    try:
-      return getopt.getopt(argv, 'e:o:', getAssignableOptStrings(longOpts))
+      return getopt.getopt(argv, 'i:e:o:', getAssignableOptStrings(longOpts))
    except getopt.GetoptError, err:
       print >> sys.stderr, str(err)
       usage(longOpts)
@@ -52,12 +52,15 @@ def generate(argv):
    optlist, fixtures = getOpt(longOpts, argv)
 
    target = None
+   inputEncoding = 'utf-8'
    encoding = 'utf-8'
 
    for o, a in optlist:
       if o == "-o":
          target = a
-      if o == "-e":
+      elif o == "-i":
+         inputEncoding = a
+      elif o == "-e":
          encoding = a
 
    if target == None:
@@ -71,7 +74,7 @@ def generate(argv):
       else:
          absFixtures.append(os.path.join(os.getcwd(), fixture))
 
-   process(target, absFixtures, encoding)
+   process(target, absFixtures, inputEncoding, encoding)
 
 ##########################################################
 if __name__ == "__main__":
