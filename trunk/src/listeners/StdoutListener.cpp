@@ -87,7 +87,7 @@ namespace
    {
       ::SetConsoleTextAttribute
             ( ::GetStdHandle(STD_OUTPUT_HANDLE)
-            , color | FOREGROUND_INTENSITY);
+            , color);
    }
    #endif
    ////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         setTextColor( FOREGROUND_RED );
+         setTextColor( FOREGROUND_RED | FOREGROUND_INTENSITY);
    #else
          os << "\033[1;31m";
    #endif
@@ -110,7 +110,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         setTextColor( FOREGROUND_GREEN );
+         setTextColor( FOREGROUND_GREEN | FOREGROUND_INTENSITY);
    #else
          os << "\033[1;32m";
    #endif
@@ -124,7 +124,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         setTextColor(0);
+         setTextColor(FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
    #else
          os << "\033[0m";
    #endif
@@ -138,7 +138,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         setTextColor(0);
+         setTextColor(FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
    #else
          os << "\33[1;36m";
    #endif
@@ -152,7 +152,7 @@ namespace
       if(colorful)
       {
    #ifdef _MSC_VER
-         setTextColor(0);
+         setTextColor(FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
    #else
          os << "\33[1;35m";
    #endif
