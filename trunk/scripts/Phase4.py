@@ -6,15 +6,13 @@ from Message import *
 
 from Phase1Result import *
 
-output_encoding = 'utf-8'
-
 ################################################
 def output(content, file):
    if file == None:
       return
 
    lines = content + "\n"
-   file.writelines(lines.encode(output_encoding))
+   file.writelines(lines)
 
 def get_base_name(file):
     return os.path.basename(file).split('.')[0]
@@ -465,7 +463,8 @@ def phase4(fixture_files, target, scopes, encoding):
    verify_testcase_deps(scopes)
 
    try:
-      file = open(target, "w")
+      #file = open(target, "w")
+      file = codecs.open(target, mode="w", encoding=encoding)
    except IOError:
       print >> sys.stderr, "open", target, "failed"
       sys.exit(1)
