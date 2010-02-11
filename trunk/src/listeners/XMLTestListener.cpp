@@ -158,7 +158,7 @@ void XMLTestListenerImpl::
 addCaseCrash(const TestCaseInfoReader* testcase)
 {
    testCaseElement->element("crash")
-		.text("test case crashed unexpectedly.");
+		.text("test crashed unexpectedly.");
 }
 
 ///////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ void XMLTestListenerImpl::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
    testCaseElement->element("skipped")
-      .text("test case is skipped due to the failure of depended test case.");
+      .text("test was skipped due to the failure of its dependent case.");
 }
 
 ///////////////////////////////////////////////////////////
