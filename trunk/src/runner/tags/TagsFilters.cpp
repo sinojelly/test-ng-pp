@@ -1,10 +1,13 @@
 
 #include <vector>
+#include <algorithm>
+
 #include <iostream>
 
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
 #include <testngpp/runner/NotCompositeTaggableFilter.h>
+#include <testngpp/runner/MatchAllTagsFilter.h>
 
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/TagsFilters.h>
@@ -20,11 +23,13 @@ TESTNGPP_NS_START
 ////////////////////////////////////////////////////////
 struct TagsFiltersImpl
 {
+   typedef std::pair<const TaggableObjFilter *, bool> ValueType;
+
    TagsFiltersImpl();
    ~TagsFiltersImpl();
 
-   void addNextFilter(TaggableObjFilter*);
-   bool startOnNext();
+   void addNextFilter(const TaggableObjFilter*);
+   const TaggableObjFilter* startOnNext();
 
    bool shouldBeFilteredThisTime(const Taggable* obj) const;
    bool shouldBeFiltered(const Taggable* obj) const;
@@ -33,9 +38,12 @@ struct TagsFiltersImpl
    
    void handleMatchAll();
 
+   ValueType
+   generateAllScopeFilter();
+
    void dump() const;
    
-   std::vector<TaggableObjFilter*> filters;
+   std::vector<const TaggableObjFilter*> filters;
    OrCompositeTaggableFilter    allTagsFilter;
    OrCompositeTaggableFilter    doneTagsFilter; 
    NotCompositeTaggableFilter   notDoneFilter;
@@ -65,7 +73,7 @@ TagsFiltersImpl::
 ////////////////////////////////////////////////////////
 void
 TagsFiltersImpl::
-addNextFilter(TaggableObjFilter* filter)
+addNextFilter(const TaggableObjFilter* filter)
 {
    filters.push_back(filter);
    
@@ -75,10 +83,9 @@ addNextFilter(TaggableObjFilter* filter)
    }
 }
 
-////////////////////////////////////////////////////////
-void
+TagsFiltersImpl::ValueType
 TagsFiltersImpl::
-handleMatchAll()
+generateAllScopeFilter()
 {
    OrCompositeTaggableFilter* orFilter = new OrCompositeTaggableFilter();
    
@@ -90,20 +97,55 @@ handleMatchAll()
       }
    }
    
+   if(orFilter->isEmpty())
+   {
+      delete orFilter;
+      return ValueType(0, false);
+   }
+   else if(orFilter->isMalform())
+   {
+      ValueType result = orFilter->fetch();
+
+      delete orFilter;
+
+      return result;
+   }
+
+   return ValueType(orFilter, true);
+}
+
+namespace
+{
+   const TaggableObjFilter*
+   generateMatchAllFilter(const TaggableObjFilter* filter, bool composite)
+   {
+      if(filter == 0)
+         return new MatchAllTagsFilter();
+
+      return new NotCompositeTaggableFilter(filter, composite);
+   }
+}
+////////////////////////////////////////////////////////
+void
+TagsFiltersImpl::
+handleMatchAll()
+{
+   ValueType filter = generateAllScopeFilter();
+
    bool hasMatchAll = false;
    for(unsigned int i=0; i<filters.size(); i++)
    {
       if(filters[i] == 0)
       {
-         filters[i] = new NotCompositeTaggableFilter(orFilter, !hasMatchAll);
+         filters[i] = generateMatchAllFilter(filter.first, !hasMatchAll && filter.second);
          allTagsFilter.addFilter(filters[i], false);
          hasMatchAll = true;
       }
    }
    
-   if(!hasMatchAll)
+   if(!hasMatchAll && filter.second)
    {
-      delete orFilter;
+      delete filter.first;
    }
 }
 
@@ -120,11 +162,11 @@ dump() const
       
       if(filters[i] != 0)
       {
-         filters[i]->dump();
+         std::cout << filters[i]->toString();
       }
       else
       {
-         std::cout << " * ";
+         std::cout << "*";
       }
    }
    
@@ -132,7 +174,7 @@ dump() const
    
 }
 ////////////////////////////////////////////////////////
-bool
+const TaggableObjFilter*
 TagsFiltersImpl::
 startOnNext() 
 {
@@ -140,7 +182,7 @@ startOnNext()
 
    if((unsigned int)index >= filters.size())
    {
-      return false;
+      return 0;
    }
 
    if(index > 0)
@@ -152,7 +194,7 @@ startOnNext()
       handleMatchAll();
    }
 
-   return true;
+   return filters[index];
 }
 
 ////////////////////////////////////////////////////////
@@ -212,13 +254,13 @@ TagsFilters::
 ////////////////////////////////////////////////////////
 void
 TagsFilters::
-addNextFilter(TaggableObjFilter* filter)
+addNextFilter(const TaggableObjFilter* filter)
 {
    This->addNextFilter(filter);
 }
 
 ////////////////////////////////////////////////////////
-bool
+const TaggableObjFilter*
 TagsFilters::
 startOnNext() 
 {

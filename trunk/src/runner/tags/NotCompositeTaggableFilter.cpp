@@ -9,10 +9,10 @@ TESTNGPP_NS_START
 ////////////////////////////////////////////////////////
 struct NotCompositeTaggableFilterImpl
 {
-   TaggableObjFilter* filter;
+   const TaggableObjFilter* filter;
    bool isComposite;
 
-   NotCompositeTaggableFilterImpl(TaggableObjFilter*, bool);
+   NotCompositeTaggableFilterImpl(const TaggableObjFilter*, bool);
    ~NotCompositeTaggableFilterImpl();
 
    bool matches(const Taggable* obj) const;
@@ -20,7 +20,7 @@ struct NotCompositeTaggableFilterImpl
 
 ////////////////////////////////////////////////////////
 NotCompositeTaggableFilterImpl::
-NotCompositeTaggableFilterImpl(TaggableObjFilter* tagsFilter, bool composite)
+NotCompositeTaggableFilterImpl(const TaggableObjFilter* tagsFilter, bool composite)
    : filter(tagsFilter)
    , isComposite(composite)
 {
@@ -36,7 +36,7 @@ NotCompositeTaggableFilterImpl::
 
 ////////////////////////////////////////////////////////
 NotCompositeTaggableFilter::
-NotCompositeTaggableFilter(TaggableObjFilter* filter, bool composite)
+NotCompositeTaggableFilter(const TaggableObjFilter* filter, bool composite)
    : This(new NotCompositeTaggableFilterImpl(filter, composite))
 {
 }
@@ -66,12 +66,11 @@ matches(const Taggable* obj) const
 }
 
 ////////////////////////////////////////////////////////
-void NotCompositeTaggableFilter::
-dump() const
+std::string
+NotCompositeTaggableFilter::
+toString() const
 {
-   std::cout << "^";
-   This->filter->dump();
-   std::cout.flush();
+   return "^" + This->filter->toString();
 }
 
 TESTNGPP_NS_END

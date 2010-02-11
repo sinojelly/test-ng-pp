@@ -12,7 +12,6 @@
 #include <testngpp/runner/NotCompositeTaggableFilter.h>
 
 #include <testngpp/runner/GeneralTagsFilter.h>
-#include <testngpp/runner/EmptyTagFilter.h>
 
 TESTNGPP_NS_START
 
@@ -28,7 +27,26 @@ struct OrCompositeTaggableFilterImpl
 
    void addFilter(const TaggableObjFilter* filter, bool isComposite);
    bool matches(const Taggable* obj) const;
+   ValueType fetch();
 };
+
+////////////////////////////////////////////////////////
+OrCompositeTaggableFilterImpl::ValueType
+OrCompositeTaggableFilterImpl::
+fetch()
+{
+   Filters::iterator i = filters.begin();
+   if(i == filters.end())
+   {
+      return ValueType(0, false);
+   }
+
+   ValueType result = (*i);
+
+   filters.erase(i);
+
+   return result;
+}
 
 ////////////////////////////////////////////////////////
 OrCompositeTaggableFilterImpl::
@@ -111,20 +129,46 @@ isEmpty() const
 }
 
 ////////////////////////////////////////////////////////
-void OrCompositeTaggableFilter::
-dump() const
+bool OrCompositeTaggableFilter::
+isMalform() const
 {
-   std::cout << "(";
+   return This->filters.size() == 1;
+}
+
+////////////////////////////////////////////////////////
+std::pair<const TaggableObjFilter*, bool>
+OrCompositeTaggableFilter::
+fetch() 
+{
+   return This->fetch();
+}
+
+////////////////////////////////////////////////////////
+std::string
+OrCompositeTaggableFilter::
+toString() const
+{
+   bool isFirst = true;
+   std::string result("(");
    
    OrCompositeTaggableFilterImpl::Filters::const_iterator i = This->filters.begin();
    for(; i != This->filters.end(); i++)
    {
-      (*i).first->dump();
+      if(isFirst)
+      {
+         isFirst = false;
+      }
+      else
+      {
+         result += " ";
+      }
+
+      result += (*i).first->toString();
    }
    
-   std::cout << ")";
-   
-   std::cout.flush();
+   result += ")";
+
+   return result;
 }
 
 TESTNGPP_NS_END

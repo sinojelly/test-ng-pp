@@ -90,20 +90,31 @@ addFilter(const TaggableObjFilter* filter, bool isComposite)
 }
 
 ////////////////////////////////////////////////////////
-void AndCompositeTaggableFilter::
-dump() const
+std::string 
+AndCompositeTaggableFilter::
+toString() const
 {
-   std::cout << "[";
+   bool isFirst = true;
+   std::string result("[");
 
    AndCompositeTaggableFilterImpl::Filters::const_iterator i = This->filters.begin();
    for(; i != This->filters.end(); i++)
    {
-      (*i).first->dump();
+      if(isFirst)
+      {
+         isFirst = false;
+      }
+      else
+      {
+         result += " ";
+      }
+
+      result += (*i).first->toString();
    }
    
-   std::cout << "]";
+   result += "]";
    
-   std::cout.flush();
+   return result;
 }
 
 TESTNGPP_NS_END

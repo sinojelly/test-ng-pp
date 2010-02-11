@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include <testngpp/runner/EmptyTagFilter.h>
+#include <testngpp/runner/EmptyTagsFilter.h>
 #include <testngpp/internal/Taggable.h>
 #include <testngpp/runner/InternalError.h>
 
@@ -9,7 +9,7 @@ TESTNGPP_NS_START
 
 /////////////////////////////////////////////
 bool
-EmptyTagFilter::
+EmptyTagsFilter::
 matches(const Taggable* obj) const
 {
    if(obj == 0)
@@ -21,12 +21,11 @@ matches(const Taggable* obj) const
 }
 
 /////////////////////////////////////////////
-void
-EmptyTagFilter::
-dump() const
+std::string
+EmptyTagsFilter::
+toString() const
 {
-   std::cout << " $ ";
-   std::cout.flush();
+   return "$";
 }
 
 TESTNGPP_NS_END

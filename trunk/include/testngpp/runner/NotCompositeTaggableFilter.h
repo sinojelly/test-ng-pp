@@ -13,12 +13,12 @@ struct NotCompositeTaggableFilterImpl;
 struct NotCompositeTaggableFilter
    : public TaggableObjFilter
 {
-   NotCompositeTaggableFilter(TaggableObjFilter*, bool composite=true);
+   NotCompositeTaggableFilter(const TaggableObjFilter*, bool composite=true);
    ~NotCompositeTaggableFilter();
 
    bool matches(const Taggable*) const;
 
-   void dump() const;
+   std::string toString() const;
    
 private:
    NotCompositeTaggableFilterImpl * This;

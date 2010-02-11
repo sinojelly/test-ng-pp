@@ -14,8 +14,10 @@
 #include <testngpp/runner/SimpleTestResultManager.h>
 #include <testngpp/runner/TestResultManager.h>
 #include <testngpp/runner/TagsFilters.h>
+#include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/TagsParser.h>
 #include <testngpp/runner/TestRunnerContext.h>
+#include <testngpp/runner/TestResultCollector.h>
 
 #include <testngpp/runner/TestRunner.h>
 
@@ -178,9 +180,21 @@ runAllTests
    TestRunnerContext* context = \
       loadSuites(suites, tagsFilters, filter);
 
-   while(tagsFilters->startOnNext())
+   TestResultCollector* collector = \
+      resultManager->getResultCollector();
+
+   while(1)
    {
+      const TaggableObjFilter* taggableFilter = \
+         tagsFilters->startOnNext();
+      if(taggableFilter == 0)
+      {
+         break;
+      }
+
+      collector->startTagsFiltering(taggableFilter);
       runAllSuites(context, filter);
+      collector->endTagsFiltering(taggableFilter);
    }
 
    delete context;

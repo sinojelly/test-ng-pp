@@ -1,12 +1,14 @@
 
 #include <string>
+#include <algorithm>
+
 #include <iostream>
 
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
 #include <testngpp/runner/NotCompositeTaggableFilter.h>
 #include <testngpp/runner/GeneralTagsFilter.h>
-#include <testngpp/runner/EmptyTagFilter.h>
+#include <testngpp/runner/EmptyTagsFilter.h>
 #include <testngpp/runner/PosixFNMatcher.h>
 
 #include <testngpp/utils/StringList.h>
@@ -136,9 +138,9 @@ namespace
        return Token(tag);        
     }
 
-   TaggableObjFilter* parseNOT(char** pp);
-   TaggableObjFilter* parseOR(char** pp, bool parseInScope=true, bool isStart=false);
-   TaggableObjFilter* parseAND(char** pp);
+   const TaggableObjFilter* parseNOT(char** pp);
+   const TaggableObjFilter* parseOR(char** pp, bool parseInScope=true, bool isStart=false);
+   const TaggableObjFilter* parseAND(char** pp);
    
    void doParseAND(AndCompositeTaggableFilter* filter, char** pp)
    {
@@ -168,7 +170,7 @@ namespace
    }
    
    ///////////////////////////////////////////////////////////////
-   TaggableObjFilter*
+   const TaggableObjFilter*
    parseAND(char** pp)
    {
       AndCompositeTaggableFilter * filter = new AndCompositeTaggableFilter();
@@ -187,10 +189,10 @@ namespace
    }
     
    ///////////////////////////////////////////////////////////////
-   TaggableObjFilter*
+   const TaggableObjFilter*
    parseNOT(char** pp)
    {
-        TaggableObjFilter* filter = 0;
+        const TaggableObjFilter* filter = 0;
         
         Token token = parseToken(pp, false);
         switch (token.type) 
@@ -205,7 +207,7 @@ namespace
             filter = parseAND(pp);
             break;
         case TOKEN_DOLLAR:
-            filter = new EmptyTagFilter();
+            filter = new EmptyTagsFilter();
             break;
         default:
             TESGNTPP_PARSE_TAGS_ERR();
@@ -244,7 +246,7 @@ namespace
                 filter->addFilter(parseAND(pp));
                 break;
              case TOKEN_DOLLAR:
-                filter->addFilter(new EmptyTagFilter());
+                filter->addFilter(new EmptyTagsFilter());
                 break;
              case TOKEN_STAR:
                 if(numberOfTags > 0 || !topGroup)
@@ -279,7 +281,7 @@ namespace
    }
    
    ///////////////////////////////////////////////////////////////
-   TaggableObjFilter*
+   const TaggableObjFilter*
    parseOR(char** pp, bool parseInScope, bool isStart)
    {
             
@@ -294,6 +296,13 @@ namespace
             
             return 0;
          }
+
+         if(filter->isMalform())
+         {
+            std::pair<const TaggableObjFilter*, bool> subFilter = filter->fetch();
+            delete filter;
+            return subFilter.first;
+         }
       }
       catch (...)
       {
@@ -305,7 +314,7 @@ namespace
     }
     
    ///////////////////////////////////////////////////////////////
-   TaggableObjFilter*
+   const TaggableObjFilter*
    parseFilter(const std::string& tags)
    {       
       if(isEmptyString(tags))
@@ -340,8 +349,7 @@ void parseSpec(TagsFilters* tagsFilters, const std::string& spec)
       rest = spec.substr(pos+1, spec.size() - pos);
    }   
    
-   TaggableObjFilter* filter = parseFilter(tags);
-   tagsFilters->addNextFilter(filter);
+   tagsFilters->addNextFilter(parseFilter(tags));
    
    parseSpec(tagsFilters, rest);
 }

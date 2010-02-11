@@ -95,7 +95,8 @@ SET(TESTNGRUNNER_LIB_SRCS
   tags/OrCompositeTaggableFilter.cpp 
   tags/NotCompositeTaggableFilter.cpp 
   tags/GeneralTagsFilter.cpp 
-  tags/EmptyTagFilter.cpp 
+  tags/EmptyTagsFilter.cpp 
+  tags/MatchAllTagsFilter.cpp 
   tags/TagsFilters.cpp 
   tags/TagsParser.cpp 
   tags/FixtureTagsFilter.cpp
