@@ -16,9 +16,9 @@ struct TagsFilters
    TagsFilters();
    ~TagsFilters();
 
-   void addNextFilter(TaggableObjFilter*);
+   void addNextFilter(const TaggableObjFilter*);
 
-   bool startOnNext();
+   const TaggableObjFilter* startOnNext();
 
    bool shouldBeFilteredThisTime(const Taggable* ) const;
    bool shouldBeFiltered(const Taggable* ) const;

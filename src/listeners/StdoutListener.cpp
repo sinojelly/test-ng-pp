@@ -19,6 +19,8 @@
 #include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestListener.h>
 
+#include <testngpp/runner/TaggableObjFilter.h>
+
 #include <testngpp/runner/TestResultReporter.h>
 #include <testngpp/runner/TestSuiteResultReporter.h>
 #include <testngpp/runner/TestCaseResultReporter.h>
@@ -198,6 +200,7 @@ struct StdoutListener : public TestListener
       ( bool 
       , bool 
       , bool
+      , bool
       , TestResultReporter*
       , TestSuiteResultReporter*
       , TestCaseResultReporter* );
@@ -219,6 +222,9 @@ struct StdoutListener : public TestListener
    void endTestSuite(TestSuiteInfoReader*);
    void addSuiteError(TestSuiteInfoReader*, const std::string&);
    
+   void startTagsFiltering(const TaggableObjFilter*);
+   void endTagsFiltering(const TaggableObjFilter*);
+
    void startTest();
    void endTest();
    void addError(const std::string&);
@@ -251,6 +257,7 @@ private:
 
    bool showSuite;
    bool showFixture;
+   bool showTags;
    
    TestResultReporter*        bookKeeper;      // X
    TestSuiteResultReporter*   suiteBookKeeper; // X
@@ -265,6 +272,7 @@ StdoutListener
       ( bool isColorful
       , bool shouldShowSuite
       , bool shouldShowFixture
+      , bool shouldShowTags
       , TestResultReporter* reporter
       , TestSuiteResultReporter* suiteReporter 
       , TestCaseResultReporter* caseReporter)
@@ -275,6 +283,7 @@ StdoutListener
 , normal(isColorful)
 , showSuite(shouldShowSuite)
 , showFixture(shouldShowFixture)
+, showTags(shouldShowTags)
 , bookKeeper(reporter)
 , suiteBookKeeper(suiteReporter)
 , caseBookKeeper(caseReporter)
@@ -378,16 +387,16 @@ endTestCase(const TestCaseInfoReader* testcase)
          std::cout << succ << "." << normal;
          break;
       case TestCaseResultReporter::TR_FAILED:
-         std::cout << fail << "F" << normal;   
+         //std::cout << fail << "F" << normal;   
          break;
       case TestCaseResultReporter::TR_ERROR:
-         std::cout << fail << "E" << normal;
+         //std::cout << fail << "E" << normal;
          break;
       case TestCaseResultReporter::TR_SKIPPED:
-         std::cout << fail << "S" << normal;
+         //std::cout << fail << "S" << normal;
          break;
       case TestCaseResultReporter::TR_CRASHED:   
-         std::cout << fail << "C" << normal;
+         //std::cout << fail << "C" << normal;
          break;
       case TestCaseResultReporter::TR_UNKNOWN:
          throw Error(TESTNGPP_INTERNAL_ERROR(3001));
@@ -454,6 +463,26 @@ endTestSuite(TestSuiteInfoReader*)
 void 
 StdoutListener::
 addSuiteError(TestSuiteInfoReader*, const std::string&)
+{
+}
+
+///////////////////////////////////////////////////////////
+void
+StdoutListener::
+startTagsFiltering(const TaggableObjFilter* filter)
+{
+   if(!showTags) return;
+
+   std::cout
+      << std::endl << std::endl
+      << info << "{ " << filter->toString() << " }" 
+      << normal << std::endl;
+}
+
+///////////////////////////////////////////////////////////
+void
+StdoutListener::
+endTagsFiltering(const TaggableObjFilter*)
 {
 }
 
@@ -604,12 +633,13 @@ LISTENER(create_instance)
 {
    OptionList options;
    
-   options.parse(argc, argv, "csf");
+   options.parse(argc, argv, "cfst");
    
    return new StdoutListener
          ( options.hasOption("c")
          , options.hasOption("s")
          , options.hasOption("f")
+         , options.hasOption("t")
          , resultReporter
          , suiteReporter
          , caseResultReporter);

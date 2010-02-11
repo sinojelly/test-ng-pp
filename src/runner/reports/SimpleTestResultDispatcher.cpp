@@ -39,6 +39,9 @@ struct SimpleTestResultDispatcherImpl
    void endTestSuite(TestSuiteInfoReader*);
    void addSuiteError(TestSuiteInfoReader*, const std::string&);
 
+   void startTagsFiltering(const TaggableObjFilter*);
+   void endTagsFiltering(const TaggableObjFilter*);
+
    void startTest();
    void endTest();
    void addError(const std::string&);
@@ -462,7 +465,49 @@ addSuiteError(TestSuiteInfoReader* suite, const std::string& msg )
 }
 
 ///////////////////////////////////////////////////////////
-void SimpleTestResultDispatcherImpl::startTest()
+void
+SimpleTestResultDispatcherImpl::
+startTagsFiltering(const TaggableObjFilter* filter)
+{
+   Listeners::iterator i = listeners.begin();
+   for(; i != listeners.end(); i++)
+   {
+      (*i)->startTagsFiltering(filter);
+   }
+}
+
+///////////////////////////////////////////////////////////
+void
+SimpleTestResultDispatcher::
+startTagsFiltering(const TaggableObjFilter* filter)
+{
+   This->startTagsFiltering(filter);
+}
+
+///////////////////////////////////////////////////////////
+void
+SimpleTestResultDispatcherImpl::
+endTagsFiltering(const TaggableObjFilter* filter) 
+{
+   Listeners::iterator i = listeners.begin();
+   for(; i != listeners.end(); i++)
+   {
+      (*i)->endTagsFiltering(filter);
+   }
+}
+
+///////////////////////////////////////////////////////////
+void
+SimpleTestResultDispatcher::
+endTagsFiltering(const TaggableObjFilter* filter) 
+{
+   This->endTagsFiltering(filter);
+}
+
+///////////////////////////////////////////////////////////
+void
+SimpleTestResultDispatcherImpl::
+startTest()
 {
    Listeners::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)

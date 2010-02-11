@@ -6,12 +6,12 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestSuiteResultCollector.h>
+#include <testngpp/runner/TagsFilterResultCollector.h>
 
 TESTNGPP_NS_START
 
 struct TestResultCollector
-   : public TestSuiteResultCollector
+   : public TagsFilterResultCollector
 {
    virtual void startTest() = 0;
    virtual void endTest() = 0;

@@ -38,12 +38,11 @@ matches(const std::string& name) const
 }
 
 ////////////////////////////////////////////////////////
-
-void PosixFNMatcher::
-dump() const
+std::string
+PosixFNMatcher::
+getPattern() const
 {
-   std::cout << " " << pattern << " ";
-   std::cout.flush();
+   return pattern;
 }
 
 TESTNGPP_NS_END

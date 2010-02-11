@@ -170,6 +170,8 @@ static void freeMemory(void* p) TESTNGPP_THROW(Error)
       throw Error("Memory Corruption");
    }
 
+   endBlock->magic = 0;
+
    ::free(header);
 }
 

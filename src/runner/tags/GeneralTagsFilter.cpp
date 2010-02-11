@@ -62,10 +62,11 @@ matches(const Taggable* obj) const
 }
 
 ////////////////////////////////////////////////////////
-void GeneralTagsFilter::
-dump() const
+std::string
+GeneralTagsFilter::
+toString() const
 {
-   This->tagsMatcher->dump();
+   return This->tagsMatcher->getPattern();
 }
 
 TESTNGPP_NS_END

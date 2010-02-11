@@ -290,7 +290,23 @@ addSuiteError(TestSuiteInfoReader*, const std::string& msg)
 }
 
 ///////////////////////////////////////////////////////////
-void XMLTestListener::startTest()
+void
+XMLTestListener::
+startTagsFiltering(const TaggableObjFilter*)
+{
+}
+
+///////////////////////////////////////////////////////////
+void
+XMLTestListener::
+endTagsFiltering(const TaggableObjFilter*)
+{
+}
+
+///////////////////////////////////////////////////////////
+void
+XMLTestListener::
+startTest()
 {
    This->startTest();
 }

@@ -156,6 +156,18 @@ addSuiteError(TestSuiteInfoReader*, const std::string& msg )
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
+startTagsFiltering(const TaggableObjFilter*)
+{
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultReporter::
+endTagsFiltering(const TaggableObjFilter*)
+{
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultReporter::
 startTest()
 {
 }
