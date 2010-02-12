@@ -49,6 +49,8 @@ private:
 
    void unloadFixtures();
 
+   void clear();
+
 private:
 
    TestSuiteLoader* suiteLoader; // Y
@@ -73,17 +75,34 @@ TestSuiteContextImpl
 	  , suite(0)
 	  , suitePath(path)
 {
-   load(path);
-   loadFixtures(tagsFilter, filter);
+   __TESTNGPP_TRY
+   {
+      load(path);
+      loadFixtures(tagsFilter, filter);
+   }
+   __TESTNGPP_CATCH_ALL
+   {
+      clear();
+      throw;
+   }
+   __TESTNGPP_END_TRY
 }
 
 /////////////////////////////////////////////////////////////////
 TestSuiteContextImpl::
 ~TestSuiteContextImpl()
 {
+   clear();
+   delete suiteLoader;
+}
+
+/////////////////////////////////////////////////////////////////
+void
+TestSuiteContextImpl::
+clear()
+{
    unloadFixtures();
    suiteLoader->unload();
-   delete suiteLoader;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -136,7 +155,7 @@ load( const std::string& path )
    __TESTNGPP_CATCH(std::exception& e)
    {
       resultCollector->addError("test suite \"" + path + "\" can't be loaded : " + e.what());
-	  throw;
+      throw;
    }
    __TESTNGPP_END_TRY
 }

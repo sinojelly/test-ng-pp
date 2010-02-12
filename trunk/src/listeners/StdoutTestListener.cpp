@@ -539,6 +539,7 @@ void
 StdoutTestListener::
 startTest()
 {
+   std::cout << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
@@ -679,8 +680,12 @@ endTest()
 ///////////////////////////////////////////////////////////
 void
 StdoutTestListener::
-addError(const std::string&)
+addError(const std::string& err)
 {
+   std::cout << fail << getTitle("ERROR") 
+             << info << "runner: " 
+             << normal << err 
+             << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
