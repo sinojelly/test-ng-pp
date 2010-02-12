@@ -3,5 +3,5 @@
 ../src/runner/testngpp-runner libsample \
    -L../src/listeners \
    -l"testngppxmllistener result.xml" \
-   -l"testngppstdoutlistener -c" \
-   -t"*" -c100 $@
+   -l"testngppstdoutlistener -c -s -f" \
+   -t"* > ^$" -c100 $@
