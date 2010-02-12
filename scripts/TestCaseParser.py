@@ -22,6 +22,10 @@ class TestCaseParser:
       self.file = file
 
    #######################################################
+   def verify_scope(self, scope):
+      return False
+
+   #######################################################
    def verify_testcase_tag(self, tag):
       if tag != None and tag.get_tag() != "test":
          warning(self.file, tag, "unknown annotation @" + tag.get_tag())
