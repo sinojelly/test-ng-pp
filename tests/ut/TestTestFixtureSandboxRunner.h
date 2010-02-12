@@ -87,7 +87,7 @@ public:
                .with(eq((const TestCaseInfoReader*)&myTestCase3))
                .after("start3");
 
-      SimpleTestCaseRunner caseRunner;
+      SimpleTestCaseRunner caseRunner(0);
       TestHierarchySandboxRunner runner(2, &caseRunner);
 //      TestHierarchyHandler hierarchy(&myTestFixtureDesc, filter, collector);
 //      runner.run(&hierarchy, collector);

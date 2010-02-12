@@ -31,7 +31,7 @@ private:
 public:
    MockObject<EnvironmentCleaner> cleaner;
 
-   SimpleTestCaseRunner runner;
+
 
    TestCaseSandbox* sandbox;
 
@@ -73,6 +73,7 @@ public:
 
    void testShouldBeAbleToReportStartAndEndEvent()
    {
+      SimpleTestCaseRunner runner(0);
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
           f.testcase[0], &runner, f.collector, true);
@@ -87,6 +88,8 @@ public:
 
    void TtestShouldBeAbleToReportAssertionFailed()
    {
+      SimpleTestCaseRunner runner(0);
+
       MOCK_METHOD(f.fixture,setUp)
           .stubs()
           .will(throws(AssertionFailure("abc.h",1,"assertion failure")));
@@ -113,6 +116,7 @@ public:
 
    void testShouldBeAbleToReportError()
    {
+      SimpleTestCaseRunner runner(0);
       MOCK_METHOD(f.fixture, setUp).stubs().will(throws(Error("error")));
 
       //////////////////////////////////////////////////////////
@@ -133,6 +137,8 @@ public:
 
    void testShouldBecomeDeadAfterAllEventsHaveBeenHandled()
    {
+      SimpleTestCaseRunner runner(0);
+
       //////////////////////////////////////////////////////////
       sandbox = TestCaseSandbox::createInstance(cleaner, 
           f.testcase[0], &runner, f.collector, true);

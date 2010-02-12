@@ -46,12 +46,15 @@ public:
 
       suiteReporter.startTestCase(caseInfoReader);
       suiteReporter.addCaseCrash(caseInfoReader);
+      suiteReporter.endTestCase(caseInfoReader);
 
       suiteReporter.startTestCase(caseInfoReader);
       suiteReporter.addCaseCrash(caseInfoReader);
+      suiteReporter.endTestCase(caseInfoReader);
 
       suiteReporter.startTestCase(caseInfoReader);
       suiteReporter.addCaseCrash(caseInfoReader);
+      suiteReporter.endTestCase(caseInfoReader);
 
       suiteReporter.endTestSuite(suiteInfoReader);
 

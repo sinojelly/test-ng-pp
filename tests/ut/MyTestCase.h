@@ -12,14 +12,14 @@ struct MyTestCase : public TESTNGPP_NS::TestCase
            , TESTNGPP_NS::TestCase* depends
            , const std::string& file
            , unsigned int line)
-           : TESTNGPP_NS::TestCase(nameOfCase, nameOfFixture, depends, file, line)
+           : TESTNGPP_NS::TestCase(nameOfCase, nameOfFixture, "MySuite", depends, file, line)
    {}
 
    MyTestCase( const std::string& nameOfCase
            , const std::string& nameOfFixture
            , const std::string& file
            , unsigned int line)
-           : TESTNGPP_NS::TestCase(nameOfCase, nameOfFixture, 0, file, line)
+           : TESTNGPP_NS::TestCase(nameOfCase, nameOfFixture, "MySuite", 0, file, line)
    {}
 
    TESTNGPP_NS::TestFixture* getFixture() const { return 0; }

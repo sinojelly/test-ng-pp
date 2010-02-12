@@ -68,7 +68,7 @@ public:
 
    void run()
    {
-      SimpleTestCaseRunner runner;
+      SimpleTestCaseRunner runner(0);
 
       runner.run(f.testcase[0], f.collector);
 
