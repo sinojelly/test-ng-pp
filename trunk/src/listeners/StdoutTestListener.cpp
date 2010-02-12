@@ -106,9 +106,9 @@ namespace
    };
 }
 ///////////////////////////////////////////////////////////
-struct StdoutVerboseListener : public TestListener
+struct StdoutTestListener : public TestListener
 {
-   StdoutVerboseListener
+   StdoutTestListener
       ( bool 
       , bool 
       , bool
@@ -206,7 +206,7 @@ namespace
    struct TestCaseInfo
    {
       TestCaseInfo
-         ( const StdoutVerboseListener* listener
+         ( const StdoutTestListener* listener
          , const TestCaseInfoReader* test
          , bool shouldShowSuite = false)
          : This(listener)
@@ -219,7 +219,7 @@ namespace
          return This->outputTestCaseInfo(os, testcase, showSuite);
       }
 
-      const StdoutVerboseListener* This;
+      const StdoutTestListener* This;
       const TestCaseInfoReader* testcase;
       bool showSuite;
    };
@@ -233,13 +233,13 @@ std::ostream& operator<<
    return testcase.output(os);
 }
 ///////////////////////////////////////////////////////////
-StdoutVerboseListener::
-StdoutVerboseListener
+StdoutTestListener::
+StdoutTestListener
       ( bool isColorful
       , bool shouldShowSuite
       , bool shouldShowFixture
       , bool shouldShowTags
-      , bool isVerbose
+      , bool isTest
       , TestResultReporter* reporter
       , TestSuiteResultReporter* suiteReporter 
       , TestCaseResultReporter* caseReporter)
@@ -251,7 +251,7 @@ StdoutVerboseListener
 , showSuite(shouldShowSuite)
 , showFixture(shouldShowFixture)
 , showTags(shouldShowTags)
-, verbose(isVerbose)
+, verbose(isTest)
 , isSuccess(true)
 , bookKeeper(reporter)
 , suiteBookKeeper(suiteReporter)
@@ -263,7 +263,7 @@ StdoutVerboseListener
 
 ///////////////////////////////////////////////////////////
 std::ostream&
-StdoutVerboseListener::
+StdoutTestListener::
 outputTestCaseInfo
       ( std::ostream& os
       , const TestCaseInfoReader* testcase
@@ -287,7 +287,7 @@ outputTestCaseInfo
 }
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 reportCaseFailure
       ( const TestCaseInfoReader* testcase
       , unsigned int result
@@ -325,7 +325,7 @@ reportCaseFailure
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 reportCaseSuccess
       ( const TestCaseInfoReader* testcase )
 {
@@ -343,7 +343,7 @@ reportCaseSuccess
 }
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 reportCaseFailure
       ( const TestCaseInfoReader* testcase
       , unsigned int result
@@ -354,7 +354,7 @@ reportCaseFailure
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 addCaseCrash(const TestCaseInfoReader* testcase)
 {
    reportCaseFailure
@@ -365,7 +365,7 @@ addCaseCrash(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutVerboseListener::
+StdoutTestListener::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
    reportCaseFailure
@@ -376,8 +376,10 @@ addCaseSkipped(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutVerboseListener::
-addCaseError(const TestCaseInfoReader* testcase, const std::string& error)
+StdoutTestListener::
+addCaseError
+   ( const TestCaseInfoReader* testcase
+   , const std::string& error)
 {
    reportCaseFailure
       ( testcase
@@ -387,7 +389,7 @@ addCaseError(const TestCaseInfoReader* testcase, const std::string& error)
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutVerboseListener::
+StdoutTestListener::
 addCaseFailure
    ( const TestCaseInfoReader* testcase
    , const AssertionFailure& failure)
@@ -401,7 +403,7 @@ addCaseFailure
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 startTestCase(const TestCaseInfoReader* testcase)
 {
    if(!verbose) return;
@@ -413,7 +415,7 @@ startTestCase(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 addTestResult
    ( std::list<TestCaseResult>& set
    , const TestCaseInfoReader* testcase
@@ -426,7 +428,7 @@ addTestResult
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 endTestCase
    ( const TestCaseInfoReader* testcase )
 {
@@ -454,7 +456,7 @@ endTestCase
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 startTestFixture(TestFixtureInfoReader* fixture)
 {
    if(!showFixture) return;
@@ -466,28 +468,28 @@ startTestFixture(TestFixtureInfoReader* fixture)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 endTestFixture(TestFixtureInfoReader*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 addFixtureError(TestFixtureInfoReader*, const std::string&)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutVerboseListener::
+StdoutTestListener::
 addFixtureFailure(TestFixtureInfoReader*, const AssertionFailure&)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 startTestSuite(TestSuiteInfoReader* suite)
 {
    if(!showSuite) return;
@@ -502,21 +504,21 @@ startTestSuite(TestSuiteInfoReader* suite)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 endTestSuite(TestSuiteInfoReader*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutVerboseListener::
+StdoutTestListener::
 addSuiteError(TestSuiteInfoReader*, const std::string&)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 startTagsFiltering(const TaggableObjFilter* filter)
 {
    if(!showTags) return;
@@ -531,21 +533,21 @@ startTagsFiltering(const TaggableObjFilter* filter)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 endTagsFiltering(const TaggableObjFilter*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutVerboseListener::
+StdoutTestListener::
 startTest()
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::     
+StdoutTestListener::     
 reportFailedNumber(const std::string& title, unsigned int number)
 {
    if(number > 0)
@@ -558,7 +560,7 @@ reportFailedNumber(const std::string& title, unsigned int number)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::     
+StdoutTestListener::     
 reportCasesResult()
 {
    if(bookKeeper->getNumberOfUnsuccessfulTestCases() > 0)
@@ -581,7 +583,7 @@ reportCasesResult()
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::     
+StdoutTestListener::     
 reportSuitesResult()
 {
    if(bookKeeper->getNumberOfUnloadableSuites() == 0)
@@ -614,7 +616,7 @@ reportSuitesResult()
 }
      
 void
-StdoutVerboseListener::
+StdoutTestListener::
 reportAllUnsuccessfulTests() const
 {
    if(!verbose) return;
@@ -638,7 +640,7 @@ reportAllUnsuccessfulTests() const
 }
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 endTest()
 {
    if(bookKeeper->getNumberOfTestCases() == 0)
@@ -680,7 +682,7 @@ endTest()
 
 ///////////////////////////////////////////////////////////
 void
-StdoutVerboseListener::
+StdoutTestListener::
 addError(const std::string&)
 {
 }
@@ -692,7 +694,7 @@ TESTNGPP_NS_END
 ///////////////////////////////////////////////////////////
 USING_TESTNGPP_NS
 
-#define LISTENER(name) testngppverboselistener_##name
+#define LISTENER(name) testngppstdoutlistener_##name
 
 ///////////////////////////////////////////////////////////
 extern "C" DLL_EXPORT
@@ -708,7 +710,7 @@ LISTENER(create_instance)
    
    options.parse(argc, argv, "cvsft");
    
-   return new StdoutVerboseListener
+   return new StdoutTestListener
          ( options.hasOption("c")
          , options.hasOption("s")
          , options.hasOption("f")
