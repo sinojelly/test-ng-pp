@@ -3,5 +3,5 @@
 ../src/runner/testngpp-runner libsample \
    -L../src/listeners \
    -l"testngppxmllistener result.xml" \
-   -l"testngppverboselistener -c " \
-   -t"succ" -c100 $@
+   -l"testngppverboselistener -c -f -t -s -v" \
+   -t"*" -c100 $@
