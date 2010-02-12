@@ -174,7 +174,7 @@ private:
 
 public:
    std::ostream& outputTestCaseInfo
-         (std::ostream&, const TestCaseInfoReader*, bool showSuite) const;
+         (std::ostream&, const TestCaseInfoReader*) const;
 
 private:   
    
@@ -207,21 +207,18 @@ namespace
    {
       TestCaseInfo
          ( const StdoutTestListener* listener
-         , const TestCaseInfoReader* test
-         , bool shouldShowSuite = false)
+         , const TestCaseInfoReader* test)
          : This(listener)
          , testcase(test)
-         , showSuite(shouldShowSuite)
       {}
 
       std::ostream& output(std::ostream& os) const
       {
-         return This->outputTestCaseInfo(os, testcase, showSuite);
+         return This->outputTestCaseInfo(os, testcase);
       }
 
       const StdoutTestListener* This;
       const TestCaseInfoReader* testcase;
-      bool showSuite;
    };
 }
 
@@ -266,12 +263,11 @@ std::ostream&
 StdoutTestListener::
 outputTestCaseInfo
       ( std::ostream& os
-      , const TestCaseInfoReader* testcase
-      , bool showSuite) const
+      , const TestCaseInfoReader* testcase) const
 {
    if(!showFixture)
    {
-      if(showSuite)
+      if(!showSuite)
       {
          os << testcase->getNameOfSuite()
             << "::";
@@ -497,7 +493,7 @@ startTestSuite(TestSuiteInfoReader* suite)
    std::cout << std::endl;
    std::cout
       << info 
-      << formatTitle("Suite:" + suite->getName(), '-', maxLenOfLine)
+      << formatTitle("SUITE: " + suite->getName(), '-', maxLenOfLine)
       << normal
       << std::endl;
 }
@@ -526,7 +522,7 @@ startTagsFiltering(const TaggableObjFilter* filter)
    std::cout << std::endl;
    std::cout
       << info 
-      << formatTitle("Tags:{" + filter->toString() + "}",'=', maxLenOfLine)
+      << formatTitle("TAGS: {" + filter->toString() + "}",'=', maxLenOfLine)
       << normal 
       << std::endl;
 }
