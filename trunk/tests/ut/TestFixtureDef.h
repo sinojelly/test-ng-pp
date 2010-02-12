@@ -43,7 +43,7 @@ static MyTestFixture myTestFixture;
 struct MyTestCase : public TestCase
 {
    MyTestCase(const std::string name, unsigned int line)
-	  : TestCase(name, "MyTestFixture", 0, "MyTestFixture.h", line)
+	  : TestCase(name, "MyTestFixture", "MySuite", 0, "MyTestFixture.h", line)
    {}
 
    MyTestFixture myTestFixture;

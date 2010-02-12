@@ -23,7 +23,7 @@ class FTestFixture1
            , const std::string& file
            , unsigned int line)
            : m_fixture(fixture)
-           , TestCase(nameOfCase, nameOfFixture, 0, file, line)
+           , TestCase(nameOfCase, nameOfFixture, "mysuite", 0, file, line)
       {}
 
       TestFixture* getFixture() const { return m_fixture; }

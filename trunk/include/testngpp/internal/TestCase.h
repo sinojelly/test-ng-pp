@@ -33,7 +33,7 @@ struct TestCase
 {
 	TestCase( const std::string& nameOfCase
            , const std::string& nameOfFixture
-		   , const std::string& nameOfSuite
+		     , const std::string& nameOfSuite
            , TESTNGPP_NS::TestCase* testcase
            , const std::string& file
            , unsigned int line)

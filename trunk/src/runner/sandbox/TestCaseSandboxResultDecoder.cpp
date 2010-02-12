@@ -88,12 +88,10 @@ TestCaseSandboxResultDecoderImpl::addCaseError(const std::string& msg)
 void
 TestCaseSandboxResultDecoderImpl::addCaseFailure(const AssertionFailure& failure)
 {
-#if 0
    if(!startReceived || endReceived || crashInformed)
    {
       throw Error(TESTNGPP_INTERNAL_ERROR(1002));
    }
-#endif
    failures.push_back(failure);
 
    failureReceived = true;

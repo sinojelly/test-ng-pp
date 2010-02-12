@@ -7,6 +7,8 @@ ELSE()
     MESSAGE(FATAL_ERROR "No Python interpreter found")
 ENDIF(PYTHONINTERP_FOUND)
 
+LINK_DIRECTORIES(${PROJECT_HOME}/src)
+
 SET(PACKAGE_NAME \"mockcpp\")
 SET(PACKAGE_STRING \"mockcpp\")
 SET(PACKAGE_BUGREPORT \"dev.mockcpp@gmail.com\")
