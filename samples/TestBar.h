@@ -7,6 +7,16 @@
 
 USING_TESTCPP_NS
 
+struct ABC
+{
+   ABC() { p = new char[10]; }
+   ~ABC() { delete [] p; }
+
+   char *p;
+};
+
+ABC abc;
+
 struct TestBar1 : public TESTCPP_NS::TestFixture
 {
     // @test(id=1, depends=4, tags="ft slow")

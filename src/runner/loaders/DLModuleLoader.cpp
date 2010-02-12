@@ -37,11 +37,7 @@ DLModuleLoaderImpl()
 ////////////////////////////////////////////////////////
 DLModuleLoaderImpl::~DLModuleLoaderImpl()
 {
-    if(handle != 0)
-    {
-        ::dlclose(handle);
-        handle = 0;
-    }
+   unload();
 }
 
 /////////////////////////////////////////////////////////////////
@@ -64,11 +60,11 @@ namespace
 
    void* openModule(const std::string& modulePath)
    {
-      void* p = ::dlopen(modulePath.c_str(), RTLD_LAZY);
+      void* p = ::dlopen(modulePath.c_str(), RTLD_NOW);
       if(p == 0)
       {
          std::string module = modulePath + ".so";
-         return ::dlopen(module.c_str(), RTLD_LAZY);
+         return ::dlopen(module.c_str(), RTLD_NOW);
       }
 
       return p;
@@ -111,10 +107,11 @@ DLModuleLoaderImpl::load( const StringList& searchingPaths
 void
 DLModuleLoaderImpl::unload()
 {
-    if(handle != 0)
-    {
-        ::dlclose(handle);
-    }
+   if(handle != 0)
+   {
+      ::dlclose(handle);
+      handle = 0;
+   }
 }
 
 ////////////////////////////////////////////////////////

@@ -22,6 +22,8 @@ struct SimpleTestResultReporterImpl
    unsigned int getNumberOfUnsuccessfulCases() const;
    unsigned int getNumberOfTestCases() const;
 
+   unsigned int round;
+
    SimpleTestResultReporterImpl(TestSuiteResultReporter* suiteReporter)
       : numberOfCrashedCases(0)
       , numberOfSkippedCases(0)
@@ -31,6 +33,7 @@ struct SimpleTestResultReporterImpl
       , numberOfLoadedSuites(0)
       , numberOfUnloadableSuites(0)
       , suiteResultReporter(suiteReporter)
+      , round(0)
    {}
 };
 
@@ -125,7 +128,7 @@ addFixtureFailure(TestFixtureInfoReader*, const AssertionFailure& failure)
 void SimpleTestResultReporter::
 startTestSuite(TestSuiteInfoReader* suite)
 {
-   This->numberOfLoadedSuites++;
+   if(This->round == 1) This->numberOfLoadedSuites++;
 }
 
 ///////////////////////////////////////////////////////////
@@ -158,6 +161,7 @@ addSuiteError(TestSuiteInfoReader*, const std::string& msg )
 void SimpleTestResultReporter::
 startTagsFiltering(const TaggableObjFilter*)
 {
+   This->round++;
 }
 
 ///////////////////////////////////////////////////////////

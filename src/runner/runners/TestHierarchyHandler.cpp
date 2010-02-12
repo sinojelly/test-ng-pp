@@ -1,7 +1,6 @@
 
 #include <utility>
 #include <list>
-#include <iostream>
 
 #include <testngpp/internal/TestCase.h>
 
@@ -36,7 +35,6 @@ struct SkippedTestCases
          ( const TestCase* testcase
          , bool userSpecified)
    {
-//      std::cout << "TESTCASE " << testcase->getName() << " is SKIPPED" << std::endl;
       tagsFilter->testDone(testcase, false);
   
       if(!userSpecified)

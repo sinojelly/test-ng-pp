@@ -1,6 +1,8 @@
 
 #include <vector>
 
+#include <testngpp/ExceptionKeywords.h>
+
 #include <testngpp/runner/TestResultCollector.h>
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TestFilter.h>
@@ -8,6 +10,7 @@
 #include <testngpp/runner/ModuleTestSuiteLoaderFactory.h>
 
 #include <testngpp/runner/TestRunnerContext.h>
+#include <testngpp/runner/TestSuiteLoader.h>
 
 TESTNGPP_NS_START
 
@@ -78,14 +81,22 @@ loadSuite
 {
    TestSuiteLoader* loader = ModuleTestSuiteLoaderFactory().create();
 
-   TestSuiteContext* suite = \
-      new TestSuiteContext( loader
-                          , pathOfSuite
-                          , collector
-                          , tagsFilter
-                          , filter);
+   __TESTNGPP_TRY
+   {
+      TestSuiteContext* suite = \
+         new TestSuiteContext( loader
+                             , pathOfSuite
+                             , collector
+                             , tagsFilter
+                             , filter);
 
-   suites.push_back(suite);
+      suites.push_back(suite);
+   }
+   __TESTNGPP_CATCH_ALL
+   {
+      delete loader;
+   }
+   __TESTNGPP_END_TRY
 }
 
 /////////////////////////////////////////////////////////////////
@@ -108,11 +119,9 @@ void
 TestRunnerContextImpl::
 unloadSuites()
 {
-   std::vector<TestSuiteContext*>::iterator i = suites.begin();
-
-   for(; i != suites.end(); i++)
+   for(unsigned int i=0; i<suites.size(); i++)
    {
-      delete (*i);
+      delete suites[i];
    }
 
    suites.clear();
