@@ -3,12 +3,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(testngpp)
 
-SET(PACKAGE_NAME \"testngpp\")
-SET(PACKAGE_STRING \"testngpp\")
-SET(PACKAGE_BUGREPORT \"arthur.ii.yuan@gmail.com\")
-SET(PACKAGE_URL \"http://code.google.com/p/test-ng-pp\")
-SET(PACKAGE \"testngpp\")
-SET(VERSION \"0.4\")
+INCLUDE(ProjectVar.txt)
 
 FIND_LIBRARY(DL_LIBRARY NAMES dl)
 IF(DL_LIBRARY)
@@ -37,10 +32,6 @@ ADD_SUBDIRECTORY(src/runner)
 #ADD_SUBDIRECTORY(libs)
 #ADD_SUBDIRECTORY(ut)
 ADD_SUBDIRECTORY(samples)
-
-IF(MSVC)
-  SET(TESTNGPP_DISABLE_SANDBOX TRUE)
-ENDIF(MSVC)
 
 ########################################################
 INSTALL(DIRECTORY include/testngpp DESTINATION include
