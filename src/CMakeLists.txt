@@ -35,6 +35,7 @@ SET(TESTNGPP_SRCS
   Formatter.cpp 
   OptionList.cpp 
   StringToOptions.cpp
+  ConsoleState.cpp
 )
 
 IF(NOT TESTNGPP_DISABLE_RC)

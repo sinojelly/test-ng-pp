@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <string>
+#include <list>
 
 #include <testngpp/Error.h>
 #include <testngpp/AssertionFailure.h>
@@ -24,12 +25,86 @@
 
 TESTNGPP_NS_START
 
-///////////////////////////////////////////////////////////
-struct StdoutListener : public TestListener
+namespace
 {
-   StdoutListener
+
+   std::string
+   getTitle(const std::string title)
+   {
+      const unsigned int maxLenOfTitle = 10;
+
+      unsigned int numberOfBlanks = maxLenOfTitle - title.size();
+      if(title.size() > maxLenOfTitle)
+      {
+         numberOfBlanks = 0;
+         // TODO: Truncate
+      }
+  
+
+      std::string leftBlanks("[");
+      for(unsigned int i=0; i<numberOfBlanks/2; i++)
+      {
+         leftBlanks += " ";
+      }
+
+      std::string rightBlanks("]");
+      for(unsigned int i=0; i<numberOfBlanks/2+numberOfBlanks%2; i++)
+      {
+         rightBlanks = " " + rightBlanks;
+      }
+
+      return leftBlanks + title + rightBlanks;
+   }   
+
+   std::string
+   getTitle(unsigned int code)
+   {
+      switch(code)
+      {
+      case TestCaseResultReporter::TR_SUCCESS:
+         return getTitle("OK");
+      case TestCaseResultReporter::TR_ERROR:
+         return getTitle("ERROR");
+      case TestCaseResultReporter::TR_CRASHED:
+         return getTitle("CRASHED");
+      case TestCaseResultReporter::TR_SKIPPED:
+         return getTitle("SKIPPED");
+      case TestCaseResultReporter::TR_FAILED:
+         return getTitle("FAILED");
+      }
+
+      return getTitle("UNKNOWN");
+   }
+
+   struct TestCaseResult
+   {
+      TestCaseResult
+         (const TestCaseInfoReader* testcase
+         , unsigned int resultCode)
+         : name(testcase->getName())
+         , fixture(testcase->getNameOfFixture())
+         , suite(testcase->getNameOfSuite())
+         , result(resultCode)
+      {}
+
+      std::string toString() const
+      {
+          return getTitle(result) + " " + suite + "::" + fixture + "::" + name;
+      }
+      
+      std::string name;
+      std::string fixture;
+      std::string suite;
+      unsigned int result;
+   };
+}
+///////////////////////////////////////////////////////////
+struct StdoutVerboseListener : public TestListener
+{
+   StdoutVerboseListener
       ( bool 
       , bool 
+      , bool
       , bool
       , bool
       , TestResultReporter*
@@ -71,13 +146,24 @@ private:
    
    void reportCaseFailure
          ( const TestCaseInfoReader* testcase
+         , const std::string& type
          , unsigned int line
          , const std::string& msg);
 
    void reportCaseFailure
          ( const TestCaseInfoReader* testcase
+         , const std::string& type
          , const std::string& msg);
    
+   void reportCaseSuccess
+         ( const TestCaseInfoReader* testcase );
+
+   void reportAllUnsuccessfulTests() const;
+
+public:
+   std::ostream& outputTestCaseInfo
+         (std::ostream&, const TestCaseInfoReader*, bool showSuite) const;
+
 private:   
    
    Succ    succ;
@@ -89,21 +175,57 @@ private:
    bool showSuite;
    bool showFixture;
    bool showTags;
+   bool failedOnly;
    
    TestResultReporter*        bookKeeper;      // X
    TestSuiteResultReporter*   suiteBookKeeper; // X
    TestCaseResultReporter*    caseBookKeeper;  // X
+
+   std::list<TestCaseResult> failedTests;
+   std::list<TestCaseResult> errorTests;
+   std::list<TestCaseResult> crashedTests;
+   std::list<TestCaseResult> skippedTests;
 };
 
+namespace
+{
+   struct TestCaseInfo
+   {
+      TestCaseInfo
+         ( const StdoutVerboseListener* listener
+         , const TestCaseInfoReader* test
+         , bool shouldShowSuite = false)
+         : This(listener)
+         , testcase(test)
+         , showSuite(shouldShowSuite)
+      {}
 
+      std::ostream& output(std::ostream& os) const
+      {
+         return This->outputTestCaseInfo(os, testcase, showSuite);
+      }
+
+      const StdoutVerboseListener* This;
+      const TestCaseInfoReader* testcase;
+      bool showSuite;
+   };
+}
 
 ///////////////////////////////////////////////////////////
-StdoutListener::
-StdoutListener
+std::ostream& operator<<
+      ( std::ostream& os
+      , const TestCaseInfo& testcase)
+{
+   return testcase.output(os);
+}
+///////////////////////////////////////////////////////////
+StdoutVerboseListener::
+StdoutVerboseListener
       ( bool isColorful
       , bool shouldShowSuite
       , bool shouldShowFixture
       , bool shouldShowTags
+      , bool showFailedOnly
       , TestResultReporter* reporter
       , TestSuiteResultReporter* suiteReporter 
       , TestCaseResultReporter* caseReporter)
@@ -115,35 +237,64 @@ StdoutListener
 , showSuite(shouldShowSuite)
 , showFixture(shouldShowFixture)
 , showTags(shouldShowTags)
+, failedOnly(showFailedOnly)
 , bookKeeper(reporter)
 , suiteBookKeeper(suiteReporter)
 , caseBookKeeper(caseReporter)
 {
 }
 
-///////////////////////////////////////////////////////////
-void
-StdoutListener::
-reportCaseFailure
-      ( const TestCaseInfoReader* testcase
-      , unsigned int line
-      , const std::string& msg)
-{
-   std::cerr
-      << std::endl
-      << warn;
 
+
+///////////////////////////////////////////////////////////
+std::ostream&
+StdoutVerboseListener::
+outputTestCaseInfo
+      ( std::ostream& os
+      , const TestCaseInfoReader* testcase
+      , bool showSuite) const
+{
    if(!showFixture)
    {
-      std::cerr
-         << testcase->getNameOfFixture()
+      if(showSuite)
+      {
+         os << testcase->getNameOfSuite()
+            << "::";
+      }
+
+      os << testcase->getNameOfFixture()
          << "::";
    }
 
-   std::cerr
-      << testcase->getName() 
+   os << testcase->getName();
+
+   return os;
+}
+///////////////////////////////////////////////////////////
+void
+StdoutVerboseListener::
+reportCaseFailure
+      ( const TestCaseInfoReader* testcase
+      , const std::string& title 
+      , unsigned int line
+      , const std::string& msg)
+{
+   std::cout
+      << fail
+      << getTitle(title)
       << normal
-      << " - "
+      << " ";
+
+   if(failedOnly)
+   {
+      std::cout
+         << info
+         << TestCaseInfo(this, testcase)
+         << normal
+         << " - ";
+   }
+
+   std::cout 
       << testcase->getFileName()
       << ":"
       << line
@@ -154,93 +305,119 @@ reportCaseFailure
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
+reportCaseSuccess
+      ( const TestCaseInfoReader* testcase )
+{
+   if(failedOnly)
+      return;
+
+   std::cout << succ << getTitle("OK") << normal << std::endl;
+}
+///////////////////////////////////////////////////////////
+void
+StdoutVerboseListener::
 reportCaseFailure
       ( const TestCaseInfoReader* testcase
+      , const std::string& type 
       , const std::string& msg)
 {
-   reportCaseFailure(testcase, testcase->getLineOfFile(), msg);
+   reportCaseFailure(testcase, type, testcase->getLineOfFile(), msg);
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 addCaseCrash(const TestCaseInfoReader* testcase)
 {
-   reportCaseFailure(testcase, "test crashed unexpectedly.");
+   reportCaseFailure(testcase, "CRASHED", "test crashed unexpectedly.");
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutListener::
+StdoutVerboseListener::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
-   reportCaseFailure(testcase, 
+   reportCaseFailure(testcase, "SKIPPED",
       "test was skipped due to the failure of its dependent case.");
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutListener::
+StdoutVerboseListener::
 addCaseError(const TestCaseInfoReader* testcase, const std::string& error)
 {
-   reportCaseFailure(testcase, error);
+   reportCaseFailure(testcase, "ERROR", error);
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutListener::
+StdoutVerboseListener::
 addCaseFailure
    ( const TestCaseInfoReader* testcase
    , const AssertionFailure& failure)
 {
    reportCaseFailure
       ( testcase
+      , "FAILED"
       , failure.getLineOfFile()
       , failure.what());
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 startTestCase(const TestCaseInfoReader* testcase)
 {
+   if(failedOnly) return;
+
+   std::cout << succ << getTitle("RUN") << normal 
+             << " "
+             << info << TestCaseInfo(this, testcase) << normal
+             << std::endl;
 }
 
+namespace
+{
+   void addTestResult
+      ( std::list<TestCaseResult>& set
+      , const TestCaseInfoReader* testcase
+      , unsigned int code )
+   {
+      set.push_back(TestCaseResult(testcase, code));
+   }
+
+}
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 endTestCase(const TestCaseInfoReader* testcase)
 {
-   switch (caseBookKeeper->getTestCaseResult(testcase)) 
+   unsigned int result = \
+      caseBookKeeper->getTestCaseResult(testcase);
+
+   switch (result) 
    {
       case TestCaseResultReporter::TR_SUCCESS:
-         std::cout << succ << "." << normal;
+         reportCaseSuccess(testcase);
          break;
       case TestCaseResultReporter::TR_FAILED:
-         //std::cout << fail << "F" << normal;   
-         break;
       case TestCaseResultReporter::TR_ERROR:
-         //std::cout << fail << "E" << normal;
+      case TestCaseResultReporter::TR_CRASHED:   
+         addTestResult(failedTests, testcase, result);
          break;
       case TestCaseResultReporter::TR_SKIPPED:
-         //std::cout << fail << "S" << normal;
-         break;
-      case TestCaseResultReporter::TR_CRASHED:   
-         //std::cout << fail << "C" << normal;
+         addTestResult(skippedTests, testcase, result);
          break;
       case TestCaseResultReporter::TR_UNKNOWN:
          throw Error(TESTNGPP_INTERNAL_ERROR(3001));
          break;
-      default:
-         break;
    }  
-   std::cout.flush();
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 startTestFixture(TestFixtureInfoReader* fixture)
 {
    if(!showFixture) return;
@@ -252,28 +429,28 @@ startTestFixture(TestFixtureInfoReader* fixture)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 endTestFixture(TestFixtureInfoReader*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 addFixtureError(TestFixtureInfoReader*, const std::string&)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutListener::
+StdoutVerboseListener::
 addFixtureFailure(TestFixtureInfoReader*, const AssertionFailure&)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 startTestSuite(TestSuiteInfoReader* suite)
 {
    if(!showSuite) return;
@@ -285,21 +462,21 @@ startTestSuite(TestSuiteInfoReader* suite)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 endTestSuite(TestSuiteInfoReader*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutListener::
+StdoutVerboseListener::
 addSuiteError(TestSuiteInfoReader*, const std::string&)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 startTagsFiltering(const TaggableObjFilter* filter)
 {
    if(!showTags) return;
@@ -311,21 +488,21 @@ startTagsFiltering(const TaggableObjFilter* filter)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 endTagsFiltering(const TaggableObjFilter*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void 
-StdoutListener::
+StdoutVerboseListener::
 startTest()
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::     
+StdoutVerboseListener::     
 reportFailedNumber(const std::string& title, unsigned int number)
 {
    if(number > 0)
@@ -338,7 +515,7 @@ reportFailedNumber(const std::string& title, unsigned int number)
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::     
+StdoutVerboseListener::     
 reportCasesResult()
 {
    if(bookKeeper->getNumberOfUnsuccessfulTestCases() > 0)
@@ -361,7 +538,7 @@ reportCasesResult()
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::     
+StdoutVerboseListener::     
 reportSuitesResult()
 {
    if(bookKeeper->getNumberOfUnloadableSuites() == 0)
@@ -393,9 +570,32 @@ reportSuitesResult()
       << std::endl;     
 }
      
+void
+StdoutVerboseListener::
+reportAllUnsuccessfulTests() const
+{
+   if(failedOnly) return;
+
+   std::list<TestCaseResult>::const_iterator i = \
+     failedTests.begin();
+
+   for(; i != failedTests.end(); i++)
+   {
+      std::cout
+         << fail << (*i).toString()
+         << normal << std::endl;
+   }
+
+   for(i = skippedTests.begin(); i != skippedTests.end(); i++)
+   {
+      std::cout
+         << warn << (*i).toString()
+         << normal << std::endl;
+   }
+}
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 endTest()
 {
    if(bookKeeper->getNumberOfTestCases() == 0)
@@ -410,12 +610,14 @@ endTest()
       << normal 
       << std::endl;
      
+   reportAllUnsuccessfulTests();
+
    if( ( bookKeeper->getNumberOfUnloadableSuites() 
        + bookKeeper->getNumberOfUnsuccessfulTestCases()) == 0)
    {
       std::cout
          << succ
-         << "[  OK  ] "
+         << getTitle(TestCaseResultReporter::TR_SUCCESS)
          << bookKeeper->getNumberOfTestCases()
          << normal
          << " cases from "
@@ -435,7 +637,7 @@ endTest()
 
 ///////////////////////////////////////////////////////////
 void
-StdoutListener::
+StdoutVerboseListener::
 addError(const std::string&)
 {
 }
@@ -447,7 +649,7 @@ TESTNGPP_NS_END
 ///////////////////////////////////////////////////////////
 USING_TESTNGPP_NS
 
-#define LISTENER(name) testngppstdoutlistener_##name
+#define LISTENER(name) testngppverboselistener_##name
 
 ///////////////////////////////////////////////////////////
 extern "C" DLL_EXPORT
@@ -461,13 +663,14 @@ LISTENER(create_instance)
 {
    OptionList options;
    
-   options.parse(argc, argv, "cfst");
+   options.parse(argc, argv, "cnsft");
    
-   return new StdoutListener
+   return new StdoutVerboseListener
          ( options.hasOption("c")
          , options.hasOption("s")
          , options.hasOption("f")
          , options.hasOption("t")
+         , options.hasOption("n")
          , resultReporter
          , suiteReporter
          , caseResultReporter);
