@@ -20,6 +20,10 @@ SET(STDOUTLISTENER_SRCS
   StdoutListener.cpp
 )
 
+SET(VERBOSELISTENER_SRCS
+  StdoutVerboseListener.cpp
+)
+
 SET(XMLLISTENER_SRCS
   XMLTestListener.cpp
   XMLBuilder.cpp
@@ -27,7 +31,7 @@ SET(XMLLISTENER_SRCS
 
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
 
-#ADD_LIBRARY(testngpplistener MODULE StdoutTestListener.cpp)
+ADD_LIBRARY(testngppverboselistener MODULE ${VERBOSELISTENER_SRCS})
 ADD_LIBRARY(testngppstdoutlistener MODULE ${STDOUTLISTENER_SRCS})
 ADD_LIBRARY(testngppxmllistener MODULE ${XMLLISTENER_SRCS})
 
@@ -36,8 +40,13 @@ TARGET_LINK_LIBRARIES(testngppxmllistener-fortest ${TESTNGPP_LIBRARY})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include .)
 
-SET_TARGET_PROPERTIES(testngppstdoutlistener testngppxmllistener
+SET_TARGET_PROPERTIES(
+   testngppstdoutlistener 
+   testngppverboselistener 
+   testngppxmllistener
    PROPERTIES SUFFIX ".so")
+
 TARGET_LINK_LIBRARIES(testngppstdoutlistener ${TESTNGPP_LIBRARY})
 TARGET_LINK_LIBRARIES(testngppxmllistener ${TESTNGPP_LIBRARY})
-#TARGET_LINK_LIBRARIES(testngpplistener ${TESTNGPP_LIBRARY})
+TARGET_LINK_LIBRARIES(testngppverboselistener ${TESTNGPP_LIBRARY})
+
