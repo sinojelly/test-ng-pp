@@ -60,6 +60,7 @@ public:
    std::vector<TestFixtureContext*> fixtures;
    TestSuiteDesc* suite; //X
    std::string suitePath;
+
 };
 
 /////////////////////////////////////////////////////////////////
@@ -93,6 +94,7 @@ TestSuiteContextImpl::
 ~TestSuiteContextImpl()
 {
    clear();
+
    delete suiteLoader;
 }
 
@@ -117,10 +119,7 @@ loadFixtures
       TestFixtureDesc* fixture = suite->getTestFixture(i);
       if(filter->isFixtureMatch((const TestFixtureInfoReader*)fixture))
       {
-         TestFixtureContext* fixtureContext = \
-            new TestFixtureContext(fixture, tagsFilter);
-
-         fixtures.push_back(fixtureContext);
+         fixtures.push_back(new TestFixtureContext(fixture, tagsFilter));
       }
    }
 }
@@ -130,12 +129,9 @@ void
 TestSuiteContextImpl::
 unloadFixtures()
 {
-   std::vector<TestFixtureContext*>::iterator i = \
-      fixtures.begin();
-
-   for(; i != fixtures.end(); i++)
+   for(unsigned int i=0; i < fixtures.size(); i++)
    {
-      delete (*i);
+      delete fixtures[i];
    }
 
    fixtures.clear();
@@ -154,7 +150,8 @@ load( const std::string& path )
    }
    __TESTNGPP_CATCH(std::exception& e)
    {
-      resultCollector->addError("test suite \"" + path + "\" can't be loaded : " + e.what());
+      resultCollector->addError
+         ( "test suite \"" + path + "\" can't be loaded : " + e.what() );
       throw;
    }
    __TESTNGPP_END_TRY

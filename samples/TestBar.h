@@ -15,7 +15,7 @@ struct ABC
    char *p;
 };
 
-ABC abc;
+ABC abc[100];
 
 struct TestBar1 : public TESTCPP_NS::TestFixture
 {

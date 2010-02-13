@@ -2,6 +2,9 @@
 #include <string>
 #include <dlfcn.h>
 
+#include <iostream>
+#include <testngpp/ResourceCheckPoint.h>
+
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
@@ -26,6 +29,7 @@ struct DLModuleLoaderImpl
     void* findSymbol(const std::string& symbol);
 
     void* handle;
+
 };
 
 ////////////////////////////////////////////////////////
@@ -96,11 +100,20 @@ void
 DLModuleLoaderImpl::load( const StringList& searchingPaths
                         , const std::string& modulePath)
 {
+   if(handle != 0)
+   {
+      unload();
+   }
+
+   TESTNGPP_RCP checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+
    handle = openModule(modulePath);
    if(handle == 0)
    {
       loadInSearchingPaths(searchingPaths, modulePath);
    }
+
+   TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
 }
 
 ////////////////////////////////////////////////////////
@@ -109,8 +122,10 @@ DLModuleLoaderImpl::unload()
 {
    if(handle != 0)
    {
+      TESTNGPP_RCP checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
       ::dlclose(handle);
       handle = 0;
+      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
    }
 }
 

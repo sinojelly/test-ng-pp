@@ -9,6 +9,7 @@
 TESTNGPP_NS_START
 
 struct ModuleTestSuiteLoaderImpl
+    : public TestSuiteDescEntryNameGetter
 {
    ModuleTestSuiteLoaderImpl(ModuleLoader* moduleLoader)
       : loader(moduleLoader)
@@ -23,7 +24,10 @@ struct ModuleTestSuiteLoaderImpl
 
    void unload();
 
-   ModuleLoader* loader;
+   std::string getDescEntryName() const
+   { return "___testngpp_test_suite_desc_getter"; }
+
+   ModuleLoader* loader; // Y
 };
 
 ///////////////////////////////////////////////////////////////
@@ -52,6 +56,11 @@ load( const StringList& searchingPaths
    if(loader == 0)
    {
       throw Error("Internal Error");
+   }
+
+   if(nameGetter == 0)
+   {
+      nameGetter = this;
    }
 
    loader->load(searchingPaths, path);

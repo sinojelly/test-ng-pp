@@ -31,6 +31,7 @@ TESTNGPP_NS_START
 #define TESTNGPP_RCP int
 #define TESTNGPP_SET_RESOURCE_CHECK_POINT() 0
 #define TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(rcp)
+#define TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(rcp) 
 
 #else
 
@@ -56,6 +57,16 @@ void testngppVerifyCheckPoint(const ResourceCheckPoint& rcp
 }while(0)
 
 ///////////////////////////////////////////////////////////
+#define TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(rcp) \
+  try \
+  { \
+     TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(rcp); \
+  } \
+  catch(std::exception& ex) \
+  { \
+      std::cerr << __FILE__ << "(" << __LINE__ << "):" \
+                  << ex.what() << std::endl; \
+  } 
 
 #endif
 

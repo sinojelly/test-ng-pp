@@ -13,7 +13,7 @@ template = '''
 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <%s.h>
+#include <testngpp/%s.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
@@ -32,13 +32,7 @@ public:
    }
    void tearDown()
    {
-      try {
-        TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
-      }
-      catch(std::exception& ex)
-      {
-        std::cerr << ex.what() << std::endl;
-      }
+      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
    }
 
 };

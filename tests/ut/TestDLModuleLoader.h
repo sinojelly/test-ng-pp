@@ -45,8 +45,9 @@ public:
    void testShouldHaveNoMemoryLeakage()
    {
       StringList searchingPaths;
-      //loader->load(searchingPaths, "libmockcpp-ut-TestAny.so");
-      loader->load(searchingPaths, "../../samples/libsample.so");
+      loader->load(searchingPaths, "libmockcpp-ut-TestAny.so");
+      loader->findSymbol("___testngpp_test_suite_desc_getter");
+      //loader->load(searchingPaths, "../../samples/libsample.so");
       loader->unload();
    }
 };

@@ -1,6 +1,10 @@
 
 #include <vector>
 
+// TODO : removed these 2 headers, only for resource debug
+#include <iostream>
+#include <testngpp/ResourceCheckPoint.h>
+
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/runner/TestResultCollector.h>
@@ -46,6 +50,8 @@ private:
 
 public:
 
+   TESTNGPP_RCP checkpoint;
+
    std::vector<TestSuiteContext*> suites;
 };
 
@@ -57,6 +63,9 @@ TestRunnerContextImpl
       , TagsFilters* tagsFilter
       , const TestFilter* filter)
 {
+
+   checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+
    loadSuites( suites
              , collector
              , tagsFilter
@@ -125,6 +134,16 @@ unloadSuites()
    }
 
    suites.clear();
+
+   try
+   {
+      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+   }
+   catch(std::exception& ex)
+   {
+      std::cerr << __FILE__ << "(" << __LINE__ << "):"
+                  << ex.what() << std::endl;
+   }
 }
 
 /////////////////////////////////////////////////////////////////
