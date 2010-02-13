@@ -130,24 +130,19 @@ public:
 };
 
 
-FIXTURE(ChineseFixture, 中文套件样例)
+FIXTURE(ChineseFixture, 中文套件样例->各种各样的字符都应改允许)
 {
-    void func()
+    TEST(测试用例1-> 1+1=2)
     {
-       throw 1;
+       TS_ASSERT_EQUALS(2, 1+1);
     }
 
-    TEST(测试用例1)
-    {
-      TS_ASSERT_THROWS_NOTHING(func());
-    }
-
-    TEST(测试用例2)
+    TEST(测试用例2-> strings should equals each other)
     {
       TS_ASSERT(std::string("abc") == std::string("abcd"));
     }
 
-    TEST(测试用例3)
+    TEST(测试用例3-> 两个相同的整数应该相等)
     {
       int a = 1;
       int b = 1;
