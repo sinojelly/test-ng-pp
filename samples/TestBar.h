@@ -3,9 +3,9 @@
 #include <string>
 #include <iostream>
 
-#include <testcpp/testcpp.hpp>
+#include <testngpp/testngpp.hpp>
 
-USING_TESTCPP_NS
+USING_TESTNGPP_NS
 
 struct ABC
 {
@@ -17,7 +17,7 @@ struct ABC
 
 ABC abc[100];
 
-struct TestBar1 : public TESTCPP_NS::TestFixture
+struct TestBar1 : public TESTNGPP_NS::TestFixture
 {
     // @test(id=1, depends=4, tags="ft slow")
     void case10()
@@ -67,8 +67,8 @@ public:
     }
 };
 
-// @fixutre(tags=succ)
-struct TestBar3 : public TESTCPP_NS::TestFixture
+// @fixture(tags=succ)
+struct TestBar3 : public TESTNGPP_NS::TestFixture
 {
    // @test
    void case30()

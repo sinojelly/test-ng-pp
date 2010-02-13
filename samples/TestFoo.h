@@ -1,5 +1,4 @@
 
-//#include <unistd.h>
 #include <cstdlib>
 #include <string>
 #include <iostream>
@@ -130,19 +129,19 @@ public:
 };
 
 
-FIXTURE(ChineseFixture, 中文套件样例->各种各样的字符都应改允许)
+FIXTURE(ChineseFixture, 中文套件样例''~!@#$%^&*/><;"各种各样的字符都应改允许")
 {
-    TEST(测试用例1-> 1+1=2)
+    TEST(测试用例1: 1+1=2)
     {
        TS_ASSERT_EQUALS(2, 1+1);
     }
 
-    TEST(测试用例2-> strings should equals each other)
+    TEST(测试用例2: identical strings should equals each other)
     {
-      TS_ASSERT(std::string("abc") == std::string("abcd"));
+      TS_ASSERT(std::string("abc") == std::string("abc"));
     }
 
-    TEST(测试用例3-> 两个相同的整数应该相等)
+    TEST(测试用例3: "两个相同的整数应该相等")
     {
       int a = 1;
       int b = 1;
