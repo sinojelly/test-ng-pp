@@ -29,6 +29,7 @@ SET(TESTNGPP_RC_SRCS
 )
 
 SET(TESTNGPP_SRCS
+  Exception.cpp
   AssertionFailure.cpp 
   TestSuiteDesc.cpp 
   TypeString.cpp 

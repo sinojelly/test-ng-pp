@@ -6,6 +6,8 @@
 
 #include <testngpp/testngpp.h>
 #include <testngpp/AssertionFailure.h>
+#include <testngpp/Warning.h>
+#include <testngpp/Info.h>
 
 TESTNGPP_NS_START
 
@@ -14,13 +16,15 @@ struct TestCaseInfoReader;
 
 struct TestCaseResultCollector
 {
-   virtual void addCaseCrash(const TestCaseInfoReader*) = 0;
-	virtual void addCaseError(const TestCaseInfoReader*, const std::string&) = 0;
-	virtual void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&)  = 0;
-	virtual void addCaseSkipped(const TestCaseInfoReader*)  = 0;
+   virtual void addCaseCrash(const TestCaseInfoReader*) {}
+   virtual void addCaseError(const TestCaseInfoReader*, const std::string&) {}
+   virtual void addCaseInfo(const TestCaseInfoReader*, const TESTNGPP_NS::Info&) {}
+   virtual void addCaseWarning(const TestCaseInfoReader*, const TESTNGPP_NS::Warning&) {}
+	virtual void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&)  {}
+	virtual void addCaseSkipped(const TestCaseInfoReader*)  {}
 
-   virtual void startTestCase(const TestCaseInfoReader*) = 0;
-   virtual void endTestCase(const TestCaseInfoReader*) = 0;
+   virtual void startTestCase(const TestCaseInfoReader*) {}
+   virtual void endTestCase(const TestCaseInfoReader*) {}
 
 	virtual ~TestCaseResultCollector() {}
 };

@@ -74,7 +74,7 @@ namespace
    }
 
    ////////////////////////////////////////////////////////
-   std::ostream& switchToWarning(std::ostream& os, bool colorful)
+   std::ostream& switchToWarn(std::ostream& os, bool colorful)
    {
       if(colorful)
       {
@@ -89,33 +89,33 @@ namespace
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const Succ& succ)
+std::ostream& operator<<(std::ostream& os, const SuccState& succ)
 {
    return switchToSucc(os, succ.isColorful());
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const Fail& fail)
+std::ostream& operator<<(std::ostream& os, const FailState& fail)
 {
    return switchToFail(os, fail.isColorful());
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const Normal& norm)
+std::ostream& operator<<(std::ostream& os, const NormalState& norm)
 {
    return switchToNorm(os, norm.isColorful());
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const Info& info)
+std::ostream& operator<<(std::ostream& os, const InfoState& info)
 {
    return switchToInfo(os, info.isColorful());
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const Warning& warn)
+std::ostream& operator<<(std::ostream& os, const WarnState& warn)
 {
-   return switchToWarning(os, warn.isColorful());
+   return switchToWarn(os, warn.isColorful());
 }
 
 ///////////////////////////////////////////////////////////
