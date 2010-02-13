@@ -250,13 +250,9 @@ TestRunner::runTests( bool useSandbox
 
    __TESTNGPP_TRY
    {
-      TESTNGPP_RCP checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
-
       TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
       This->runTests(suitePaths, tagsFilter, filter);
       delete tagsFilter;
-
-      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
    }
    __TESTNGPP_CATCH(Error& e)
    {

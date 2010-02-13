@@ -290,7 +290,7 @@ reportCaseFailure
       , unsigned int line
       , const std::string& msg)
 {
-   if(isSuccess)
+   if(isSuccess && !verbose)
    {
       std::cout << std::endl;
       isSuccess = false;

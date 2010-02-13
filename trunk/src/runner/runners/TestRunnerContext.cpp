@@ -50,8 +50,6 @@ private:
 
 public:
 
-   TESTNGPP_RCP checkpoint;
-
    std::vector<TestSuiteContext*> suites;
 };
 
@@ -63,8 +61,6 @@ TestRunnerContextImpl
       , TagsFilters* tagsFilter
       , const TestFilter* filter)
 {
-
-   checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
 
    loadSuites( suites
              , collector
@@ -134,16 +130,6 @@ unloadSuites()
    }
 
    suites.clear();
-
-   try
-   {
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
-   }
-   catch(std::exception& ex)
-   {
-      std::cerr << __FILE__ << "(" << __LINE__ << "):"
-                  << ex.what() << std::endl;
-   }
 }
 
 /////////////////////////////////////////////////////////////////
