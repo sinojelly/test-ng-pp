@@ -34,7 +34,7 @@
 TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT(expr) do { \
+#define ASSERT_TRUE(expr) do { \
    if(!(expr)) {\
       throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
          "expected (" #expr ") being TRUE, but it's actually FALSE"); \
@@ -42,26 +42,25 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_TRUE(expr) TS_ASSERT(expr)
-
-//////////////////////////////////////////////////////////////////
-#define TS_ASSERT_FALSE(expr) do { \
+#define ASSERT_FALSE(expr) do { \
    if(expr) {\
       throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
          "expected (" #expr ") being FALSE, but it's actually TRUE"); \
    } \
 }while(0)
 
-#define __TESTNGPP_MAKE_STR(expr) " " #expr " "
 //////////////////////////////////////////////////////////////////
-#define __TESTNGPP_ASSERT_EQUALITY(expected, expected_equality, value) do {\
+#define __TESTNGPP_MAKE_STR(expr) " " #expr " "
+
+//////////////////////////////////////////////////////////////////
+#define __TESTNGPP_ASSERT_EQUALITY(expected, expected_equality, wrong_equality, value) do {\
    TESTNGPP_TYPEOF(expected) __testngpp_expected = (expected); \
    TESTNGPP_TYPEOF(value) __testngpp_value = (value); \
-   if(!(__testngpp_expected expected_equality __testngpp_value)) { \
+   if(__testngpp_expected wrong_equality __testngpp_value) { \
       std::stringstream ss; \
-      ss << "expected (" #expected __TESTNGPP_MAKE_STR(expected_equality) #value "), but actually got (" \
+      ss << "expected (" #expected __TESTNGPP_MAKE_STR(expected_equality) #value "), found (" \
          << TESTNGPP_NS::toTypeAndValueString(__testngpp_expected) \
-         << __TESTNGPP_MAKE_STR(expected_equality) \
+         << __TESTNGPP_MAKE_STR(wrong_equality) \
          << TESTNGPP_NS::toTypeAndValueString(__testngpp_value) \
          << ")"; \
       throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
@@ -69,15 +68,15 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_EQUALS(expected, value) \
-   __TESTNGPP_ASSERT_EQUALITY(expected, ==, value) 
+#define ASSERT_EQ(expected, value) \
+   __TESTNGPP_ASSERT_EQUALITY(expected, ==, !=, value)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_NOT_EQUALS(expected, value) \
-   __TESTNGPP_ASSERT_EQUALITY(expected, !=, value) 
+#define ASSERT_NE(expected, value) \
+   __TESTNGPP_ASSERT_EQUALITY(expected, !=, ==, value)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_THROWS(expr, except) do { \
+#define ASSERT_THROWS(expr, except) do { \
    bool testngpp_caught_exception = false; \
    try { \
       expr; \
@@ -91,7 +90,7 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_THROWS_ANYTHING(expr) do { \
+#define ASSERT_THROWS_ANYTHING(expr) do { \
    bool __testngpp_caught_exception = false; \
    try { \
       expr; \
@@ -105,7 +104,7 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_THROWS_NOTHING(expr) do { \
+#define ASSERT_THROWS_NOTHING(expr) do { \
    try { \
       expr; \
    }catch(...){ \
@@ -115,7 +114,7 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define TS_ASSERT_THROWS_EQUALS(expr, except, expected, value) do { \
+#define ASSERT_THROWS_EQUALS(expr, except, expected, value) do { \
    try { \
       expr; \
       throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
@@ -126,7 +125,35 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define TS_FAIL(msg) do { \
+#define ASSERT_SAME_DATA(addr1, addr2, size) do { \
+   if(::memcmp((void*)addr1, (void*)addr2, size)) \
+   { \
+      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
+            "expected " #addr1 " and " #addr2 " have same data, but actually not."); \
+   } \
+}while(0)
+
+#define TESTNGPP_ABS(value) ((value) > 0?(value):-(value))
+//////////////////////////////////////////////////////////////////
+#define ASSERT_DELTA(x, y, d) do { \
+   TESTNGPP_TYPEOF(x) value1 = x; \
+   TESTNGPP_TYPEOF(y) value2 = y; \
+   TESTNGPP_TYPEOF(d) delta  = TESTNGPP_ABS(d); \
+   TESTNGPP_TYPEOF(d) actual_delta = TESTNGPP_ABS(value1 - value2); \
+   if(actual_delta > delta) \
+   { \
+      std::stringstream ss; \
+           ss << "expected the delta of " #x "," #y " is not greater than" \
+              << TESTNGPP_NS::toTypeAndValueString(delta) \
+              << "found the actual delta is " \
+              << TESTNGPP_NS::toTypeAndValueString(actual_delta) \
+              << "."; \
+           throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
+   } \
+}while(0)
+
+//////////////////////////////////////////////////////////////////
+#define FAIL(msg) do { \
     throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, msg); \
 }while(0)
 
