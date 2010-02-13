@@ -16,16 +16,25 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef __TESTNGPP_HPP
-#define __TESTNGPP_HPP
+#ifndef __TESTNGPP_BACKWARD_H
+#define __TESTNGPP_BACKWARD_H
 
 #include <testngpp/testngpp.h>
 #include <testngpp/Asserter.h>
-#include <testngpp/TestFixture.h>
-#include <testngpp/ResourceCheckPoint.h>
-#include <testngpp/ExceptionKeywords.h>
-#include <testngpp/TestDefMacros.h>
-#include <testngpp/Backward.h>
+
+TESTNGPP_NS_START
+
+#define TS_ASSERT(expr)                        ASSERT_TRUE(expr)
+#define TS_ASSERT_EQUALS(expected, actual)     ASSERT_EQ(expected, actual)
+#define TS_ASSERT_DIFFERS(expected, actual)    ASSERT_NE(expected, actual)
+#define TS_ASSERT_NOT_EQUALS(expected, actual) ASSERT_NE(expected, actual)
+#define TS_ASSERT_THROWS(expr, except)         ASSERT_THROWS(expr, except)
+#define TS_ASSERT_THROWS_ANYTHING(expr)        ASSERT_THROWS_ANYTHING(expr)
+#define TS_ASSERT_THROWS_NOTHING(expr)         ASSERT_THROWS_NOTHING(expr)
+#define TS_ASSERT_THROWS_EQUALS(expr, except, expected, value) \
+        ASSERT_THROWS_EQUALS(expr, except, expected, value)
+#define TS_FAIL(msg)                           FAIL(msg)
+
+TESTNGPP_NS_END
 
 #endif
-
