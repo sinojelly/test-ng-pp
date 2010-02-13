@@ -5,6 +5,8 @@ import os.path
 
 template = '''
 
+#include <iostream>
+
 #include <cxxtest/TestSuite.h>
 
 #include <mockcpp/mockcpp.hpp>
@@ -30,7 +32,13 @@ public:
    }
    void tearDown()
    {
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      try {
+        TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      }
+      catch(std::exception& ex)
+      {
+        std::cerr << ex.what() << std::endl;
+      }
    }
 
 };
