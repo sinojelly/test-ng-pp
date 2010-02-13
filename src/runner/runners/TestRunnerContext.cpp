@@ -1,10 +1,6 @@
 
 #include <vector>
 
-// TODO : removed these 2 headers, only for resource debug
-#include <iostream>
-#include <testngpp/ResourceCheckPoint.h>
-
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/runner/TestResultCollector.h>

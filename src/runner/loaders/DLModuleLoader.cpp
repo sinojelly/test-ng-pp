@@ -2,9 +2,6 @@
 #include <string>
 #include <dlfcn.h>
 
-#include <iostream>
-#include <testngpp/ResourceCheckPoint.h>
-
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
