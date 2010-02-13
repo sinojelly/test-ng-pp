@@ -11,6 +11,8 @@ class TestCase:
    def __init__(self, name, scope, file, line, tag):
       self.traditional_name = name[0]
       self.name             = name[1]
+      if self.name != None:
+         self.name = self.name.replace('"', '\\"').replace("'", "\\'")
       self.scope            = scope
       self.file             = file
       self.line             = line

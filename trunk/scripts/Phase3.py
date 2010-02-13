@@ -47,14 +47,21 @@ class GlobalParser:
       return is_fixture_def(content)
 
    #######################################################
+   def __is_fixture_tag(self, tag):
+      return tag.get_tag() == "fixture"
+
+   #######################################################
    def handle_tag(self, tag):
       self.__report_useless_tag()
-      self.tag = tag
+      if self.__is_fixture_tag(tag):
+         self.tag = tag
+      else:
+         warning(self.file, tag, "unknown annotation @" + tag.get_tag())
 
    #######################################################
    def __report_useless_tag(self):
       if self.tag != None:
-         warning(self.file, self.tag, "useless tag definition @" + self.tag.get_tag())
+         warning(self.file, self.tag, "useless annotation @" + self.tag.get_tag())
 
       self.tag = None
 

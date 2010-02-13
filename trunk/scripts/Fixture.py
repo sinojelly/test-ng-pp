@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import re
 
 from TestScope import TestScope
 from AnnotationParser import AnnotationParser
@@ -12,6 +13,9 @@ class Fixture:
    def __init__(self, name, file, line, tag):
       self.id   = name[0]
       self.name = name[1]
+      if self.name != None:
+         self.name = self.name.replace('"', '\\"').replace("'", "\\'")
+
       self.scope = TestScope("::", None, None)
       self.file = file
       self.line = line
