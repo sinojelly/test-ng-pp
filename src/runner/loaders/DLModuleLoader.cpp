@@ -105,15 +105,11 @@ DLModuleLoaderImpl::load( const StringList& searchingPaths
       unload();
    }
 
-   TESTNGPP_RCP checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
-
    handle = openModule(modulePath);
    if(handle == 0)
    {
       loadInSearchingPaths(searchingPaths, modulePath);
    }
-
-   TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
 }
 
 ////////////////////////////////////////////////////////
@@ -122,10 +118,8 @@ DLModuleLoaderImpl::unload()
 {
    if(handle != 0)
    {
-      TESTNGPP_RCP checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
       ::dlclose(handle);
       handle = 0;
-      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
    }
 }
 
