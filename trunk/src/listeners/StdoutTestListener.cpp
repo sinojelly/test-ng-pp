@@ -178,11 +178,11 @@ public:
 
 private:   
    
-   Succ    succ;
-   Fail    fail;
-   Info    info;
-   Warning warn;
-   Normal  normal;
+   SuccState    succ;
+   FailState    fail;
+   InfoState    info;
+   WarnState    warn;
+   NormalState  normal;
 
    bool showSuite;
    bool showFixture;

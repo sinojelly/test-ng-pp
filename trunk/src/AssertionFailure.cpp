@@ -22,12 +22,6 @@
 
 TESTNGPP_NS_START
 
-//////////////////////////////////////////////////////////
-AssertionFailure::AssertionFailure(const std::string& file
-   , unsigned int line, const std::string& msg)
-	: fileName(file), lineNumber(line), errMsg(msg)
-{}
-
 
 //////////////////////////////////////////////////////////
 bool operator==(const AssertionFailure& lhs, const AssertionFailure& rhs) 
@@ -36,25 +30,6 @@ bool operator==(const AssertionFailure& lhs, const AssertionFailure& rhs)
           lhs.getLineOfFile() == rhs.getLineOfFile() &&
           std::string(lhs.what()) == std::string(rhs.what());
 }
-//////////////////////////////////////////////////////////
-const std::string& AssertionFailure::getFileName() const
-{
-   return fileName;
-}
-
-//////////////////////////////////////////////////////////
-unsigned int AssertionFailure::getLineOfFile() const
-{
-   return lineNumber;
-}
-
-//////////////////////////////////////////////////////////
-const char* AssertionFailure::what() const TESTNGPP_THROW()
-{
-	return errMsg.c_str();
-}
-
-//////////////////////////////////////////////////////////
 
 TESTNGPP_NS_END
 

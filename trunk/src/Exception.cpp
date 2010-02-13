@@ -16,29 +16,37 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef __TESTNGPP_ASSERTION_FAILURE_H
-#define __TESTNGPP_ASSERTION_FAILURE_H
-
 #include <testngpp/Exception.h>
 
 TESTNGPP_NS_START
 
-struct AssertionFailure : public TESTNGPP_NS::Exception
-{
-	AssertionFailure( const std::string& file
-                   , unsigned int line
-                   , const std::string& msg)
-         : TESTNGPP_NS::Exception
-                ( file
-                , line
-                , msg)
-	{}
-};
+//////////////////////////////////////////////////////////
+Exception::Exception(const std::string& file
+   , unsigned int line, const std::string& msg)
+   : fileName(file), lineNumber(line), errMsg(msg)
+{}
 
-bool operator==( const AssertionFailure& lhs
-               , const AssertionFailure& rhs);
+
+//////////////////////////////////////////////////////////
+const std::string& Exception::getFileName() const
+{
+   return fileName;
+}
+
+//////////////////////////////////////////////////////////
+unsigned int Exception::getLineOfFile() const
+{
+   return lineNumber;
+}
+
+//////////////////////////////////////////////////////////
+const char* Exception::what() const TESTNGPP_THROW()
+{
+   return errMsg.c_str();
+}
+
+//////////////////////////////////////////////////////////
 
 TESTNGPP_NS_END
 
-#endif
 

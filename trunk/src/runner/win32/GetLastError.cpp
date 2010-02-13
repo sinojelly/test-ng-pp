@@ -1,4 +1,5 @@
 
+#if defined(_MSC_VER)
 #include <windows.h>
 
 #include <testngpp/Error.h>
@@ -29,3 +30,5 @@ void throwLastError()
 }
 
 TESTNGPP_NS_END
+
+#endif

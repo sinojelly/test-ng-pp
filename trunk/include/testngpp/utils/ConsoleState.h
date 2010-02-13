@@ -26,46 +26,46 @@ private:
 };
    
 ////////////////////////////////////////////////////////
-struct Succ : public ConsoleState
+struct SuccState : public ConsoleState
 {
-   Succ(bool colorful) : ConsoleState(colorful)
+   SuccState(bool colorful) : ConsoleState(colorful)
    {}
 };
    
 ////////////////////////////////////////////////////////
-struct Fail : public ConsoleState
+struct FailState : public ConsoleState
 {
-   Fail(bool colorful) : ConsoleState(colorful)
+   FailState(bool colorful) : ConsoleState(colorful)
    {}
 };
    
 ////////////////////////////////////////////////////////
-struct Normal : public ConsoleState
+struct NormalState : public ConsoleState
 {
-   Normal(bool colorful) : ConsoleState(colorful)
+   NormalState(bool colorful) : ConsoleState(colorful)
    {}
 };
    
 ////////////////////////////////////////////////////////
-struct Info : public ConsoleState
+struct InfoState : public ConsoleState
 {
-   Info(bool colorful) : ConsoleState(colorful)
+   InfoState(bool colorful) : ConsoleState(colorful)
    {}
 };
    
 ////////////////////////////////////////////////////////
-struct Warning : public ConsoleState
+struct WarnState : public ConsoleState
 {
-   Warning(bool colorful) : ConsoleState(colorful)
+   WarnState(bool colorful) : ConsoleState(colorful)
    {}
 };
 
 ////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const Succ& succ);
-std::ostream& operator<<(std::ostream& os, const Fail& fail);
-std::ostream& operator<<(std::ostream& os, const Normal& norm);
-std::ostream& operator<<(std::ostream& os, const Info& info);
-std::ostream& operator<<(std::ostream& os, const Warning& warn);
+std::ostream& operator<<(std::ostream& os, const SuccState& succ);
+std::ostream& operator<<(std::ostream& os, const FailState& fail);
+std::ostream& operator<<(std::ostream& os, const NormalState& norm);
+std::ostream& operator<<(std::ostream& os, const InfoState& info);
+std::ostream& operator<<(std::ostream& os, const WarnState& warn);
 
 ////////////////////////////////////////////////////////
 

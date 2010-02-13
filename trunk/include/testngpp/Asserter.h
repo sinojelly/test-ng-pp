@@ -21,6 +21,8 @@
 
 #include <testngpp/testngpp.h>
 #include <testngpp/AssertionFailure.h>
+#include <testngpp/Warning.h>
+#include <testngpp/Info.h>
 #include <testngpp/utils/Formatter.h>
 #include <sstream>
 
