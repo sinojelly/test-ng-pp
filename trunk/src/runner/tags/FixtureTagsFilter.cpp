@@ -129,13 +129,11 @@ store(const TestCase* testcase, bool hasSucceeded)
 {
    if(hasSucceeded && shouldStoreAsPreFiltered(testcase))
    {
-//      std::cout << "STORE " << testcase->getName() << " AS PRE-FILTERED" << std::endl;
       preRunTestCases.push_back(testcase);
    }
    
    if(!hasSucceeded && !hasFailedAlready(testcase))
    {
-//      std::cout << "STORE " << testcase->getName() << " AS FAILED" << std::endl;
       failedTestCases.push_back(testcase);
    }
 }

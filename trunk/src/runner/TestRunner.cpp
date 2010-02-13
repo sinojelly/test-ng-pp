@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <testngpp/ResourceCheckPoint.h>
 
 #include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
@@ -177,11 +178,11 @@ runAllTests
       , TagsFilters* tagsFilters
       , const TestFilter* filter)
 {
-   TestRunnerContext* context = \
-      loadSuites(suites, tagsFilters, filter);
-
    TestResultCollector* collector = \
       resultManager->getResultCollector();
+
+   TestRunnerContext* context = \
+      loadSuites(suites, tagsFilters, filter);
 
    while(1)
    {
@@ -249,9 +250,13 @@ TestRunner::runTests( bool useSandbox
 
    __TESTNGPP_TRY
    {
+      TESTNGPP_RCP checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+
       TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
       This->runTests(suitePaths, tagsFilter, filter);
       delete tagsFilter;
+
+      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
    }
    __TESTNGPP_CATCH(Error& e)
    {

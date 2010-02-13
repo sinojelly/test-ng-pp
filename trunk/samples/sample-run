@@ -1,7 +1,9 @@
 #!/bin/bash
 
-../src/runner/testngpp-runner libsample \
+../src/runner/testngpp-runner libmockcpp-ut-TestAny \
    -L../src/listeners \
-   -l"testngppxmllistener result.xml" \
    -l"testngppstdoutlistener -c -s -f -v" \
    -t"* > ^$" -c100 $@
+
+
+#   -l"testngppxmllistener result.xml" 
