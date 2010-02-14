@@ -7,116 +7,85 @@
 
 TESTNGPP_NS_START
 
+///////////////////////////////////////////////////////////
+#if defined(_MSC_VER)
+
+///////////////////////////////////////////////////////////
+#define C_RED     (FOREGROUND_RED   | FOREGROUND_INTENSITY)
+#define C_GREEN   (FOREGROUND_GREEN | FOREGROUND_INTENSITY)
+#define C_YELLOW  (FOREGROUND_RED   | FOREGROUND_GREEN |FOREGROUND_INTENSITY)
+#define C_MAGENTA (FOREGROUND_RED   | FOREGROUND_BLUE  |FOREGROUND_INTENSITY)
+#define C_CYAN    (FOREGROUND_GREEN | FOREGROUND_BLUE  |FOREGROUND_INTENSITY)
+#define C_WHITE   (FOREGROUND_RED   | FOREGROUND_BLUE  |FOREGROUND_GREEN )
+
+///////////////////////////////////////////////////////////
 namespace 
 {
-   #if defined(_MSC_VER)
-   void setTextColor(unsigned int color)
+   struct Color
    {
-      ::SetConsoleTextAttribute
+      Color(unsigned int c)
+         : color(c)
+
+      void operator()()
+      {
+         ::SetConsoleTextAttribute
             ( ::GetStdHandle(STD_OUTPUT_HANDLE)
             , color);
-   }
-   #endif
-   ////////////////////////////////////////////////////////
-   std::ostream& switchToFail(std::ostream& os, bool colorful)
-   {
-      if(colorful)
-      {
-   #ifdef _MSC_VER
-         setTextColor( FOREGROUND_RED | FOREGROUND_INTENSITY);
-   #else
-         os << "\033[1;31m";
-   #endif
       }
-      return os;
-   }
-   
-   ////////////////////////////////////////////////////////
-   std::ostream& switchToSucc(std::ostream& os, bool colorful)
-   {
-      if(colorful)
-      {
-   #ifdef _MSC_VER
-         setTextColor( FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-   #else
-         os << "\033[1;32m";
-   #endif
-      }
-      return os;
-   } 
-   
-   ////////////////////////////////////////////////////////
-   std::ostream& switchToNorm(std::ostream& os, bool colorful)
-   {
-      if(colorful)
-      {
-   #ifdef _MSC_VER
-         setTextColor(FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-   #else
-         os << "\033[0m";
-   #endif
-      }
-      return os;
-   }
-   
-   ////////////////////////////////////////////////////////
-   std::ostream& switchToInfo(std::ostream& os, bool colorful)
-   {
-      if(colorful)
-      {
-   #ifdef _MSC_VER
-         setTextColor(FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
-   #else
-         os << "\33[1;36m";
-   #endif
-      }
-      return os;
-   }
 
-   ////////////////////////////////////////////////////////
-   std::ostream& switchToWarn(std::ostream& os, bool colorful)
-   {
-      if(colorful)
-      {
-   #ifdef _MSC_VER
-         setTextColor(FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
-   #else
-         os << "\33[1;35m";
-   #endif
-      }
-      return os;
-   }
+   private:
+      unsigned int color;
+   };
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const SuccState& succ)
+std::ostream& operator<<(std::ostream& os, const Color color)
 {
-   return switchToSucc(os, succ.isColorful());
+   color();
+   return os;
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const FailState& fail)
-{
-   return switchToFail(os, fail.isColorful());
+
+#endif
+
+
+///////////////////////////////////////////////////////////
+#if defined(_MSC_VER)
+
+#define RED     Color(C_RED)
+#define GREEN   Color(C_GREEN)
+#define YELLOW  Color(C_YELLOW)
+#define MAGENTA Color(C_MAGENTA)
+#define CYAN    Color(C_CYAN)
+#define WHITE   Color(C_WHITE)
+
+#else
+
+#define RED     "\033[1;31m"
+#define GREEN   "\033[1;32m"
+#define YELLOW  "\033[1;33m"
+#define MAGENTA "\033[1;35m"
+#define CYAN    "\033[1;36m"
+#define WHITE   "\033[0m"
+
+#endif
+
+///////////////////////////////////////////////////////////
+#define DEF_STATE_COLOR_MAPPING(S,C) \
+std::ostream& operator<<(std::ostream& os, const S& state) \
+{ \
+   if(state.isColorful()) os << C; \
+   return os; \
 }
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const NormalState& norm)
-{
-   return switchToNorm(os, norm.isColorful());
-}
+DEF_STATE_COLOR_MAPPING(SuccState,   GREEN)
+DEF_STATE_COLOR_MAPPING(InfoState,   CYAN)
+DEF_STATE_COLOR_MAPPING(WarnState,   YELLOW)
+DEF_STATE_COLOR_MAPPING(FailState,   RED)
+DEF_STATE_COLOR_MAPPING(NormalState, WHITE)
 
 ///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const InfoState& info)
-{
-   return switchToInfo(os, info.isColorful());
-}
 
-///////////////////////////////////////////////////////////
-std::ostream& operator<<(std::ostream& os, const WarnState& warn)
-{
-   return switchToWarn(os, warn.isColorful());
-}
-
-///////////////////////////////////////////////////////////
 TESTNGPP_NS_END
