@@ -19,16 +19,35 @@
 #ifndef __TESTNGPP_FIXTURE_H
 #define __TESTNGPP_FIXTURE_H
 
+#include <string>
+
 #include <testngpp/testngpp.h>
 
 TESTNGPP_NS_START
 
+struct TestCaseInfoReader;
+struct TestCaseResultCollector;
+
 struct TestFixture
 {
+   TestFixture() : testcase(0), collector(0) {}
+
 	virtual void setUp() {}
 	virtual void tearDown() {}
 
    virtual ~TestFixture() {}
+
+   //////////////////////////////////////////////
+   void reportInfo(const char* file, unsigned int line, const std::string& info);
+   void reportWarning(const char* file, unsigned int line, const std::string& warning);
+   void reportFailure(const char* file, unsigned int line, const std::string& failure);
+
+   void setCurrentTestCase(const TestCaseInfoReader*, TestCaseResultCollector*);
+
+private:
+
+   const TestCaseInfoReader* testcase;
+   TestCaseResultCollector* collector;
 };
 
 TESTNGPP_NS_END

@@ -82,6 +82,7 @@ SET(TESTNGRUNNER_LIB_SRCS
   reports/SimpleTestResultDispatcher.cpp 
   reports/SimpleTestResultReporter.cpp 
   reports/SimpleTestCaseResultReporter.cpp 
+  reports/SmartTestCaseResultCollector.cpp 
   reports/SimpleTestSuiteResultReporter.cpp
   reports/SimpleTestResultManager.cpp
 

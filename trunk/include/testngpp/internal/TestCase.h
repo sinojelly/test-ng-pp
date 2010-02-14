@@ -23,10 +23,9 @@
 #include <string>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/TestFixture.h>
 
 TESTNGPP_NS_START
-
-struct TestFixture;
 
 struct TestCase
    : public TestCaseInfoReader
@@ -67,10 +66,25 @@ struct TestCase
 	{ return lineOfFile; }
 
    virtual TESTNGPP_NS::TestFixture* getFixture() const = 0;
+   virtual void setFixture(TESTNGPP_NS::TestFixture* fixture = 0) = 0;
 
-   virtual void setUp(TESTNGPP_NS::TestFixture* fixture = 0) = 0;
-   virtual void tearDown() = 0;
-   virtual void run(bool runDepends=false) = 0;
+   void setUp()
+   {
+      getFixture()->setUp();
+   }
+
+   void tearDown()
+   {
+      getFixture()->tearDown();
+   }
+
+   void run()
+   {
+      runDependedTestCase();
+      runTest();
+   }
+
+   virtual void runTest() = 0;
 
    unsigned int numberOfTags() const { return 0; }
 
@@ -80,21 +94,23 @@ struct TestCase
      return tags;
    }
 
+private:
+
    void runDependedTestCase()
    {
       if(depends == 0)
          return;
 
-      depends->setUp(getFixture());
-      depends->run(true);
+      depends->setFixture(getFixture());
+      depends->run();
    }
 
 private:
 	std::string name;
 	std::string fixtureName;
 	std::string suiteName;
-    TESTNGPP_NS::TestCase* depends;
-    std::string fileName;
+   TESTNGPP_NS::TestCase* depends;
+   std::string fileName;
 	unsigned int lineOfFile;
 };
 

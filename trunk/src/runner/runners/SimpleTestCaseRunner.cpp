@@ -4,9 +4,12 @@
 #include <testngpp/win32/die.h>
 #endif
 
+#include <testngpp/ExceptionKeywords.h>
 #include <testngpp/runner/TestCaseRunnerDieHandler.h>
 #include <testngpp/runner/SimpleTestCaseRunner.h>
 #include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/runner/SmartTestCaseResultCollector.h>
+
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/internal/TestFixtureDesc.h>
 
@@ -15,19 +18,15 @@ TESTNGPP_NS_START
 #define __RUN(block) try block \
    catch(AssertionFailure& failure) \
    { \
-      if(!(reportSuccess || hasFailure)) collector->startTestCase(testcase); \
-      collector->addCaseFailure(testcase, failure); \
       hasFailure = true; \
    } \
    catch(std::exception& e) \
    { \
-      if(!(reportSuccess || hasFailure)) collector->startTestCase(testcase); \
       collector->addCaseError(testcase, e.what()); \
       hasFailure = true; \
    } \
    catch(...) \
    { \
-      if(!(reportSuccess || hasFailure)) collector->startTestCase(testcase); \
       collector->addCaseError(testcase, "Unknown Exception"); \
       hasFailure = true; \
    }
@@ -36,14 +35,16 @@ namespace
 {
 bool runTest
       ( TestCase* testcase
-      , TestCaseResultCollector* collector
-      , bool reportSuccess)
+      , TestCaseResultCollector* collector)
 {
    bool hasFailure = false;
 
    __RUN({
+      testcase->setFixture();
+      testcase->getFixture()->setCurrentTestCase(testcase, collector);
+
       testcase->setUp();
-      testcase->run(true);
+      testcase->run();
    });
 
    __RUN({
@@ -54,18 +55,15 @@ bool runTest
 }
 
 #if defined(_MSC_VER)
-int tryToRunTest
+int win32TryToRunTest
       ( TestCase* testcase
-      , TestCaseResultCollector* collector
-      , bool reportSuccess)
+      , TestCaseResultCollector* collector)
 {
-
-	__try {
-		if(!runTest(testcase, collector, reportSuccess))
-		{
-			return 1;
-		}
-	}__except(EXCEPTION_EXECUTE_HANDLER)
+	__try
+	{
+		return runTest(testcase, collector) ? 0:1;
+	}
+	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
 		return -1;
 	}
@@ -73,6 +71,26 @@ int tryToRunTest
 	return 0;
 }
 #endif
+
+
+bool doRun
+   ( TestCase* testcase
+   , TestCaseResultCollector* collector
+   , TestCaseRunnerDieHandler* handler)
+{
+#if defined(_MSC_VER)
+   int result = tryToRunTest( testcase, collector);
+   if(result < 0 && handler != 0)
+   {
+      handler->die(testcase, collector);
+   }
+
+   return result == 0;
+#else
+   return runTest(testcase, collector);
+#endif
+}
+
 }
 
 //////////////////////////////////////////
@@ -81,35 +99,25 @@ bool SimpleTestCaseRunner::run
       , TestCaseResultCollector* collector
       , bool reportSuccess)
 {
-   bool hasFailure = false;
+   bool success = false;
 
-   if(reportSuccess)
-   {
-      collector->startTestCase(testcase);
-   }
+   TestCaseResultCollector* smartCollector =
+         new SmartTestCaseResultCollector(collector, reportSuccess);
 
-#if defined(_MSC_VER)
-   int result = tryToRunTest
-	   ( testcase
-	   , collector
-	   , reportSuccess);
+   smartCollector->startTestCase(testcase);
 
-   if(result < 0 && handler != 0)
-   {
-	   handler->die(testcase, collector);
-   }
+   __TESTNGPP_DO
 
-   hasFailure = (result==0?false:true);
-#else
-   hasFailure = !runTest(testcase, collector, reportSuccess);
-#endif
+   success = doRun(testcase, smartCollector, handler);
 
-   if(hasFailure || reportSuccess)
-   {
-      collector->endTestCase(testcase);
-   }
+   __TESTNGPP_CLEANUP
 
-   return !hasFailure;
+   smartCollector->endTestCase(testcase);
+   delete smartCollector;
+
+   __TESTNGPP_DONE
+
+   return success;
 }
 
 TESTNGPP_NS_END

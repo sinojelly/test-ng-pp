@@ -20,9 +20,6 @@
 #define __TESTNGPP_ASSERTER_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/AssertionFailure.h>
-#include <testngpp/Warning.h>
-#include <testngpp/Info.h>
 #include <testngpp/utils/Formatter.h>
 #include <sstream>
 
@@ -35,19 +32,19 @@
 
 TESTNGPP_NS_START
 
+#define __TESTNGPP_REPORT_FAILURE(what) \
+      reportFailure(__FILE__, __LINE__, what)
 //////////////////////////////////////////////////////////////////
 #define ASSERT_TRUE(expr) do { \
    if(!(expr)) {\
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
-         "expected (" #expr ") being TRUE, but it's actually FALSE"); \
+      __TESTNGPP_REPORT_FAILURE("expected (" #expr ") being TRUE, but it's actually FALSE"); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
 #define ASSERT_FALSE(expr) do { \
    if(expr) {\
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
-         "expected (" #expr ") being FALSE, but it's actually TRUE"); \
+      __TESTNGPP_REPORT_FAILURE("expected (" #expr ") being FALSE, but it's actually TRUE"); \
    } \
 }while(0)
 
@@ -65,7 +62,7 @@ TESTNGPP_NS_START
          << __TESTNGPP_MAKE_STR(wrong_equality) \
          << TESTNGPP_NS::toTypeAndValueString(__testngpp_value) \
          << ")"; \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
+      __TESTNGPP_REPORT_FAILURE(ss.str()); \
    } \
 }while(0)
 
@@ -86,7 +83,7 @@ TESTNGPP_NS_START
       testngpp_caught_exception = true; \
    } \
    if(!testngpp_caught_exception) { \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
+      __TESTNGPP_REPORT_FAILURE( \
          "expected " #expr " will throw an exception of type " #except ", but actually not."); \
    } \
 }while(0)
@@ -100,7 +97,7 @@ TESTNGPP_NS_START
       __testngpp_caught_exception = true; \
    } \
    if(!__testngpp_caught_exception) { \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
+      __TESTNGPP_REPORT_FAILURE ( \
          "expected " #expr " will throw an exception of any type, but actually not."); \
    } \
 }while(0)
@@ -110,7 +107,7 @@ TESTNGPP_NS_START
    try { \
       expr; \
    }catch(...){ \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
+      __TESTNGPP_REPORT_FAILURE ( \
           "expected " #expr " will not throw any exceptions, but it actually did."); \
    } \
 }while(0)
@@ -119,10 +116,10 @@ TESTNGPP_NS_START
 #define ASSERT_THROWS_EQUALS(expr, except, expected, value) do { \
    try { \
       expr; \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
+      __TESTNGPP_REPORT_FAILURE ( \
           "expected " #expr " will throw an exception of type " #except ", but actually not."); \
    }catch(except){ \
-      TS_ASSERT_EQUALS(expected, value); \
+      ASSERT_EQUALS(expected, value); \
    } \
 }while(0)
 
@@ -130,7 +127,7 @@ TESTNGPP_NS_START
 #define ASSERT_SAME_DATA(addr1, addr2, size) do { \
    if(::memcmp((void*)addr1, (void*)addr2, size)) \
    { \
-      throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, \
+      __TESTNGPP_REPORT_FAILURE ( \
             "expected " #addr1 " and " #addr2 " have same data, but actually not."); \
    } \
 }while(0)
@@ -150,13 +147,23 @@ TESTNGPP_NS_START
               << "found the actual delta is " \
               << TESTNGPP_NS::toTypeAndValueString(actual_delta) \
               << "."; \
-           throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, ss.str()); \
+      __TESTNGPP_REPORT_FAILURE(ss.str()); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
 #define FAIL(msg) do { \
-    throw TESTNGPP_NS::AssertionFailure(__FILE__, __LINE__, msg); \
+    __TESTNGPP_REPORT_FAILURE(msg); \
+}while(0)
+
+//////////////////////////////////////////////////////////////////
+#define WARN(msg) do { \
+    reportWarning(__FILE__, __LINE__, msg); \
+}while(0)
+
+//////////////////////////////////////////////////////////////////
+#define INFO(msg) do { \
+    reportInfo(__FILE__, __LINE__, msg); \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
