@@ -28,8 +28,11 @@ public:
     // @test
     void case0()
     {
+       INFO("cleanup test");
+
        __TESTNGPP_DO
 
+       WARN("gonna have an assertion failure");
        TS_ASSERT(false);
 
        __TESTNGPP_CLEANUP

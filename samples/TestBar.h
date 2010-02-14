@@ -33,6 +33,7 @@ struct TestBar1 : public TESTNGPP_NS::TestFixture
 
     TEST(case13)
     {
+       INFO("this is case 13");
     }
 			
     // @test(id=4, tags="it slow")

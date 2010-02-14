@@ -30,6 +30,18 @@ namespace
 
    const unsigned int maxLenOfLine = 60;
 
+   enum StateTitle
+   {
+      ST_SUCCESS,
+      ST_INFO,
+      ST_WARNING,
+      ST_FAILED,
+      ST_ERROR,
+      ST_CRASHED,
+      ST_SKIPPED,
+      ST_RUN
+   };
+
    std::string
    formatTitle
       ( const std::string title
@@ -64,20 +76,26 @@ namespace
    }   
 
    std::string
-   getTitle(unsigned int code)
+   getTitle(StateTitle code)
    {
       switch(code)
       {
-      case TestCaseResultReporter::TR_SUCCESS:
+      case ST_SUCCESS:
          return getTitle("OK");
-      case TestCaseResultReporter::TR_ERROR:
+      case ST_ERROR:
          return getTitle("ERROR");
-      case TestCaseResultReporter::TR_CRASHED:
+      case ST_CRASHED:
          return getTitle("CRASHED");
-      case TestCaseResultReporter::TR_SKIPPED:
+      case ST_SKIPPED:
          return getTitle("SKIPPED");
-      case TestCaseResultReporter::TR_FAILED:
+      case ST_FAILED:
          return getTitle("FAILED");
+      case ST_WARNING:
+         return getTitle("WARNING");
+      case ST_INFO:
+         return getTitle("INFO");
+      case ST_RUN:
+         return getTitle("RUN");
       }
 
       return getTitle("UNKNOWN");
@@ -87,7 +105,7 @@ namespace
    {
       TestCaseResult
          (const TestCaseInfoReader* testcase
-         , unsigned int resultCode)
+         , StateTitle resultCode)
          : name(testcase->getName())
          , fixture(testcase->getNameOfFixture())
          , suite(testcase->getNameOfSuite())
@@ -102,7 +120,7 @@ namespace
       std::string name;
       std::string fixture;
       std::string suite;
-      unsigned int result;
+      StateTitle result;
    };
 }
 ///////////////////////////////////////////////////////////
@@ -118,6 +136,10 @@ struct StdoutTestListener : public TestListener
       , TestSuiteResultReporter*
       , TestCaseResultReporter* );
    
+   ///////////////////////////////////////////////////////////
+   void addCaseWarning(const TestCaseInfoReader*, const Warning& );
+   void addCaseInfo(const TestCaseInfoReader*, const Info& );
+
    void addCaseCrash(const TestCaseInfoReader*);
    void addCaseSkipped(const TestCaseInfoReader*);
    void addCaseError(const TestCaseInfoReader*, const std::string&);
@@ -151,17 +173,38 @@ private:
          ( const std::string& title
          , unsigned int number);
    
-   void reportCaseFailure
+   template <typename State>
+   void reportCaseMessage
          ( const TestCaseInfoReader* testcase
-         , unsigned int result
+         , const State& state
+         , StateTitle result
          , unsigned int line
          , const std::string& msg);
 
-   void reportCaseFailure
+   template <typename State>
+   void reportCaseMessage
          ( const TestCaseInfoReader* testcase
-         , unsigned int result
+         , const State& state
+         , StateTitle result
          , const std::string& msg);
    
+   void reportCaseFailure
+            ( const TestCaseInfoReader* testcase
+            , StateTitle title
+            , const std::string& msg);
+
+   void reportCaseFailure
+            ( const TestCaseInfoReader* testcase
+            , StateTitle title
+            , unsigned int line
+            , const std::string& msg);
+
+   template <typename State>
+   void outputCaseState
+            ( const TestCaseInfoReader* testcase
+            , const State& state
+            , StateTitle title);
+
    void reportCaseSuccess
          ( const TestCaseInfoReader* testcase );
 
@@ -170,7 +213,7 @@ private:
    void addTestResult
          ( std::list<TestCaseResult>& set
          , const TestCaseInfoReader* testcase
-         , unsigned int code );
+         , StateTitle result );
 
 public:
    std::ostream& outputTestCaseInfo
@@ -282,11 +325,13 @@ outputTestCaseInfo
    return os;
 }
 ///////////////////////////////////////////////////////////
+template <typename State>
 void
 StdoutTestListener::
-reportCaseFailure
+reportCaseMessage
       ( const TestCaseInfoReader* testcase
-      , unsigned int result
+      , const State& state
+      , StateTitle title
       , unsigned int line
       , const std::string& msg)
 {
@@ -297,8 +342,8 @@ reportCaseFailure
    }
 
    std::cout
-      << fail
-      << getTitle(result)
+      << state
+      << getTitle(title)
       << normal;
 
    if(!verbose)
@@ -306,17 +351,43 @@ reportCaseFailure
       std::cout
          << info
          << TestCaseInfo(this, testcase)
-         << normal
-         << " - ";
+         << normal;
    }
 
-   std::cout 
-      << testcase->getFileName()
-      << ":"
-      << line
-      << ": " 
-      << msg
-      << std::endl;   
+   if(msg.size() > 0)
+   {
+
+      if(!verbose)
+      {
+         std::cout << " - ";
+      }
+
+      std::cout
+         << testcase->getFileName()
+         << ":"
+         << line
+         << ": "
+         << msg;
+   }
+
+   std::cout << std::endl;
+}
+
+///////////////////////////////////////////////////////////
+template <typename State>
+void
+StdoutTestListener::
+outputCaseState
+       ( const TestCaseInfoReader* testcase
+       , const State& state
+       , StateTitle title)
+{
+   reportCaseMessage
+         ( testcase
+         , state
+         , title
+         , 0
+         , "");
 }
 
 ///////////////////////////////////////////////////////////
@@ -329,7 +400,7 @@ reportCaseSuccess
 
    if(verbose)
    {
-      std::cout << succ << getTitle("OK") << normal << std::endl;
+      std::cout << succ << getTitle(ST_SUCCESS) << normal << std::endl;
    }
    else
    {
@@ -338,16 +409,45 @@ reportCaseSuccess
    }
 }
 ///////////////////////////////////////////////////////////
+template <typename State>
+void
+StdoutTestListener::
+reportCaseMessage
+      ( const TestCaseInfoReader* testcase
+      , const State& state
+      , StateTitle title
+      , const std::string& msg)
+{
+   reportCaseMessage(testcase, state, title, testcase->getLineOfFile(), msg);
+}
+
+///////////////////////////////////////////////////////////
 void
 StdoutTestListener::
 reportCaseFailure
       ( const TestCaseInfoReader* testcase
-      , unsigned int result
+      , StateTitle title
       , const std::string& msg)
 {
-   reportCaseFailure(testcase, result, testcase->getLineOfFile(), msg);
+   reportCaseMessage(testcase, fail, title, msg);
 }
 
+///////////////////////////////////////////////////////////
+void
+StdoutTestListener::
+reportCaseFailure
+      ( const TestCaseInfoReader* testcase
+      , StateTitle title
+      , unsigned int line
+      , const std::string& msg)
+{
+   reportCaseMessage
+         ( testcase
+         , fail
+         , title
+         , line
+         , msg);
+}
 ///////////////////////////////////////////////////////////
 void
 StdoutTestListener::
@@ -355,7 +455,7 @@ addCaseCrash(const TestCaseInfoReader* testcase)
 {
    reportCaseFailure
       ( testcase
-      , TestCaseResultReporter::TR_CRASHED
+      , ST_CRASHED
       , "test crashed unexpectedly.");
 }
 
@@ -366,7 +466,7 @@ addCaseSkipped(const TestCaseInfoReader* testcase)
 {
    reportCaseFailure
       ( testcase 
-      , TestCaseResultReporter::TR_SKIPPED
+      , ST_SKIPPED
       , "test was skipped due to the failure of its dependent case.");
 }
 
@@ -379,7 +479,7 @@ addCaseError
 {
    reportCaseFailure
       ( testcase
-      , TestCaseResultReporter::TR_ERROR
+      , ST_ERROR
       , error);
 }
 
@@ -392,9 +492,37 @@ addCaseFailure
 {
    reportCaseFailure
       ( testcase
-      , TestCaseResultReporter::TR_FAILED
+      , ST_FAILED
       , failure.getLineOfFile()
       , failure.what());
+}
+
+
+///////////////////////////////////////////////////////////
+void
+StdoutTestListener::
+addCaseWarning(const TestCaseInfoReader* testcase, const Warning& warning)
+{
+   reportCaseMessage
+      ( testcase
+      , warn
+      , ST_WARNING
+      , warning.getLineOfFile()
+      , warning.what());
+}
+
+
+///////////////////////////////////////////////////////////
+void
+StdoutTestListener::
+addCaseInfo(const TestCaseInfoReader* testcase, const Info& msg)
+{
+   reportCaseMessage
+      ( testcase
+      , info
+      , ST_INFO
+      , msg.getLineOfFile()
+      , msg.what());
 }
 
 ///////////////////////////////////////////////////////////
@@ -404,7 +532,7 @@ startTestCase(const TestCaseInfoReader* testcase)
 {
    if(!verbose) return;
 
-   std::cout << succ << getTitle("RUN") << normal 
+   std::cout << succ << getTitle(ST_RUN) << normal
              << info << TestCaseInfo(this, testcase) << normal
              << std::endl;
 }
@@ -415,11 +543,11 @@ StdoutTestListener::
 addTestResult
    ( std::list<TestCaseResult>& set
    , const TestCaseInfoReader* testcase
-   , unsigned int code )
+   , StateTitle title )
 {
    if(!verbose) return;
 
-   set.push_back(TestCaseResult(testcase, code));
+   set.push_back(TestCaseResult(testcase, title));
 }
 
 ///////////////////////////////////////////////////////////
@@ -437,12 +565,16 @@ endTestCase
          reportCaseSuccess(testcase);
          break;
       case TestCaseResultReporter::TR_FAILED:
+         addTestResult(failedTests, testcase, ST_FAILED);
+         break;
       case TestCaseResultReporter::TR_ERROR:
+         addTestResult(failedTests, testcase, ST_ERROR);
+         break;
       case TestCaseResultReporter::TR_CRASHED:   
-         addTestResult(failedTests, testcase, result);
+         addTestResult(failedTests, testcase, ST_CRASHED);
          break;
       case TestCaseResultReporter::TR_SKIPPED:
-         addTestResult(skippedTests, testcase, result);
+         addTestResult(skippedTests, testcase, ST_SKIPPED);
          break;
       case TestCaseResultReporter::TR_UNKNOWN:
          throw Error(TESTNGPP_INTERNAL_ERROR(3001));
@@ -659,7 +791,7 @@ endTest()
    {
       std::cout
          << succ
-         << getTitle(TestCaseResultReporter::TR_SUCCESS)
+         << getTitle(ST_SUCCESS)
          << bookKeeper->getNumberOfTestCases()
          << normal
          << " cases from "
@@ -682,7 +814,7 @@ void
 StdoutTestListener::
 addError(const std::string& err)
 {
-   std::cout << fail << getTitle("ERROR") 
+   std::cout << fail << getTitle(ST_ERROR)
              << info << "runner: " 
              << normal << err 
              << std::endl;

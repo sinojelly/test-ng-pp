@@ -26,6 +26,8 @@ struct SimpleTestResultDispatcherImpl
    void addCaseSkipped(const TestCaseInfoReader*);
    void addCaseError(const TestCaseInfoReader*, const std::string&);
    void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
+   void addCaseWarning(const TestCaseInfoReader*, const Warning&);
+   void addCaseInfo(const TestCaseInfoReader*, const Info&);
 
    void startTestCase(const TestCaseInfoReader*);
    void endTestCase(const TestCaseInfoReader*);
@@ -217,6 +219,62 @@ void SimpleTestResultDispatcher::
 addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure)
 {
    This->addCaseFailure(testcase, failure);
+}
+
+///////////////////////////////////////////////////////////
+template <typename T>
+void notifyAddCaseWarning(T& listeners,
+   const TestCaseInfoReader* testcase, const Warning& warning)
+{
+   typename T::iterator i = listeners.begin();
+   for(; i != listeners.end(); i++)
+   {
+      (*i)->addCaseWarning(testcase, warning);
+   }
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultDispatcherImpl::
+addCaseWarning(const TestCaseInfoReader* testcase, const Warning& warning)
+{
+   notifyAddCaseWarning(caseListeners, testcase, warning);
+   notifyAddCaseWarning(suiteListeners, testcase, warning);
+   notifyAddCaseWarning(listeners, testcase, warning);
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultDispatcher::
+addCaseWarning(const TestCaseInfoReader* testcase, const Warning& warning)
+{
+   This->addCaseWarning(testcase, warning);
+}
+
+///////////////////////////////////////////////////////////
+template <typename T>
+void notifyAddCaseInfo(T& listeners,
+   const TestCaseInfoReader* testcase, const Info& info)
+{
+   typename T::iterator i = listeners.begin();
+   for(; i != listeners.end(); i++)
+   {
+      (*i)->addCaseInfo(testcase, info);
+   }
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultDispatcherImpl::
+addCaseInfo(const TestCaseInfoReader* testcase, const Info& info)
+{
+   notifyAddCaseInfo(caseListeners, testcase, info);
+   notifyAddCaseInfo(suiteListeners, testcase, info);
+   notifyAddCaseInfo(listeners, testcase, info);
+}
+
+///////////////////////////////////////////////////////////
+void SimpleTestResultDispatcher::
+addCaseInfo(const TestCaseInfoReader* testcase, const Info& info)
+{
+   This->addCaseInfo(testcase, info);
 }
 
 ///////////////////////////////////////////////////////////

@@ -16,6 +16,8 @@ struct TestCaseSandboxResultReporter
    TestCaseSandboxResultReporter(WrittableChannel* channel);
    ~TestCaseSandboxResultReporter();
 
+   void addCaseInfo(const TestCaseInfoReader*, const Info&);
+   void addCaseWarning(const TestCaseInfoReader*, const Warning&);
    void addCaseCrash(const TestCaseInfoReader*) {}
    void addCaseSkipped(const TestCaseInfoReader*) {}
    void addCaseError(const TestCaseInfoReader*, const std::string&); 
