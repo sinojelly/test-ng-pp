@@ -40,9 +40,6 @@ bool runTest
    bool hasFailure = false;
 
    __RUN({
-      testcase->setFixture();
-      testcase->getFixture()->setCurrentTestCase(testcase, collector);
-
       testcase->setUp();
       testcase->run();
    });
@@ -103,6 +100,9 @@ bool SimpleTestCaseRunner::run
 
    TestCaseResultCollector* smartCollector =
          new SmartTestCaseResultCollector(collector, reportSuccess);
+
+   testcase->setFixture();
+   testcase->getFixture()->setCurrentTestCase(testcase, collector);
 
    smartCollector->startTestCase(testcase);
 

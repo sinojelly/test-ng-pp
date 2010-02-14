@@ -35,6 +35,8 @@ struct SimpleTestResultDispatcher
    void addCaseError(const TestCaseInfoReader*, const std::string&);
    void addCaseCrash(const TestCaseInfoReader*);
    void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
+   void addCaseWarning(const TestCaseInfoReader*, const Warning&);
+   void addCaseInfo(const TestCaseInfoReader*, const Info&);
    void addCaseSkipped(const TestCaseInfoReader*);
 
    void startTestCase(const TestCaseInfoReader*);

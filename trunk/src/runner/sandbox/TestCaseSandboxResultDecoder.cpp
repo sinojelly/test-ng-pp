@@ -1,9 +1,12 @@
 
 #include <sstream>
-#include <list>
+#include <vector>
+
 #include <errno.h>
 
 #include <testngpp/AssertionFailure.h>
+#include <testngpp/Warning.h>
+#include <testngpp/Info.h>
 
 #include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
@@ -14,20 +17,68 @@
 
 TESTNGPP_NS_START
 
+namespace
+{
+   struct InfoContainer
+   {
+      void flush( const TestCaseInfoReader* testcase
+                , TestCaseResultCollector* collector)
+      {
+        unsigned int indexOfInfos = 0;
+        unsigned int indexOfWarns = 0;
+ 
+        for(unsigned int i=0; i<types.size(); i++)
+        {
+           if(types[i]) collector->addCaseInfo(testcase, infos[indexOfInfos++]);
+           else      collector->addCaseWarning(testcase, warns[indexOfWarns++]);
+        }
+
+        types.clear();
+        infos.clear();
+        warns.clear();
+      }
+
+      void addWarning(const Warning& warn)
+      {
+         types.push_back(false);
+         warns.push_back(warn);
+      }
+
+      void addInfo(const Info& info)
+      {
+         types.push_back(true);
+         infos.push_back(info);
+      }
+
+      std::vector<bool> types;
+      std::vector<Info> infos;
+      std::vector<Warning> warns;
+   };
+}
+
 struct TestCaseSandboxResultDecoderImpl
 {
 	void addCaseError(const std::string& msg);
 	void addCaseFailure(const AssertionFailure& failure);
+	void addCaseInfo(const Info& info);
+	void addCaseWarning(const Warning& warning);
 
    AssertionFailure readAssertionFailure();
+   Warning readWarning();
+   Info readInfo();
+
+   void handleInfo();
+   void handleWarning();
    void handleAssertionFailure();
    void handleError();
    void handleInternalError();
    void handleStartCase();
    void handleEndCase();
+
    void flushRegularEvents();
    void flushErrorEvents();
    void flushFailureEvents();
+   void flushInfoEvents();
    void flushEndEvent();
 
    bool decode();
@@ -40,6 +91,7 @@ struct TestCaseSandboxResultDecoderImpl
       : channel(ch), testcase(tc), collector(rc)
       , startReceived(false), endReceived(false)
       , errorReceived(false), failureReceived(false)
+      , infoReceived(false)
       , crashInformed(false), reportSuccess(report)
    {}
 
@@ -52,13 +104,19 @@ struct TestCaseSandboxResultDecoderImpl
    bool hasError() const
    { return errorReceived || failureReceived || crashInformed; }
 
+   bool couldRecvEvents() const
+   { return (startReceived && !endReceived && !crashInformed); }
+
    ReadableChannel* channel; // Y
 
    const TestCaseInfoReader* testcase; // X
    TestCaseResultCollector* collector; // X
+  
 
-   typedef std::list<std::string> Errors;
-   typedef std::list<AssertionFailure> Failures;
+   typedef std::vector<std::string> Errors;
+   typedef std::vector<AssertionFailure> Failures;
+
+   InfoContainer infos;
    
    Errors errors;
    Failures failures;
@@ -66,15 +124,17 @@ struct TestCaseSandboxResultDecoderImpl
    bool endReceived;
    bool errorReceived;
    bool failureReceived;
+   bool infoReceived;
    bool crashInformed;
    bool reportSuccess;
 };
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::addCaseError(const std::string& msg)
+TestCaseSandboxResultDecoderImpl::
+addCaseError(const std::string& msg)
 {
-   if(!startReceived || endReceived || crashInformed)
+   if(!couldRecvEvents())
    {
       throw Error(TESTNGPP_INTERNAL_ERROR(1001));
    }
@@ -86,12 +146,14 @@ TestCaseSandboxResultDecoderImpl::addCaseError(const std::string& msg)
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::addCaseFailure(const AssertionFailure& failure)
+TestCaseSandboxResultDecoderImpl::
+addCaseFailure(const AssertionFailure& failure)
 {
-   if(!startReceived || endReceived || crashInformed)
+   if(!couldRecvEvents())
    {
       throw Error(TESTNGPP_INTERNAL_ERROR(1002));
    }
+
    failures.push_back(failure);
 
    failureReceived = true;
@@ -99,7 +161,38 @@ TestCaseSandboxResultDecoderImpl::addCaseFailure(const AssertionFailure& failure
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::flushErrorEvents()
+TestCaseSandboxResultDecoderImpl::
+addCaseInfo(const Info& info)
+{
+   if(!couldRecvEvents())
+   {
+      throw Error(TESTNGPP_INTERNAL_ERROR(1006));
+   }
+
+   infos.addInfo(info);
+  
+   infoReceived = true;
+}
+
+/////////////////////////////////////////////////////////////////////////
+void
+TestCaseSandboxResultDecoderImpl::
+addCaseWarning(const Warning& warning)
+{
+   if(!couldRecvEvents())
+   {
+      throw Error(TESTNGPP_INTERNAL_ERROR(1007));
+   }
+
+   infos.addWarning(warning);
+  
+   infoReceived = true;
+}
+
+/////////////////////////////////////////////////////////////////////////
+void
+TestCaseSandboxResultDecoderImpl::
+flushErrorEvents()
 {
    Errors::iterator error = errors.begin();
    for(; error != errors.end(); error++)
@@ -112,7 +205,8 @@ TestCaseSandboxResultDecoderImpl::flushErrorEvents()
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::flushFailureEvents()
+TestCaseSandboxResultDecoderImpl::
+flushFailureEvents()
 {
    Failures::iterator failure = failures.begin();
    for(; failure != failures.end(); failure++)
@@ -125,7 +219,16 @@ TestCaseSandboxResultDecoderImpl::flushFailureEvents()
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::flushEndEvent()
+TestCaseSandboxResultDecoderImpl::
+flushInfoEvents()
+{
+   infos.flush(testcase, collector);
+}
+
+/////////////////////////////////////////////////////////////////////////
+void
+TestCaseSandboxResultDecoderImpl::
+flushEndEvent()
 {
    if(endReceived)
    {
@@ -135,27 +238,22 @@ TestCaseSandboxResultDecoderImpl::flushEndEvent()
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::flushRegularEvents()
+TestCaseSandboxResultDecoderImpl::
+flushRegularEvents()
 {
    if(!startReceived)
    {
       return;
    }
 
-   bool shouldReport = reportSuccess;
-
-   if( errorReceived || failureReceived || crashInformed)
-   {
-      shouldReport = true;
-   }
-
-   if(!shouldReport)
+   if(!(reportSuccess || hasError()))
    { 
       return;
    }
 
    collector->startTestCase(testcase);
 
+   flushInfoEvents();
    flushErrorEvents();
    flushFailureEvents();
 
@@ -164,7 +262,8 @@ TestCaseSandboxResultDecoderImpl::flushRegularEvents()
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::flush(bool crashed)
+TestCaseSandboxResultDecoderImpl::
+flush(bool crashed)
 {
    if(crashInformed)
    {
@@ -184,15 +283,18 @@ TestCaseSandboxResultDecoderImpl::flush(bool crashed)
 /////////////////////////////////////////////////////////////////////////
 namespace
 {
-   const unsigned char startCmd = 1;
-   const unsigned char endCmd = 2;
-   const unsigned char errorCmd = 3;
+   const unsigned char startCmd   = 1;
+   const unsigned char endCmd     = 2;
+   const unsigned char errorCmd   = 3;
    const unsigned char failureCmd = 4;
+   const unsigned char infoCmd    = 5;
+   const unsigned char warningCmd = 6;
 }
 
 /////////////////////////////////////////////////////////////
 AssertionFailure
-TestCaseSandboxResultDecoderImpl::readAssertionFailure()
+TestCaseSandboxResultDecoderImpl::
+readAssertionFailure()
 {
    std::string file = channel->readString();
    int line = channel->readInt();
@@ -201,24 +303,63 @@ TestCaseSandboxResultDecoderImpl::readAssertionFailure()
 }
 
 /////////////////////////////////////////////////////////////
-void
-TestCaseSandboxResultDecoderImpl::handleAssertionFailure()
+Info
+TestCaseSandboxResultDecoderImpl::
+readInfo()
 {
-   AssertionFailure failure = readAssertionFailure();
-   addCaseFailure(failure);
+   std::string file = channel->readString();
+   int line = channel->readInt();
+   std::string reason = channel->readString();
+   return Info(file, line, reason);
+}
+
+/////////////////////////////////////////////////////////////
+Warning
+TestCaseSandboxResultDecoderImpl::
+readWarning()
+{
+   std::string file = channel->readString();
+   int line = channel->readInt();
+   std::string reason = channel->readString();
+   return Warning(file, line, reason);
 }
 
 /////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::handleError()
+TestCaseSandboxResultDecoderImpl::
+handleAssertionFailure()
 {
-   std::string errMsg = channel->readString();
-   addCaseError(errMsg);
+   addCaseFailure(readAssertionFailure());
 }
 
 /////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::handleInternalError()
+TestCaseSandboxResultDecoderImpl::
+handleInfo()
+{
+   addCaseInfo(readInfo());
+}
+
+/////////////////////////////////////////////////////////////
+void
+TestCaseSandboxResultDecoderImpl::
+handleWarning()
+{
+   addCaseWarning(readWarning());
+}
+
+/////////////////////////////////////////////////////////////
+void
+TestCaseSandboxResultDecoderImpl::
+handleError()
+{
+   addCaseError(channel->readString());
+}
+
+/////////////////////////////////////////////////////////////
+void
+TestCaseSandboxResultDecoderImpl::
+handleInternalError()
 {
    const char * err = TESTNGPP_INTERNAL_ERROR(1003);
    addCaseError(err);
@@ -227,9 +368,14 @@ TestCaseSandboxResultDecoderImpl::handleInternalError()
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::handleStartCase()
+TestCaseSandboxResultDecoderImpl::
+handleStartCase()
 {
-   if(startReceived || endReceived || errorReceived || failureReceived || crashInformed)
+   if( startReceived   ||
+       endReceived     || 
+       errorReceived   ||
+       failureReceived || 
+       crashInformed)
    {
       throw Error(TESTNGPP_INTERNAL_ERROR(1004));
    }
@@ -239,12 +385,16 @@ TestCaseSandboxResultDecoderImpl::handleStartCase()
 
 /////////////////////////////////////////////////////////////////////////
 void
-TestCaseSandboxResultDecoderImpl::handleEndCase()
+TestCaseSandboxResultDecoderImpl::
+handleEndCase()
 {
-   if(endReceived || !startReceived || crashInformed)
+   if( endReceived   ||
+      !startReceived ||
+       crashInformed)
    {
       throw Error(TESTNGPP_INTERNAL_ERROR(1005));
    }
+
    endReceived = true;
 }
 /////////////////////////////////////////////////////////////////////////
@@ -261,6 +411,10 @@ bool TestCaseSandboxResultDecoderImpl::decode()
       handleError(); break;
    case failureCmd:
       handleAssertionFailure(); break;
+   case infoCmd:
+      handleInfo(); break;
+   case warningCmd:
+      handleWarning(); break;
    default:
       handleInternalError();
    }
