@@ -169,8 +169,10 @@ private:
    void reportSuitesResult();
    void reportCasesResult();
 
-   void reportFailedNumber
+   template <typename State>
+   void reportNumber
          ( const std::string& title
+         , const State& state
          , unsigned int number);
    
    template <typename State>
@@ -225,6 +227,7 @@ private:
    FailState    fail;
    InfoState    info;
    WarnState    warn;
+   DebugState   debug;
    NormalState  normal;
 
    bool showSuite;
@@ -287,6 +290,7 @@ StdoutTestListener
 , fail(isColorful)
 , info(isColorful)
 , warn(isColorful)
+, debug(isColorful)
 , normal(isColorful)
 , showSuite(shouldShowSuite)
 , showFixture(shouldShowFixture)
@@ -520,7 +524,7 @@ addCaseInfo(const TestCaseInfoReader* testcase, const Info& msg)
 {
    reportCaseMessage
       ( testcase
-      , info
+      , debug
       , ST_INFO
       , msg.getLineOfFile()
       , msg.what());
@@ -678,15 +682,19 @@ startTest()
 }
 
 ///////////////////////////////////////////////////////////
+template <typename State>
 void
 StdoutTestListener::     
-reportFailedNumber(const std::string& title, unsigned int number)
+reportNumber
+   ( const std::string& title
+   , const State& state
+   , unsigned int number)
 {
    if(number > 0)
    {
       std::cout 
           << " " << title << ": " 
-          << fail << number << normal;
+          << state << number << normal;
    }
 }
 
@@ -701,11 +709,11 @@ reportCasesResult()
       unsigned int rate = int(successCases*100/bookKeeper->getNumberOfTestCases()); 
       
       std::cout << std::endl;
-      std::cout << " success: " << succ << successCases << normal;
-      reportFailedNumber("failed", bookKeeper->getNumberOfFailedTestCases());
-      reportFailedNumber("errors", bookKeeper->getNumberOfErrorTestCases());
-      reportFailedNumber("crashed", bookKeeper->getNumberOfCrashedTestCases());
-      reportFailedNumber("skipped", bookKeeper->getNumberOfSkippedTestCases());
+      reportNumber("success", succ, bookKeeper->getNumberOfSuccessfulTestCases());
+      reportNumber("failed",  fail, bookKeeper->getNumberOfFailedTestCases());
+      reportNumber("errors",  fail, bookKeeper->getNumberOfErrorTestCases());
+      reportNumber("crashed", fail, bookKeeper->getNumberOfCrashedTestCases());
+      reportNumber("skipped", warn, bookKeeper->getNumberOfSkippedTestCases());
       std::cout << std::endl; 
       std::cout << " success rate: " << fail << rate << '%' << normal;
       std::cout << std::endl;

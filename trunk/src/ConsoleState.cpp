@@ -83,6 +83,7 @@ std::ostream& operator<<(std::ostream& os, const S& state) \
 DEF_STATE_COLOR_MAPPING(SuccState,   GREEN)
 DEF_STATE_COLOR_MAPPING(InfoState,   CYAN)
 DEF_STATE_COLOR_MAPPING(WarnState,   YELLOW)
+DEF_STATE_COLOR_MAPPING(DebugState,  MAGENTA)
 DEF_STATE_COLOR_MAPPING(FailState,   RED)
 DEF_STATE_COLOR_MAPPING(NormalState, WHITE)
 
