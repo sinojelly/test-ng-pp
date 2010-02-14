@@ -61,11 +61,19 @@ struct WarnState : public ConsoleState
 };
 
 ////////////////////////////////////////////////////////
+struct DebugState : public ConsoleState
+{
+   DebugState(bool colorful) : ConsoleState(colorful)
+   {}
+};
+   
+////////////////////////////////////////////////////////
 std::ostream& operator<<(std::ostream& os, const SuccState& succ);
 std::ostream& operator<<(std::ostream& os, const FailState& fail);
 std::ostream& operator<<(std::ostream& os, const NormalState& norm);
 std::ostream& operator<<(std::ostream& os, const InfoState& info);
 std::ostream& operator<<(std::ostream& os, const WarnState& warn);
+std::ostream& operator<<(std::ostream& os, const DebugState& debug);
 
 ////////////////////////////////////////////////////////
 
