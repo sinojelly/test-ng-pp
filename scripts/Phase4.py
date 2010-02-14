@@ -68,12 +68,11 @@ static struct %s
         , %d)
    {}
 
-   void setUp(TESTNGPP_NS::TestFixture* fixture)
+   void setFixture(TESTNGPP_NS::TestFixture* fixture)
    {
       if(fixture == 0)
       {
          belongedFixture = new %s();
-         belongedFixture->setUp();
       }
       else
       {
@@ -81,17 +80,8 @@ static struct %s
       }
    }
 
-   void tearDown()
+   void runTest()
    {
-      belongedFixture->tearDown();
-      delete belongedFixture;
-   }
-
-   void run(bool runDepends=false)
-   {
-      if(runDepends)
-         runDependedTestCase();
-
       belongedFixture->%s();
    }
 

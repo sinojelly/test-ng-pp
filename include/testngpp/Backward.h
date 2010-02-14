@@ -34,6 +34,8 @@ TESTNGPP_NS_START
 #define TS_ASSERT_THROWS_EQUALS(expr, except, expected, value) \
         ASSERT_THROWS_EQUALS(expr, except, expected, value)
 #define TS_FAIL(msg)                           FAIL(msg)
+#define TS_WARN(msg)                           WARN(msg)
+#define TS_TRACE(msg)                          INFO(msg)
 
 TESTNGPP_NS_END
 
