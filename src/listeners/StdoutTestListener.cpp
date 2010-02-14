@@ -292,7 +292,7 @@ StdoutTestListener
 , showFixture(shouldShowFixture)
 , showTags(shouldShowTags)
 , verbose(isTest)
-, isSuccess(true)
+, isSuccess(false)
 , bookKeeper(reporter)
 , suiteBookKeeper(suiteReporter)
 , caseBookKeeper(caseReporter)
@@ -464,8 +464,9 @@ void
 StdoutTestListener::
 addCaseSkipped(const TestCaseInfoReader* testcase)
 {
-   reportCaseFailure
+   reportCaseMessage
       ( testcase 
+      , warn
       , ST_SKIPPED
       , "test was skipped due to the failure of its dependent case.");
 }
@@ -589,6 +590,8 @@ startTestFixture(TestFixtureInfoReader* fixture)
 {
    if(!showFixture) return;
    
+   if(!verbose && isSuccess) std::cout << std::endl;
+
    std::cout << std::endl;
    std::cout << info << "(" << fixture->getName() << ")" << normal;
    std::cout << std::endl;
@@ -845,7 +848,7 @@ LISTENER(create_instance)
    
    return new StdoutTestListener
          ( options.hasOption("c")
-         , options.hasOption("s")
+         , options.hasOption("s") || options.hasOption("f") 
          , options.hasOption("f")
          , options.hasOption("t")
          , options.hasOption("v")
