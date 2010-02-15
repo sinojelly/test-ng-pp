@@ -4,7 +4,7 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/AssertionFailure.h>
+#include <testngpp/internal/AssertionFailure.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS

@@ -6,10 +6,10 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
-#include <testngpp/runner/ModuleTestSuiteLoader.h>
-#include <testngpp/runner/DLModuleLoader.h>
+#include <testngpp/runner/loaders/ModuleTestSuiteLoader.h>
+#include <testngpp/runner/loaders/DLModuleLoader.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
@@ -18,7 +18,7 @@ class TestModuleTestSuiteLoader: public CxxTest::TestSuite
 {
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    ModuleTestSuiteLoader *loader;
    TestSuiteDesc* desc;
@@ -27,7 +27,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
       loader = new ModuleTestSuiteLoader(new DLModuleLoader());
       desc = 0;
    }
@@ -35,7 +35,7 @@ public:
    {
       delete loader;
 
-      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
+      TESTNGPPST_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
    }
 
    void testShouldNotHaveMemoryLeakage()
