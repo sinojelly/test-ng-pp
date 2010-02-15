@@ -1,8 +1,9 @@
 
 #include <iostream>
 
-#include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
+
+#include <testngpp/internal/Error.h>
 
 #include <testngpp/runner/SimpleTestResultDispatcher.h>
 #include <testngpp/runner/SimpleTestResultReporter.h>

@@ -4,9 +4,9 @@
 
 #include <errno.h>
 
-#include <testngpp/AssertionFailure.h>
-#include <testngpp/Warning.h>
-#include <testngpp/Info.h>
+#include <testngpp/internal/AssertionFailure.h>
+#include <testngpp/internal/Warning.h>
+#include <testngpp/internal/Info.h>
 
 #include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>

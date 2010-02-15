@@ -16,7 +16,7 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#include <testngpp/Exception.h>
+#include <testngpp/internal/Exception.h>
 
 TESTNGPP_NS_START
 

@@ -22,7 +22,8 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
-#include <testngpp/Error.h>
+
+#include <testngpp/internal/Error.h>
 
 TESTNGPP_NS_START
 

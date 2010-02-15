@@ -4,6 +4,9 @@
 
 #include <iostream>
 
+#include <testngpp/internal/Error.h>
+#include <testngpp/internal/Taggable.h>
+
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
 #include <testngpp/runner/NotCompositeTaggableFilter.h>
@@ -11,12 +14,7 @@
 
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/TagsFilters.h>
-
-#include <testngpp/internal/Taggable.h>
 #include <testngpp/runner/InternalError.h>
-
-#include <testngpp/Error.h>
-
 
 TESTNGPP_NS_START
 

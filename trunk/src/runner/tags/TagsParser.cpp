@@ -4,6 +4,10 @@
 
 #include <iostream>
 
+#include <testngpp/utils/StringList.h>
+
+#include <testngpp/internal/Error.h>
+
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
 #include <testngpp/runner/NotCompositeTaggableFilter.h>
@@ -11,11 +15,8 @@
 #include <testngpp/runner/EmptyTagsFilter.h>
 #include <testngpp/runner/PosixFNMatcher.h>
 
-#include <testngpp/utils/StringList.h>
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TagsParser.h>
-
-#include <testngpp/Error.h>
 
 TESTNGPP_NS_START
 

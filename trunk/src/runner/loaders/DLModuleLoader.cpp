@@ -2,7 +2,7 @@
 #include <string>
 #include <dlfcn.h>
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/runner/DLModuleLoader.h>

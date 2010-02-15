@@ -1,7 +1,4 @@
 
-#include <testngpp/Error.h>
-#include <testngpp/ExceptionKeywords.h>
-
 #include <testngpp/runner/ModuleTestListenerLoaderFactory.h>
 #include <testngpp/runner/ModuleTestListenerLoader.h>
 #include <testngpp/runner/ModuleLoaderFactory.h>

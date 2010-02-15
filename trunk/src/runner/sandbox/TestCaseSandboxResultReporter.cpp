@@ -2,7 +2,7 @@
 #include <sstream>
 #include <errno.h>
 
-#include <testngpp/AssertionFailure.h>
+#include <testngpp/internal/AssertionFailure.h>
 
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 

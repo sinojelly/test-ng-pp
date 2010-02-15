@@ -20,8 +20,6 @@
 #define __TESTNGPP_RESOURCE_CHECK_POINT_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/AssertionFailure.h>
-#include <testngpp/Error.h>
 
 TESTNGPP_NS_START
 
@@ -45,7 +43,7 @@ struct ResourceCheckPoint
 ///////////////////////////////////////////////////////////
 ResourceCheckPoint testngppSetCheckPoint();
 void testngppVerifyCheckPoint(const ResourceCheckPoint& rcp
-        , const char*, unsigned int)  TESTNGPP_THROW(Error, AssertionFailure);
+        , const char*, unsigned int);
 
 ///////////////////////////////////////////////////////////
 #define TESTNGPP_SET_RESOURCE_CHECK_POINT() \

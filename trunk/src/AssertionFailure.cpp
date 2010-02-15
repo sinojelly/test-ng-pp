@@ -18,7 +18,7 @@
 
 #include <string>
 
-#include <testngpp/AssertionFailure.h>
+#include <testngpp/internal/AssertionFailure.h>
 
 TESTNGPP_NS_START
 

@@ -19,7 +19,7 @@
 #ifndef __TESTNGPP_ASSERTION_FAILURE_H
 #define __TESTNGPP_ASSERTION_FAILURE_H
 
-#include <testngpp/Exception.h>
+#include <testngpp/internal/Exception.h>
 
 TESTNGPP_NS_START
 

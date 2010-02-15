@@ -19,7 +19,7 @@
 #ifndef __TESTNGPP_INFO_H_
 #define __TESTNGPP_INFO_H_
 
-#include <testngpp/Exception.h>
+#include <testngpp/internal/Exception.h>
 
 TESTNGPP_NS_START
 
