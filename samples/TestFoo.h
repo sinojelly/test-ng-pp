@@ -21,11 +21,12 @@ public:
        __TESTNGPP_DO
 
        WARN("gonna have an assertion failure");
-       TS_ASSERT(false);
+
+       ASSERT_FALSE(true);
 
        __TESTNGPP_CLEANUP
 
-       TS_ASSERT(true);
+       ASSERT_TRUE(true);
 
        __TESTNGPP_DONE
     }
@@ -36,11 +37,11 @@ public:
     {
        __TESTNGPP_DO
 
-       TS_ASSERT(true);
+       ASSERT_TRUE(true);
 
        __TESTNGPP_CLEANUP
 
-       TS_ASSERT(false);
+       ASSERT_FALSE(true);
 
        __TESTNGPP_DONE
     }

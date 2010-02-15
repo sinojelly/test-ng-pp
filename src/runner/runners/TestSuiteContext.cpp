@@ -1,9 +1,9 @@
 
 #include <vector>
 
-#include <testngpp/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
+#include <testngpp/internal/Error.h>
 #include <testngpp/internal/TestSuiteDesc.h>
 
 #include <testngpp/runner/TestSuiteLoader.h>

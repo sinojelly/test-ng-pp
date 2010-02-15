@@ -5,9 +5,9 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
-#include <testngpp/AssertionFailure.h>
-#include <testngpp/Warning.h>
-#include <testngpp/Info.h>
+#include <testngpp/internal/AssertionFailure.h>
+#include <testngpp/internal/Warning.h>
+#include <testngpp/internal/Info.h>
 
 TESTNGPP_NS_START
 

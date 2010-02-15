@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 
 #include <testngpp/runner/SimpleTestCaseResultReporter.h>
 #include <testngpp/runner/InternalError.h>

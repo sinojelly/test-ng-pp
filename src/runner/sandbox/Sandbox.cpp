@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 
 #include <testngpp/runner/Sandbox.h>
 #include <testngpp/runner/EnvironmentCleaner.h>

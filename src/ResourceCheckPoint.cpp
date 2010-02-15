@@ -33,6 +33,8 @@
 #endif
 
 #include <testngpp/ResourceCheckPoint.h>
+#include <testngpp/internal/AssertionFailure.h>
+#include <testngpp/internal/Error.h>
 
 #if defined(_MSC_VER)
 #define snprintf _snprintf
@@ -83,7 +85,7 @@ ResourceCheckPoint testngppSetCheckPoint()
 
 //////////////////////////////////////////////////////////////////
 void testngppVerifyCheckPoint(const ResourceCheckPoint& rcp
-      , const char* file, unsigned int line) TESTNGPP_THROW(Error, AssertionFailure)
+      , const char* file, unsigned int line) 
 {
    if(rcp.memory != allocatedSize)
    {
@@ -145,7 +147,7 @@ static void* allocateMemory(size_t size) TESTNGPP_THROW(std::bad_alloc)
 }
 
 //////////////////////////////////////////////////////////////////
-static void freeMemory(void* p) TESTNGPP_THROW(Error)
+static void freeMemory(void* p) 
 {
    if(p == 0)
    {

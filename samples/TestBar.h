@@ -22,38 +22,43 @@ struct TestBar1 : public TESTNGPP_NS::TestFixture
     // @test(id=1, depends=4, tags="ft slow")
     void case10()
     {
-       TS_ASSERT(false);
+       INFO("this is case 10");
+       ASSERT_FALSE(true);
     }
 
     // @test(id=2, depends=1, tags="it fast")
     void case11()
     {
-       TS_ASSERT(true);
+       INFO("this is case 11");
+       ASSERT_TRUE(true);
     }
 
+    // @test(id=3)
     TEST(case13)
     {
        INFO("this is case 13");
     }
 			
-    // @test(id=4, tags="it slow")
+    // @test(id=4, depends=3, tags="it slow")
     TEST(case14)
     {
-	   //exit(-1);
-       TS_ASSERT(true);
+       INFO("this is case 14");
+       ASSERT_TRUE(true);
     }
 
     // @test(depends=4, tags="ut fast")
     TEST(case15)
     {
-       TS_ASSERT(true);
+       INFO("this is case 15");
+       ASSERT_FALSE(true);
     }
 
     // @test(depends=2, tags="ft slow empty")
     TEST(case16)
     {
+       INFO("this is case 16");
 	    exit(-1);
-	}
+	 }
 };
 
 class TestBar2 : public TestFixture

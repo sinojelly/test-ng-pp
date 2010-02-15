@@ -1,8 +1,8 @@
 
 #include <testngpp/TestFixture.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
-#include <testngpp/Warning.h>
-#include <testngpp/Info.h>
+#include <testngpp/internal/Warning.h>
+#include <testngpp/internal/Info.h>
 
 #include <testngpp/runner/TestCaseResultCollector.h>
 

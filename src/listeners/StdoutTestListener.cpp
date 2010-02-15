@@ -3,8 +3,8 @@
 #include <string>
 #include <list>
 
-#include <testngpp/Error.h>
-#include <testngpp/AssertionFailure.h>
+#include <testngpp/internal/Error.h>
+#include <testngpp/internal/AssertionFailure.h>
 
 #include <testngpp/utils/OptionList.h>
 #include <testngpp/utils/StringList.h>

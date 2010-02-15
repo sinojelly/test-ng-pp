@@ -1,5 +1,5 @@
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 
 #include <testngpp/runner/ModuleTestSuiteLoader.h>
 #include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
