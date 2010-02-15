@@ -1,11 +1,13 @@
 
+#include <testngpp/utils/InternalError.h>
+
 #include <testngpp/internal/Error.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestSuiteInfoReader.h>
 
 #include <testngpp/runner/SimpleTestSuiteResultReporter.h>
 #include <testngpp/runner/SimpleTestCaseResultReporter.h>
-#include <testngpp/runner/InternalError.h>
+
 
 TESTNGPP_NS_START
 

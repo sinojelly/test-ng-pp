@@ -3,6 +3,8 @@
 
 #include <testngpp/ExceptionKeywords.h>
 
+#include <testngpp/utils/InternalError.h>
+
 #include <testngpp/internal/Error.h>
 
 #include <testngpp/runner/SimpleTestResultDispatcher.h>
@@ -12,9 +14,6 @@
 
 #include <testngpp/runner/loaders/TestListenerLoader.h>
 #include <testngpp/runner/loaders/TestListenerLoaderFactory.h>
-
-#include <testngpp/runner/InternalError.h>
-
 #include <testngpp/runner/SimpleTestResultManager.h>
 
 TESTNGPP_NS_START

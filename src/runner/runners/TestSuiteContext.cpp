@@ -3,6 +3,8 @@
 
 #include <testngpp/ExceptionKeywords.h>
 
+#include <testngpp/utils/InternalError.h>
+
 #include <testngpp/internal/Error.h>
 #include <testngpp/internal/TestSuiteDesc.h>
 
@@ -16,7 +18,6 @@
 #include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
 
 #include <testngpp/runner/TestSuiteContext.h>
-#include <testngpp/runner/InternalError.h>
  
 TESTNGPP_NS_START
  
