@@ -10,13 +10,13 @@
 
 TESTNGPP_NS_START
 
-struct TaggableObjFilter;
+struct TagsFilterRule;
 
 struct TagsFilterResultCollector
    : public TestSuiteResultCollector
 {
-   virtual void startTagsFiltering(const TaggableObjFilter*) = 0;
-   virtual void endTagsFiltering(const TaggableObjFilter*) = 0;
+   virtual void startTagsFiltering(const TagsFilterRule*) = 0;
+   virtual void endTagsFiltering(const TagsFilterRule*) = 0;
 
    virtual ~TagsFilterResultCollector() {}
 };

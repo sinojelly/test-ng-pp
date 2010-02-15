@@ -293,14 +293,14 @@ addSuiteError(TestSuiteInfoReader*, const std::string& msg)
 ///////////////////////////////////////////////////////////
 void
 XMLTestListener::
-startTagsFiltering(const TaggableObjFilter*)
+startTagsFiltering(const TagsFilterRule*)
 {
 }
 
 ///////////////////////////////////////////////////////////
 void
 XMLTestListener::
-endTagsFiltering(const TaggableObjFilter*)
+endTagsFiltering(const TagsFilterRule*)
 {
 }
 

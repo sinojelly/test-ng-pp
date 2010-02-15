@@ -160,14 +160,14 @@ addSuiteError(TestSuiteInfoReader*, const std::string& msg )
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-startTagsFiltering(const TaggableObjFilter*)
+startTagsFiltering(const TagsFilterRule*)
 {
    This->round++;
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-endTagsFiltering(const TaggableObjFilter*)
+endTagsFiltering(const TagsFilterRule*)
 {
 }
 

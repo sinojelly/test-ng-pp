@@ -46,8 +46,8 @@ struct SimpleTestResultReporter
    void endTestSuite(TestSuiteInfoReader*);
    void addSuiteError(TestSuiteInfoReader*, const std::string&);
 
-   void startTagsFiltering(const TaggableObjFilter*);
-   void endTagsFiltering(const TaggableObjFilter*);
+   void startTagsFiltering(const TagsFilterRule*);
+   void endTagsFiltering(const TagsFilterRule*);
 
    void startTest();
    void endTest();

@@ -14,14 +14,13 @@
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestSuiteInfoReader.h>
+#include <testngpp/internal/TagsFilterRule.h>
 
 #include <testngpp/listener/TestListener.h>
 #include <testngpp/listener/TestResultReporter.h>
 #include <testngpp/listener/TestSuiteResultReporter.h>
 #include <testngpp/listener/TestCaseResultReporter.h>
 
-
-#include <testngpp/runner/TaggableObjFilter.h>
 
 TESTNGPP_NS_START
 
@@ -157,8 +156,8 @@ struct StdoutTestListener : public TestListener
    void endTestSuite(TestSuiteInfoReader*);
    void addSuiteError(TestSuiteInfoReader*, const std::string&);
    
-   void startTagsFiltering(const TaggableObjFilter*);
-   void endTagsFiltering(const TaggableObjFilter*);
+   void startTagsFiltering(const TagsFilterRule*);
+   void endTagsFiltering(const TagsFilterRule*);
 
    void startTest();
    void endTest();
@@ -654,7 +653,7 @@ addSuiteError(TestSuiteInfoReader*, const std::string&)
 ///////////////////////////////////////////////////////////
 void
 StdoutTestListener::
-startTagsFiltering(const TaggableObjFilter* filter)
+startTagsFiltering(const TagsFilterRule* filter)
 {
    if(!showTags) return;
 
@@ -669,7 +668,7 @@ startTagsFiltering(const TaggableObjFilter* filter)
 ///////////////////////////////////////////////////////////
 void
 StdoutTestListener::
-endTagsFiltering(const TaggableObjFilter*)
+endTagsFiltering(const TagsFilterRule*)
 {
 }
 
