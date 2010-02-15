@@ -4,7 +4,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestResultCollector.h>
+#include <testngpp/listener/TestResultCollector.h>
 
 TESTNGPP_NS_START
 

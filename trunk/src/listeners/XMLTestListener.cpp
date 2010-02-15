@@ -10,9 +10,10 @@
 #include <testngpp/internal/TestSuiteInfoReader.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
 
-#include <testngpp/runner/TestResultReporter.h>
-#include <testngpp/runner/TestSuiteResultReporter.h>
-#include <testngpp/runner/TestCaseResultReporter.h>
+#include <testngpp/listener/TestResultReporter.h>
+#include <testngpp/listener/TestSuiteResultReporter.h>
+#include <testngpp/listener/TestCaseResultReporter.h>
+
 #include <testngpp/runner/InternalError.h>
 
 /*

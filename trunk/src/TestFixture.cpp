@@ -4,7 +4,7 @@
 #include <testngpp/internal/Warning.h>
 #include <testngpp/internal/Info.h>
 
-#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/listener/TestCaseResultCollector.h>
 
 TESTNGPP_NS_START
 

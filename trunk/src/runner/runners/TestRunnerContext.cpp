@@ -3,7 +3,8 @@
 
 #include <testngpp/ExceptionKeywords.h>
 
-#include <testngpp/runner/TestResultCollector.h>
+#include <testngpp/listener/TestResultCollector.h>
+
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestSuiteContext.h>

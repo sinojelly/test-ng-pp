@@ -5,6 +5,8 @@
 
 #include <testngpp/internal/Error.h>
 
+#include <testngpp/listener/TestResultCollector.h>
+
 #include <testngpp/runner/loaders/ModuleTestListenerLoaderFactory.h>
 #include <testngpp/runner/loaders/ModuleTestSuiteLoaderFactory.h>
 
@@ -19,7 +21,7 @@
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/TagsParser.h>
 #include <testngpp/runner/TestRunnerContext.h>
-#include <testngpp/runner/TestResultCollector.h>
+
 
 #include <testngpp/runner/TestRunner.h>
 

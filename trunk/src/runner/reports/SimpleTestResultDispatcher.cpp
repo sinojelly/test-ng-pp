@@ -2,12 +2,13 @@
 #include <list>
 #include <iostream>
 
-#include <testngpp/runner/SimpleTestResultDispatcher.h>
-#include <testngpp/runner/TestCaseListener.h>
-#include <testngpp/runner/TestSuiteListener.h>
-#include <testngpp/runner/TestListener.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
 
+#include <testngpp/listener/TestListener.h>
+#include <testngpp/listener/TestCaseListener.h>
+#include <testngpp/listener/TestSuiteListener.h>
+
+#include <testngpp/runner/SimpleTestResultDispatcher.h>
 
 TESTNGPP_NS_START
 

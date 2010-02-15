@@ -10,6 +10,8 @@
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestCase.h>
 
+#include <testngpp/listener/TestCaseResultCollector.h>
+
 #include <testngpp/runner/EOFError.h>
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/Sandbox.h>
@@ -17,7 +19,7 @@
 #include <testngpp/runner/TestCaseSandboxHandler.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
 #include <testngpp/runner/TestCaseSandbox.h>
-#include <testngpp/runner/TestCaseResultCollector.h>
+
 
 
 TESTNGPP_NS_START

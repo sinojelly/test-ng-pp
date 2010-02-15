@@ -4,12 +4,12 @@
 #include <sstream>
 #include <iostream>
 
-#include <testngpp/internal/Error.h>
 #include <testngpp/ExceptionKeywords.h>
-
 #include <testngpp/utils/StringToOptions.h>
 
-#include <testngpp/runner/TestListener.h>
+#include <testngpp/internal/Error.h>
+
+#include <testngpp/listener/TestListener.h>
 
 #include <testngpp/runner/loaders/ModuleLoader.h>
 #include <testngpp/runner/loaders/ModuleTestListenerLoader.h>

@@ -4,8 +4,8 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestSuiteListener.h>
-#include <testngpp/runner/TestSuiteResultReporter.h>
+#include <testngpp/listener/TestSuiteListener.h>
+#include <testngpp/listener/TestSuiteResultReporter.h>
 
 TESTNGPP_NS_START
 

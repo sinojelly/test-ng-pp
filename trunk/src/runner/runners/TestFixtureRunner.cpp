@@ -5,10 +5,12 @@
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestFixtureDesc.h>
 
+#include <testngpp/listener/TestFixtureResultCollector.h>
+
 #include <testngpp/runner/TestFixtureRunner.h>
 #include <testngpp/runner/TestHierarchyRunner.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
-#include <testngpp/runner/TestFixtureResultCollector.h>
+
 #include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestCaseFilter.h>
 #include <testngpp/runner/FixtureTagsFilter.h>

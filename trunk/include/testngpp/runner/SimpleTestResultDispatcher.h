@@ -4,11 +4,12 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestResultCollector.h>
+#include <testngpp/listener/TestResultCollector.h>
+#include <testngpp/listener/TestResultReporter.h>
+
 #include <testngpp/runner/TestResultDispatcher.h>
 #include <testngpp/runner/TestSuiteResultDispatcher.h>
 #include <testngpp/runner/TestCaseResultDispatcher.h>
-#include <testngpp/runner/TestResultReporter.h>
 
 TESTNGPP_NS_START
 

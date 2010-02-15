@@ -3,13 +3,13 @@
 #include <list>
 
 #include <testngpp/internal/TestCase.h>
-
 #include <testngpp/internal/TestFixtureDesc.h>
+
+#include <testngpp/listener/TestFixtureResultCollector.h>
 
 #include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestCaseContainer.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
-#include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseFilter.h>
 #include <testngpp/runner/FixtureTagsFilter.h>
 #include <testngpp/runner/InternalError.h>
