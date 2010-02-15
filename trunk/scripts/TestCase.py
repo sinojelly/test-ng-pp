@@ -4,6 +4,7 @@ import re
 from Message import *
 from AnnotationParser import AnnotationParser
 from TagsParser import TagsParser
+from Name import *
 
 ##########################################
 class TestCase:
@@ -12,7 +13,7 @@ class TestCase:
       self.traditional_name = name[0]
       self.name             = name[1]
       if self.name != None:
-         self.name = self.name.replace('"', '\\"').replace("'", "\\'")
+         self.name = escape_name(self.name)
       self.scope            = scope
       self.file             = file
       self.line             = line

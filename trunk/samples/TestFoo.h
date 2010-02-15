@@ -12,18 +12,6 @@ struct TestFixture12 {};
 class TestFoo : public TestFixture
 {
 public:
-    void setUp()
-    {}
-
-    void tearDown()
-    {}
-
-    // Success
-
-    /* this ml-comments is for test
- as well */ // same here
-
-    /* this msl-comments is only for test */ //it should not hurt
 
     // @test
     void case0()
@@ -66,51 +54,58 @@ public:
     }
 #endif
 
-    // Success
-    void testCase3() {}
+    // @test
+    void case3() {}
 
-    void testCase4()
+    // @test
+    void case4()
     {
-      TS_ASSERT_EQUALS(2, 2);
+      ASSERT_EQ(2, 2);
     }
 
-    void testCase5()
+    // @test
+    void case5()
     {
-      TS_ASSERT(std::string("abc") == std::string("abc"));
+      ASSERT_EQ(std::string("abc"), "abc");
     }
 
-    // Fail
-    void testCase6()
+    // @test
+    void case6()
     {
-      TS_FAIL("not <implemented/> <yet>.");
+      FAIL("not implemented yet.");
     }
 
-    // Success
-    void testCase7()
+    // @test
+    void case7()
     {
-      TS_ASSERT_THROWS_NOTHING(testCase3());
+      unsigned int a = 0xabcdef01;
+      unsigned int b = 0xabcdef02;
+      ASSERT_SAME_DATA(&a, &b, sizeof(unsigned int));
     }
 
-    // Success
-    void testCase8()
+    // @test
+    void case8()
     {
-      TS_ASSERT_THROWS_ANYTHING(testCase6());
+      unsigned int a = 0xabcdef01;
+      unsigned int b = 0xabcdef01;
+      ASSERT_SAME_DATA(&a, &b, sizeof(unsigned int));
     }
 
-    // Fail
-    void testCase9()
+    // @test
+    void case9()
     {
-      TS_ASSERT_THROWS_ANYTHING(testCase3());
+       ASSERT_DELTA(10, 9.9, 0.01);
     }
 
-    void testCase10()
+    // @test
+    void case10()
     {
-      TS_ASSERT_THROWS_ANYTHING(testCase6());
+       ASSERT_DELTA(10, 9.9, 0.1);
     }
 
     void testCase11()
     {
-      TS_ASSERT_THROWS_NOTHING(testCase3());
+      ASSERT_THROWS_NOTHING(case3());
     }
 
 #if 0
@@ -120,19 +115,21 @@ public:
     }
 #endif
 
-    void testCase13()
+    // @test
+    void case13()
     {
-      TS_ASSERT_THROWS(testCase3(), std::exception);
+      ASSERT_THROWS(case3(), std::exception);
     }
 
-    void testCase14()
+    // @test
+    void case14()
     {
-      TS_ASSERT_THROWS(testCase3(), std::exception);
+      ASSERT_THROWS(case3(), std::exception);
     }
 };
 
 
-FIXTURE(ChineseFixture, 中文套件样例''~!@#$%^&*/><;"各种各样的字符都应改允许")
+FIXTURE(ChineseFixture, 中文套件样例''~!@#$*%^&/\><;"各种各样的字符都应改允许")
 {
     TEST(测试用例1: 1+1=2)
     {

@@ -6,6 +6,7 @@ import re
 from TestScope import TestScope
 from AnnotationParser import AnnotationParser
 from TagsParser import TagsParser
+from Name import *
 
 ###########################################
 class Fixture:
@@ -14,8 +15,7 @@ class Fixture:
       self.id   = name[0]
       self.name = name[1]
       if self.name != None:
-         self.name = self.name.replace('"', '\\"').replace("'", "\\'")
-
+         self.name = escape_name(self.name)
       self.scope = TestScope("::", None, None)
       self.file = file
       self.line = line
