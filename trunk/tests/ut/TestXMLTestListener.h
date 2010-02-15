@@ -3,9 +3,10 @@
 #include <testngpp/internal/TestSuiteInfoReader.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
-#include <testngpp/runner/TestSuiteResultReporter.h>
-#include <testngpp/runner/TestCaseResultReporter.h>
-#include <testngpp/AssertionFailure.h>
+#include <testngpp/internal/AssertionFailure.h>
+
+#include <testngpp/listener/TestSuiteResultReporter.h>
+#include <testngpp/listener/TestCaseResultReporter.h>
 
 #include <mockcpp/mockcpp.hpp>
 
@@ -127,6 +128,6 @@ public:
   </testsuite>\n\
 </testsuites>\n";
 
-		TS_ASSERT_EQUALS(expected, os->str())
+		TS_ASSERT_EQUALS(expected, os->str());
 	}
 };

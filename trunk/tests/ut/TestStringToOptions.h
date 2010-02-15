@@ -4,7 +4,7 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <testngpp/utils/StringToOptions.h>
 
@@ -17,27 +17,17 @@ class TestStringToOptions: public CxxTest::TestSuite
 {
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
 public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
    }
    void tearDown()
    {
-      try {
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
-      }
-      catch(TESTNGPP_NS::AssertionFailure& e)
-      {
-         std::cerr << e.what() << std::endl;
-      }
-      catch(TESTNGPP_NS::Error& e)
-      {
-         std::cerr << e.what() << std::endl;
-      }
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToGetNumberOfArgsOfSimpleString()

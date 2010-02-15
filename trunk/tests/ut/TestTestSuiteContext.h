@@ -4,15 +4,15 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <testngpp/runner/TestSuiteContext.h>
 #include <testngpp/runner/TestFilter.h>
-#include <testngpp/runner/ModuleTestSuiteLoader.h>
-#include <testngpp/runner/DLModuleLoader.h>
+#include <testngpp/runner/loaders/ModuleTestSuiteLoader.h>
+#include <testngpp/runner/loaders/DLModuleLoader.h>
 #include <testngpp/runner/TagsParser.h>
 #include <testngpp/runner/TagsFilters.h>
-#include <testngpp/runner/TestResultCollector.h>
+#include <testngpp/listener/TestResultCollector.h>
 
 
 USING_MOCKCPP_NS
@@ -22,7 +22,7 @@ class TestTestSuiteContext: public CxxTest::TestSuite
 {
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    TestSuiteContext* context;
  
@@ -33,7 +33,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
 
       MOCK_METHOD(filter, isFixtureMatch)
          .stubs().will(returnValue(true));
@@ -47,7 +47,7 @@ public:
       filter.reset();
       collector.reset();
 
-      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldNotHaveMemoryLeakage()
@@ -56,7 +56,7 @@ public:
 
       context = new TestSuiteContext
          ( new ModuleTestSuiteLoader(new DLModuleLoader())
-         , "libmockcpp-ut-TestAny"
+         , "../../samples/libsample"
          , collector
          , tagsFilter
          , filter);

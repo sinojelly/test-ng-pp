@@ -35,13 +35,13 @@ public:
    {
       delete loader;
 
-      TESTNGPPST_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldNotHaveMemoryLeakage()
    {
       StringList searchingPaths;
-      desc = loader->load(searchingPaths, "libmockcpp-ut-TestAny", 0);
+      desc = loader->load(searchingPaths, "../../samples/libsample", 0);
       loader->unload();
    }
 };

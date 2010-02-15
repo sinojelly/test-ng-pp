@@ -18,7 +18,7 @@ ADD_DEFINITIONS(
 
 SET(UT_CASES
   TestAssertionFailure.h
-  TestDLModuleLoader.h
+#  TestDLModuleLoader.h
 #  TestExceptionKeywords.h
 #  TestFixtureDef.h
   TestGeneralTestFilter.h
@@ -29,26 +29,26 @@ SET(UT_CASES
   TestPosixFNMatcher.h
   TestSandbox.h
   TestSandboxProcessor.h
-  TestSimpleTestCaseRunner.h
+#  TestSimpleTestCaseRunner.h
   TestSimpleTestSuiteResultReporter.h
   TestStringToOptions.h
   TestTagsParser.h
   TestTestCase.h
   TestTestCaseHierarchy.h
-  TestTestCaseSandbox.h
+#  TestTestCaseSandbox.h
   TestTestCaseSandboxResultReporter.h
   TestTestFilterFactory.h
   TestTestFixtureDesc.h
   TestTestFixtureSandboxRunner.h
   TestTestSuiteContext.h
   TestTestSuiteDesc.h
-  TestTestSuiteRunner.h
   TestXMLBuilder.h
   TestXMLTestListener.h
 )
 
 LINK_DIRECTORIES(
   ${PROJECT_HOME}/src
+  ${PROJECT_HOME}/src/listeners
   ${PROJECT_HOME}/src/runner
   ${CMAKE_BINARY_DIR}/3rdparty/testngppst/src)
 
@@ -56,6 +56,7 @@ INCLUDE_DIRECTORIES(BEFORE
   .
   ${PROJECT_HOME}/include
   ${PROJECT_HOME}/3rdparty
+  ${PROJECT_HOME}/src
   ${CMAKE_SOURCE_DIR}/3rdparty/testngppst/include
   ${CMAKE_SOURCE_DIR}/3rdparty/mockcpp/include
   )
@@ -77,6 +78,7 @@ FOREACH(CASE ${UT_CASES})
     testngppst
     testngpp
     testngpp-runner-lib
+    testngppxmllistener-fortest
     mockcpp)
 
   ADD_CUSTOM_COMMAND(

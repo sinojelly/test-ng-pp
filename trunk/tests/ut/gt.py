@@ -11,7 +11,7 @@ template = '''
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <testngpp/%s.h>
 
@@ -22,17 +22,17 @@ class Test%s: public CxxTest::TestSuite
 {
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
 public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
    }
    void tearDown()
    {
-      TESTNGPP_VERIFY_RCP_WITH_ERR_MSG(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
 };

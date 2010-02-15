@@ -3,6 +3,7 @@
 #include <string>
 
 #include <mockcpp/mockcpp.hpp>
+
 #include <listeners/XMLBuilder.h>
 
 #include <cxxtest/TestSuite.h>
@@ -43,7 +44,7 @@ public:
 					.attribute("genre", "novel")
 				.write(ss);
 
-		TS_ASSERT_EQUALS(expected, ss.str())
+		TS_ASSERT_EQUALS(expected, ss.str());
 
 		delete builder;
 	}
@@ -60,7 +61,7 @@ public:
 "<?xml version=\"1.0\"?>\n\
 <books name=\"&lt;&gt;&amp;&apos;&quot;\">&lt;&gt;&amp;&apos;&quot;</books>\n";
 
-		TS_ASSERT_EQUALS(expected, ss.str())
+		TS_ASSERT_EQUALS(expected, ss.str());
 
 		delete builder;
 	}
