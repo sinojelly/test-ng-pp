@@ -1,7 +1,7 @@
 #!/bin/bash
 
-all_headers=`find src include -name *.h*`
-all_srcs=`find src -name *.c*`
+all_headers=`find ./src ./include -name *.h*`
+all_srcs=`find ./src -name *.c*`
 all_makes=`find . -name CMakeLists.txt`
 all_files="${all_headers} ${all_srcs} ${all_makes}"
 
