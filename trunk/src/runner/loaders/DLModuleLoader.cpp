@@ -5,7 +5,7 @@
 #include <testngpp/internal/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
-#include <testngpp/runner/DLModuleLoader.h>
+#include <testngpp/runner/loaders/DLModuleLoader.h>
 
 TESTNGPP_NS_START
 

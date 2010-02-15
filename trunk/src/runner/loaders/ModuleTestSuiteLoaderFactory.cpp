@@ -1,9 +1,9 @@
 
 
 #include <testngpp/internal/Error.h>
-#include <testngpp/runner/ModuleTestSuiteLoaderFactory.h>
-#include <testngpp/runner/ModuleTestSuiteLoader.h>
-#include <testngpp/runner/ModuleLoaderFactory.h>
+#include <testngpp/runner/loaders/ModuleTestSuiteLoaderFactory.h>
+#include <testngpp/runner/loaders/ModuleTestSuiteLoader.h>
+#include <testngpp/runner/loaders/ModuleLoaderFactory.h>
 
 TESTNGPP_NS_START
 

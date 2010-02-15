@@ -5,13 +5,14 @@
 
 #include <testngpp/internal/Error.h>
 
+#include <testngpp/runner/loaders/ModuleTestListenerLoaderFactory.h>
+#include <testngpp/runner/loaders/ModuleTestSuiteLoaderFactory.h>
+
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
 #include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFilterFactory.h>
-#include <testngpp/runner/ModuleTestListenerLoaderFactory.h>
-#include <testngpp/runner/ModuleTestSuiteLoaderFactory.h>
 #include <testngpp/runner/SimpleTestResultManager.h>
 #include <testngpp/runner/TestResultManager.h>
 #include <testngpp/runner/TagsFilters.h>

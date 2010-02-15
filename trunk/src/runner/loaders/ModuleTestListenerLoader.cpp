@@ -10,9 +10,9 @@
 #include <testngpp/utils/StringToOptions.h>
 
 #include <testngpp/runner/TestListener.h>
-#include <testngpp/runner/ModuleLoader.h>
 
-#include <testngpp/runner/ModuleTestListenerLoader.h>
+#include <testngpp/runner/loaders/ModuleLoader.h>
+#include <testngpp/runner/loaders/ModuleTestListenerLoader.h>
 
 
 TESTNGPP_NS_START

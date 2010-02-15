@@ -4,7 +4,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestListenerLoaderFactory.h>
+#include <testngpp/runner/loaders/TestListenerLoaderFactory.h>
 
 TESTNGPP_NS_START
 

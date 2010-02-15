@@ -4,7 +4,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestSuiteLoader.h>
+#include <testngpp/runner/loaders/TestSuiteLoader.h>
 
 TESTNGPP_NS_START
 

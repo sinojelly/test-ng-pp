@@ -7,10 +7,10 @@
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestSuiteContext.h>
-#include <testngpp/runner/ModuleTestSuiteLoaderFactory.h>
-
 #include <testngpp/runner/TestRunnerContext.h>
-#include <testngpp/runner/TestSuiteLoader.h>
+
+#include <testngpp/runner/loaders/ModuleTestSuiteLoaderFactory.h>
+#include <testngpp/runner/loaders/TestSuiteLoader.h>
 
 TESTNGPP_NS_START
 

@@ -56,7 +56,9 @@ public:
 #endif
 
     // @test
-    void case3() {}
+    void case3()
+    {
+    }
 
     // @test
     void case4()
