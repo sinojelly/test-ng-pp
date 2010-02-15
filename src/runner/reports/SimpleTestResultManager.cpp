@@ -10,8 +10,8 @@
 #include <testngpp/runner/SimpleTestCaseResultReporter.h>
 #include <testngpp/runner/SimpleTestSuiteResultReporter.h>
 
-#include <testngpp/runner/TestListenerLoader.h>
-#include <testngpp/runner/TestListenerLoaderFactory.h>
+#include <testngpp/runner/loaders/TestListenerLoader.h>
+#include <testngpp/runner/loaders/TestListenerLoaderFactory.h>
 
 #include <testngpp/runner/InternalError.h>
 

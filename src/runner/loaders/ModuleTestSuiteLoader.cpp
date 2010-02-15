@@ -1,10 +1,11 @@
 
 #include <testngpp/internal/Error.h>
 
-#include <testngpp/runner/ModuleTestSuiteLoader.h>
+#include <testngpp/runner/loaders/ModuleTestSuiteLoader.h>
+#include <testngpp/runner/loaders/ModuleLoader.h>
+#include <testngpp/runner/loaders/ModuleLoaderFactory.h>
+
 #include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
-#include <testngpp/runner/ModuleLoaderFactory.h>
-#include <testngpp/runner/ModuleLoader.h>
 
 TESTNGPP_NS_START
 

@@ -6,7 +6,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestListenerLoader.h>
+#include <testngpp/runner/loaders/TestListenerLoader.h>
 
 TESTNGPP_NS_START
 

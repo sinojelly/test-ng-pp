@@ -3,7 +3,7 @@
 #define __TESTNGPP_LT_MODULE_LOADER_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/runner/ModuleLoader.h>
+#include <testngpp/runner/loaders/ModuleLoader.h>
 #include <testngpp/runner/SearchingPaths.h>
 
 

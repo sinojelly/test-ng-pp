@@ -1,7 +1,7 @@
 
-#include <testngpp/runner/ModuleTestListenerLoaderFactory.h>
-#include <testngpp/runner/ModuleTestListenerLoader.h>
-#include <testngpp/runner/ModuleLoaderFactory.h>
+#include <testngpp/runner/loaders/ModuleTestListenerLoaderFactory.h>
+#include <testngpp/runner/loaders/ModuleTestListenerLoader.h>
+#include <testngpp/runner/loaders/ModuleLoaderFactory.h>
 
 TESTNGPP_NS_START
 
