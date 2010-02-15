@@ -32,8 +32,10 @@
 
 TESTNGPP_NS_START
 
+//////////////////////////////////////////////////////////////////
 #define __TESTNGPP_REPORT_FAILURE(what) \
       reportFailure(__FILE__, __LINE__, what)
+
 //////////////////////////////////////////////////////////////////
 #define ASSERT_TRUE(expr) do { \
    if(!(expr)) {\
@@ -125,28 +127,36 @@ TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
 #define ASSERT_SAME_DATA(addr1, addr2, size) do { \
-   if(::memcmp((void*)addr1, (void*)addr2, size)) \
+   void* p1 = reinterpret_cast<void*>(addr1); \
+   void* p2 = reinterpret_cast<void*>(addr2); \
+   if(::memcmp((void*)p1, (void*)p2, size)) \
    { \
-      __TESTNGPP_REPORT_FAILURE ( \
-            "expected " #addr1 " and " #addr2 " have same data, but actually not."); \
+      std::stringstream ss; \
+      ss << "expected (" #addr1 ", " #addr2 ") have same data, found (" \
+         << TESTNGPP_NS::toBufferString(p1, size) \
+         << ", " \
+         << TESTNGPP_NS::toBufferString(p2, size) \
+         << ")"; \
+      __TESTNGPP_REPORT_FAILURE(ss.str()); \
    } \
 }while(0)
 
-#define TESTNGPP_ABS(value) ((value) > 0?(value):-(value))
+//////////////////////////////////////////////////////////////////
+#define __TESTNGPP_ABS(value) ((value) > 0?(value):-(value))
 //////////////////////////////////////////////////////////////////
 #define ASSERT_DELTA(x, y, d) do { \
    TESTNGPP_TYPEOF(x) value1 = x; \
    TESTNGPP_TYPEOF(y) value2 = y; \
-   TESTNGPP_TYPEOF(d) delta  = TESTNGPP_ABS(d); \
-   TESTNGPP_TYPEOF(d) actual_delta = TESTNGPP_ABS(value1 - value2); \
+   TESTNGPP_TYPEOF(d) delta  = __TESTNGPP_ABS(d); \
+   TESTNGPP_TYPEOF(d) actual_delta = __TESTNGPP_ABS(value1 - value2); \
    if(actual_delta > delta) \
    { \
       std::stringstream ss; \
-           ss << "expected the delta of " #x "," #y " is not greater than" \
-              << TESTNGPP_NS::toTypeAndValueString(delta) \
-              << "found the actual delta is " \
-              << TESTNGPP_NS::toTypeAndValueString(actual_delta) \
-              << "."; \
+      ss << "expected the delta of (" #x ", " #y ") <= (" \
+         << TESTNGPP_NS::toTypeAndValueString(delta) \
+         << "), actual delta: (" \
+         << TESTNGPP_NS::toTypeAndValueString(actual_delta) \
+         << ")"; \
       __TESTNGPP_REPORT_FAILURE(ss.str()); \
    } \
 }while(0)
