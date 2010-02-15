@@ -6,7 +6,7 @@ TESTNGPP_UT_SUITES=`ls libtestngpp-ut-*`
 ${TESTNGPPST_ROOT}/src/runner/testngppst-runner \
    -L${TESTNGPPST_ROOT}/src/listeners \
    -l"testngppstxmllistener result.xml" \
-   -l"testngppststdoutlistener -c -t -v" \
-   -t"* > ft" -c10 $@ \
+   -l"testngppststdoutlistener -c" \
+   -t"*" -c10 $@ \
    ${TESTNGPP_UT_SUITES}
 

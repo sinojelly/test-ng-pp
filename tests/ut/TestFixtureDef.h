@@ -2,6 +2,7 @@
 #include <string>
 
 #include <testngpp/internal/AssertionFailure.h>
+#include <testngpp/internal/Warning.h>
 #include <testngpp/internal/TestFixtureDesc.h>
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/TestFixture.h>
@@ -30,7 +31,7 @@ public:
 
    void testCase2()
    {
-      throw TESTNGPP_NS::Exception(15, "MyTestFixture.h", "Exception");
+      throw TESTNGPP_NS::Warning("MyTestFixture.h", 13, "Exception");
    }
 
    void testCase3()
@@ -49,23 +50,14 @@ struct MyTestCase : public TESTNGPP_NS::TestCase
    MyTestFixture myTestFixture;
 
    TESTNGPP_NS::TestFixture* getFixture() const { return 0; }
-
-   void setUp(TESTNGPP_NS::TestFixture*)
-   {
-      myTestFixture.setUp();
-   }
-
-   void tearDown()
-   {
-      myTestFixture.tearDown();
-   }
+   void setFixture(TESTNGPP_NS::TestFixture* fixture = 0) {}
 };
 
 static struct MyTestCase1 : public MyTestCase
 {
    MyTestCase1() : MyTestCase("testCase1", 5) {}
 
-   void run(bool)
+   void runTest()
    {
       myTestFixture.testCase1();
    }
@@ -76,7 +68,7 @@ static struct MyTestCase2 : public MyTestCase
 {
    MyTestCase2() : MyTestCase("testCase1", 5) {}
 
-   void run(bool)
+   void runTest()
    {
       myTestFixture.testCase2();
    }
@@ -87,7 +79,7 @@ static struct MyTestCase3 : public MyTestCase
 {
    MyTestCase3() : MyTestCase("testCase1", 5) {}
 
-   void run(bool)
+   void runTest()
    {
       myTestFixture.testCase3();
    }

@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 #include <cxxtest/TestSuite.h> 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <mockcpp/mockcpp.hpp>
 
@@ -18,16 +18,16 @@ USING_TESTNGPP_NS
 class TestSandboxProcessor: public CxxTest::TestSuite
 {
 private:
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
 public:
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
    }
    void tearDown()
    {
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldCleanupEnvironmentAndDoHandling()

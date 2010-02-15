@@ -1,6 +1,6 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <mockcpp/mockcpp.hpp>
 
@@ -10,7 +10,7 @@
 #include <testngpp/runner/TestHierarchyRunner.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/SimpleTestCaseRunner.h>
-#include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/listener/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseFilter.h>
 
 USING_MOCKCPP_NS
@@ -19,7 +19,7 @@ USING_TESTNGPP_NS
 class TestTestHierarchySandboxRunner: public CxxTest::TestSuite
 {
 private:
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    MockObject<TestCaseFilter> filter;
    MockObject<TestFixtureResultCollector> collector;
@@ -27,7 +27,7 @@ private:
 public:
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
 
       MOCK_METHOD(filter, isCaseMatch)
          .defaults().will(returnValue(true));
@@ -38,7 +38,7 @@ public:
       collector.reset();
       filter.reset();
 
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToRunATestFixture()

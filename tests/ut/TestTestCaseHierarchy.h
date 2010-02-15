@@ -1,12 +1,14 @@
 
 
 #include <iostream>
+#include <list>
+#include <algorithm>
 
 #include <cxxtest/TestSuite.h>
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <testngpp/internal/TestCase.h>
 
@@ -49,7 +51,7 @@ class TestTestCaseHierarchy: public CxxTest::TestSuite
 
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    FTestFixture2 f;
    
@@ -61,7 +63,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
 
       f.setUp();
 
@@ -88,12 +90,7 @@ public:
 
       f.tearDown();
 
-      try {
-        TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
-      }catch(std::exception& ex)
-      {
-         std::cout << ex.what() << std::endl;
-      }
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
 

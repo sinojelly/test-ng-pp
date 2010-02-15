@@ -4,8 +4,9 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
+#include <testngpp/internal/Error.h>
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TagsParser.h>
 #include <testngpp/internal/Taggable.h>
@@ -17,24 +18,18 @@ class TestTagsParser: public CxxTest::TestSuite
 {
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
 public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
    }
    
    void tearDown()
    {
-      try {
-       TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
-      }
-      catch(std::exception& ex)
-      {
-         std::cout << ex.what() << std::endl;
-      }
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    struct TaggableObj0 : public Taggable

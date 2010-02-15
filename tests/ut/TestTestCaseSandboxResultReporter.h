@@ -1,6 +1,6 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -25,7 +25,7 @@ class TestTestCaseSandboxResultReporter: public CxxTest::TestSuite
 {
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    int sockets[2];
 
@@ -38,7 +38,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
 
       int result = ::socketpair(AF_UNIX, SOCK_STREAM, 0, sockets);
       TS_ASSERT(result == 0);
@@ -50,7 +50,7 @@ public:
    void tearDown()
    {
       delete rChannel;
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleReportStartEvent()
@@ -101,7 +101,7 @@ class TestTestCaseSandboxResultDecoder: public CxxTest::TestSuite
 {
 private:
 
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    int sockets[2];
 
@@ -120,7 +120,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
 
       int result = ::socketpair(AF_UNIX, SOCK_STREAM, 0, sockets);
       TS_ASSERT(result == 0);
@@ -144,7 +144,7 @@ public:
       delete reporter;
       delete decoder;
 
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToDecodeStartEvent()
