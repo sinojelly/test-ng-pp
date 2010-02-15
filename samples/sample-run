@@ -2,7 +2,7 @@
 
 ../src/runner/testngpp-runner libsample \
    -L../src/listeners \
-   -l"testngppstdoutlistener -c -f" \
+   -l"testngppstdoutlistener -c -f -t" \
    -l"testngppxmllistener result.xml" \
    -t"*" -c100 $@
 

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
+#include <testngpp/internal/TagsFilterRule.h>
 
 #include <testngpp/listener/TestListener.h>
 #include <testngpp/listener/TestCaseListener.h>
@@ -42,8 +43,8 @@ struct SimpleTestResultDispatcherImpl
    void endTestSuite(TestSuiteInfoReader*);
    void addSuiteError(TestSuiteInfoReader*, const std::string&);
 
-   void startTagsFiltering(const TaggableObjFilter*);
-   void endTagsFiltering(const TaggableObjFilter*);
+   void startTagsFiltering(const TagsFilterRule*);
+   void endTagsFiltering(const TagsFilterRule*);
 
    void startTest();
    void endTest();
@@ -526,7 +527,7 @@ addSuiteError(TestSuiteInfoReader* suite, const std::string& msg )
 ///////////////////////////////////////////////////////////
 void
 SimpleTestResultDispatcherImpl::
-startTagsFiltering(const TaggableObjFilter* filter)
+startTagsFiltering(const TagsFilterRule* filter)
 {
    Listeners::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
@@ -538,7 +539,7 @@ startTagsFiltering(const TaggableObjFilter* filter)
 ///////////////////////////////////////////////////////////
 void
 SimpleTestResultDispatcher::
-startTagsFiltering(const TaggableObjFilter* filter)
+startTagsFiltering(const TagsFilterRule* filter)
 {
    This->startTagsFiltering(filter);
 }
@@ -546,7 +547,7 @@ startTagsFiltering(const TaggableObjFilter* filter)
 ///////////////////////////////////////////////////////////
 void
 SimpleTestResultDispatcherImpl::
-endTagsFiltering(const TaggableObjFilter* filter) 
+endTagsFiltering(const TagsFilterRule* filter) 
 {
    Listeners::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
@@ -558,7 +559,7 @@ endTagsFiltering(const TaggableObjFilter* filter)
 ///////////////////////////////////////////////////////////
 void
 SimpleTestResultDispatcher::
-endTagsFiltering(const TaggableObjFilter* filter) 
+endTagsFiltering(const TagsFilterRule* filter) 
 {
    This->endTagsFiltering(filter);
 }

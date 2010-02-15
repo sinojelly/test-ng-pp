@@ -4,18 +4,17 @@
 #include <string>
 
 #include <testngpp/testngpp.h>
+#include <testngpp/internal/TagsFilterRule.h>
 
 TESTNGPP_NS_START
 
 struct Taggable;
 
 ////////////////////////////////////////////////////
-struct TaggableObjFilter
+struct TaggableObjFilter : public TagsFilterRule
 {
    virtual bool matches(const Taggable*) const = 0;
    
-   virtual std::string toString() const = 0;
-
    virtual ~TaggableObjFilter() {}
 };
 
