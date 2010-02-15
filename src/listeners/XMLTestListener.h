@@ -20,7 +20,7 @@
 #define __TESTNGPP_XML_TEST_LISTENER_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/runner/TestListener.h>
+#include <testngpp/listener/TestListener.h>
 #include <sstream>
 
 TESTNGPP_NS_START

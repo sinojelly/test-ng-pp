@@ -4,9 +4,9 @@
 #include <testngpp/internal/TestCase.h>
 
 #include <testngpp/comm/PipeWrittableChannel.h>
+#include <testngpp/listener/TestCaseResultCollector.h>
 
 #include <testngpp/runner/TestCaseSandboxHandler.h>
-#include <testngpp/runner/TestCaseResultCollector.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 #include <testngpp/runner/TestCaseRunner.h>
 

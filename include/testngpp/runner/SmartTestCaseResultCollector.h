@@ -2,7 +2,7 @@
 #ifndef __TESTNGPP_SMART_TESTCASE_RESULT_COLLECTOR_H
 #define __TESTNGPP_SMART_TESTCASE_RESULT_COLLECTOR_H
 
-#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/listener/TestCaseResultCollector.h>
 
 TESTNGPP_NS_START
 

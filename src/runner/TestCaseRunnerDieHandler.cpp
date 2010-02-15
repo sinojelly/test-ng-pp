@@ -1,6 +1,6 @@
 
 #include <testngpp/internal/TestCase.h>
-#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/listener/TestCaseResultCollector.h>
 #include <testngpp/runner/TestCaseRunnerDieHandler.h>
 
 TESTNGPP_NS_START

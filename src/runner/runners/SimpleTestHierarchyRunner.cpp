@@ -3,10 +3,11 @@
 
 #include <testngpp/internal/TestCase.h>
 
+#include <testngpp/listener/TestFixtureResultCollector.h>
+
 #include <testngpp/runner/SimpleTestHierarchyRunner.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/TestCaseRunner.h>
-#include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseFilter.h>
 
 TESTNGPP_NS_START

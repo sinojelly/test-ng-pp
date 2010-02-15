@@ -8,12 +8,13 @@
 
 #include <testngpp/internal/TestCase.h>
 
+#include <testngpp/listener/TestFixtureResultCollector.h>
+
 #include <testngpp/runner/TestCaseHierarchy.h>
 #include <testngpp/runner/TestHierarchySandboxRunner.h>
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
-#include <testngpp/runner/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseSandbox.h>
 #include <testngpp/runner/EnvironmentCleaner.h>
 #include <testngpp/runner/TestCaseContainer.h>

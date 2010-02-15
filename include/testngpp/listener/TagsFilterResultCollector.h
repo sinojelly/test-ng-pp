@@ -6,7 +6,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestSuiteResultCollector.h>
+#include <testngpp/listener/TestSuiteResultCollector.h>
 
 TESTNGPP_NS_START
 

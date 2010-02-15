@@ -1,10 +1,11 @@
 
 #include <iostream>
-
-#include <testngpp/runner/SimpleTestResultReporter.h>
-#include <testngpp/runner/TestSuiteResultReporter.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestSuiteInfoReader.h>
+
+#include <testngpp/listener/TestSuiteResultReporter.h>
+
+#include <testngpp/runner/SimpleTestResultReporter.h>
 
 TESTNGPP_NS_START
 

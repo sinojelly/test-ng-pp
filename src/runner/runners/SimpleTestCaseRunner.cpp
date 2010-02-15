@@ -5,13 +5,15 @@
 #endif
 
 #include <testngpp/ExceptionKeywords.h>
-#include <testngpp/runner/TestCaseRunnerDieHandler.h>
-#include <testngpp/runner/SimpleTestCaseRunner.h>
-#include <testngpp/runner/TestCaseResultCollector.h>
-#include <testngpp/runner/SmartTestCaseResultCollector.h>
 
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/internal/TestFixtureDesc.h>
+
+#include <testngpp/listener/TestCaseResultCollector.h>
+
+#include <testngpp/runner/TestCaseRunnerDieHandler.h>
+#include <testngpp/runner/SimpleTestCaseRunner.h>
+#include <testngpp/runner/SmartTestCaseResultCollector.h>
 
 TESTNGPP_NS_START
 

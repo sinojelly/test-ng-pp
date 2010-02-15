@@ -6,9 +6,10 @@
 #include <testngpp/internal/Error.h>
 #include <testngpp/internal/TestSuiteDesc.h>
 
+#include <testngpp/listener/TestResultCollector.h>
+
 #include <testngpp/runner/loaders/TestSuiteLoader.h>
 
-#include <testngpp/runner/TestResultCollector.h>
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFixtureContext.h>

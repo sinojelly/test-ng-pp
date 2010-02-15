@@ -3,7 +3,7 @@
 #define __TESTNGPP_TESTCASE_SANDBOX_RESULT_REPORTER_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/listener/TestCaseResultCollector.h>
 
 TESTNGPP_NS_START
 

@@ -6,7 +6,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TagsFilterResultCollector.h>
+#include <testngpp/listener/TagsFilterResultCollector.h>
 
 TESTNGPP_NS_START
 

@@ -4,7 +4,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/listener/TestFixtureResultCollector.h>
 
 TESTNGPP_NS_START
 

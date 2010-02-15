@@ -3,10 +3,11 @@
 
 #include <testngpp/internal/TestSuiteDesc.h>
 
+#include <testngpp/listener/TestResultCollector.h>
+
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFixtureRunner.h>
-#include <testngpp/runner/TestResultCollector.h>
 #include <testngpp/runner/TestSuiteContext.h>
 
 TESTNGPP_NS_START
