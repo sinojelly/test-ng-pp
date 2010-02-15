@@ -16,8 +16,8 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef __TEST_CPP_ERROR_H
-#define __TEST_CPP_ERROR_H
+#ifndef __TESTNGPP_ERROR_H
+#define __TESTNGPP_ERROR_H
 
 #include <exception>
 #include <string>
