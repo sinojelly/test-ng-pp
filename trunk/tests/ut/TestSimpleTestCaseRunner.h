@@ -1,14 +1,16 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngpp/internal/TestCase.h>
 #include <testngpp/TestFixture.h>
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/internal/Warning.h>
 #include <testngpp/internal/TestFixtureDesc.h>
+#include <testngpp/listener/TestCaseResultCollector.h>
+
 #include <testngpp/runner/SimpleTestCaseRunner.h>
-#include <testngpp/runner/TestCaseResultCollector.h>
 
 #include <FTestFixture1.h>
 
@@ -19,7 +21,7 @@ class TestSimpleTestCaseRunner: public CxxTest::TestSuite
 {
 
 private:
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    FTestFixture1 f;
 
@@ -29,7 +31,7 @@ public:
 
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
       f.setUp();
 
       testcase = f.testcase[0];
@@ -63,7 +65,7 @@ public:
    {
       f.tearDown();
 
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void run()
@@ -101,7 +103,7 @@ public:
    {
       MOCK_METHOD(f.fixture, setUp)
          .expects(once())
-         .will(throws(Exception(13, "TestNothing.h", "Exception")))
+         .will(throws(TESTNGPP_NS::Warning("TestNothing.h", 13, "Exception")))
          .id("setUp");
 
       MOCK_METHOD(f.collector, addCaseError)

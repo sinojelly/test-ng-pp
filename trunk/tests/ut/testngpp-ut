@@ -1,14 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
-case `uname` in
-  *CYGWIN*)
-    all_tests=`ls testngpp-ut-*.exe`
-    ;;
-  *)
-    all_tests=`ls testngpp-ut-*`
-    ;;
-esac
+TESTNGPPST_ROOT=`pwd`/../3rdparty/testngppst
 
-for testsuite in ${all_tests}; do
-   ./${testsuite}
-done
+TESTNGPP_UT_SUITES=`ls libtestngpp-ut-*`
+${TESTNGPPST_ROOT}/src/runner/testngppst-runner \
+   -L${TESTNGPPST_ROOT}/src/listeners \
+   -l"testngppstxmllistener result.xml" \
+   -l"testngppststdoutlistener -c -t -v" \
+   -t"* > ft" -c10 $@ \
+   ${TESTNGPP_UT_SUITES}
+

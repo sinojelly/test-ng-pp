@@ -1,18 +1,18 @@
 
 #include <string>
 
+#include <testngpp/internal/AssertionFailure.h>
 #include <testngpp/internal/TestFixtureDesc.h>
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/TestFixture.h>
 
-
 #include <mockcpp/Exception.h>
-#include <testngpp/AssertionFailure.h>
+
 
 USING_TESTNGPP_NS
 USING_MOCKCPP_NS
 
-class MyTestFixture : public TestFixture
+class MyTestFixture : public TESTNGPP_NS::TestFixture
 {
 public:
    void setUp()
@@ -25,12 +25,12 @@ public:
 
    void testCase1()
    {
-      throw AssertionFailure("MyTestFixture.h", 12, "a != b");
+      throw TESTNGPP_NS::AssertionFailure("MyTestFixture.h", 12, "a != b");
    }
 
    void testCase2()
    {
-      throw Exception(15, "MyTestFixture.h", "Exception");
+      throw TESTNGPP_NS::Exception(15, "MyTestFixture.h", "Exception");
    }
 
    void testCase3()
@@ -40,7 +40,7 @@ public:
 
 static MyTestFixture myTestFixture;
 
-struct MyTestCase : public TestCase
+struct MyTestCase : public TESTNGPP_NS::TestCase
 {
    MyTestCase(const std::string name, unsigned int line)
 	  : TestCase(name, "MyTestFixture", "MySuite", 0, "MyTestFixture.h", line)
@@ -94,7 +94,7 @@ static struct MyTestCase3 : public MyTestCase
 }
 myTestCase3;
 
-static TestCase* myTestCases[] = { &myTestCase1, &myTestCase2, &myTestCase3 };
+static TESTNGPP_NS::TestCase* myTestCases[] = { &myTestCase1, &myTestCase2, &myTestCase3 };
 
-static TestFixtureDesc myTestFixtureDesc("MyTestFixture", "MyTestFixture.h", myTestCases, 3);
+static TESTNGPP_NS::TestFixtureDesc myTestFixtureDesc("MyTestFixture", "MyTestFixture.h", myTestCases, 3);
 

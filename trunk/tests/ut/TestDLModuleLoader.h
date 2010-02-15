@@ -8,7 +8,7 @@
 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <testngpp/runner/DLModuleLoader.h>
+#include <testngpp/runner/loaders/DLModuleLoader.h>
 
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
