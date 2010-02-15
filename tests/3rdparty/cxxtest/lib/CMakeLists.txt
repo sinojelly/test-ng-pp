@@ -1,6 +1,0 @@
-
-
-INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/3rdparty/cxxtest)
-
-ADD_LIBRARY(cxxtest STATIC CxxTest.cpp)
-
