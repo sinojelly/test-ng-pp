@@ -4,6 +4,7 @@
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/internal/Error.h>
+#include <testngpp/utils/InternalError.h>
 
 #include <testngpp/listener/TestResultCollector.h>
 
@@ -12,7 +13,7 @@
 
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
-#include <testngpp/runner/InternalError.h>
+
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFilterFactory.h>
 #include <testngpp/runner/SimpleTestResultManager.h>
@@ -21,7 +22,6 @@
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/TagsParser.h>
 #include <testngpp/runner/TestRunnerContext.h>
-
 
 #include <testngpp/runner/TestRunner.h>
 

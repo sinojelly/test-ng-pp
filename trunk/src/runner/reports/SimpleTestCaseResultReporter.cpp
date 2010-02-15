@@ -2,9 +2,9 @@
 #include <iostream>
 
 #include <testngpp/internal/Error.h>
+#include <testngpp/utils/InternalError.h>
 
 #include <testngpp/runner/SimpleTestCaseResultReporter.h>
-#include <testngpp/runner/InternalError.h>
 
 TESTNGPP_NS_START
 

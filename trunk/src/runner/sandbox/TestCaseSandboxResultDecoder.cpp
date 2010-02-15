@@ -4,11 +4,12 @@
 
 #include <errno.h>
 
+#include <testngpp/utils/InternalError.h>
+
 #include <testngpp/internal/AssertionFailure.h>
 #include <testngpp/internal/Warning.h>
 #include <testngpp/internal/Info.h>
 
-#include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
 

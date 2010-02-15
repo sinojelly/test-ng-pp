@@ -1,6 +1,9 @@
 
-#include <testngpp/internal/Error.h>
 #include <testngpp/ExceptionKeywords.h>
+
+#include <testngpp/utils/InternalError.h>
+
+#include <testngpp/internal/Error.h>
 
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestFixtureDesc.h>
@@ -11,7 +14,6 @@
 #include <testngpp/runner/TestHierarchyRunner.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 
-#include <testngpp/runner/InternalError.h>
 #include <testngpp/runner/TestCaseFilter.h>
 #include <testngpp/runner/FixtureTagsFilter.h>
 #include <testngpp/runner/TestFixtureContext.h>

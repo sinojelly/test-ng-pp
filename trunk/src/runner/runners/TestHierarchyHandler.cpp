@@ -2,6 +2,8 @@
 #include <utility>
 #include <list>
 
+#include <testngpp/utils/InternalError.h>
+
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/internal/TestFixtureDesc.h>
 
@@ -12,8 +14,6 @@
 #include <testngpp/runner/TestHierarchyHandler.h>
 #include <testngpp/runner/TestCaseFilter.h>
 #include <testngpp/runner/FixtureTagsFilter.h>
-#include <testngpp/runner/InternalError.h>
-
 
 TESTNGPP_NS_START
 

@@ -9,6 +9,7 @@
 #include <testngpp/utils/OptionList.h>
 #include <testngpp/utils/StringList.h>
 #include <testngpp/utils/ConsoleState.h>
+#include <testngpp/utils/InternalError.h>
 
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
@@ -19,11 +20,8 @@
 #include <testngpp/listener/TestSuiteResultReporter.h>
 #include <testngpp/listener/TestCaseResultReporter.h>
 
-#include <testngpp/runner/InternalError.h>
 
 #include <testngpp/runner/TaggableObjFilter.h>
-
-
 
 TESTNGPP_NS_START
 

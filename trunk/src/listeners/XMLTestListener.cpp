@@ -5,6 +5,8 @@
 #include <iostream>
 
 #include <testngpp/utils/Formatter.h>
+#include <testngpp/utils/InternalError.h>
+
 #include <testngpp/internal/Error.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/internal/TestSuiteInfoReader.h>
@@ -13,8 +15,6 @@
 #include <testngpp/listener/TestResultReporter.h>
 #include <testngpp/listener/TestSuiteResultReporter.h>
 #include <testngpp/listener/TestCaseResultReporter.h>
-
-#include <testngpp/runner/InternalError.h>
 
 /*
  ## doc type definition (in relaxng compact syntax)

@@ -3,14 +3,14 @@
 #include <algorithm>
 #include <iostream>
 
+#include <testngpp/internal/Taggable.h>
+
+#include <testngpp/utils/InternalError.h>
+
 #include <testngpp/runner/TaggableObjFilter.h>
 #include <testngpp/runner/OrCompositeTaggableFilter.h>
-#include <testngpp/internal/Taggable.h>
-#include <testngpp/runner/InternalError.h>
-
 #include <testngpp/runner/AndCompositeTaggableFilter.h>
 #include <testngpp/runner/NotCompositeTaggableFilter.h>
-
 #include <testngpp/runner/GeneralTagsFilter.h>
 
 TESTNGPP_NS_START
