@@ -51,14 +51,15 @@ public:
     // @test
     void case2()
     {
-      // ::exit(1);
+       WARN("gonna exit");
+       ::exit(1);
     }
 #endif
 
     // @test
     void case3()
     {
-       sleep(10);
+       sleep(3);
     }
 
     // @test
