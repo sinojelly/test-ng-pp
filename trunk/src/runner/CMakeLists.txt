@@ -153,10 +153,10 @@ ENDIF(MSVC)
 
 TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 
-ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp TestCaseRunnerDieHandler.cpp)
+ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp) 
 
 IF(MSVC)
-   ADD_EXECUTABLE(testngpp-win32-testcase-runner win32/TestCaseSandboxRunnerMain.cpp TestCaseSandboxRunnerDieHandler.cpp)
+   ADD_EXECUTABLE(testngpp-win32-testcase-runner win32/TestCaseSandboxRunnerMain.cpp)
    TARGET_LINK_LIBRARIES(testngpp-win32-testcase-runner ${TESTNGPP_LIBRARY} testngpp-runner-lib)
 ENDIF(MSVC)
 

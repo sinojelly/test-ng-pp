@@ -1,6 +1,5 @@
 
 #include <testngpp/runner/SimpleTestCaseRunner.h>
-#include <testngpp/runner/TestCaseRunnerDieHandler.h>
 #include <testngpp/runner/TestCaseRunnerFactory.h>
 
 TESTNGPP_NS_START
@@ -17,7 +16,7 @@ TestCaseRunnerFactory::createInstance()
 {
    if(caseRunner == 0)
    {
-      caseRunner = new SimpleTestCaseRunner(new TestCaseRunnerDieHandler());
+      caseRunner = new SimpleTestCaseRunner();
       ref = 1;
    }
    else
