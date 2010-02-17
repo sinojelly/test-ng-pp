@@ -19,9 +19,12 @@
 #ifndef __TESTNGPP_ASSERTER_H
 #define __TESTNGPP_ASSERTER_H
 
+#include <sstream>
+#include <string.h>
+
 #include <testngpp/testngpp.h>
 #include <testngpp/utils/Formatter.h>
-#include <sstream>
+
 
 #if defined(__GNUC__)
 #define TESTNGPP_TYPEOF(expr) typeof(expr)
