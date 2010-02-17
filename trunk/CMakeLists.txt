@@ -36,9 +36,14 @@ INSTALL(DIRECTORY include/testngpp DESTINATION include
           PATTERN ".svn" EXCLUDE
           PATTERN "comm" EXCLUDE
           PATTERN "runner" EXCLUDE
-          PATTERN "win32" EXCLUDE
-          PATTERN "utils" EXCLUDE)
+          PATTERN "win32" EXCLUDE)
 
+IF(MSVC)
+INSTALL(DIRECTORY 3rdparty/boost DESTINATION 3rdparty
+          PATTERN ".svn" EXCLUDE)
+   
+ENDIF(MSVC)
+		  
 IF(USING_AS_TESTCPP)
   INSTALL(DIRECTORY include/testcpp DESTINATION include
           PATTERN ".svn" EXCLUDE)

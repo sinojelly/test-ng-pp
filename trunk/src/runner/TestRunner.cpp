@@ -135,9 +135,7 @@ void
 TestRunnerImpl::
 createSuiteRunner(bool useSandbox, unsigned int maxConcurrent)
 {
-   std::cout << "USE SANDBOX : " << useSandbox << std::endl;
    fixtureRunner = TestFixtureRunnerFactory::createInstance(useSandbox, maxConcurrent);
-
    suiteRunner = new TestSuiteRunner(fixtureRunner, resultManager->getResultCollector());
 }
 
