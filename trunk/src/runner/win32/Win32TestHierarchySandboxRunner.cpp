@@ -172,8 +172,6 @@ setupListeners()
    {
 	  handles[i++] = (*iter)->getEventId();
       handles[i++] = (*iter)->getSandboxId();
-//	  std::cout << "sandbox id = " << (unsigned int)(*iter)->getSandboxId() << std::endl;
-//	  std::cout << "event   id = " << (unsigned int)(*iter)->getEventId()   << std::endl;
    }
 }
 

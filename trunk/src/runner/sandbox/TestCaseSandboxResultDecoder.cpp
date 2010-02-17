@@ -284,6 +284,10 @@ flush(bool crashed)
 
    if(crashed && !endReceived)
    {
+	  if(!startReceived)
+	  {
+		collector->startTestCase(testcase);
+	  }
       collector->addCaseCrash(testcase);
       timeval tv = timer.stop();
       collector->endTestCase(testcase, tv.tv_sec, tv.tv_usec);

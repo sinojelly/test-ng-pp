@@ -18,7 +18,7 @@ class TestFoo : public TestFixture
 public:
 
     // @test
-    TEST(abc)
+    TEST('*'bc)
     {
        INFO("cleanup test");
 
