@@ -9,8 +9,8 @@ ENDIF(PYTHONINTERP_FOUND)
 
 ADD_CUSTOM_TARGET(compile-testngppgen
    ${PYTHON} pycompile.py) 
-
-INSTALL(DIRECTORY . DESTINATION share/testngpp
+   
+INSTALL(DIRECTORY . DESTINATION testngpp/generator
        FILES_MATCHING PATTERN "*.pyc"
        PATTERN "CMakeFiles" EXCLUDE
        PATTERN ".svn" EXCLUDE

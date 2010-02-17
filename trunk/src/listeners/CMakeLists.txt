@@ -35,10 +35,12 @@ TARGET_LINK_LIBRARIES(testngppxmllistener-fortest ${TESTNGPP_LIBRARY})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include .)
 
-SET_TARGET_PROPERTIES(
+IF(NOT MSVC)
+ SET_TARGET_PROPERTIES(
    testngppstdoutlistener 
    testngppxmllistener
    PROPERTIES SUFFIX ".so")
+ENDIF(NOT MSVC)
 
 TARGET_LINK_LIBRARIES(testngppstdoutlistener ${TESTNGPP_LIBRARY})
 TARGET_LINK_LIBRARIES(testngppxmllistener ${TESTNGPP_LIBRARY})
