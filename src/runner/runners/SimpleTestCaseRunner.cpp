@@ -15,7 +15,6 @@
 
 #include <testngpp/listener/TestCaseResultCollector.h>
 
-#include <testngpp/runner/TestCaseRunnerDieHandler.h>
 #include <testngpp/runner/SimpleTestCaseRunner.h>
 #include <testngpp/runner/SmartTestCaseResultCollector.h>
 
@@ -68,7 +67,7 @@ int win32TryToRunTest
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
-		return -1;
+		return ::GetExceptionCode();
 	}
 
 	return 0;
@@ -78,14 +77,15 @@ int win32TryToRunTest
 
 bool doRun
    ( TestCase* testcase
-   , TestCaseResultCollector* collector
-   , TestCaseRunnerDieHandler* handler)
+   , TestCaseResultCollector* collector)
 {
 #if defined(_MSC_VER)
    int result = tryToRunTest( testcase, collector);
-   if(result < 0 && handler != 0)
+   if(result < 0)
    {
-      handler->die(testcase, collector);
+      ostringstream oss;
+      oss << "exception (" << result << ") raised";
+      collector->addCaseError(testcase, oss.str());
    }
 
    return result == 0;
@@ -117,7 +117,7 @@ bool SimpleTestCaseRunner::run
    __TESTNGPP_DO
 
    timer.start();
-   success = doRun(testcase, smartCollector, handler);
+   success = doRun(testcase, smartCollector);
 
    __TESTNGPP_CLEANUP
 
