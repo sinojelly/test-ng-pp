@@ -4,11 +4,10 @@
 
 #include <windows.h>
 
-#include <testngpp/win32/Die.h>
 #include <testngpp/ExceptionKeywords.h>
 #include <testngpp/comm/Win32PipeWrittableChannel.h>
 #include <testngpp/runner/TestCaseSandboxResultReporter.h>
-#include <testngpp/runner/ModuleTestSuiteLoaderFactory.h>
+#include <testngpp/runner/loaders/ModuleTestSuiteLoaderFactory.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFilterFactory.h>
 #include <testngpp/runner/TagsFilters.h>
@@ -87,10 +86,6 @@ int runTest
 	////////////////////////////////////////////////////
     suiteRunner->run(context->getSuite(0), filter);
 	////////////////////////////////////////////////////
-
-	__TESTNGPP_CATCH(TESTNGPP_NS::Die&)
-	
-		exit(250);
 
 	__TESTNGPP_CATCH_ALL
         

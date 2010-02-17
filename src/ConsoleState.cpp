@@ -25,8 +25,9 @@ namespace
    {
       Color(unsigned int c)
          : color(c)
+	  {}
 
-      void operator()()
+      void operator()(void) const
       {
          ::SetConsoleTextAttribute
             ( ::GetStdHandle(STD_OUTPUT_HANDLE)

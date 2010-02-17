@@ -3,11 +3,11 @@
 #include <windows.h>
 #include <iostream>
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/utils/StringList.h>
-#include <testngpp/runner/Win32DllModuleLoader.h>
+#include <testngpp/runner/loaders/Win32DllModuleLoader.h>
 
 
 TESTNGPP_NS_START

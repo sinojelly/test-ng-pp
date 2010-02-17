@@ -4,8 +4,6 @@
 
 #include <errno.h>
 
-#include <sys/time.h>
-
 #include <testngpp/utils/InternalError.h>
 #include <testngpp/utils/StupidTimer.h>
 

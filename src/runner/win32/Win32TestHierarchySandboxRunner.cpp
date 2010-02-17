@@ -11,7 +11,7 @@
 
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
-#include <testngpp/runner/TestFixtureResultCollector.h>
+#include <testngpp/listener/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestHierarchyHandler.h>
 
 #include <testngpp/win32/Win32ThrowLastError.h>

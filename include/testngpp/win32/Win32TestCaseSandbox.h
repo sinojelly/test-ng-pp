@@ -7,7 +7,7 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 
 #include <testngpp/runner/SandboxTypedef.h>
 #include <testngpp/runner/EOFError.h>
