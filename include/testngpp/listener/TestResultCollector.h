@@ -14,7 +14,7 @@ struct TestResultCollector
    : public TagsFilterResultCollector
 {
    virtual void startTest() = 0;
-   virtual void endTest() = 0;
+   virtual void endTest(unsigned int, unsigned int) = 0;
 
    virtual void addError(const std::string&) = 0;
 

@@ -65,7 +65,7 @@ struct XMLTestListener
    void endTagsFiltering(const TagsFilterRule*);
 
    void startTest();
-   void endTest();
+   void endTest(unsigned int, unsigned int);
    void addError(const std::string&);
 
 private:

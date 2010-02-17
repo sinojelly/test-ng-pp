@@ -17,7 +17,7 @@ struct TestResultManager
    virtual bool hasFailure() const = 0;
 
    virtual void startTest() = 0;
-   virtual void endTest() = 0;
+   virtual void endTest(unsigned int, unsigned int) = 0;
 
    virtual TestResultCollector* getResultCollector() const = 0;
 

@@ -82,7 +82,7 @@ struct XMLTestListenerImpl
 
    ////////////////////////////////////////////////////////
    void startTest();
-   void endTest();
+   void endTest(unsigned int, unsigned int);
    void startTestSuite(TestSuiteInfoReader* suite);
    void endTestSuite(TestSuiteInfoReader* suite);
 
@@ -103,7 +103,7 @@ void XMLTestListenerImpl::startTest()
 }
 
 ///////////////////////////////////////////////////////////
-void XMLTestListenerImpl::endTest()
+void XMLTestListenerImpl::endTest(unsigned int, unsigned int)
 {
 	rootElement->write(os);
 }
@@ -316,9 +316,9 @@ startTest()
 }
 
 ///////////////////////////////////////////////////////////
-void XMLTestListener::endTest()
+void XMLTestListener::endTest(unsigned int secs, unsigned int usecs)
 {
-	This->endTest();
+	This->endTest(secs, usecs);
 }
 
 ///////////////////////////////////////////////////////////

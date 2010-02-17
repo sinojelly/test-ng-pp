@@ -7,6 +7,7 @@
 #include <sys/time.h>
 
 #include <testngpp/utils/InternalError.h>
+#include <testngpp/utils/StupidTimer.h>
 
 #include <testngpp/internal/AssertionFailure.h>
 #include <testngpp/internal/Warning.h>
@@ -124,6 +125,7 @@ struct TestCaseSandboxResultDecoderImpl
    typedef std::vector<std::string> Errors;
    typedef std::vector<AssertionFailure> Failures;
 
+   StupidTimer timer;
    timeval endTime;
 
    InfoContainer infos;
@@ -285,7 +287,8 @@ flush(bool crashed)
    if(crashed && !endReceived)
    {
       collector->addCaseCrash(testcase);
-      collector->endTestCase(testcase, 0, 0);
+      timeval tv = timer.stop();
+      collector->endTestCase(testcase, tv.tv_sec, tv.tv_usec);
       crashInformed = true;
    }
 }
@@ -404,6 +407,7 @@ handleStartCase()
    }
 
    startReceived = true;
+   timer.start();
 }
 
 /////////////////////////////////////////////////////////////////////////

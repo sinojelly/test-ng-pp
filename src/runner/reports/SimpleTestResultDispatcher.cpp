@@ -47,7 +47,7 @@ struct SimpleTestResultDispatcherImpl
    void endTagsFiltering(const TagsFilterRule*);
 
    void startTest();
-   void endTest();
+   void endTest(unsigned int secs, unsigned int usecs);
    void addError(const std::string&);
    
 };
@@ -594,20 +594,22 @@ SimpleTestResultDispatcher::startTest()
 }
 
 ///////////////////////////////////////////////////////////
-void SimpleTestResultDispatcherImpl::endTest()
+void SimpleTestResultDispatcherImpl::
+endTest(unsigned int secs, unsigned int usecs)
 {
    Listeners::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
    {
-      (*i)->endTest();
+      (*i)->endTest(secs, usecs);
    }
 }
 
 ///////////////////////////////////////////////////////////
 void
-SimpleTestResultDispatcher::endTest()
+SimpleTestResultDispatcher::
+endTest(unsigned int secs, unsigned int usecs)
 {
-   This->endTest();
+   This->endTest(secs, usecs);
 }
 
 ///////////////////////////////////////////////////////////

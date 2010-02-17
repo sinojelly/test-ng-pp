@@ -4,7 +4,7 @@
    -L../src/listeners \
    -l"testngppstdoutlistener -c -f -t -v" \
    -l"testngppxmllistener result.xml" \
-   -t"*" -c1 $@
+   -t"*" -c10 $@
 
 
 

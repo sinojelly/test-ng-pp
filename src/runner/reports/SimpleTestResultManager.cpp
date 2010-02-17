@@ -137,9 +137,10 @@ SimpleTestResultManager::startTest()
 
 ///////////////////////////////////////////////////////
 void
-SimpleTestResultManager::endTest()
+SimpleTestResultManager::
+endTest(unsigned int secs, unsigned int usecs)
 {
-   This->dispatcher->endTest();
+   This->dispatcher->endTest(secs, usecs);
 }
 
 ///////////////////////////////////////////////////////

@@ -179,7 +179,7 @@ startTest()
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-endTest()
+endTest(unsigned int, unsigned int)
 {
 }
 

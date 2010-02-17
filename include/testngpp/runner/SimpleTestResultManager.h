@@ -17,7 +17,7 @@ struct SimpleTestResultManager : public TestResultManager
    bool hasFailure() const;
 
    void startTest();
-   void endTest();
+   void endTest(unsigned int, unsigned int);
 
    TestResultCollector* getResultCollector() const;
 
