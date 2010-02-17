@@ -98,14 +98,17 @@ namespace
 
 		for(unsigned int i=0; i<str.size(); i++)
 		{
-			if(str[i] == '\\')
-				result += "\\\\";
-			else if(str[i] == '\'')
-				result += "\\\'";
-			else if(str[i] == '\"')
-				result += "\\\"";
-			else
-				result += str[i];
+			switch(str[i])
+			{
+			case '\\':
+			case '\'':
+			case '\"':
+				result += '\\';
+				break;
+			default:
+				break;
+			}
+			result += str[i];
 		}
 
 		return result;
