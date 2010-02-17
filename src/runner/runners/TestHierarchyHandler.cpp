@@ -42,7 +42,7 @@ struct SkippedTestCases
       
       collector->startTestCase(testcase);
       collector->addCaseSkipped(testcase);
-      collector->endTestCase(testcase);
+      collector->endTestCase(testcase, 0, 0);
    }
 
 private:

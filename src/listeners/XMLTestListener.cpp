@@ -87,7 +87,7 @@ struct XMLTestListenerImpl
    void endTestSuite(TestSuiteInfoReader* suite);
 
    void startTestCase(const TestCaseInfoReader* testcase);
-   void endTestCase(const TestCaseInfoReader* testcase);
+   void endTestCase(const TestCaseInfoReader* testcase, unsigned int, unsigned int);
    void addCaseCrash(const TestCaseInfoReader* testcase);
    void addCaseSkipped(const TestCaseInfoReader* testcase);
    void addCaseFailure(const TestCaseInfoReader* testcase, const AssertionFailure& failure);
@@ -150,7 +150,7 @@ startTestCase(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void XMLTestListenerImpl::
-endTestCase(const TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase, unsigned int, unsigned int)
 {
 }
 
@@ -241,9 +241,12 @@ startTestCase(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void XMLTestListener::
-endTestCase(const TestCaseInfoReader* testcase)
+endTestCase
+      ( const TestCaseInfoReader* testcase
+      , unsigned int secs
+      , unsigned int usecs)
 {
-   This->endTestCase(testcase);
+   This->endTestCase(testcase, secs, usecs);
 }
 
 ///////////////////////////////////////////////////////////

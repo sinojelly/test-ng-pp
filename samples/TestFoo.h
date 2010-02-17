@@ -51,7 +51,7 @@ public:
     // @test
     void case2()
     {
-       ::exit(1);
+      // ::exit(1);
     }
 #endif
 

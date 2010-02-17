@@ -6,6 +6,8 @@
 
 #include <testngpp/ExceptionKeywords.h>
 
+#include <testngpp/utils/StupidTimer.h>
+
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/internal/TestFixtureDesc.h>
 
@@ -104,17 +106,21 @@ bool SimpleTestCaseRunner::run
          new SmartTestCaseResultCollector(collector, reportSuccess);
 
    testcase->setFixture();
-   testcase->getFixture()->setCurrentTestCase(testcase, collector);
+   testcase->getFixture()->setCurrentTestCase(testcase, smartCollector);
 
    smartCollector->startTestCase(testcase);
 
+   StupidTimer timer;
+
    __TESTNGPP_DO
 
+   timer.start();
    success = doRun(testcase, smartCollector, handler);
 
    __TESTNGPP_CLEANUP
 
-   smartCollector->endTestCase(testcase);
+   timeval e = timer.stop();
+   smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;
 
    __TESTNGPP_DONE

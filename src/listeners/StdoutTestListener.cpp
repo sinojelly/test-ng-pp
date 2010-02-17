@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 
 #include <testngpp/internal/Error.h>
 #include <testngpp/internal/AssertionFailure.h>
@@ -16,11 +16,11 @@
 #include <testngpp/internal/TestSuiteInfoReader.h>
 #include <testngpp/internal/TagsFilterRule.h>
 
-#include <testngpp/listener/TestListener.h>
 #include <testngpp/listener/TestResultReporter.h>
 #include <testngpp/listener/TestSuiteResultReporter.h>
 #include <testngpp/listener/TestCaseResultReporter.h>
 
+#include <testngpp/listener/TestListener.h>
 
 TESTNGPP_NS_START
 
@@ -122,6 +122,7 @@ namespace
       StateTitle result;
    };
 }
+
 ///////////////////////////////////////////////////////////
 struct StdoutTestListener : public TestListener
 {
@@ -145,7 +146,7 @@ struct StdoutTestListener : public TestListener
    void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
    
    void startTestCase(const TestCaseInfoReader*);
-   void endTestCase(const TestCaseInfoReader*);
+   void endTestCase(const TestCaseInfoReader*, unsigned int, unsigned int);
    
    void startTestFixture(TestFixtureInfoReader*);
    void endTestFixture(TestFixtureInfoReader*);
@@ -207,12 +208,14 @@ private:
             , StateTitle title);
 
    void reportCaseSuccess
-         ( const TestCaseInfoReader* testcase );
+         ( const TestCaseInfoReader* testcase
+         , unsigned int secs
+         , unsigned int usecs);
 
    void reportAllUnsuccessfulTests() const;
 
    void addTestResult
-         ( std::list<TestCaseResult>& set
+         ( std::vector<TestCaseResult>& set
          , const TestCaseInfoReader* testcase
          , StateTitle result );
 
@@ -240,10 +243,10 @@ private:
    TestSuiteResultReporter*   suiteBookKeeper; // X
    TestCaseResultReporter*    caseBookKeeper;  // X
 
-   std::list<TestCaseResult> failedTests;
-   std::list<TestCaseResult> errorTests;
-   std::list<TestCaseResult> crashedTests;
-   std::list<TestCaseResult> skippedTests;
+   std::vector<TestCaseResult> failedTests;
+   std::vector<TestCaseResult> errorTests;
+   std::vector<TestCaseResult> crashedTests;
+   std::vector<TestCaseResult> skippedTests;
 };
 
 namespace
@@ -397,13 +400,19 @@ outputCaseState
 void
 StdoutTestListener::
 reportCaseSuccess
-      ( const TestCaseInfoReader* testcase )
+      ( const TestCaseInfoReader* testcase
+      , unsigned int secs
+      , unsigned int usecs )
 {
    isSuccess = true;
 
    if(verbose)
    {
-      std::cout << succ << getTitle(ST_SUCCESS) << normal << std::endl;
+      std::cout << succ << getTitle(ST_SUCCESS) << "(";
+      if(secs > 0)
+         std::cout << secs << "s ";
+
+      std::cout << usecs << " us)" << normal << std::endl;
    }
    else
    {
@@ -545,7 +554,7 @@ startTestCase(const TestCaseInfoReader* testcase)
 void
 StdoutTestListener::
 addTestResult
-   ( std::list<TestCaseResult>& set
+   ( std::vector<TestCaseResult>& set
    , const TestCaseInfoReader* testcase
    , StateTitle title )
 {
@@ -558,7 +567,9 @@ addTestResult
 void
 StdoutTestListener::
 endTestCase
-   ( const TestCaseInfoReader* testcase )
+   ( const TestCaseInfoReader* testcase
+   , unsigned int secs
+   , unsigned int usecs)
 {
    unsigned int result = \
       caseBookKeeper->getTestCaseResult(testcase);
@@ -566,7 +577,7 @@ endTestCase
    switch (result) 
    {
       case TestCaseResultReporter::TR_SUCCESS:
-         reportCaseSuccess(testcase);
+         reportCaseSuccess(testcase, secs, usecs);
          break;
       case TestCaseResultReporter::TR_FAILED:
          addTestResult(failedTests, testcase, ST_FAILED);
@@ -760,7 +771,7 @@ reportAllUnsuccessfulTests() const
 {
    if(!verbose) return;
 
-   std::list<TestCaseResult>::const_iterator i = \
+   std::vector<TestCaseResult>::const_iterator i = \
      failedTests.begin();
 
    for(; i != failedTests.end(); i++)

@@ -32,7 +32,7 @@ struct SimpleTestResultDispatcherImpl
    void addCaseInfo(const TestCaseInfoReader*, const Info&);
 
    void startTestCase(const TestCaseInfoReader*);
-   void endTestCase(const TestCaseInfoReader*);
+   void endTestCase(const TestCaseInfoReader*, unsigned int, unsigned int);
 
    void startTestFixture(TestFixtureInfoReader*);
    void endTestFixture(TestFixtureInfoReader*);
@@ -308,29 +308,39 @@ startTestCase(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 template <typename T>
-void notifyEndCase(T& listeners, const TestCaseInfoReader* testcase)
+void notifyEndCase
+      ( T& listeners
+      , const TestCaseInfoReader* testcase
+      , unsigned int secs
+      , unsigned int usecs)
 {
    typename T::iterator i = listeners.begin();
    for(; i != listeners.end(); i++)
    {
-      (*i)->endTestCase(testcase);
+      (*i)->endTestCase(testcase, secs, usecs);
    }
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcherImpl::
-endTestCase(const TestCaseInfoReader* testcase)
+endTestCase
+      ( const TestCaseInfoReader* testcase
+      , unsigned int secs
+      , unsigned int usecs)
 {
-   notifyEndCase(caseListeners, testcase);
-   notifyEndCase(suiteListeners, testcase);
-   notifyEndCase(listeners, testcase);
+   notifyEndCase(caseListeners, testcase, secs, usecs);
+   notifyEndCase(suiteListeners, testcase, secs, usecs);
+   notifyEndCase(listeners, testcase, secs, usecs);
 }
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultDispatcher::
-endTestCase(const TestCaseInfoReader* testcase)
+endTestCase
+      ( const TestCaseInfoReader* testcase
+      , unsigned int secs
+      , unsigned int usecs)
 {
-   This->endTestCase(testcase);
+   This->endTestCase(testcase, secs, usecs);
 }
 
 ///////////////////////////////////////////////////////////

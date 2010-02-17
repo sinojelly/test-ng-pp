@@ -105,11 +105,14 @@ startTestCase(const TestCaseInfoReader *testcase)
 /////////////////////////////////////////////////////////////////
 void
 SmartTestCaseResultCollector::
-endTestCase(const TestCaseInfoReader *testcase)
+endTestCase
+      ( const TestCaseInfoReader *testcase
+      , unsigned int secs
+      , unsigned int usecs)
 {
    if(shouldReport())
    {
-      collector->endTestCase(testcase);
+      collector->endTestCase(testcase, secs, usecs);
    }
 }
 

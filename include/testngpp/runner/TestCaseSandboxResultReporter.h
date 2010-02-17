@@ -24,7 +24,7 @@ struct TestCaseSandboxResultReporter
    void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
 
    void startTestCase(const TestCaseInfoReader*); 
-   void endTestCase(const TestCaseInfoReader*);
+   void endTestCase(const TestCaseInfoReader*, unsigned int, unsigned int);
 
 private:
    TestCaseSandboxResultReporterImpl* This;

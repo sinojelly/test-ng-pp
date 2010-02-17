@@ -97,7 +97,7 @@ startTestCase(const TestCaseInfoReader*)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestResultReporter::
-endTestCase(const TestCaseInfoReader*)
+endTestCase(const TestCaseInfoReader*, unsigned int, unsigned int)
 {
 }
 

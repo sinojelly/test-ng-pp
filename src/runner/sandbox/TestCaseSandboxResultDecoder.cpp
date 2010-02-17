@@ -4,6 +4,8 @@
 
 #include <errno.h>
 
+#include <time.h>
+
 #include <testngpp/utils/InternalError.h>
 
 #include <testngpp/internal/AssertionFailure.h>
@@ -55,6 +57,7 @@ namespace
       std::vector<Info> infos;
       std::vector<Warning> warns;
    };
+
 }
 
 struct TestCaseSandboxResultDecoderImpl
@@ -67,6 +70,7 @@ struct TestCaseSandboxResultDecoderImpl
    AssertionFailure readAssertionFailure();
    Warning readWarning();
    Info readInfo();
+   timeval readTime();
 
    void handleInfo();
    void handleWarning();
@@ -94,7 +98,10 @@ struct TestCaseSandboxResultDecoderImpl
       , errorReceived(false), failureReceived(false)
       , infoReceived(false)
       , crashInformed(false), reportSuccess(report)
-   {}
+   {
+      endTime.tv_sec  = 0;
+      endTime.tv_usec = 0;
+   }
 
    ~TestCaseSandboxResultDecoderImpl()
    {
@@ -116,6 +123,8 @@ struct TestCaseSandboxResultDecoderImpl
 
    typedef std::vector<std::string> Errors;
    typedef std::vector<AssertionFailure> Failures;
+
+   timeval endTime;
 
    InfoContainer infos;
    
@@ -233,7 +242,7 @@ flushEndEvent()
 {
    if(endReceived)
    {
-      collector->endTestCase(testcase);
+      collector->endTestCase(testcase, endTime.tv_sec, endTime.tv_usec);
    }
 }
 
@@ -276,7 +285,7 @@ flush(bool crashed)
    if(crashed && !endReceived)
    {
       collector->addCaseCrash(testcase);
-      collector->endTestCase(testcase);
+      collector->endTestCase(testcase, 0, 0);
       crashInformed = true;
    }
 }
@@ -290,6 +299,19 @@ namespace
    const unsigned char failureCmd = 4;
    const unsigned char infoCmd    = 5;
    const unsigned char warningCmd = 6;
+}
+
+/////////////////////////////////////////////////////////////
+timeval
+TestCaseSandboxResultDecoderImpl::
+readTime()
+{
+   timeval tv;
+
+   tv.tv_sec  = channel->readInt();
+   tv.tv_usec = channel->readInt();
+
+   return tv;
 }
 
 /////////////////////////////////////////////////////////////
@@ -395,6 +417,8 @@ handleEndCase()
    {
       throw Error(TESTNGPP_INTERNAL_ERROR(1005));
    }
+
+   endTime = readTime();
 
    endReceived = true;
 }
