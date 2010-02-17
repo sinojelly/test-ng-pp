@@ -109,7 +109,7 @@ namespace
 				result += "]";
 				break;
 			//case '\\':
-			case '\'':
+			//case '\'':
 			case '\"':
 				result += '\\';
 			default:
