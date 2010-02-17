@@ -67,6 +67,7 @@ public:
     // @test
     void case20()
     {
+      WARN("this test is gonna crash 'coz of invalid memory access");
 	   char* p = 0;
 	   (*p) = 0;
       TS_ASSERT(true);
