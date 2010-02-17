@@ -54,11 +54,11 @@ std::string toPCharStr(const T& s)
 	if(s == 0)
       ss << "NULL";
 	else
-#if 0
+#if 1
 	  ss << "\"" << s << "\"";
 #endif
 
-    ss << (void*) s;
+//    ss << (void*) s;
 
 	return ss.str();
 }

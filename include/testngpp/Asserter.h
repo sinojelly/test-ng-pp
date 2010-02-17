@@ -86,6 +86,9 @@ TESTNGPP_NS_START
       expr; \
    }catch(except&){ \
       testngpp_caught_exception = true; \
+   } catch(...) {\
+	  __TESTNGPP_REPORT_FAILURE( \
+         "expected " #expr " will throw an exception of type " #except ", but actually raised a different kind of exception."); \
    } \
    if(!testngpp_caught_exception) { \
       __TESTNGPP_REPORT_FAILURE( \

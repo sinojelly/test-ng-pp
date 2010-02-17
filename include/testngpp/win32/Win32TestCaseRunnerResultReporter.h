@@ -32,6 +32,18 @@ struct TestCaseRunnerResultReporter
 		delete reporter;
 	}
 
+	void addCaseInfo(const TestCaseInfoReader* testcase, const Info& info)
+	{
+		reporter->addCaseInfo(testcase, info);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
+	}
+	
+	void addCaseWarning(const TestCaseInfoReader* testcase, const Warning& warning)
+	{
+		reporter->addCaseWarning(testcase, warning);
+		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
+	}
+
 	void addCaseCrash(const TestCaseInfoReader* testcase)
 	{
 		reporter->addCaseCrash(testcase);
