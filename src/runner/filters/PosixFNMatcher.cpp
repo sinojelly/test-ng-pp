@@ -22,7 +22,7 @@ PosixFNMatcher(const std::string& namePattern)
 ////////////////////////////////////////////////////
 namespace
 {
-   const int flags = FNM_CASEFOLD; 
+   const int flags = FNM_CASEFOLD|FNM_NOESCAPE; 
 }
 
 ////////////////////////////////////////////////////

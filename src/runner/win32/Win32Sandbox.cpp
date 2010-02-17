@@ -100,15 +100,23 @@ namespace
 		{
 			switch(str[i])
 			{
-			case '\\':
+			case '*':
+			case '?':
+			case '[':
+			case ']':
+				result += "[";
+				result += str[i];
+				result += "]";
+				break;
+			//case '\\':
 			case '\'':
 			case '\"':
 				result += '\\';
-				break;
 			default:
+				result += str[i];
 				break;
 			}
-			result += str[i];
+			
 		}
 
 		return result;

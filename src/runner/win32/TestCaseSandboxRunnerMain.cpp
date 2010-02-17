@@ -57,6 +57,7 @@ int runTest
 	  , const std::string& fixtureName
 	  , const std::string& testcaseName)
 {
+	std::cout << "testcase name : " << testcaseName << std::endl;
 	const TESTNGPP_NS::TestFilter* filter = createFilter(fixtureName, testcaseName);
 	TESTNGPP_NS::TagsFilters* tagsFilter = TESTNGPP_NS::TagsParser::parse("*");
     TESTNGPP_NS::TestFixtureRunner* fixtureRunner = 0;
@@ -136,5 +137,7 @@ int main(int argc, char* argv[])
       hSemap = (HANDLE)atoi(argv[5]);
    }
 
-   return runTest(createCollector(hWrite, hSemap), suite, fixture, testcase);
+   return 
+	   runTest(createCollector(hWrite, hSemap), suite, fixture, testcase);
+
 }
