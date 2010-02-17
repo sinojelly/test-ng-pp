@@ -63,11 +63,6 @@ public:
     // @test
     void case3()
     {
-#if defined(_MSC_VER)
-		Sleep(3000);
-#else
-       sleep(3);
-#endif
     }
 
     // @test
