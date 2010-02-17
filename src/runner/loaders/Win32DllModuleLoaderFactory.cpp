@@ -1,8 +1,8 @@
 
-#include <testngpp/runner/ModuleLoader.h>
-#include <testngpp/runner/ModuleLoaderFactory.h>
+#include <testngpp/runner/loaders/ModuleLoader.h>
+#include <testngpp/runner/loaders/ModuleLoaderFactory.h>
 
-#include <testngpp/runner/Win32DllModuleLoader.h>
+#include <testngpp/runner/loaders/Win32DllModuleLoader.h>
 
 
 TESTNGPP_NS_START
