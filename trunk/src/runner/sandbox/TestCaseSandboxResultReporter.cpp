@@ -26,7 +26,7 @@ struct TestCaseSandboxResultReporterImpl
 	void addCaseWarning(const TestCaseInfoReader* testCase, const Warning& warning);
 
 	void startTestCase(const TestCaseInfoReader* testCase);
-	void endTestCase(const TestCaseInfoReader* testCase);
+	void endTestCase(const TestCaseInfoReader* testCase, unsigned int, unsigned int);
 
    WrittableChannel* channel; // Y
 };
@@ -89,9 +89,11 @@ startTestCase(const TestCaseInfoReader* testCase)
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporterImpl::
-endTestCase(const TestCaseInfoReader* testCase)
+endTestCase(const TestCaseInfoReader* testCase, unsigned int secs, unsigned int usecs)
 {
 	channel->writeByte(endCmd);
+   channel->writeInt(secs);
+   channel->writeInt(usecs);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -144,9 +146,12 @@ startTestCase(const TestCaseInfoReader* testCase)
 
 /////////////////////////////////////////////////////////////////////////
 void TestCaseSandboxResultReporter::
-endTestCase(const TestCaseInfoReader* testCase)
+endTestCase
+      ( const TestCaseInfoReader* testCase
+      , unsigned int secs
+      , unsigned int usecs)
 {
-	This->endTestCase(testCase);
+	This->endTestCase(testCase, secs, usecs);
 }
 
 

@@ -21,9 +21,7 @@ struct SmartTestCaseResultCollector
    void addCaseSkipped(const TestCaseInfoReader*);
 
    void startTestCase(const TestCaseInfoReader*);
-   void endTestCase(const TestCaseInfoReader*);
-
-
+   void endTestCase(const TestCaseInfoReader*, unsigned int, unsigned int);
 
 private:
    bool shouldReport() const;

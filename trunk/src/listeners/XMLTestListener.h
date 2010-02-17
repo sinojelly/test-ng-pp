@@ -46,7 +46,10 @@ struct XMLTestListener
    void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&);
 
    void startTestCase(const TestCaseInfoReader*);
-   void endTestCase(const TestCaseInfoReader*);
+   void endTestCase
+            ( const TestCaseInfoReader*
+            , unsigned int
+            , unsigned int);
 
    void startTestFixture(TestFixtureInfoReader*);
    void endTestFixture(TestFixtureInfoReader*);
@@ -55,6 +58,7 @@ struct XMLTestListener
 
    void startTestSuite(TestSuiteInfoReader*);
    void endTestSuite(TestSuiteInfoReader*);
+
    void addSuiteError(TestSuiteInfoReader*, const std::string&);
 
    void startTagsFiltering(const TagsFilterRule*);

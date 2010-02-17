@@ -38,6 +38,7 @@ SET(TESTNGPP_SRCS
   OptionList.cpp 
   StringToOptions.cpp
   ConsoleState.cpp
+  StupidTimer.cpp
 )
 
 IF(NOT TESTNGPP_DISABLE_RC)

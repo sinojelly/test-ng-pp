@@ -35,14 +35,16 @@ SimpleTestCaseResultReporter()
 }
 
 ///////////////////////////////////////////////////////////
-SimpleTestCaseResultReporter::~SimpleTestCaseResultReporter()
+SimpleTestCaseResultReporter::
+~SimpleTestCaseResultReporter()
 {
    delete This;
 }
 
 ///////////////////////////////////////////////////////////
 unsigned int
-SimpleTestCaseResultReporter::getTestCaseResult(const TestCaseInfoReader* testcase) const
+SimpleTestCaseResultReporter::
+getTestCaseResult(const TestCaseInfoReader* testcase) const
 {
    if(testcase == This->testcase && This->finished) 
    {
@@ -126,7 +128,10 @@ startTestCase(const TestCaseInfoReader* testcase)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestCaseResultReporter::
-endTestCase(const TestCaseInfoReader* testcase)
+endTestCase
+      ( const TestCaseInfoReader* testcase
+      , unsigned int
+      , unsigned int)
 {
    if(This->testcase != testcase)
    {

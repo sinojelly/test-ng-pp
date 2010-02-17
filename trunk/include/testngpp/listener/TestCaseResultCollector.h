@@ -23,8 +23,13 @@ struct TestCaseResultCollector
 	virtual void addCaseFailure(const TestCaseInfoReader*, const AssertionFailure&)  {}
 	virtual void addCaseSkipped(const TestCaseInfoReader*)  {}
 
-   virtual void startTestCase(const TestCaseInfoReader*) {}
-   virtual void endTestCase(const TestCaseInfoReader*) {}
+   virtual void startTestCase
+                  ( const TestCaseInfoReader* ) {}
+
+   virtual void endTestCase
+                  ( const TestCaseInfoReader*
+                  , unsigned int secs
+                  , unsigned int uSecs) = 0;
 
 	virtual ~TestCaseResultCollector() {}
 };

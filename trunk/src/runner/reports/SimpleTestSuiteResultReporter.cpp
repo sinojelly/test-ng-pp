@@ -127,7 +127,7 @@ startTestCase(const TestCaseInfoReader*)
 
 ///////////////////////////////////////////////////////////
 void SimpleTestSuiteResultReporter::
-endTestCase(const TestCaseInfoReader* testcase)
+endTestCase(const TestCaseInfoReader* testcase, unsigned int, unsigned int)
 {
    switch(This->caseResultReporter->getTestCaseResult(testcase))
    {
