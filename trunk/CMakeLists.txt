@@ -28,7 +28,7 @@ ENDIF(MSVC)
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(src/listeners)
 ADD_SUBDIRECTORY(src/runner)
-#ADD_SUBDIRECTORY(ut)
+ADD_SUBDIRECTORY(scripts)
 ADD_SUBDIRECTORY(samples)
 
 ########################################################
@@ -36,6 +36,7 @@ INSTALL(DIRECTORY include/testngpp DESTINATION include
           PATTERN ".svn" EXCLUDE
           PATTERN "comm" EXCLUDE
           PATTERN "runner" EXCLUDE
+          PATTERN "win32" EXCLUDE
           PATTERN "utils" EXCLUDE)
 
 IF(USING_AS_TESTCPP)
@@ -47,3 +48,4 @@ IF(USING_AS_CXXTEST)
   INSTALL(DIRECTORY include/cxxtest DESTINATION include
           PATTERN ".svn" EXCLUDE)
 ENDIF(USING_AS_CXXTEST)
+

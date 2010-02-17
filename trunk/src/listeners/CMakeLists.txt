@@ -43,3 +43,7 @@ SET_TARGET_PROPERTIES(
 TARGET_LINK_LIBRARIES(testngppstdoutlistener ${TESTNGPP_LIBRARY})
 TARGET_LINK_LIBRARIES(testngppxmllistener ${TESTNGPP_LIBRARY})
 
+INSTALL(
+   TARGETS testngppstdoutlistener testngppxmllistener
+   LIBRARY DESTINATION lib)
+
