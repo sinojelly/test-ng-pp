@@ -18,7 +18,7 @@ class TestFoo : public TestFixture
 public:
 
     // @test
-    void case0()
+    TEST(abc)
     {
        INFO("cleanup test");
 
