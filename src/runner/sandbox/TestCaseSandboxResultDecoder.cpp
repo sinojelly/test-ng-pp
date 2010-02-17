@@ -26,13 +26,20 @@ namespace
       void flush( const TestCaseInfoReader* testcase
                 , TestCaseResultCollector* collector)
       {
-        unsigned int indexOfInfos = 0;
-        unsigned int indexOfWarns = 0;
+        unsigned int indexOfInfos  = 0;
+        unsigned int indexOfWarns  = 0;
+		unsigned int indexOfFails  = 0;
+		unsigned int indexOfErrors = 0;
  
         for(unsigned int i=0; i<types.size(); i++)
         {
-           if(types[i]) collector->addCaseInfo(testcase, infos[indexOfInfos++]);
-           else      collector->addCaseWarning(testcase, warns[indexOfWarns++]);
+			switch(types[i])
+			{
+			case 0: collector->addCaseInfo(testcase, infos[indexOfInfos++]); break;
+			case 1: collector->addCaseWarning(testcase, warns[indexOfWarns++]); break;
+			case 2: collector->addCaseFailure(testcase, failures[indexOfFails++]); break;
+			case 3: collector->addCaseError(testcase, errors[indexOfErrors++]); break;
+			}
         }
 
         types.clear();
@@ -40,21 +47,36 @@ namespace
         warns.clear();
       }
 
-      void addWarning(const Warning& warn)
+	  void addInfo(const Info& info)
       {
-         types.push_back(false);
-         warns.push_back(warn);
-      }
-
-      void addInfo(const Info& info)
-      {
-         types.push_back(true);
+         types.push_back(0);
          infos.push_back(info);
       }
 
-      std::vector<bool> types;
+      void addWarning(const Warning& warn)
+      {
+         types.push_back(1);
+         warns.push_back(warn);
+      }
+
+	  void addFailure(const AssertionFailure& failure)
+	  {
+		  types.push_back(2);
+		  failures.push_back(failure);
+	  }
+
+	  void addError(const std::string& error)
+	  {
+		  types.push_back(3);
+		  errors.push_back(error);
+	  }
+
+      std::vector<unsigned char> types;
+
       std::vector<Info> infos;
       std::vector<Warning> warns;
+	  std::vector<AssertionFailure> failures;
+	  std::vector<std::string> errors;
    };
 
 }
@@ -80,8 +102,6 @@ struct TestCaseSandboxResultDecoderImpl
    void handleEndCase();
 
    void flushRegularEvents();
-   void flushErrorEvents();
-   void flushFailureEvents();
    void flushInfoEvents();
    void flushEndEvent();
 
@@ -120,16 +140,11 @@ struct TestCaseSandboxResultDecoderImpl
    TestCaseResultCollector* collector; // X
   
 
-   typedef std::vector<std::string> Errors;
-   typedef std::vector<AssertionFailure> Failures;
-
    StupidTimer timer;
    timeval endTime;
 
    InfoContainer infos;
    
-   Errors errors;
-   Failures failures;
    bool startReceived;
    bool endReceived;
    bool errorReceived;
@@ -149,7 +164,7 @@ addCaseError(const std::string& msg)
       throw Error(TESTNGPP_INTERNAL_ERROR(1001));
    }
 
-   errors.push_back(msg);
+   infos.addError(msg);
 
    errorReceived = true;
 }
@@ -164,7 +179,7 @@ addCaseFailure(const AssertionFailure& failure)
       throw Error(TESTNGPP_INTERNAL_ERROR(1002));
    }
 
-   failures.push_back(failure);
+   infos.addFailure(failure);
 
    failureReceived = true;
 }
@@ -197,34 +212,6 @@ addCaseWarning(const Warning& warning)
    infos.addWarning(warning);
   
    infoReceived = true;
-}
-
-/////////////////////////////////////////////////////////////////////////
-void
-TestCaseSandboxResultDecoderImpl::
-flushErrorEvents()
-{
-   Errors::iterator error = errors.begin();
-   for(; error != errors.end(); error++)
-   {
-      collector->addCaseError(testcase, (*error));
-   }
-
-   errors.clear();
-}
-
-/////////////////////////////////////////////////////////////////////////
-void
-TestCaseSandboxResultDecoderImpl::
-flushFailureEvents()
-{
-   Failures::iterator failure = failures.begin();
-   for(; failure != failures.end(); failure++)
-   {
-      collector->addCaseFailure(testcase, (*failure));
-   }
-
-   failures.clear();
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -264,8 +251,6 @@ flushRegularEvents()
    collector->startTestCase(testcase);
 
    flushInfoEvents();
-   flushErrorEvents();
-   flushFailureEvents();
 
    flushEndEvent();
 }
