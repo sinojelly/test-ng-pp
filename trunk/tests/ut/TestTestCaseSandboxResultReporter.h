@@ -66,7 +66,7 @@ public:
    {
       TestCaseSandboxResultReporter reporter(wChannel);
 
-   	reporter.endTestCase(testcase);
+   	reporter.endTestCase(testcase,0,0);
 
       TS_ASSERT(rChannel->readByte() == 2);
    }
@@ -165,7 +165,7 @@ public:
    void testShouldBeAbleToDecodeEndEventAndReturnTrueToRepresentTheCaseHasFinished()
    {
       reporter->startTestCase(testcase);
-      reporter->endTestCase(testcase);
+      reporter->endTestCase(testcase,0,0);
 
       //////////////////////////////////////////////
       collector.METHOD(TestCaseResultCollector::endTestCase)
@@ -243,7 +243,7 @@ public:
 
    void testShouldThrowInternalErrorIfReceivedEndEventBeforeStartTestCase()
    {
-      reporter->endTestCase(testcase);
+      reporter->endTestCase(testcase, 0, 0);
       TS_ASSERT_THROWS(decoder->decode(), Error);
    }
 
@@ -276,8 +276,8 @@ public:
    void testShouldThrowInternalErrorIfReceivedAnotherEndEvent()
    {
       reporter->startTestCase(testcase);
-      reporter->endTestCase(testcase);
-      reporter->endTestCase(testcase);
+      reporter->endTestCase(testcase,0,0);
+      reporter->endTestCase(testcase,0,0);
 
       decoder->decode();
       decoder->decode();
@@ -288,7 +288,7 @@ public:
    void testShouldThrowInternalErrorIfReceivedErrorEventAfterEndEvent()
    {
       reporter->startTestCase(testcase);
-      reporter->endTestCase(testcase);
+      reporter->endTestCase(testcase,0,0);
 
       std::string msg("test case error");
       reporter->addCaseError(testcase, msg);
@@ -302,7 +302,7 @@ public:
 	void testShouldThrowInternalErrorIfReceivedFailureEventAfterEndEvent()
 	{
 		reporter->startTestCase(testcase);
-		reporter->endTestCase(testcase);
+		reporter->endTestCase(testcase,0,0);
 
       AssertionFailure failure("TestNothing.h", 11, "test case error");
       reporter->addCaseFailure(testcase, failure);
@@ -328,7 +328,7 @@ public:
    {
       //////////////////////////////////////////////
       collector.METHOD(TestCaseResultCollector::startTestCase)
-               .expects(never());
+               .expects(once());
 
       collector.METHOD(TestCaseResultCollector::addCaseCrash)
                .expects(once());
@@ -341,7 +341,7 @@ public:
    void testShouldNotReportCrashEventAfterEndEventReceived()
    {
       reporter->startTestCase(testcase);
-      reporter->endTestCase(testcase);
+      reporter->endTestCase(testcase,0,0);
 
       collector.METHOD(TestCaseResultCollector::addCaseCrash)
                .expects(never());

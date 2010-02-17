@@ -109,12 +109,12 @@ public:
 		listener->startTestSuite(testSuiteInfoReader);
 		listener->startTestFixture(testFixtureInfoReader);
 		listener->startTestCase(testCaseInfoReader);
-		listener->endTestCase(testCaseInfoReader);
+		listener->endTestCase(testCaseInfoReader,0,0);
 		listener->startTestCase(testCaseInfoReader);
 		listener->addCaseFailure(testCaseInfoReader, assertionFailure);
 		listener->endTestFixture(testFixtureInfoReader);
 		listener->endTestSuite(testSuiteInfoReader);
-		listener->endTest();
+		listener->endTest(0,0);
 
 		std::string expected =
 "<?xml version=\"1.0\"?>\n\
