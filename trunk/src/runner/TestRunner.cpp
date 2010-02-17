@@ -5,6 +5,7 @@
 
 #include <testngpp/internal/Error.h>
 #include <testngpp/utils/InternalError.h>
+#include <testngpp/utils/StupidTimer.h>
 
 #include <testngpp/listener/TestResultCollector.h>
 
@@ -214,9 +215,13 @@ runTests
 {
    resultManager->startTest();
 
+   StupidTimer timer;
+   timer.start();
+
    runAllTests(suites, tagsFilters, filter);
 
-   resultManager->endTest();
+   timeval tv = timer.stop();
+   resultManager->endTest(tv.tv_sec, tv.tv_usec);
 
    if(resultManager->hasFailure())
    {

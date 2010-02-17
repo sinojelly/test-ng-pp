@@ -161,7 +161,7 @@ struct StdoutTestListener : public TestListener
    void endTagsFiltering(const TagsFilterRule*);
 
    void startTest();
-   void endTest();
+   void endTest(unsigned int, unsigned int);
    void addError(const std::string&);
 
 private:
@@ -791,7 +791,7 @@ reportAllUnsuccessfulTests() const
 ///////////////////////////////////////////////////////////
 void
 StdoutTestListener::
-endTest()
+endTest(unsigned int secs, unsigned int usecs)
 {
    if(bookKeeper->getNumberOfTestCases() == 0)
    {
@@ -827,6 +827,9 @@ endTest()
 
    reportCasesResult();
 
+   std::cout
+      << std::endl 
+      << info << "(" << secs << "s " << usecs << "us)" << normal;
    std::cout << std::endl;
 }
 
