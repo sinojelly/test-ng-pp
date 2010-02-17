@@ -1,5 +1,5 @@
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/comm/Win32PipeReadableChannel.h>
@@ -9,7 +9,7 @@
 #include <testngpp/runner/EOFError.h>
 #include <testngpp/runner/TestCaseRunner.h>
 #include <testngpp/runner/TestCaseSandboxResultDecoder.h>
-#include <testngpp/runner/TestCaseResultCollector.h>
+#include <testngpp/listener/TestCaseResultCollector.h>
 
 #include <testngpp/win32/Win32ThrowLastError.h>
 #include <testngpp/win32/Win32Sandbox.h>

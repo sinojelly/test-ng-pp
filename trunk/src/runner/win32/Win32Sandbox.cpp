@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 
-#include <testngpp/Error.h>
+#include <testngpp/internal/Error.h>
 #include <testngpp/ExceptionKeywords.h>
 
 #include <testngpp/win32/Win32Sandbox.h>
@@ -92,6 +92,25 @@ Win32Sandbox::die()
 
 namespace
 {
+	std::string escape(const std::string& str)
+	{
+		std::string result("");
+
+		for(unsigned int i=0; i<str.size(); i++)
+		{
+			if(str[i] == '\\')
+				result += "\\\\";
+			else if(str[i] == '\'')
+				result += "\\\'";
+			else if(str[i] == '\"')
+				result += "\\\"";
+			else
+				result += str[i];
+		}
+
+		return result;
+	}
+
    void pipe(HANDLE pipes[])
    {
 	  SECURITY_ATTRIBUTES secAttr;
@@ -152,9 +171,9 @@ namespace
 	  
 	  oss << "\"" << modulePath << "\"" 
 		  << " "  << suite 
-          << " "  << fixture 
-          << " "  << testcase 
-          << " "  << (DWORD)hWrite
+          << " \""  << escape(fixture) 
+          << "\" \""  << escape(testcase) 
+          << "\" "  << (DWORD)hWrite
           << " "  << (DWORD)hSemphore;
       
 	  STARTUPINFO startInfo;

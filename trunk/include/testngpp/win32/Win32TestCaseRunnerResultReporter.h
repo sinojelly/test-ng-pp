@@ -8,12 +8,12 @@
 
 #include <testngpp/testngpp.h>
 
-#include <testngpp/runner/TestResultCollector.h>
+#include <testngpp/listener/TestResultCollector.h>
 #include <testngpp/internal/TestSuiteInfoReader.h>
 #include <testngpp/internal/TestFixtureInfoReader.h>
 #include <testngpp/internal/TestCaseInfoReader.h>
 
-#include <testngpp/AssertionFailure.h>
+#include <testngpp/internal/AssertionFailure.h>
 
 TESTNGPP_NS_START
 
@@ -62,9 +62,9 @@ struct TestCaseRunnerResultReporter
 		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
-    void endTestCase(const TestCaseInfoReader* testcase)
+    void endTestCase(const TestCaseInfoReader* testcase, unsigned int secs, unsigned int usecs)
 	{
-		reporter->endTestCase(testcase);
+		reporter->endTestCase(testcase, secs, usecs);
 		if(semaphore) ::ReleaseSemaphore(semaphore, 1, NULL);
 	}
 
@@ -96,21 +96,6 @@ struct TestCaseRunnerResultReporter
 		std::cerr << "suite error : " << error << std::endl;
 	}
 	
-	void startTagsFiltering(const TaggableObjFilter*)
-	{
-	}
-   
-	void endTagsFiltering(const TaggableObjFilter*)
-	{
-	}
-
-	void startTest() 
-	{
-	}
-	void endTest()
-	{
-	}
-
 	void addError(const std::string& error)
 	{
 		std::cerr << "test error : " << error << std::endl;

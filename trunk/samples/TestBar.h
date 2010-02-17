@@ -7,15 +7,15 @@
 
 USING_TESTNGPP_NS
 
-struct ABC
+struct Hell
 {
-   ABC() { p = new char[10]; }
-   ~ABC() { delete [] p; }
+   Hell() { p = new char[10]; }
+   ~Hell() { delete [] p; }
 
    char *p;
 };
 
-ABC abc[100];
+Hell hell[100];
 
 struct TestBar1 : public TESTNGPP_NS::TestFixture
 {

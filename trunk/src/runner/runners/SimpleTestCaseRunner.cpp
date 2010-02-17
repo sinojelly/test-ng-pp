@@ -1,9 +1,8 @@
 
-#include <iostream>
+#include <sstream>
 
 #if defined(_MSC_VER)
 #include <windows.h>
-#include <testngpp/win32/die.h>
 #endif
 
 #include <testngpp/ExceptionKeywords.h>
@@ -20,8 +19,62 @@
 
 TESTNGPP_NS_START
 
+#if defined(_MSC_VER)
+namespace {
+struct HwExceptionEntry
+{
+	unsigned int code;
+	const char* name;
+};
+
+#define HW_EXCEPTION(code) {code, #code}
+
+static HwExceptionEntry hwExceptionTable[] =
+{
+	HW_EXCEPTION(STATUS_GUARD_PAGE_VIOLATION),
+    HW_EXCEPTION(STATUS_ACCESS_VIOLATION),
+    HW_EXCEPTION(STATUS_IN_PAGE_ERROR),
+	HW_EXCEPTION(STATUS_INVALID_HANDLE),
+	HW_EXCEPTION(STATUS_NO_MEMORY),
+	HW_EXCEPTION(STATUS_ILLEGAL_INSTRUCTION),
+	HW_EXCEPTION(STATUS_NONCONTINUABLE_EXCEPTION),
+	HW_EXCEPTION(STATUS_INVALID_DISPOSITION),
+	HW_EXCEPTION(STATUS_ARRAY_BOUNDS_EXCEEDED),
+	HW_EXCEPTION(STATUS_FLOAT_DENORMAL_OPERAND),
+	HW_EXCEPTION(STATUS_FLOAT_DIVIDE_BY_ZERO),
+	HW_EXCEPTION(STATUS_FLOAT_INEXACT_RESULT),
+	HW_EXCEPTION(STATUS_FLOAT_INVALID_OPERATION),
+	HW_EXCEPTION(STATUS_FLOAT_OVERFLOW),
+	HW_EXCEPTION(STATUS_FLOAT_STACK_CHECK),
+	HW_EXCEPTION(STATUS_FLOAT_UNDERFLOW),
+	HW_EXCEPTION(STATUS_INTEGER_DIVIDE_BY_ZERO),
+	HW_EXCEPTION(STATUS_INTEGER_OVERFLOW),
+	HW_EXCEPTION(STATUS_PRIVILEGED_INSTRUCTION),
+	HW_EXCEPTION(STATUS_STACK_OVERFLOW),
+	HW_EXCEPTION(STATUS_CONTROL_C_EXIT),
+	HW_EXCEPTION(STATUS_FLOAT_MULTIPLE_FAULTS),
+	HW_EXCEPTION(STATUS_FLOAT_MULTIPLE_TRAPS),
+	HW_EXCEPTION(STATUS_REG_NAT_CONSUMPTION)
+};
+
+std::string exceptionCodeToStr(unsigned int code)
+{
+	for(unsigned int i=0; i<sizeof(hwExceptionTable)/sizeof(hwExceptionTable[0]); i++)
+	{
+		if(hwExceptionTable[i].code == code)
+			return hwExceptionTable[i].name;
+	}
+
+	std::ostringstream oss;
+
+	oss << "unknown (" << code << ")";
+	return oss.str();
+}
+}
+#endif
+
 #define __RUN(block) try block \
-   catch(AssertionFailure& failure) \
+   catch(AssertionFailure&) \
    { \
       hasFailure = true; \
    } \
@@ -80,11 +133,11 @@ bool doRun
    , TestCaseResultCollector* collector)
 {
 #if defined(_MSC_VER)
-   int result = tryToRunTest( testcase, collector);
+   int result = win32TryToRunTest( testcase, collector);
    if(result < 0)
    {
-      ostringstream oss;
-      oss << "exception (" << result << ") raised";
+	  std::ostringstream oss;
+      oss << "exception " << exceptionCodeToStr(result) << " raised";
       collector->addCaseError(testcase, oss.str());
    }
 
