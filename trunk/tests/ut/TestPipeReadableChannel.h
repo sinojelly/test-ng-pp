@@ -4,12 +4,10 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
-
-#include <mockcpp/mockcpp.hpp>
+#include <string.h>
 
 #include <testngpp/comm/PipeReadableChannel.h>
 
-USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
 class TestPipeReadableChannel: public CxxTest::TestSuite

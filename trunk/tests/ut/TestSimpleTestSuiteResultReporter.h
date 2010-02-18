@@ -32,9 +32,10 @@ public:
 
    void testShouldBeAbleToReportNumberOfCrashedCases()
    {
-      MockObject<TestCaseResultReporter> caseReporter;
-      MockObject<TestCaseInfoReader> caseInfoReader;
-      MockObject<TestSuiteInfoReader> suiteInfoReader;
+
+      MockObject<TESTNGPP_NS::TestCaseResultReporter> caseReporter;
+      MockObject<TESTNGPP_NS::TestCaseInfoReader> caseInfoReader;
+      MockObject<TESTNGPP_NS::TestSuiteInfoReader> suiteInfoReader;
 
       MOCK_METHOD(caseReporter, getTestCaseResult)
                   .stubs()

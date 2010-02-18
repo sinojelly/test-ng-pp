@@ -16,8 +16,6 @@
 #include <testngpp/comm/PipeReadableChannel.h>
 #include <testngpp/comm/PipeWrittableChannel.h>
 
-
-
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
