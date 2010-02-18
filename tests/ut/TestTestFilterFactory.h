@@ -67,10 +67,11 @@ public:
 
       TS_ASSERT(filter != 0);
 
+
       /////////////////////////////////////////////////
       MockObject<TestFixtureInfoReader> fixture0;
 
-      fixture0.METHOD(TestFixtureInfoReader::getName)
+      MOCK_METHOD(fixture0, getName)
               .stubs().will(returnValue(std::string("Fixture0")));
 
       TS_ASSERT(!filter->isFixtureMatch(fixture0));
@@ -93,5 +94,6 @@ public:
 
       //////////////////////////////////////////////////
       TestFilterFactory::returnFilter(filter);
+
    }
 };
