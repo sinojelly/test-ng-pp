@@ -3,13 +3,10 @@
 
 #include <testngppst/ResourceCheckPoint.h>
 
-#include <mockcpp/mockcpp.hpp>
-
 #include <testngpp/internal/TestCase.h>
 
 #include "MyTestCase.h"
 
-USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
 class TestTestCase: public CxxTest::TestSuite
@@ -19,12 +16,11 @@ private:
 
    TestCase* testCase;
 
-
 public:
    void setUp()
    {
       checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
-	   testCase = new MyTestCase("testShouldDoNothing", "TestNothing", "TestNothing.h", 23);
+	    testCase = new MyTestCase("testShouldDoNothing", "TestNothing", "TestNothing.h", 23);
    }
    void tearDown()
    {

@@ -1,16 +1,10 @@
 
-
+#include <iostream>
 #include <cxxtest/TestSuite.h>
-
-#include <mockcpp/mockcpp.hpp>
-
 #include <testngppst/ResourceCheckPoint.h>
 
 #include <testngpp/utils/StringToOptions.h>
 
-#include <iostream>
-
-USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
 class TestStringToOptions: public CxxTest::TestSuite

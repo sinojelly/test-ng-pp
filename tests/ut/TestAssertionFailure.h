@@ -2,19 +2,16 @@
 #include <cxxtest/TestSuite.h> 
 #include <testngpp/ResourceCheckPoint.h>
 
-#include <mockcpp/mockcpp.hpp>
-
 #include <testngpp/internal/AssertionFailure.h>
 
-USING_MOCKCPP_NS
-USING_TESTNGPP_NS
+using namespace testngpp;
 
 class TestAssertionFailure: public CxxTest::TestSuite
 {
 private:
    TESTNGPP_RCP checkpoint;
 
-   AssertionFailure* failure;
+   TESTNGPP_NS::AssertionFailure* failure;
    
 public:
    void setUp()

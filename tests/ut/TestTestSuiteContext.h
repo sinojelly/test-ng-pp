@@ -35,11 +35,8 @@ public:
    {
       checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
 
-      MOCK_METHOD(filter, isFixtureMatch)
-         .stubs().will(returnValue(true));
-      MOCK_METHOD(filter, isCaseMatch)
-         .stubs().will(returnValue(true));
-
+      MOCK_METHOD(filter, isFixtureMatch).stubs().will(returnValue(true));
+      MOCK_METHOD(filter, isCaseMatch).stubs().will(returnValue(true));
    }
 
    void tearDown()

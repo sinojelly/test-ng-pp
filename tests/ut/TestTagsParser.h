@@ -2,8 +2,6 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <mockcpp/mockcpp.hpp>
-
 #include <testngppst/ResourceCheckPoint.h>
 
 #include <testngpp/internal/Error.h>
@@ -11,7 +9,6 @@
 #include <testngpp/runner/TagsParser.h>
 #include <testngpp/internal/Taggable.h>
 
-USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
 class TestTagsParser: public CxxTest::TestSuite

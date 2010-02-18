@@ -18,33 +18,33 @@ ADD_DEFINITIONS(
 
 SET(UT_CASES
   TestAssertionFailure.h
-#  TestDLModuleLoader.h
-#  TestExceptionKeywords.h
-#  TestFixtureDef.h
-  TestGeneralTestFilter.h
   TestModuleTestSuiteLoader.h
-  TestOrCompositeTestFilter.h
   TestPipeReadableChannel.h
   TestPipeWrittableChannel.h
   TestPosixFNMatcher.h
-  TestSandbox.h
-  TestSandboxProcessor.h
-#  TestSimpleTestCaseRunner.h
-  TestSimpleTestSuiteResultReporter.h
   TestStringToOptions.h
   TestTagsParser.h
   TestTestCase.h
-  TestTestCaseHierarchy.h
-#  TestTestCaseSandbox.h
-  TestTestCaseSandboxResultReporter.h
-  TestTestFilterFactory.h
   TestTestFixtureDesc.h
-  TestTestFixtureSandboxRunner.h
-  TestTestSuiteContext.h
   TestTestSuiteDesc.h
   TestXMLBuilder.h
-  TestXMLTestListener.h
 )
+
+SET(UT_CASES_WITH_MOCK
+  TestTestFixtureSandboxRunner.h
+  TestTestCaseHierarchy.h
+  TestSandbox.h
+  TestSandboxProcessor.h
+  TestTestSuiteContext.h
+  TestTestCaseSandboxResultReporter.h
+  TestXMLTestListener.h
+  TestTestFilterFactory.h
+  TestOrCompositeTestFilter.h
+  TestSimpleTestSuiteResultReporter.h
+  TestGeneralTestFilter.h
+)
+
+SET(UT_CASES ${UT_CASES} ${UT_CASES_WITH_MOCK})
 
 LINK_DIRECTORIES(
   ${PROJECT_HOME}/src
