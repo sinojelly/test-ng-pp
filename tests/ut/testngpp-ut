@@ -7,6 +7,6 @@ ${TESTNGPPST_ROOT}/src/runner/testngppst-runner \
    -L${TESTNGPPST_ROOT}/src/listeners \
    -l"testngppstxmllistener result.xml" \
    -l"testngppststdoutlistener -c " \
-   -t"*" -c1 $@ \
+   -t"*" -c100 $@ \
    ${TESTNGPP_UT_SUITES}
 

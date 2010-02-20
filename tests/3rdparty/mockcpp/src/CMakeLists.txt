@@ -209,7 +209,7 @@ ENDFOREACH()
 ######################################################
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
 
-ADD_LIBRARY(mockcpp SHARED ${MOCKCPP_SRCS})
+ADD_LIBRARY(mockcpp STATIC ${MOCKCPP_SRCS})
 
 INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_SRC_ROOT}/include ${PROJECT_HOME}/3rdparty)
 
