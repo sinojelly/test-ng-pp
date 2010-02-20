@@ -59,13 +59,18 @@ namespace
       return fullPath;
    }
 
+   void* DlOpen(const char* path)
+   {
+      return ::dlopen(path, RTLD_LAZY | RTLD_LOCAL);
+   }
+
    void* openModule(const std::string& modulePath)
    {
-      void* p = ::dlopen(modulePath.c_str(), RTLD_NOW);
+      void* p = DlOpen(modulePath.c_str());
       if(p == 0)
       {
          std::string module = modulePath + ".so";
-         return ::dlopen(module.c_str(), RTLD_NOW);
+         return DlOpen(module.c_str());
       }
 
       return p;
