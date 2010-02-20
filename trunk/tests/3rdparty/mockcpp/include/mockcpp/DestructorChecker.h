@@ -29,7 +29,8 @@ MOCKCPP_NS_START
 ///////////////////////////////////////////////
 
 void* createDestructorChecker(const std::type_info& info);
-void getIndicesOfDestructor(void* obj, unsigned int& indexOfVptr, unsigned int& indexOfVtbl);
+unsigned int getIndexOfVptrOfDestructor();
+unsigned int getIndexOfVtblOfDestructor();
 
 ///////////////////////////////////////////////
 template <class Interface, class Original>
@@ -45,7 +46,18 @@ std::pair<unsigned int, unsigned int> getIndexOfDestructor()
    unsigned int vptrIndex = 0;
    unsigned int vtblIndex = 0;
 
-   getIndicesOfDestructor((void*)original, vptrIndex, vtblIndex);
+   try
+   {
+      vptrIndex = getIndexOfVptrOfDestructor();
+      vtblIndex = getIndexOfVtblOfDestructor();
+
+      // FIXME:
+      ::operator delete(original);
+   }
+   catch(...)
+   {
+      throw;
+   }
 
    return std::pair<unsigned int, unsigned int>
        (vptrIndex, vtblIndex);
