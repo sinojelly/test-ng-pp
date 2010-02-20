@@ -16,4 +16,5 @@ done
 mv include/testngpp/testngpp.h include/testngpp/testngppst.h
 mv include/testngpp/testngpp.hpp include/testngpp/testngppst.hpp
 mv include/testngpp include/testngppst
+mv scripts/testngppgen scripts/testngppstgen
 mv scripts/testngppgen.py scripts/testngppstgen.py
