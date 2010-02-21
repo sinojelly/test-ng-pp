@@ -13,7 +13,7 @@ USING_TESTNGPP_NS
 
 struct TestFixture12 {};
 
-class TestFoo : public TestFixture
+FIXTURE(Foo)
 {
 public:
 
