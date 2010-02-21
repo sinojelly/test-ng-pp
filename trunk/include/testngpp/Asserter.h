@@ -58,7 +58,7 @@ TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
 #define __TESTNGPP_ASSERT_EQUALITY(expected, expected_equality, wrong_equality, value) do {\
-   TESTNGPP_TYPEOF(expected) __testngpp_expected = (expected); \
+   TESTNGPP_TYPEOF(value) __testngpp_expected = (expected); \
    TESTNGPP_TYPEOF(value) __testngpp_value = (value); \
    if(__testngpp_expected wrong_equality __testngpp_value) { \
       std::stringstream ss; \
