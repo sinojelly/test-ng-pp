@@ -704,6 +704,8 @@ showSuiteName(const TestCaseInfoReader* testcase)
       << formatTitle("SUITE: " + testcase->getNameOfSuite(), '-', maxLenOfLine)
       << normal
       << std::endl;
+
+   isSuccess = false;
 }
 
 ///////////////////////////////////////////////////////////
