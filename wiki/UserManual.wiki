@@ -97,7 +97,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言 [WikiSyntax#1.6_Assertion] ，如果断言失败，则此测试用例将会失败。
+测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言 [WikiSyntax#Assertion] ，如果断言失败，则此测试用例将会失败。
 
 ==1.5 SETUP和TEARDOWN==
 
@@ -180,7 +180,7 @@ FIXTURE(DLModuleLoader)
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
 
-=1.6 Assertion=
+==Assertion==
 || 断言 || 用法 || 例子 ||
 || ASSERT_TRUE(expr) || 断言表达式的求值为true || ASSERT_TRUE(10 == a) ||
 || ASSERT_FALSE(expr) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
