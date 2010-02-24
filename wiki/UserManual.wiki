@@ -406,6 +406,12 @@ FIXTURE(DLModuleLoader)
 
 在这个过程中，即便TEST(可以在指明后缀".so"的情况下加载一个模块)里面的断言失败，*TestNG++*仍然认为是用例TEST(可以在加载后卸载模块)失败。
 
+==兼容性==
+
+===CxxTest===
+
+===TestCpp===
+
 =编译和链接=
 
 Coming...
