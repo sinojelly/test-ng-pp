@@ -405,3 +405,27 @@ FIXTURE(DLModuleLoader)
   # delete FixtureDLModuleLoader;
 
 在这个过程中，即便TEST(可以在指明后缀".so"的情况下加载一个模块)里面的断言失败，*TestNG++*仍然认为是用例TEST(可以在加载后卸载模块)失败。
+
+=编译和链接=
+
+Coming...
+
+==Test Suite==
+
+Coming...
+
+==Generator==
+
+Coming...
+
+=运行测试=
+
+Coming...
+
+==Tags==
+
+Coming...
+
+==Test Listener==
+
+Coming...
