@@ -39,4 +39,4 @@ FIXTURE(CFoo, 类CFoo的测试装置, 你可以使用它们：(){}[]''~!@#$%^&*+
 
 *FIXTURE* 本身是一个宏，所以要求*fixture name* 必须遵守宏参数的语法规则，你可以在名字里使用() ' "等符号，但它们必须正确的成对出现，否则编译器将会报错。
 
-如果你没有提供*fixture name* ，则*fixture ID*将被当作*fixture name* 。
+如果你没有提供*fixture name* ，则*fixture ID* 将被当作*fixture name* 。
