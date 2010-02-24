@@ -29,7 +29,7 @@ FIXTURE(DLModuleLoader)
 {{{
 #include <testngpp/testngpp.hpp>
 
-#include "CFoo.h"
+#include "DLModuleLoader.h"
 
 FIXTURE(DLModuleLoader, 类DLModuleLoader的测试, 你可以在fixture name中使用这些字符：(){}[]''~!@#$%^&*+-=_?><"")
 {
@@ -44,5 +44,20 @@ FIXTURE(DLModuleLoader, 类DLModuleLoader的测试, 你可以在fixture name中�
 在定义了fixture之后，你可以编写你的第一个测试。如下：
 
 {{{
+#include <testngpp/testngpp.hpp>
+
+#include "DLModuleLoader.h"
+
+FIXTURE(DLModuleLoader)
+{
+   TEST(should be able to load modules without suffix ".so")
+   {
+      DLModuleLoader* loader = new DLModuleLoader();
+  
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite"));
+
+      delete loader;
+   }
+};
 
 }}}
