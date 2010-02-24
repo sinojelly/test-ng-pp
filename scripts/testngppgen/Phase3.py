@@ -12,7 +12,7 @@ from FixtureParser import FixtureParser
 from Message import *
 
 fixture_re1  = re.compile( \
-   r'''^\s*FIXTURE\s*\(\s*(?P<fixtureId>[A-Za-z_][A-Za-z0-9_]*)\s*(,\s*(?P<fixtureName>[^\)]+))?\s*\)\s*''', \
+   r'''^\s*FIXTURE\s*\(\s*(?P<fixtureId>[A-Za-z_][A-Za-z0-9_]*)\s*(,\s*(?P<fixtureName>.+))?\s*\)\s*''', \
    re.UNICODE)
 
 fixture_re2  = re.compile( \
