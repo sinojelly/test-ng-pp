@@ -4,12 +4,12 @@
 
 为了使用*TestNG++*，你首先要创建放置测试代码的源代码文件，尽管并不是强制的约束，但建议使用".h"作为这些文件的扩展名。
 
-然后，你需要包含*TestNG++*的头文件 *testngpp.hpp* ；像这样：
+然后，你需要包含*TestNG++*的头文件 _*testngpp.hpp*_ ；像这样：
 {{{
 #include <testngpp/testngpp.hpp>
 }}}
 
-然后，声明一个 *fixture*。比如，将要被测试的类名为CFoo，则可以将 *fixture*定义如下:
+然后，声明一个 *fixture* 。比如，将要被测试的类名为CFoo，则可以将 *fixture* 定义如下:
 
 {{{
 #include <testngpp/testngpp.hpp>
@@ -22,9 +22,9 @@ FIXTURE(CFoo)
 
 }}}
 
-*FIXTURE*的第一个参数为*Fixture ID*，它可以是任何C/C++标识符（Identifier）。一般而言，将其命名为*CUT*（Class Under Test）的名字即可。
+*FIXTURE* 的第一个参数为 *Fixture ID* ，它可以是任何C/C++标识符（Identifier）。一般而言，将其命名为*CUT*（Class Under Test）的名字即可。
 
-*FIXTURE*还有第二个参数：*Fixture Name*。它可以是任何_宏参数_所允许的字符。如果你的编译器支持多语言，你可以使用任何其它字符集所支持的字符。比如：
+*FIXTURE* 还有第二个参数：*Fixture Name* 。它可以是任何_宏参数_所允许的字符。如果你的编译器支持多语言，你可以使用任何其它字符集所支持的字符。比如：
 
 {{{
 #include <testngpp/testngpp.hpp>
@@ -37,6 +37,6 @@ FIXTURE(CFoo, 类CFoo的测试装置, 你可以使用它们：(){}[]''~!@#$%^&*+
 
 }}}
 
-*FIXTURE*本身是一个宏，所以要求*fixture name*必须遵守宏参数的语法规则，你可以在名字里使用() ' "等符号，但它们必须正确的成对出现，否则编译器将会报错。
+*FIXTURE* 本身是一个宏，所以要求*fixture name* 必须遵守宏参数的语法规则，你可以在名字里使用() ' "等符号，但它们必须正确的成对出现，否则编译器将会报错。
 
-如果你没有提供*fixture name*，则*fixture ID*将被当作*fixture name*。
+如果你没有提供*fixture name* ，则*fixture ID*将被当作*fixture name* 。
