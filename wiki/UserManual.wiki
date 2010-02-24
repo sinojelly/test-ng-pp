@@ -9,7 +9,7 @@
 #include <testngpp/testngpp.hpp>
 }}}
 
-然后，声明一个Fixture。比如，我们要测试的class的名字为CFoo，则你的fixture定义如下:
+然后，声明一个Fixture。比如，将要被测试的类名为CFoo，则可以将fixture定义如下:
 
 {{{
 #include <testngpp/testngpp.hpp>
@@ -22,4 +22,4 @@ FIXTURE(CFoo)
 
 }}}
 
-FIXTURE()的第一个参数为Fixture ID，它可以是任何C/C++标识符（Identifier）。一般而言，将其命名为你的CUT（Class Under Test）即可。
+FIXTURE的第一个参数为Fixture ID，它可以是任何C/C++标识符（Identifier）。一般而言，将其命名为CUT（Class Under Test）的名字即可。
