@@ -97,7 +97,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-==1.6 Assertion==
+==1.5 Assertion==
 
 测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言，如果断言失败，则此测试用例将会失败。
 
@@ -113,7 +113,7 @@ FIXTURE(DLModuleLoader)
 || ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_FALSE(10 != a) ||
 || ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
 
-==1.5 SETUP和TEARDOWN==
+==1.6 SETUP和TEARDOWN==
 
 在测试成功运行之后，我们来编写第二个用例。
 
@@ -194,7 +194,7 @@ FIXTURE(DLModuleLoader)
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
 
-==测试依赖==
+==1.7 测试依赖==
 
 随后我们编写针对unload的测试，传统的做法如下：
 
