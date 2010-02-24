@@ -101,6 +101,8 @@ FIXTURE(DLModuleLoader)
 
 测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言，如果断言失败，则此测试用例将会失败。
 
+TestNG++提供的测试断言如下：
+
 || 断言 || 用法 || 例子 ||
 || ASSERT_TRUE(expr) || 断言表达式的求值为true || ASSERT_TRUE(10 == a) ||
 || ASSERT_FALSE(expr) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
@@ -112,6 +114,19 @@ FIXTURE(DLModuleLoader)
 || ASSERT_THROWS_ANYTHING(expr) || 断言表达式将会抛出异常 || ASSERT_THROWS_ANYTHING(foo()) ||
 || ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_FALSE(10 != a) ||
 || ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
+
+这些断言的都遵从了"快速失败"的原则，即一旦断言失败，整个用例将中止执行。结果是，对于上面的例子，如果断言失败将会造成内存泄露。
+
+{{{
+   TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
+   {
+      DLModuleLoader* loader = new DLModuleLoader();
+  
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite"));
+
+      delete loader; // 如果上面的断言失败，此语句将得不到执行
+   }
+}}}
 
 ==1.6 SETUP和TEARDOWN==
 
