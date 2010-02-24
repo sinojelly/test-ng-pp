@@ -15,7 +15,7 @@ from PreprocessScopeParser import *
 
 from Message import *
 
-testcase_re1 = re.compile( r'^\s*TEST\s*\(\s*(?P<testcaseName>[^\)]+)\s*\)\s*$' , re.UNICODE)
+testcase_re1 = re.compile( r'^\s*TEST\s*\(\s*(?P<testcaseName>.+)\s*\)\s*$' , re.UNICODE)
 testcase_re2 = re.compile( r'^\s*void\s+(?P<testcaseId>test[A-Za-z0-9_]+)\s*\(\s*(void)?\s*\)\s*$')
 
 testcase_re3 = re.compile( r'^\s*void\s+(?P<testcaseId>[A-Za-z_][A-Za-z0-9_]*)\s*\(\s*(void)?\s*\)\s*$')

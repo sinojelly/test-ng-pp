@@ -13,7 +13,7 @@ USING_TESTNGPP_NS
 
 struct TestFixture12 {};
 
-FIXTURE(Foo)
+FIXTURE(Foo, 类CFoo的测试装置, 你可以使用它们: ())
 {
 public:
 
@@ -66,7 +66,7 @@ public:
     }
 
     // @test
-    void case4()
+    TEST(case4())
     {
       EXPECT_NE(2, 2);
       INFO("still be here even if it's been failed");
