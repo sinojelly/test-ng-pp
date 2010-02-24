@@ -188,7 +188,7 @@ TestNG++提供了另外一种机制来帮助编写简单的测试。
    {
       DLModuleLoader* loader = new DLModuleLoader();
 
-      __TESTNGPP_DO      
+      __DO__      
       
       Suite* suite = 0;
       EXPECT_THROW_NOTHING(suite = loader->load("libMySuite"));
@@ -201,15 +201,15 @@ TestNG++提供了另外一种机制来帮助编写简单的测试。
       ASSERT_TRUE( 0 != testcase );
       ASSERT_EQ("MyTestCase", testcase->getName());
       
-      __TESTNGPP_CLEANUP // 无论__TESTNGPP_DO里面的断言失败与否，__TESTNGPP_CLEANUP里面的代码都会得到执行
+      __CLEANUP__ // 无论__DO__里面的断言失败与否，__CLEANUP__里面的代码都会得到执行
 
       delete loader;
 
-      __TESTNGPP_DONE 
+      __DONE__ // 不要忘了写它 
    }
 }}}
 
-由于__TESTNGPP_DO里面的每一个断言都用的是“快速失败”Assertion，所以任何一个断言失败都会导致__TESTNGPP_DO的部分立即中止，但__TESTNGPP_CLEANUP的部分却无论成功与失败都肯定会得到执行。
+由于__DO__里面的每一个断言都用的是“快速失败”Assertion，所以任何一个断言失败都会导致__DO__的部分立即中止，但__CLEANUP__的部分却无论成功与失败都肯定会得到执行。
 
 另外，TestNG++还提供了另外几个Assertion用于特殊的目的。
 
