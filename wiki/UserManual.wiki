@@ -84,6 +84,8 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
+测试用例里面的ASSERT_THROWS_NOTHING是一个测试断言，如果断言失败，则此测试用例将会失败。
+
 在测试成功运行之后，我们来编写第二个用例。
 
 {{{
@@ -148,3 +150,5 @@ FIXTURE(DLModuleLoader)
 };
 
 }}}
+
+===测试断言===
