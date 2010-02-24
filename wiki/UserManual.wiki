@@ -96,7 +96,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言，如果断言失败，则此测试用例将会失败。
+测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言[WikiSyntax#1.6 测试断言]，如果断言失败，则此测试用例将会失败。
 
 ===1.5 SETUP和TEARDOWN===
 
