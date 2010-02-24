@@ -193,3 +193,88 @@ FIXTURE(DLModuleLoader)
   # TEST(可以在指明后缀".so"的情况下加载一个模块) 
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
+
+==测试依赖==
+
+随后我们编写针对unload的测试，传统的做法如下：
+
+{{{
+#include <testngpp/testngpp.hpp>
+
+#include "DLModuleLoader.h"
+
+FIXTURE(DLModuleLoader)
+{
+   DLModuleLoader* loader;
+   
+   SETUP()
+   {
+      loader = new DLModuleLoader();
+   }
+
+   TEARDOWN()
+   {
+      delete loader;
+   }
+
+   TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
+   {
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite"));
+   }
+
+   TEST(可以在指明后缀".so"的情况下加载一个模块)
+   { 
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite.so"));
+   }
+
+   TEST(可以在加载后卸载模块)
+   {
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite.so"));
+      ASSERT_THROWS_NOTHING(loader->unload());
+   }
+};
+
+}}}
+
+但，我们可以看出，卸载的前提是先加载模块，而加载模块的测试我们已经编写过，没有必要再次重复这个过程，所以，我们可以使用测试依赖。改写结果如下：
+
+{{{
+#include <testngpp/testngpp.hpp>
+
+#include "DLModuleLoader.h"
+
+FIXTURE(DLModuleLoader)
+{
+   DLModuleLoader* loader;
+   
+   SETUP()
+   {
+      loader = new DLModuleLoader();
+   }
+
+   TEARDOWN()
+   {
+      delete loader;
+   }
+
+   TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
+   {
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite"));
+   }
+
+   // @ test (id=load)
+   TEST(可以在指明后缀".so"的情况下加载一个模块)
+   { 
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite.so"));
+   }
+
+   // @ test (depends=load)
+   TEST(可以在加载后卸载模块)
+   {
+      ASSERT_THROWS_NOTHING(loader->unload());
+   }
+};
+
+}}}
+
+通过annotation属性id来标注加载测试用例，然后用属性depends来引入依赖。
