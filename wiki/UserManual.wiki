@@ -209,7 +209,7 @@ TestNG++提供了另外一种机制来帮助编写简单的测试。
 另外，TestNG++还提供了另外几个Assertion用于特殊的目的。
 
 || 断言 || 用法 || 例子 ||
-|| FAIL(str) || 让用例立即失败 || FAIL("not implemented yet") ||
+|| FAIL(str) || 让用例立即失败，并给出失败的原因 || FAIL("not implemented yet") ||
 || WARN(str) || 给出一个警告，但用例并不失败 || WARN(“got a non-fatal null pointer.”) ||
 || INFO(str) || 给出一个信息，用例并不失败 || INFO(“resource has been released.”) ||
 
