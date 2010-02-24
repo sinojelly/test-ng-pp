@@ -165,4 +165,10 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
+像任何正确实现的xUnit框架一样，TestNG++会为每个测试用例创建一个Fixture实例，并执行其SETUP和TEARDOWN。对于本例中的两个用例，运行的过程分别如下：
+
+new FixtureDLModuleLoader() => SETUP() => TEST(可以在不需要指明后缀".so"的情况下加载一个模块) => TEARDOWN() => delete FixtureDLModuleLoader;
+
+new FixtureDLModuleLoader() => SETUP() => TEST(可以在指明后缀".so"的情况下加载一个模块) => TEARDOWN() => delete FixtureDLModuleLoader;
+
 ===1.6 测试断言===
