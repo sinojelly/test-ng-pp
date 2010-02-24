@@ -32,9 +32,9 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-*FIXTURE* 的第一个参数为 *Fixture ID* ，它可以是任何C/C++标识符（Identifier）。一般而言，将其命名为 *CUT* (_Class Under Test_)的名字即可。
+*FIXTURE()* 的第一个参数为 *Fixture ID* ，它可以是任何C/C++标识符（Identifier）。一般而言，将其命名为 *CUT* (_Class Under Test_)的名字即可。
 
-*FIXTURE* 还有第二个可选参数：*Fixture Name* 。它可以是任何_宏参数_所允许的字符。如果你的编译器支持多语言，你可以使用任何其它字符集所支持的字符。比如：
+*FIXTURE()* 还有第二个可选参数：*Fixture Name* 。它可以是任何_宏参数_所允许的字符。如果你的编译器支持多语言，你可以使用任何其它字符集所支持的字符。比如：
 
 {{{
 #include <testngpp/testngpp.hpp>
@@ -74,7 +74,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-TEST()用来定义一个测试用例。括号里面的部分是 *test name* ，和 *fixture name* 一样，它可以使用你的编译器和所允许的任何字符。并且，同样也要遵守宏参数的语法约束。
+*TEST()* 用来定义一个测试用例。括号里面的部分是 *test name* ，和 *fixture name* 一样，它可以使用你的编译器和所允许的任何字符。并且，同样也要遵守宏参数的语法约束。
 
 比如，我可以将上面的测试用例用中文来命名：
 {{{
@@ -96,7 +96,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-测试用例里面的ASSERT_THROWS_NOTHING是一个测试断言，如果断言失败，则此测试用例将会失败。
+测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言，如果断言失败，则此测试用例将会失败。
 
 ===1.5 SETUP和TEARDOWN===
 
@@ -165,7 +165,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-像任何正确实现的xUnit框架一样，TestNG++会为每个测试用例创建一个Fixture实例，并执行其SETUP和TEARDOWN。对于本例中的两个用例，运行的过程分别如下：
+像任何正确实现的xUnit框架一样，*TestNG++* 会为每个测试用例创建一个Fixture实例，并执行其 *SETUP* 和 *TEARDOWN* 。对于本例中的两个用例，运行的过程分别如下：
 
 new FixtureDLModuleLoader() 
 => SETUP() 
