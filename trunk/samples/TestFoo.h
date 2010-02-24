@@ -68,7 +68,8 @@ public:
     // @test
     void case4()
     {
-      ASSERT_EQ(2, 2);
+      EXPECT_NE(2, 2);
+      INFO("still be here even if it's been failed");
     }
 
     // @test
