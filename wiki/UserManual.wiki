@@ -198,7 +198,7 @@ TestNG++提供的测试断言如下：
       __DO__      // 从这里开始是可能失败的部分
       
       Suite* suite = 0;
-      EXPECT_THROW_NOTHING(suite = loader->load("libMySuite"));
+      ASSERT_THROW_NOTHING(suite = loader->load("libMySuite"));
       ASSERT_TRUE( 0 != suite );
 
       Fixture* fixture = suite->findFixture("MyFixture");
