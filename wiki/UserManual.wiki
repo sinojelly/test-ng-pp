@@ -9,6 +9,8 @@
 #include <testngpp/testngpp.hpp>
 }}}
 
+===1.1 Fixture===
+
 然后，声明一个 *fixture* 。比如，将要被测试的类名为DLModuleLoader，则可以将 *fixture* 定义如下:
 
 {{{
@@ -40,6 +42,8 @@ FIXTURE(DLModuleLoader, 类DLModuleLoader的测试, 你可以在fixture name中�
 *FIXTURE* 本身是一个宏，所以要求*fixture name* 必须遵守宏参数的语法规则，你可以在名字里使用() ' "等符号，但它们必须正确的成对出现，否则编译器将会报错。
 
 如果你没有提供 *fixture name* ，则 *fixture ID* 将被当作 *fixture name* 。
+
+===1.2 Test Case===
 
 在定义了fixture之后，你可以编写你的第一个测试。如下：
 
@@ -151,4 +155,4 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-===测试断言===
+===1.3 测试断言===
