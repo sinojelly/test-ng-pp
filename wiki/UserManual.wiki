@@ -299,6 +299,8 @@ FIXTURE(DLModuleLoader)
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
 
+另外，可以保证的是，无论测试失败与否，TEARDOWN都肯定会得到执行。
+
 ==1.7 测试依赖==
 
 随后我们编写针对unload的测试，传统的做法如下：
