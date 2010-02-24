@@ -142,6 +142,19 @@ TestNG++提供的测试断言如下：
 || EXPECT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || EXPECT_THROWS_NOTHING(foo()) ||
 || EXPECT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || EXPECT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
 
+这样，上面用例就可以改写为：
+
+{{{
+   TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
+   {
+      DLModuleLoader* loader = new DLModuleLoader();
+  
+      EXPECT_THROWS_NOTHING(loader->load("libMySuite"));
+
+      delete loader; // 即使上面的断言失败，此语句仍将得到执行
+   }
+}}}
+
 ==1.6 SETUP和TEARDOWN==
 
 在测试成功运行之后，我们来编写第二个用例。
