@@ -31,7 +31,7 @@ FIXTURE还有第二个参数：Fixture Name。它可以是任何宏参数所允�
 
 #include "CFoo.h"
 
-FIXTURE(CFoo, 类CFoo的测试装置, 你可以使用它们：''~!@#$%^&*+-=_?><"")
+FIXTURE(CFoo, 类CFoo的测试装置, 你可以使用它们：(){}[]''~!@#$%^&*+-=_?><"")
 {
 };
 
