@@ -283,8 +283,8 @@ FIXTURE(DLModuleLoader)
 
   # new FixtureDLModuleLoader() 
   # SETUP()
- ＃ TEST(可以在指明后缀".so"的情况下加载一个模块)
- ＃ TEST(可以在加载后卸载模块)
+  # TEST(可以在指明后缀".so"的情况下加载一个模块)
+  # TEST(可以在加载后卸载模块)
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
 
