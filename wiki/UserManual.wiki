@@ -190,4 +190,4 @@ new FixtureDLModuleLoader()
 || ASSERT_THROWS(expr, except) || 断言表达式将会抛出except类型的异常 || ASSERT_THROWS(foo(), std::exception) ||
 || ASSERT_THROWS_ANYTHING(expr) || 断言表达式将会抛出异常 || ASSERT_THROWS_ANYTHING(foo()) ||
 || ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_FALSE(10 != a) ||
-|| ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "exception", e.what()) ||
+|| ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
