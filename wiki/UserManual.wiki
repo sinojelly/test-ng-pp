@@ -180,3 +180,6 @@ new FixtureDLModuleLoader()
 => delete FixtureDLModuleLoader;
 
 ===1.6 测试断言===
+|| 断言 || 用法 ||
+|| ASSERT_TRUE(expr) || 断言表达式的求值为true ||
+|| ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 ||
