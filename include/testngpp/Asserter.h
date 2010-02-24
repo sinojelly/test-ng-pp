@@ -208,6 +208,13 @@ TESTNGPP_NS_START
     reportInfo(__FILE__, __LINE__, msg); \
 }while(0)
 
+
+//////////////////////////////////////////////////////////////////
+struct DoingWell {};
+#define __DO__        try {
+#define __CLEANUP__   throw TESTNGPP_NS::DoingWell(); } catch(...) {
+#define __DONE__      try {throw;}catch(TESTNGPP_NS::DoingWell&){}} 
+
 //////////////////////////////////////////////////////////////////
 
 TESTNGPP_NS_END

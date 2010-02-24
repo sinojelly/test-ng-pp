@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iostream>
 
-#include <testngpp/ExceptionKeywords.h>
+#include <testngpp/comm/ExceptionKeywords.h>
 #include <testngpp/utils/StringToOptions.h>
 
 #include <testngpp/internal/Error.h>

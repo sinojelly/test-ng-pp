@@ -7,7 +7,7 @@
 #include <testngpp/utils/OptionList.h>
 #include <testngpp/utils/StringList.h>
 #include <testngpp/runner/ResourceCheckPoint.h>
-#include <testngpp/ExceptionKeywords.h>
+#include <testngpp/comm/ExceptionKeywords.h>
 
 USING_TESTNGPP_NS
 
