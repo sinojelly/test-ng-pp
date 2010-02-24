@@ -165,7 +165,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-像任何正确实现的xUnit框架一样，*TestNG++* 会为每个测试用例创建一个Fixture实例，并执行其 *SETUP* 和 *TEARDOWN* 。对于本例中的两个用例，运行的过程分别如下：
+像任何正确实现的xUnit框架一样，*TestNG++* 会为每个测试用例创建一个Fixture实例，并执行其 *SETUP* 和 *TEARDOWN* 。对于本例中的两个用例，其执行过程分别如下：
 
 new FixtureDLModuleLoader() 
 => SETUP() 
