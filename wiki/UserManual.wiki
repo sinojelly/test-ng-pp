@@ -155,6 +155,58 @@ TestNG++提供的测试断言如下：
    }
 }}}
 
+对于这个例子，这种方式工作的很好。但在另外一些情况下，它将会导致晦涩复杂的测试。比如：
+
+{{{
+   TEST(应该能够根据名字找到相应的test case)
+   {
+      DLModuleLoader* loader = new DLModuleLoader();
+      
+      Suite* suite = 0;
+      EXPECT_THROW_NOTHING(suite = loader->load("libMySuite"));
+      EXPECT_TRUE( 0 != suite);
+      if(suite != 0)
+      {
+          Fixture* fixture = suite->findFixture("MyFixture");
+          EXPECT_TRUE(0 != fixture);
+          if(fixture != 0)
+          {
+               TestCase* testcase = fixture->findTestCase("MyTestCase");
+               EXPECT_TRUE(0 != testcase);
+               EXPECT_EQ("MyTestCase", testcase->getName());
+          }
+      }
+
+      delete loader; 
+   }
+}}}
+
+TestNG++提供了另外一种机制来帮助编写简单的测试。
+
+{{{
+   TEST(应该能够根据名字找到相应的test case)
+   {
+      DLModuleLoader* loader = new DLModuleLoader();
+
+      __TESTNGPP_DO      
+      
+      Suite* suite = 0;
+      EXPECT_THROW_NOTHING(suite = loader->load("libMySuite"));
+      ASSERT_TRUE( 0 != suite);
+      Fixture* fixture = suite->findFixture("MyFixture");
+      TestCase* testcase = fixture->findTestCase("MyTestCase");
+      ASSERT_TRUE(0 != testcase);
+      ASSERT_EQ("MyTestCase", testcase->getName());
+      
+      __TESTNGPP_CLEANUP // 无论__TESTNGPP_DO里面的断言失败与否，__TESTNGPP_CLEANUP里面的代码都会得到执行
+
+     delete loader;
+
+     __TESTNGPP_DONE 
+   }
+}}}
+
+
 ==1.6 SETUP和TEARDOWN==
 
 在测试成功运行之后，我们来编写第二个用例。
