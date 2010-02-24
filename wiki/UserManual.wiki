@@ -97,7 +97,21 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
+==1.6 Assertion==
+
 测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言，如果断言失败，则此测试用例将会失败。
+
+|| 断言 || 用法 || 例子 ||
+|| ASSERT_TRUE(expr) || 断言表达式的求值为true || ASSERT_TRUE(10 == a) ||
+|| ASSERT_FALSE(expr) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
+|| ASSERT_EQ(expected, value) || 断言两个表达式相等 || ASSERT_EQ(10, a) ||
+|| ASSERT_NE(expected, value) || 断言两个表达式不相等 || ASSERT_NE(10, a) ||
+|| ASSERT_SAME_DATA(addr1, addr2, size) || 断言两个地址所指向的内存在size范围内完全相同 || ASSERT_SAME_DATA(p1, p2, 64) ||
+|| ASSERT_DELTA(x, y, delta) || 断言表达式的差值应该在delta的范围之内 || ASSERT_DELTA(9.91, 10, 0.1) ||
+|| ASSERT_THROWS(expr, except) || 断言表达式将会抛出except类型的异常 || ASSERT_THROWS(foo(), std::exception) ||
+|| ASSERT_THROWS_ANYTHING(expr) || 断言表达式将会抛出异常 || ASSERT_THROWS_ANYTHING(foo()) ||
+|| ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_FALSE(10 != a) ||
+|| ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
 
 ==1.5 SETUP和TEARDOWN==
 
@@ -179,17 +193,3 @@ FIXTURE(DLModuleLoader)
   # TEST(可以在指明后缀".so"的情况下加载一个模块) 
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
-
-==1.6 Assertion==
-
-|| 断言 || 用法 || 例子 ||
-|| ASSERT_TRUE(expr) || 断言表达式的求值为true || ASSERT_TRUE(10 == a) ||
-|| ASSERT_FALSE(expr) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
-|| ASSERT_EQ(expected, value) || 断言两个表达式相等 || ASSERT_EQ(10, a) ||
-|| ASSERT_NE(expected, value) || 断言两个表达式不相等 || ASSERT_NE(10, a) ||
-|| ASSERT_SAME_DATA(addr1, addr2, size) || 断言两个地址所指向的内存在size范围内完全相同 || ASSERT_SAME_DATA(p1, p2, 64) ||
-|| ASSERT_DELTA(x, y, delta) || 断言表达式的差值应该在delta的范围之内 || ASSERT_DELTA(9.91, 10, 0.1) ||
-|| ASSERT_THROWS(expr, except) || 断言表达式将会抛出except类型的异常 || ASSERT_THROWS(foo(), std::exception) ||
-|| ASSERT_THROWS_ANYTHING(expr) || 断言表达式将会抛出异常 || ASSERT_THROWS_ANYTHING(foo()) ||
-|| ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_FALSE(10 != a) ||
-|| ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
