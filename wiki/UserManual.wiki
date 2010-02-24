@@ -36,3 +36,5 @@ FIXTURE(CFoo, 类CFoo的测试装置, 你可以使用它们：''~!@#$%^&*+-=_?><
 };
 
 }}}
+
+如果你没有提供Fixture Name，则Fixture ID将被当作Fixture Name。
