@@ -22,32 +22,32 @@ public:
     {
        INFO("cleanup test");
 
-       __TESTNGPP_DO
+       __DO__
 
        WARN("gonna have an assertion failure");
 
        ASSERT_FALSE(true);
 
-       __TESTNGPP_CLEANUP
+       __CLEANUP__
 
        ASSERT_TRUE(true);
 
-       __TESTNGPP_DONE
+       __DONE__
     }
 			
     // @test
     // @timeout=15s
     void case1()
     {
-       __TESTNGPP_DO
+       __DO__
 
        ASSERT_TRUE(true);
 
-       __TESTNGPP_CLEANUP
+       __CLEANUP__
 
        ASSERT_FALSE(true);
 
-       __TESTNGPP_DONE
+       __DONE__
     }
 
 #if !defined(TESTNGPP_DISABLE_SANDBOX) || !TESTNGPP_DISABLE_SANDBOX

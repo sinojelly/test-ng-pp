@@ -5,7 +5,7 @@
 #include <windows.h>
 #endif
 
-#include <testngpp/ExceptionKeywords.h>
+#include <testngpp/comm/ExceptionKeywords.h>
 
 #include <testngpp/utils/StupidTimer.h>
 
@@ -32,8 +32,8 @@ struct HwExceptionEntry
 static HwExceptionEntry hwExceptionTable[] =
 {
 	HW_EXCEPTION(STATUS_GUARD_PAGE_VIOLATION),
-    HW_EXCEPTION(STATUS_ACCESS_VIOLATION),
-    HW_EXCEPTION(STATUS_IN_PAGE_ERROR),
+   HW_EXCEPTION(STATUS_ACCESS_VIOLATION),
+   HW_EXCEPTION(STATUS_IN_PAGE_ERROR),
 	HW_EXCEPTION(STATUS_INVALID_HANDLE),
 	HW_EXCEPTION(STATUS_NO_MEMORY),
 	HW_EXCEPTION(STATUS_ILLEGAL_INSTRUCTION),
