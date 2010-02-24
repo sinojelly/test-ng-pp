@@ -15,7 +15,7 @@
 #include <testngpp/testngpp.hpp>
 }}}
 
-为了能够让编译通过，不要忘记把 *TestNG++* 的安装路径的include放到编译选项里。假如 *TestNG++* 的头文件被安装到/usr/local/include下，则你需要确保/usr/local/include被指定在你的编译选项里。对于windows用户而言，如果 *TestNG++* 被安装到了c:/testngpp，则你需要将路径c:/testngpp/include放到你的编译选项里。
+为了能够让编译通过，不要忘记把 *TestNG++* 的安装路径的include放到编译选项里。假如 *TestNG++* 的头文件被安装到/usr/local/include下，则你需要确保/usr/local/include被指定在你的编译选项里。对于windows用户而言，假设 *TestNG++* 被安装在c:\testngpp，则你需要将路径c:\testngpp\include放到你的编译选项里。
 
 ===1.3 Fixture===
 
