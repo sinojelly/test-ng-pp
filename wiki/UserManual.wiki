@@ -112,10 +112,10 @@ TestNG++提供的测试断言如下：
 || ASSERT_DELTA(x, y, delta) || 断言表达式的差值应该在delta的范围之内 || ASSERT_DELTA(9.91, 10, 0.1) ||
 || ASSERT_THROWS(expr, except) || 断言表达式将会抛出except类型的异常 || ASSERT_THROWS(foo(), std::exception) ||
 || ASSERT_THROWS_ANYTHING(expr) || 断言表达式将会抛出异常 || ASSERT_THROWS_ANYTHING(foo()) ||
-|| ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_FALSE(10 != a) ||
+|| ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_THROWS_NOTHING(foo()) ||
 || ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
 
-这些断言的都遵从了"快速失败"的原则，即一旦断言失败，整个用例将中止执行。结果是，对于上面的例子，如果断言失败将会造成内存泄露。
+这些断言的都遵从了"快速失败"的原则，即一旦断言失败，整个用例将中止执行。结果是，对于这个例子，如果断言失败将会造成内存泄露。
 
 {{{
    TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
@@ -127,6 +127,20 @@ TestNG++提供的测试断言如下：
       delete loader; // 如果上面的断言失败，此语句将得不到执行
    }
 }}}
+
+所以，TestNG++提供了另外一套Assertion，以让断言失败后，测试能够继续得以执行。这些Assertion如下：
+
+|| 断言 || 用法 || 例子 ||
+|| EXPECT_TRUE(expr) || 断言表达式的求值为true || EXPECT_TRUE(10 == a) ||
+|| EXPECT_FALSE(expr) || 断言表达式的求值为false || EXPECT_FALSE(10 != a) ||
+|| EXPECT_EQ(expected, value) || 断言两个表达式相等 || EXPECT_EQ(10, a) ||
+|| EXPECT_NE(expected, value) || 断言两个表达式不相等 || EXPECT_NE(10, a) ||
+|| EXPECT_SAME_DATA(addr1, addr2, size) || 断言两个地址所指向的内存在size范围内完全相同 || EXPECT_SAME_DATA(p1, p2, 64) ||
+|| EXPECT_DELTA(x, y, delta) || 断言表达式的差值应该在delta的范围之内 || EXPECT_DELTA(9.91, 10, 0.1) ||
+|| EXPECT_THROWS(expr, except) || 断言表达式将会抛出except类型的异常 || EXPECT_THROWS(foo(), std::exception) ||
+|| EXPECT_THROWS_ANYTHING(expr) || 断言表达式将会抛出异常 || EXPECT_THROWS_ANYTHING(foo()) ||
+|| EXPECT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || EXPECT_THROWS_NOTHING(foo()) ||
+|| EXPECT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || EXPECT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
 
 ==1.6 SETUP和TEARDOWN==
 
