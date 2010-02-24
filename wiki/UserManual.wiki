@@ -192,13 +192,13 @@ TestNG++提供了另外一种机制来帮助编写简单的测试。
       
       Suite* suite = 0;
       EXPECT_THROW_NOTHING(suite = loader->load("libMySuite"));
-      ASSERT_TRUE( 0 != suite);
+      ASSERT_TRUE( 0 != suite );
 
       Fixture* fixture = suite->findFixture("MyFixture");
-      ASSERT_TRUE( 0 != suite);
+      ASSERT_TRUE( 0 != fixture );
      
       TestCase* testcase = fixture->findTestCase("MyTestCase");
-      ASSERT_TRUE(0 != testcase);
+      ASSERT_TRUE( 0 != testcase );
       ASSERT_EQ("MyTestCase", testcase->getName());
       
       __TESTNGPP_CLEANUP // 无论__TESTNGPP_DO里面的断言失败与否，__TESTNGPP_CLEANUP里面的代码都会得到执行
