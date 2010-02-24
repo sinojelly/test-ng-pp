@@ -1,6 +1,6 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngppst/ResourceCheckPoint.h>
 
 #include <testngpp/internal/AssertionFailure.h>
 
@@ -9,21 +9,21 @@ using namespace testngpp;
 class TestAssertionFailure: public CxxTest::TestSuite
 {
 private:
-   TESTNGPP_RCP checkpoint;
+   TESTNGPPST_RCP checkpoint;
 
    TESTNGPP_NS::AssertionFailure* failure;
    
 public:
    void setUp()
    {
-      checkpoint = TESTNGPP_SET_RESOURCE_CHECK_POINT();
+      checkpoint = TESTNGPPST_SET_RESOURCE_CHECK_POINT();
       failure = new AssertionFailure("TestNothing.h", 23, "AssertionFailed");
    }
 
    void tearDown()
    {
       delete failure;
-      TESTNGPP_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
+      TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
 
    void testShouldBeAbleToGetFileName()

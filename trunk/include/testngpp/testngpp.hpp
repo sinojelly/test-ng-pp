@@ -22,7 +22,6 @@
 #include <testngpp/testngpp.h>
 #include <testngpp/Asserter.h>
 #include <testngpp/TestFixture.h>
-#include <testngpp/ResourceCheckPoint.h>
 #include <testngpp/ExceptionKeywords.h>
 #include <testngpp/TestDefMacros.h>
 #include <testngpp/Backward.h>

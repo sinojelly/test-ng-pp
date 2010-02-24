@@ -75,9 +75,7 @@ struct TestCase
 
    void tearDown()
    {
-      TestFixture * fixture = getFixture();
-      fixture->tearDown();
-      delete fixture;
+      getFixture()->tearDown();
    }
 
    void run()

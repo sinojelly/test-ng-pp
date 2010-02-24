@@ -32,7 +32,7 @@
 #include <errno.h>
 #endif
 
-#include <testngpp/ResourceCheckPoint.h>
+#include <testngpp/runner/ResourceCheckPoint.h>
 #include <testngpp/internal/AssertionFailure.h>
 #include <testngpp/internal/Error.h>
 
