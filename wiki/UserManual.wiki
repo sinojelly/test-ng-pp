@@ -183,14 +183,12 @@ new FixtureDLModuleLoader()
 || 断言 || 用法 || 例子 ||
 || ASSERT_TRUE(expr) || 断言表达式的求值为true || ASSERT_TRUE(10 == a) ||
 || ASSERT_FALSE(expr) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
-|| ASSERT_EQ(expected, value) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
-|| ASSERT_NE(expected, value) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
-|| ASSERT_SAME_DATA(addr1, addr2, size) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
+|| ASSERT_EQ(expected, value) || 断言两个表达式相等 || ASSERT_EQ(10, a) ||
+|| ASSERT_NE(expected, value) || 断言两个表达式不相等 || ASSERT_NE(10, a) ||
+|| ASSERT_SAME_DATA(addr1, addr2, size) || 断言两个地址所指向的内存在size范围内完全相同 || ASSERT_SAME_DATA(p1, p2, 64) ||
 || ASSERT_DELTA(x, y, d) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
 || ASSERT_THROWS(expr, except) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
 || ASSERT_THROWS_ANYTHING(expr) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
-|| ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 ||
+|| ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_FALSE(10 != a) ||
 || ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
-
-
 
