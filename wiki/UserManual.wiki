@@ -115,12 +115,12 @@ TestNG++提供的测试断言如下：
 || ASSERT_THROWS_NOTHING(expr) || 断言expr不会抛出任何异常 || ASSERT_THROWS_NOTHING(foo()) ||
 || ASSERT_THROWS_EQUALS(expr, except, expected, value) || 断言表达式将会抛出except类型的异常，并且两个表达式相等 || ASSERT_THROWS_EQUALS(foo(), std::exception& e, "bad alloc", e.what()) ||
 
-这些断言的都遵从了"快速失败"的原则，即一旦断言失败，整个用例将中止执行。
+这些断言的都遵从了 *"快速失败"* 的原则，即一旦断言失败，整个用例将中止执行。
 
 
 ===EXPECT vs. ASSERT===
 
-”快速失败“是个号的原则，但对于C++这种需要程序员自己进行资源管理的语言而言，有时候快速失败可能会带来问题。比如，对于这个例子，如果断言失败将会造成内存泄露。
+”快速失败“是个好的原则，但对于C++这种需要程序员自己进行资源管理的语言而言，有时候快速失败可能会带来问题。比如，对于这个例子，如果断言失败将会造成内存泄露。
 
 {{{
    TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
@@ -133,7 +133,7 @@ TestNG++提供的测试断言如下：
    }
 }}}
 
-所以，TestNG++提供了另外一套Assertion，以让断言失败后，测试能够继续得以执行。这些Assertion如下：
+所以，*TestNG++* 提供了另外一套Assertion，以让断言失败后，测试能够继续得以执行。这些Assertion如下：
 
 || 断言 || 用法 || 例子 ||
 || EXPECT_TRUE(expr) || 断言表达式的求值为true || EXPECT_TRUE(10 == a) ||
@@ -188,7 +188,7 @@ TestNG++提供的测试断言如下：
 
 ===用例级别的资源管理===
 
-TestNG++提供了另外一种机制来帮助编写简单的测试。
+*TestNG++* 提供了另外一种机制来帮助编写简单的测试。
 
 {{{
    TEST(应该能够根据名字找到相应的test case)
@@ -220,7 +220,7 @@ TestNG++提供了另外一种机制来帮助编写简单的测试。
 
 ===特别的Assertion===
 
-另外，TestNG++还提供了另外几个Assertion用于特殊的目的。
+另外，*TestNG++* 还提供了另外几个Assertion用于特殊的目的。
 
 || 断言 || 用法 || 例子 ||
 || FAIL(str) || 让用例立即失败，并给出失败的原因 || FAIL("not implemented yet") ||
