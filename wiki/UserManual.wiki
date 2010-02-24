@@ -182,7 +182,7 @@ FIXTURE(DLModuleLoader)
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
 
-==Assertion==
+=Assertion=
 || 断言 || 用法 || 例子 ||
 || ASSERT_TRUE(expr) || 断言表达式的求值为true || ASSERT_TRUE(10 == a) ||
 || ASSERT_FALSE(expr) || 断言表达式的求值为false || ASSERT_FALSE(10 != a) ||
