@@ -1,0 +1,10 @@
+#TestNG++ User Manual
+
+= 编写测试 =
+
+为了使用TestNG++，你需要创建放置测试代码的源代码文件，尽管并不是强制的约束，但建议使用".h"作为这些文件的扩展名。
+
+然后，你需要包含TestNG++的头文件testngpp.hpp；像这样：
+{{{
+#include <testngpp/testngpp.hpp>
+}}}
