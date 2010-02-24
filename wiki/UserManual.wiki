@@ -113,3 +113,38 @@ FIXTURE(DLModuleLoader)
 };
 
 }}}
+
+然后我们发现，两个用例都需要使用一个loader实例，所以我们把这个实例定义移到fixture里面，并使用fixture的 *SETUP* 和 *TEARDOWN* ：
+
+
+{{{
+#include <testngpp/testngpp.hpp>
+
+#include "DLModuleLoader.h"
+
+FIXTURE(DLModuleLoader)
+{
+   DLModuleLoader* loader;
+   
+   SETUP()
+   {
+      loader = new DLModuleLoader();
+   }
+
+   TEARDOWN()
+   {
+      delete loader;
+   }
+
+   TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
+   {
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite"));
+   }
+
+   TEST(可以在指明后缀".so"的情况下加载一个模块)
+   { 
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite.so"));
+   }
+};
+
+}}}
