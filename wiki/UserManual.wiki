@@ -23,3 +23,16 @@ FIXTURE(CFoo)
 }}}
 
 FIXTURE的第一个参数为Fixture ID，它可以是任何C/C++标识符（Identifier）。一般而言，将其命名为CUT（Class Under Test）的名字即可。
+
+FIXTURE还有第二个参数：Fixture Name。它可以是任何宏参数所允许的字符。如果你的编译器支持多语言，你可以使用任何其它字符集所支持的字符。比如：
+
+{{{
+#include <testngpp/testngpp.hpp>
+
+#include "CFoo.h"
+
+FIXTURE(CFoo, 类CFoo的测试装置, 你可以使用它们：''~!@#$%^&*+-=_?><"")
+{
+};
+
+}}}
