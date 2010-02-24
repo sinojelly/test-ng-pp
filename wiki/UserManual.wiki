@@ -188,7 +188,7 @@ TestNG++提供了另外一种机制来帮助编写简单的测试。
    {
       DLModuleLoader* loader = new DLModuleLoader();
 
-      __DO__      
+      __DO__      // 从这里开始是可能失败的部分
       
       Suite* suite = 0;
       EXPECT_THROW_NOTHING(suite = loader->load("libMySuite"));
@@ -209,7 +209,8 @@ TestNG++提供了另外一种机制来帮助编写简单的测试。
    }
 }}}
 
-由于__DO__里面的每一个断言都用的是“快速失败”Assertion，所以任何一个断言失败都会导致__DO__的部分立即中止，但__CLEANUP__的部分却无论成功与失败都肯定会得到执行。
+由于__DO__里面的每一个断言都用的是“快速失败”Assertion，所以任何一个断言失败都会导致__DO__的部分立即中止，但__CLEANUP__的部分却无论成功与失败都肯定会得到执行。这种机制也可以被理解为用例级别的setup/teardown。
+
 
 另外，TestNG++还提供了另外几个Assertion用于特殊的目的。
 
