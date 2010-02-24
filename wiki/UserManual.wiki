@@ -50,7 +50,29 @@ FIXTURE(DLModuleLoader, 类DLModuleLoader的测试, 你可以在fixture name中�
 
 FIXTURE(DLModuleLoader)
 {
-   TEST(should be able to load modules without suffix ".so")
+   TEST(should be able to load modules whose name does not have suffix ".so")
+   {
+      DLModuleLoader* loader = new DLModuleLoader();
+  
+      ASSERT_THROWS_NOTHING(loader->load("libMySuite"));
+
+      delete loader;
+   }
+};
+
+}}}
+
+TEST()用来表示这是一个测试用例。括号里面的部分是 *test name* ，和 *fixture name* 一样，它可以是你的编译器和所允许的任何字符。并且，同样也要遵守宏参数的语法约束。
+
+比如，我可以将上面的测试用例用中文来命名：
+{{{
+#include <testngpp/testngpp.hpp>
+
+#include "DLModuleLoader.h"
+
+FIXTURE(DLModuleLoader)
+{
+   TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
    {
       DLModuleLoader* loader = new DLModuleLoader();
   
