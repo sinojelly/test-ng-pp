@@ -484,9 +484,9 @@ FIXTURE(DLModuleLoader)
 
 ==2.8 兼容性==
 
-===2.8.1 CxxTest兼容性===
+===2.8.1 cxxtest===
 
-===2.8.2 TestCpp兼容性===
+===2.8.2 testcpp===
 
 =3. 编译和链接=
 
