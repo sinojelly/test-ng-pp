@@ -46,7 +46,7 @@ arthur> make
 
 }}}
 
-在成功的构建之后。执行:
+在成功构建之后。执行:
 
 {{{
 arthur> make install 
