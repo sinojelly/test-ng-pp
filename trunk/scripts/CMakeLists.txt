@@ -7,9 +7,18 @@ ELSE(PYTHONINTERP_FOUND)
   MESSAGE(FATAL_ERROR "No Python interpreter found")
 ENDIF(PYTHONINTERP_FOUND)
 
-ADD_CUSTOM_TARGET(compile-testngppgen
-   ${PYTHON} pycompile.py) 
+IF(MSVC)
+  SET(RM del)
+ELSE(MSVC)
+  SET(RM rm -rf)
+ENDIF(MSVC)
+
+ADD_CUSTOM_TARGET(compile-testngppgen ALL
+   COMMAND ${PYTHON} ./pycompile.py) 
    
+ADD_CUSTOM_TARGET(clean 
+   COMMAND ${RM} *.pyc ./testngppgen/*.pyc)
+
 INSTALL(DIRECTORY . DESTINATION testngpp/generator
        FILES_MATCHING PATTERN "*.pyc"
        PATTERN "CMakeFiles" EXCLUDE
