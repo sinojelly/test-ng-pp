@@ -60,7 +60,7 @@ arthur> make install
  |- bin
  |- lib
  |- testngpp |- generator
-                   |- listener
+            |- listener
 
 }}}
 
