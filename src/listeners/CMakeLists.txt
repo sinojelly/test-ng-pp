@@ -47,5 +47,5 @@ TARGET_LINK_LIBRARIES(testngppxmllistener ${TESTNGPP_LIBRARY})
 
 INSTALL(
    TARGETS testngppstdoutlistener testngppxmllistener
-   LIBRARY DESTINATION lib)
+   LIBRARY DESTINATION testngpp/listener)
 
