@@ -14,10 +14,10 @@ ELSE(MSVC)
 ENDIF(MSVC)
 
 ADD_CUSTOM_TARGET(compile-testngppgen ALL
-   COMMAND ${PYTHON} ./pycompile.py) 
+   COMMAND ${PYTHON} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/scripts/pycompile.py) 
    
 ADD_CUSTOM_TARGET(clean 
-   COMMAND ${RM} *.pyc ./testngppgen/*.pyc)
+   COMMAND ${RM} ${CMAKE_SOURCE_DIR}/scripts/*.pyc ${CMAKE_SOURCE_DIR}/scripts/testngppgen/*.pyc)
 
 INSTALL(DIRECTORY . DESTINATION testngpp/generator
        FILES_MATCHING PATTERN "*.pyc"
