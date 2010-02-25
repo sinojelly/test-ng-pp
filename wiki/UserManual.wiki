@@ -5,19 +5,52 @@ TestNG++使用[http://www.cmake.org cmake]作为构建系统。因此，为了�
 
 到TestNG++的[http://code.google.com/p/test-ng-pp/downloads/list 下载页面]下载最新的发布版本。尽管你可以直接从源代码库checkout最新的源代码，但它的稳定性无法得到保证。
 
-随后将源代码包解压到某个目录。假社在Linux平台上，我们解压的目录是：/home/arthur/testngpp. 
+==Linux/Mac OS==
 
+随后将源代码包解压到某个目录。假社在Linux平台上，我们解压的目录是：/home/arthur/testngpp. 
+{{{
 arthur> cd /home/arthur/testngpp
 
 arthur> mkdir build
 
 arthur> cd build
+}}}
 
-arthur> cmake ..
+然后运行cmake，此时，你可以通过变量 *CMAKE_INSTALL_PREFIX* 指定 *TestNG++* 的安装路径。如果你不指定，则默认的安装路径是/usr/local。
+
+假设，我们想把TestNG++安装到目录/home/arthur/myproject :
+{{{
+
+arthur> cmake -DCMAKE_INSTALL_PREFIX=/home/arthur/myproject ..
+
+-- The C compiler identification is GNU
+-- The CXX compiler identification is GNU
+-- Checking whether C compiler has -isysroot
+-- Checking whether C compiler has -isysroot - yes
+-- Check for working C compiler: /usr/bin/gcc
+-- Check for working C compiler: /usr/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Checking whether CXX compiler has -isysroot
+-- Checking whether CXX compiler has -isysroot - yes
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Found PythonInterp: /usr/bin/python2.5
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/arthur/testngpp/build
 
 arthur> make
 
-在得到成功的
+}}}
+
+在成功的构建之后。执行:
+
+{{{
+arthur> make install 
+}}}
 
 =2 编写测试 =
 
