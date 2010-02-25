@@ -1,15 +1,17 @@
 <wiki:toc max_depth="2" />
-=1. 编写测试 =
+=1.安装=
+
+=2. 编写测试 =
 
 在你编写测试之前，你需要配置并安装*TestNG++*。
 
-==1.1 测试文件==
+==2.1 测试文件==
 
 为了使用*TestNG++*，你首先要创建放置测试代码的源代码文件，尽管并不是强制的约束，但建议使用".h"作为这些文件的扩展名。
 
 比如，我们要测试的类名为DLModuleLoader，所以，我们可以将我们的测试文件命名为TestDLModuleLoader.h。
 
-==1.2 头文件==
+==2.2 头文件==
 
 然后，你需要包含*TestNG++*的头文件 _*testngpp.hpp*_ ；像这样：
 {{{
@@ -18,7 +20,7 @@
 
 为了能够让编译通过，不要忘记把 *TestNG++* 的安装路径的include放到编译选项里。假如 *TestNG++* 的头文件被安装到/usr/local/include下，则你需要确保/usr/local/include被指定在你的编译选项里。对于windows用户而言，假设 *TestNG++* 被安装在c:\testngpp，则你需要将路径c:\testngpp\include放到你的编译选项里。
 
-==1.3 FIXTURE==
+==2.3 FIXTURE==
 
 下面，我们需要定义一个 *fixture*:
 
@@ -52,7 +54,7 @@ FIXTURE(DLModuleLoader, 类DLModuleLoader的测试, 你可以在fixture name中�
 
 如果你没有提供 *fixture name* ，则 *fixture ID* 将被当作 *fixture name* 。
 
-==1.4 TEST==
+==2.4 TEST==
 
 在定义了fixture之后，你可以编写你的第一个测试。如下：
 
@@ -97,7 +99,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-==1.5 Assertion==
+==2.5 Assertion==
 
 测试用例里面的 *ASSERT_THROWS_NOTHING* 是一个测试断言，如果断言失败，则此测试用例将会失败。
 
@@ -227,7 +229,7 @@ TestNG++提供的测试断言如下：
 || WARN(str) || 给出一个警告，但用例并不失败 || WARN(“got a non-fatal null pointer.”) ||
 || INFO(str) || 给出一个信息，用例并不失败 || INFO(“resource has been released.”) ||
 
-==1.6 SETUP和TEARDOWN==
+==2.6 SETUP和TEARDOWN==
 
 在测试成功运行之后，我们来编写第二个用例。
 
@@ -310,7 +312,7 @@ FIXTURE(DLModuleLoader)
 
 另外，可以保证的是，无论测试失败与否，TEARDOWN都肯定会得到执行。
 
-==1.7 测试依赖==
+==2.7 测试依赖==
 
 随后我们编写针对unload的测试，传统的做法如下：
 
@@ -406,13 +408,13 @@ FIXTURE(DLModuleLoader)
 
 在这个过程中，即便TEST(可以在指明后缀".so"的情况下加载一个模块)里面的断言失败，*TestNG++*仍然认为是用例TEST(可以在加载后卸载模块)失败。
 
-==兼容性==
+==2.8 兼容性==
 
-===CxxTest===
+===2.8.1 CxxTest===
 
-===TestCpp===
+===2.8.2 TestCpp===
 
-=编译和链接=
+=3. 编译和链接=
 
 Coming...
 
@@ -424,7 +426,7 @@ Coming...
 
 Coming...
 
-=运行测试=
+=4. 运行=
 
 Coming...
 
