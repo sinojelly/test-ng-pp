@@ -1,7 +1,9 @@
 <wiki:toc max_depth="2" />
-=1.安装=
+=1 安装=
 
-=2. 编写测试 =
+TestNG++使用[http://www.cmake.org cmake]作为构建系统。
+
+=2 编写测试 =
 
 在你编写测试之前，你需要配置并安装*TestNG++*。
 
