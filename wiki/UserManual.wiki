@@ -1,7 +1,9 @@
 <wiki:toc max_depth="2" />
 =1 安装=
 
-TestNG++使用[http://www.cmake.org cmake]作为构建系统。
+TestNG++使用[http://www.cmake.org cmake]作为构建系统。因此，为了构建TestNG++，你需要要确保cmake 2.6以上版本已经安装在你的系统上。
+
+你可以选择下载TestNG++的[http://code.google.com/p/test-ng-pp/downloads 源代码包]
 
 =2 编写测试 =
 
