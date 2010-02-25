@@ -1,4 +1,4 @@
-#labels Featured,Backgound
+#labels Backgound
 #Background the testNG++
 
 = Introduction =
