@@ -52,6 +52,20 @@ arthur> make
 arthur> make install 
 }}}
 
+然后，在安装目录/home/arthur/myproject，你可以看到一个这样的目录结构：
+
+{{{
+
+ |- include
+ |- bin
+ |- lib
+ |- testngpp |- generator
+                   |- listener
+
+}}}
+
+
+
 =2 编写测试 =
 
 在你编写测试之前，你需要配置并安装*TestNG++*。
