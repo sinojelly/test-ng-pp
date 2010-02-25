@@ -16,7 +16,7 @@ arthur> mkdir build
 arthur> cd build
 }}}
 
-然后运行cmake，此时，你可以通过变量 *CMAKE_INSTALL_PREFIX* 指定 *TestNG++* 的安装路径。如果你不指定，则默认的安装路径是/usr/local。
+然后运行cmake，此时，你可以通过变量 *CMAKE_INSTALL_PREFIX* 指定 TestNG++的安装路径。如果你不指定，则默认的安装路径是/usr/local。
 
 假设，我们想把TestNG++安装到目录/home/arthur/myproject :
 {{{
@@ -77,22 +77,22 @@ arthur> make install
 
 =2 编写测试 =
 
-在你编写测试之前，你需要配置并安装*TestNG++*。
+在你编写测试之前，你需要配置并安装TestNG++。
 
 ==2.1 测试文件==
 
-为了使用*TestNG++*，你首先要创建放置测试代码的源代码文件，尽管并不是强制的约束，但建议使用".h"作为这些文件的扩展名。
+为了使用TestNG++，你首先要创建放置测试代码的源代码文件，尽管并不是强制的约束，但建议使用".h"作为这些文件的扩展名。
 
 比如，我们要测试的类名为DLModuleLoader，所以，我们可以将我们的测试文件命名为TestDLModuleLoader.h。
 
 ==2.2 头文件==
 
-然后，你需要包含*TestNG++*的头文件 _*testngpp.hpp*_ ；像这样：
+然后，你需要包含TestNG++的头文件 _*testngpp.hpp*_ ；像这样：
 {{{
 #include <testngpp/testngpp.hpp>
 }}}
 
-为了能够让编译通过，不要忘记把 *TestNG++* 的安装路径的include放到编译选项里。假如 *TestNG++* 的头文件被安装到/usr/local/include下，则你需要确保/usr/local/include被指定在你的编译选项里。对于windows用户而言，假设 *TestNG++* 被安装在c:\testngpp，则你需要将路径c:\testngpp\include放到你的编译选项里。
+为了能够让编译通过，不要忘记把 *TestNG++* 的安装路径的include放到编译选项里。假如 *TestNG++* 的头文件被安装到/home/arthur/myproject下，则你需要确保/home/arthur/myproject/include被指定在你的编译选项里。对于windows用户而言，假设TestNG++被安装在c:\testngpp，则你需要将路径c:\testngpp\include放到你的编译选项里。
 
 ==2.3 FIXTURE==
 
@@ -196,7 +196,7 @@ TestNG++提供的测试断言如下：
 
 ===2.5.1 EXPECT vs. ASSERT===
 
-”快速失败“是个好的原则，但对于C++这种需要程序员自己进行资源管理的语言而言，有时候快速失败可能会带来问题。比如，对于这个例子，如果断言失败将会造成内存泄露。
+*”快速失败“* 是个好的原则，但对于C++这种需要程序员自己进行资源管理的语言而言，有时候快速失败可能会带来问题。比如，对于这个例子，如果断言失败将会造成内存泄露。
 
 {{{
    TEST(可以在不需要指明后缀".so"的情况下加载一个模块)
@@ -209,7 +209,7 @@ TestNG++提供的测试断言如下：
    }
 }}}
 
-所以，*TestNG++* 提供了另外一套Assertion，以让断言失败后，测试能够继续得以执行。这些Assertion如下：
+所以，TestNG++提供了另外一套Assertion，以让断言失败后，测试能够继续得以执行。这些Assertion和之前的ASSERT断言一一对应，但以EXPECT开头：
 
 || 断言 || 用法 || 例子 ||
 || EXPECT_TRUE(expr) || 断言表达式的求值为true || EXPECT_TRUE(10 == a) ||
@@ -264,7 +264,7 @@ TestNG++提供的测试断言如下：
 
 ===2.5.2 用例级别的资源管理===
 
-*TestNG++* 提供了另外一种机制来帮助编写简单的测试。
+TestNG++提供了另外一种机制来帮助编写简单的测试。
 
 {{{
    TEST(应该能够根据名字找到相应的test case)
@@ -292,11 +292,11 @@ TestNG++提供的测试断言如下：
    }
 }}}
 
-由于`__DO__`里面的每一个断言都用的是“快速失败”Assertion，所以任何一个断言失败都会导致`__DO__`的部分立即中止，但`__CLEANUP__`的部分却无论成功与失败都肯定会得到执行。这种机制也可以被理解为用例级别的setup/teardown。
+由于`__DO__`里面的每一个断言都用的是ASSERT——“快速失败”断言，所以任何一个断言失败都会导致`__DO__`的部分立即中止，但`__CLEANUP__`的部分却无论成功与失败都肯定会得到执行。这种机制也可以被理解为用例级别的setup/teardown。
 
 ===2.5.3 特别的Assertion===
 
-另外，*TestNG++* 还提供了另外几个Assertion用于特殊的目的。
+另外，TestNG++还提供了另外几个Assertion用于特殊的目的。
 
 || 断言 || 用法 || 例子 ||
 || FAIL(str) || 让用例立即失败，并给出失败的原因 || FAIL("not implemented yet") ||
@@ -370,7 +370,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-像任何正确实现的xUnit框架一样，*TestNG++* 会为每个测试用例创建一个Fixture实例，并执行其 *SETUP* 和 *TEARDOWN* 。对于本例中的两个用例，其执行过程分别如下：
+像任何正确实现的xUnit框架一样，TestNG++会为每个测试用例创建一个Fixture实例，并执行其 *SETUP* 和 *TEARDOWN* 。对于本例中的两个用例，其执行过程分别如下：
 
   # new FixtureDLModuleLoader() 
   # SETUP() 
@@ -384,7 +384,7 @@ FIXTURE(DLModuleLoader)
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
 
-另外，可以保证的是，无论测试失败与否，TEARDOWN都肯定会得到执行。
+另外，可以保证的是，无论测试失败与否，*TEARDOWN* 都肯定会得到执行。
 
 ==2.7 测试依赖==
 
@@ -480,7 +480,7 @@ FIXTURE(DLModuleLoader)
   # TEARDOWN() 
   # delete FixtureDLModuleLoader;
 
-在这个过程中，即便TEST(可以在指明后缀".so"的情况下加载一个模块)里面的断言失败，*TestNG++*仍然认为是用例TEST(可以在加载后卸载模块)失败。
+在这个过程中，即便 *_TEST(可以在指明后缀".so"的情况下加载一个模块)_* 里面的断言失败，TestNG++仍然认为是用例 *_TEST(可以在加载后卸载模块)_* 失败。
 
 ==2.8 兼容性==
 
