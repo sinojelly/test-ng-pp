@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include <testngpp/internal/Error.h>
-#include <testngpp/ExceptionKeywords.h>
+#include <testngpp/comm/ExceptionKeywords.h>
 
 #include <testngpp/utils/StringList.h>
 #include <testngpp/runner/loaders/Win32DllModuleLoader.h>

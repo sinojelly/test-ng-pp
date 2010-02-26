@@ -37,14 +37,14 @@ def getOpt(longOpts, argv):
       return getopt.getopt(argv, 'i:e:o:', getAssignableOptStrings(longOpts))
    except getopt.GetoptError, err:
       print >> sys.stderr, str(err)
-      usage(longOpts)
+      usage()
       sys.exit(2)
 
 ##########################################################
 def usage():
    print "Usage:", "testngppgen", \
       getUsageString(longOpts), \
-      "[-i input-encoding] [-e output-encoding] -o target testcase1 testcase2 ..."
+      "[-e encoding] -o target testcase1 testcase2 ..."
 
 ##########################################################
 longOpts = []
@@ -54,19 +54,19 @@ def generate(argv):
    optlist, fixtures = getOpt(longOpts, argv)
 
    target = None
-   inputEncoding = 'utf-8'
+
    encoding = 'utf-8'
 
    for o, a in optlist:
       if o == "-o":
          target = a
-      elif o == "-i":
-         inputEncoding = a
       elif o == "-e":
          encoding = a
 
+   inputEncoding = encoding
+
    if target == None:
-      usage(longOpts)
+      usage()
       sys.exit(1)
 
    absFixtures = []
