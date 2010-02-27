@@ -613,9 +613,12 @@ Coming...
 
 由于C/C++缺乏反射机制，实现简单的用户界面相对于Java，C#等现代语言更加的困难。为了做到这一点，TestNG++使用*Test Generator* 来扫描用户编写的测试文件，并生成相应的框架代码。
 
-*Test Generator*的实现语言是python，在编译和安装之后，*Test Generator* 的python字节码被安装到*${CMAKE_INSTALL_PREFIX}/testngpp/generator* 下。其入口文件名为：testngppgen.pyc。
+*Test Generator* 的实现语言是python，在编译和安装之后，*Test Generator* 的python字节码被安装到*${CMAKE_INSTALL_PREFIX}/testngpp/generator* 下，其中${CMAKE_INSTALL_PREFIX}时TestNG++的安装路径。
 
-
+假如TestNG++被安装在/usr/local/testngpp，可以通过下面的命令行来调用*Test Generator* ：
+{{{
+python /usr/local/testngpp/testngpp/generator/testngppgen.pyc -o GeneratedSource.cpp Test1.h Test2.h
+}}}
 
 
 =4. 运行=
