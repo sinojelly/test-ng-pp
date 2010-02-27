@@ -615,10 +615,20 @@ Coming...
 
 *Test Generator* 的实现语言是python，在编译和安装之后，*Test Generator* 的python字节码被安装到*${CMAKE_INSTALL_PREFIX}/testngpp/generator* 下，其中${CMAKE_INSTALL_PREFIX}时TestNG++的安装路径。
 
+*Test Generator* 可以将指定的一个或多个用户编写的测试文件生成一个测试套件源代码文件。
+
 假如TestNG++被安装在/usr/local/testngpp，可以通过下面的命令行来调用*Test Generator* ：
 {{{
-python /usr/local/testngpp/testngpp/generator/testngppgen.pyc -o GeneratedSource.cpp Test1.h Test2.h
+python /usr/local/testngpp/testngpp/generator/testngppgen.pyc -e gb2312 -o MyTestSuite.cpp Test1.h Test2.h
 }}}
+
+此命令行将会把Test1.h和Test2.h文件里所有的Fixture都生成到测试套件MyTestSuite里面。
+
+testngppgen.pyc的选项有：
+
+|| 选项 || 说明 ||
+|| -e || 指定测试文件的编码格式，默认值为utf-8 ||
+|| -o || 指定生成的测试套件源文件名 ||
 
 
 =4. 运行=
