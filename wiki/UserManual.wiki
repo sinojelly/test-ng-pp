@@ -665,11 +665,17 @@ arthur> gcc -bundle -o libMyTestSuite.so -L/usr/local/lib -ltestngpp -L/home/art
 
 =4. 运行=
 
-Coming...
+TestNG++的所有测试都最终都生成一个个 *module* ，然后通过 *Test Runner* 来运行这些 *module* 。
 
 ==4.1 Test Runner==
 
-Coming...
+TestNG++ *Test Runner* 所对应的可执行文件是 *testngpp-runner* (在Windows上，文件名为testngpp-runner.exe)，它被安装在${CMAKE_INSTALL_PREFIX}/bin。
+
+它所支持的选项如下:
+
+|| 选项 || 说明 ||
+|| -s || 使用sandbox模式来运行测试；如果不指定，则使用flat模式 ||
+|| -l || 指定Test Listener。可以指定任意多个Test Listener，并且可以指定Test Listener的参数，在指定参数的时候，需要用引号。比如: -l"testngppstdoutlistener -c" ||
 
 ==4.2 运行模式==
 
