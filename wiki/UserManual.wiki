@@ -631,7 +631,7 @@ testngppgen.pyc的选项有：
 
 当一个测试套件的源代码文件生成之后，就可以进行编译。
 
-TestNG++的运行时机制要求，每个测试套件源代码文件需要被编程和链接成一个*module* 。在Linux下，一个*module* 是一个所有符号都得到充分链接的*共享对象文件(Shared Object File)* ；在Mac OS下，一个*module* 对应一个*bundle* ，而在windows上，一个 *module* 则是一个*动态链接库(Dynamic Link Library)* 。
+TestNG++的运行时机制要求，每个测试套件源代码文件需要被编程和链接成一个 *module* 。在Linux下，一个 *module* 是一个所有符号都得到充分链接的*共享对象文件(Shared Object File)* ；在Mac OS下，一个 *module* 对应一个 *bundle* ，而在windows上，一个 *module* 则是一个 *动态链接库(Dynamic Link Library)* 。
 
 =4. 运行=
 
