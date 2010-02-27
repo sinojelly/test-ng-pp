@@ -602,11 +602,8 @@ public:
 
 =3. 编译和链接=
 
-Coming...
-
 ==Test Suite==
 
-Coming...
 [http://farm3.static.flickr.com/2746/4387804258_66d0d07a33_m.jpg]
 
 ==Test Generator==
@@ -630,6 +627,11 @@ testngppgen.pyc的选项有：
 || -e || 指定测试文件的编码格式，默认值为utf-8 ||
 || -o || 指定生成的测试套件源文件名 ||
 
+===3.3 编译===
+
+当一个测试套件的源代码文件生成之后，就可以进行编译。
+
+TestNG++的运行时机制要求，每个测试套件源代码文件需要被编程和链接成一个module。在Linux下，一个module是一个所有符号都得到充分链接的共享对象文件(Shared Object File)；在Mac OS下，一个module对应一个bundle，而在windows上，一个module则是一个动态链接库(Dynamic Link Library)。
 
 =4. 运行=
 
