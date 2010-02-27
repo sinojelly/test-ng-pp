@@ -1,2 +1,5 @@
 #labels Phase-Deploy
-please download the PDF version 
+
+This manual guides how to configure, build, install and use TestNG++ with Microsoft Visual Studio.
+
+Please download the [http://test-ng-pp.googlecode.com/files/testngpp-msvc.pdf PDF version]
