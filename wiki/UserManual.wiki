@@ -80,6 +80,8 @@ arthur> make install
 
 ==1.2 Windows==
 
+Windows的安装和配置请参考文档[http://test-ng-pp.googlecode.com/files/testngpp-msvc.pdf TestNG++ Installation & Configuration Guide for MSVC Users]
+
 =2 编写测试 =
 
 在你编写测试之前，你需要配置并安装TestNG++。
