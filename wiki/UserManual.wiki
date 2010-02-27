@@ -491,7 +491,7 @@ FIXTURE(DLModuleLoader)
 
 ===2.8.1 cxxtest===
 
-TestNG++完全兼容cxxtest，这意味着你可以使用TestNG++来生成，编译，和运行你之前用cxxtest所编写的所有用例：
+TestNG++完全兼容cxxtest，这意味着你可以不用做任何修改，而使用TestNG++来生成，编译，和运行你之前用cxxtest所编写的所有用例：
 
 {{{
 #include <cxxtest/TestSuite.h>
@@ -522,121 +522,13 @@ public:
 
 另外，TestNG++消除了cxxtest的一些限制：
 
-1. 你可以在测试代码中自由的使用多行注释（cxxtest不支持用多行注释来注释掉一个用例）
+  # 你可以在测试代码中自由的使用多行注释（cxxtest不支持用多行注释来注释掉一个用例）
+  # 你可以使用#if 0...#endif来diable一个用例（cxxtest不支持，即使你用了它，cxxtest仍然认为被diable的用例是存在的）
+  # 你可以使用任何宏控制块 (cxxtest不识别宏控制)
 
-{{{
-#include <cxxtest/TestSuite.h>
-
-class TestFoo : public CxxTest::TestSuite
-{
-    CFoo* foo;
-
-public:
-     
-    void setUp()
-    {
-        foo = new CFoo();
-    }
-
-    void tearDown()
-    {
-       delete foo;
-    }
-
-    void test_should_be_able_to_add_2_integers()
-    {
-         TS_ASSERT_EQUAULS(4, foo->add(1, 3));
-    }
-
-  /*
-    void test_should_be_able_to_substract_2_integers()
-    {
-         TS_ASSERT_EQUAULS(-2, foo->sub(1, 3));
-    }
-  */
-};
-
-}}}
-
-2. 你可以使用#if 0...#endif来diable一个用例（cxxtest不支持，即使你用了它，cxxtest仍然认为被diable的用例是存在的）
-
-{{{
-#include <cxxtest/TestSuite.h>
-
-class TestFoo : public CxxTest::TestSuite
-{
-    CFoo* foo;
-
-public:
-     
-    void setUp()
-    {
-        foo = new CFoo();
-    }
-
-    void tearDown()
-    {
-       delete foo;
-    }
-
-    void test_should_be_able_to_add_2_integers()
-    {
-         TS_ASSERT_EQUAULS(4, foo->add(1, 3));
-    }
-
-#if 0
-    void test_should_be_able_to_substract_2_integers()
-    {
-         TS_ASSERT_EQUAULS(-2, foo->sub(1, 3));
-    }
-#endif
-
-};
-
-}}}
-
-3. 你可以使用任何宏控制块 (cxxtest不识别宏控制)
-
-{{{
-#include <cxxtest/TestSuite.h>
-
-class TestFoo : public CxxTest::TestSuite
-{
-    CFoo* foo;
-
-public:
-     
-    void setUp()
-    {
-        foo = new CFoo();
-    }
-
-    void tearDown()
-    {
-       delete foo;
-    }
-
-#if defined(_MSC_VER)
-
-    void test_should_be_able_to_add_2_integers()
-    {
-         TS_ASSERT_EQUAULS(4, foo->add(1, 3));
-    }
-
-#else
-
-    void test_should_be_able_to_substract_2_integers()
-    {
-         TS_ASSERT_EQUAULS(-2, foo->sub(1, 3));
-    }
-
-#endif
-};
-
-}}}
-
-4. 你可以使用annotation来标注一个测试，这样，你的用例名就不必要以test开始。
-
+另外，你可以使用annotation:
+  # 你可以使用annotation来标注一个测试，这样，你的用例名就不必要以test开始。
+  # 你可以使用annotation的所有特性，比如设定测试依赖，指定tags等等.
 
 {{{
 #include <cxxtest/TestSuite.h>
@@ -665,8 +557,46 @@ public:
 };
 
 }}}
+
 ===2.8.2 testcpp===
 
+除了ResourceCheckPoint之外，TestNG++完全兼容testcpp。
+
+对于ResourceCheckPoint，TestNG++给了一个空的实现。这意味这你的testcpp用例无需做任何修改，使用TestNG++来生成，构建和运行你的testcpp用例。
+
+{{{
+#include <testcpp/testcpp.hpp>
+
+class TestFoo : public TESTCPP_NS::TestFixture
+{
+    CFoo* foo;
+
+public:
+     
+    void setUp()
+    {
+        foo = new CFoo();
+    }
+
+    void tearDown()
+    {
+       delete foo;
+    }
+
+    void test_should_be_able_to_add_2_integers()
+    {
+         TS_ASSERT_EQUAULS(4, foo->add(1, 3));
+    }
+};
+
+}}}
+
+另外，testcpp的一些限制也被解除：
+  # 你可以使用任何宏控制块 (testcpp不识别宏控制)
+
+你也可以使用annotation:
+  # 用annotation来标注一个测试，这样，你的用例名就不必要以test开始。
+  # 用annotation的所有特性，比如设定测试依赖，指定tags等等.
 
 =3. 编译和链接=
 
