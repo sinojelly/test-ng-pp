@@ -48,6 +48,7 @@ SET(UT_CASES ${UT_CASES} ${UT_CASES_WITH_MOCK})
 
 LINK_DIRECTORIES(
   ${PROJECT_HOME}/src
+  ${PROJECT_HOME}/src/utils
   ${PROJECT_HOME}/src/listeners
   ${PROJECT_HOME}/src/runner
   ${CMAKE_BINARY_DIR}/3rdparty/testngppst/src)
@@ -76,6 +77,7 @@ FOREACH(CASE ${UT_CASES})
 
   TARGET_LINK_LIBRARIES(${CASE_MODULE}
     testngppst
+    testngpp-utils
     testngpp
     testngpp-runner-lib
     testngppxmllistener-fortest

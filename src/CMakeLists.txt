@@ -10,16 +10,8 @@ SET(TESTNGPP_SRCS
   TestSuiteDesc.cpp 
   TypeString.cpp 
   Formatter.cpp 
-  OptionList.cpp 
-  StringToOptions.cpp
-  ConsoleState.cpp
   StupidTimer.cpp
 )
-
-IF(MSVC)
-  INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
-  SET(TESTNGPP_SRCS ${TESTNGPP_SRCS} GetOpt.c)
-ENDIF(MSVC)
 
 IF(MSVC)
   ADD_LIBRARY(testngpp STATIC ${TESTNGPP_SRCS})
@@ -28,7 +20,6 @@ ELSE(MSVC)
 ENDIF(MSVC)
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
-
 
 IF(MSVC)
   INSTALL(
