@@ -602,11 +602,11 @@ public:
 
 =3. 构建=
 
-==Test Suite==
+==3.1 Test Suite==
 
 [http://farm3.static.flickr.com/2746/4387804258_66d0d07a33_m.jpg]
 
-==Test Generator==
+==3.2 Test Generator==
 
 由于C/C++缺乏反射机制，实现简单的用户界面相对于Java，C#等现代语言更加的困难。为了做到这一点，TestNG++使用*Test Generator* 来扫描用户编写的测试文件，并生成相应的框架代码。
 
@@ -631,7 +631,7 @@ testngppgen.pyc的选项有：
 
 当一个测试套件的源代码文件生成之后，就可以进行编译。
 
-TestNG++的运行时机制要求，每个测试套件源代码文件需要被编程和链接成一个module。在Linux下，一个module是一个所有符号都得到充分链接的共享对象文件(Shared Object File)；在Mac OS下，一个module对应一个bundle，而在windows上，一个module则是一个动态链接库(Dynamic Link Library)。
+TestNG++的运行时机制要求，每个测试套件源代码文件需要被编程和链接成一个*module* 。在Linux下，一个*module* 是一个所有符号都得到充分链接的*共享对象文件(Shared Object File)* ；在Mac OS下，一个*module* 对应一个*bundle* ，而在windows上，一个 *module* 则是一个*动态链接库(Dynamic Link Library)* 。
 
 =4. 运行=
 
