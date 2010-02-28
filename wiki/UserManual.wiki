@@ -707,6 +707,15 @@ TestNG++提供了两种运行测试的模式，一种是传统的的模式Flat�
 
 ===4.3.1 Stdout Listener===
 
+|| 选项 || 说明 ||
+|| -c || 使用彩色模式进行输出，如果你终端不支持彩色模式，请关闭此选项 ||
+|| -f || 以fixture为单位进行输出 ||
+|| -s || 以suite为单位进行输出 ||
+|| -t || 显示当前的tag规范 ||
+|| -v || verbose模式，如果不使用verbose模式，则默认是打点模式 ||
+|| -lNumber || 信息输出级别，从0到3；0-输出所有信息；1-关闭INFO; 2-关闭INFO/WARN 3－关闭INFO/WARN/SKIPPED ||
+ 
+
 ===4.3.2 XML Listener===
 
 ==4.4 Filter==
