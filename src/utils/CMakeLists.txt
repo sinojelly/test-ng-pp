@@ -4,6 +4,7 @@ IF(MSVC)
 ENDIF(MSVC)
 
 SET(TESTNGPP_SRCS
+  StupidTimer.cpp
   OptionList.cpp 
   StringToOptions.cpp
   ConsoleState.cpp
