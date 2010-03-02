@@ -10,7 +10,6 @@ SET(TESTNGPP_SRCS
   TestSuiteDesc.cpp 
   TypeString.cpp 
   Formatter.cpp 
-  StupidTimer.cpp
 )
 
 IF(MSVC)
