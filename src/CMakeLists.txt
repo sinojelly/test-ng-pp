@@ -4,8 +4,8 @@ IF(MSVC)
 ENDIF(MSVC)
 
 SET(TESTNGPP_SRCS
-  Exception.cpp
-  AssertionFailure.cpp 
+  except/Exception.cpp
+  except/AssertionFailure.cpp 
   TestFixture.cpp
   TestSuiteDesc.cpp 
   TypeString.cpp 
