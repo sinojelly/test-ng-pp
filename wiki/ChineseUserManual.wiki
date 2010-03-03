@@ -393,7 +393,19 @@ FIXTURE(DLModuleLoader)
 
 另外，可以保证的是，无论测试失败与否，*TEARDOWN* 都肯定会得到执行。
 
-==2.7 测试依赖==
+==2.7 Annotation==
+
+C/C++语言本身并没有Annotation的机制，但TestNG++利用C/C++的注释实现了类Annotation机制。Test Generator的解析器会来解释这些Annotation，并生成相应的测试代码框架。
+
+===2.7.1 语法===
+
+TestNG++的annotation的语法为:
+{{{
+// @ annotation {attribute1=value1, attribute2=value2}
+}}}
+
+
+==2.7.2 测试依赖==
 
 随后我们编写针对unload的测试，传统的做法如下：
 
@@ -732,9 +744,6 @@ xmllistener只有一个参数，即xml报告的输出文件名。比如：
 
 如果不指定，则将报告输出到标准输出.
 
+==4.4 Tag==
 
-==4.4 Filter==
-
-==4.5 Tag==
-
-Coming...
+==4.5 Filter==
