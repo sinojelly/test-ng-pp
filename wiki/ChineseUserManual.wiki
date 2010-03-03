@@ -426,7 +426,7 @@ struct TestCFoo : public TESTNGPP_NS::TestFixture
 
 annotation *fixture* 用来标示下面的类是一个Test Fixture。
 
-注意：annotation前面的单行注释符号只能是//。其它形式的注释，比如///，////，/*  */等都被认为是普通的注释。
+注意：annotation前面的单行注释符号只能是`//`。其它形式的注释，比如`///`，`////`，`/*  */`等都被认为是普通的注释。
 
 Annotation还可以有可选的 *key=value* list；它们需要遵从如下规则：
   * *key=value* 需要放在小括号里面。
