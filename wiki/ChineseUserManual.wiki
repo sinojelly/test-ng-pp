@@ -413,7 +413,7 @@ void shouldBeAbleToParseFile()
 }
 }}}
 
-annotation *test* 用来标示下面的方法是一个测试用例。
+annotation *"test"* 用来标示下面的方法是一个测试用例。
 
 {{{
 // @fixture
@@ -424,7 +424,7 @@ struct TestCFoo : public TESTNGPP_NS::TestFixture
 
 }}}
 
-annotation *fixture* 用来标示下面的类是一个Test Fixture。
+annotation *"fixture"* 用来标示下面的类是一个Test Fixture。
 
 注意：annotation前面的单行注释符号只能是`//`。其它形式的注释，比如`///`，`////`，`/*  */`等都被认为是普通的注释。
 
