@@ -523,7 +523,7 @@ FIXTURE(DLModuleLoader)
 
 }}}
 
-通过annotation属性id来标注加载测试用例，然后用属性depends来引入依赖。
+通过annotation *test* 的key *"id"* 来标注加载测试用例，然后用key *depends* 来引入依赖。
 
 引入测试依赖后，最后一个测试用例的执行过程如下：
 
@@ -535,6 +535,10 @@ FIXTURE(DLModuleLoader)
   # *delete* FixtureDLModuleLoader;
 
 在这个过程中，即便 *_TEST(可以在指明后缀".so"的情况下加载一个模块)_* 里面的断言失败，TestNG++仍然认为是用例 *_TEST(可以在加载后卸载模块)_* 失败。
+
+===2.7.3 Tags===
+
+Tags是给测试做标记的一种方式。
 
 ==2.8 兼容性==
 
