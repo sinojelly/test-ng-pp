@@ -121,13 +121,13 @@ TESTNGPPST_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_THROWS_EQUALS(expr, except, expected, value) do { \
+#define ASSERT_THROWS_EQ(expr, except, expected, value) do { \
    try { \
       expr; \
       __TESTNGPPST_REPORT_FAILURE ( \
           "expected " #expr " will throw an exception of type " #except ", but actually not."); \
    }catch(except){ \
-      ASSERT_EQUALS(expected, value); \
+      ASSERT_EQ(expected, value); \
    } \
 }while(0)
 

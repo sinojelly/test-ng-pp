@@ -1,22 +1,19 @@
 #!/usr/bin/python
 
-from Phase1Result import *
-from TestCase import *
-from PreprocessScope import *
-
 from Message import *
+from Phase1Result import *
+from Useless import Useless
 
 ##########################################################
-class TestCaseParser:
+class ClassDeclParser:
    #######################################################
-   def __init__(self, name, scope, file, line, annotations):
-      self.begin = True
-      self.done = None
+   def __init__(self, content, file, line_number):
+      self.content = file
       self.numberOfUnclosedBraces = 0
       self.file = file
-      self.__verify_testcase_annotations(annotations)
-      self.testcase = TestCase(name, scope, file, line, annotations)
-      self.parse_line(Unknown(line, name[3]))
+      self.done = None
+      self.numberOfUnclosedBraces = 0
+      self.parse_line(Unknown(line_number, content))
 
    #######################################################
    def should_parse_sub_scopes(self):
@@ -25,12 +22,6 @@ class TestCaseParser:
    #######################################################
    def verify_scope(self, scope):
       return False
-
-   #######################################################
-   def __verify_testcase_annotations(self, annotations):
-      for anno in annotations:
-         if anno.get_tag() not in ["test"]:
-            warning(self.file, anno, "unknown annotation @" + anno.get_tag())
 
    #######################################################
    def get_container(self):
@@ -52,26 +43,17 @@ class TestCaseParser:
       if not self.done:
          return None
 
-      fatal(self.file, line, "unexpected char '" + c + "' in test case definition")
+      fatal(self.file, line, "unexpected char '" + c + "' in class definition")
       
-   #######################################################
-   def __handle_begin(self, line, c):
-      if not self.begin:
-         return None
-
-      if c == '{':
-         self.numberOfUnclosedBraces = 1
-         self.begin = None
-         return True
-
-      report_expect_char(self.file, line, "{", c)
-  
    #######################################################
    def __handle_others(self, line, c):
       if c == '{':
          self.numberOfUnclosedBraces += 1
       elif c == '}':
+         if self.numberOfUnclosedBraces == 0:
+            fatal(self.file, line, "found mismatched \'}'")
          self.numberOfUnclosedBraces -= 1
+      elif c == ';':
          if self.numberOfUnclosedBraces == 0:
             self.done = True
       
@@ -79,18 +61,17 @@ class TestCaseParser:
    def handle_char(self, line, c):
       self.__handle_space(line, c) or \
       self.__handle_done(line, c) or \
-      self.__handle_begin(line, c) or \
       self.__handle_others(line, c)
 
    #######################################################
    def is_done(self):
-      if self.done: return self.testcase
+      if self.done: return Useless()
       return None
 
    #######################################################
    def parse_line(self, line):
       if self.done:
-         fatal(self.file, line, "internal error while parsing in test case")
+         fatal(self.file, line, "internal error while parsing in inner class")
 
       for c in line.get_content():
          self.handle_char(line, c)
@@ -99,6 +80,6 @@ class TestCaseParser:
 
    #######################################################
    def handle_tag(self, tag):
-      warning(self.file, tag, "annotation is not allowed in testcase definition")
+      warning(self.file, tag, "annotation is not allowed in inner class definition")
 
 ##########################################################
