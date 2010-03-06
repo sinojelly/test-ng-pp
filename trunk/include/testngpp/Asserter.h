@@ -121,7 +121,7 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define __ASSERT_THROWS_EQUALS(expr, except, expected, value, failfast) do { \
+#define __ASSERT_THROWS_EQ(expr, except, expected, value, failfast) do { \
    try { \
       expr; \
       __TESTNGPP_REPORT_FAILURE ( \
@@ -175,8 +175,8 @@ TESTNGPP_NS_START
 #define ASSERT_THROWS(expr, except) __ASSERT_THROWS(expr, except, true)
 #define ASSERT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, true)
 #define ASSERT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, true)
-#define ASSERT_THROWS_EQUALS(expr, except, expected, value) \
-   __ASSERT_THROWS_EQUALS(expr, except, expected, value, true)
+#define ASSERT_THROWS_EQ(expr, except, expected, value) \
+   __ASSERT_THROWS_EQ(expr, except, expected, value, true)
 #define ASSERT_SAME_DATA(addr1, addr2, size) __ASSERT_SAME_DATA(addr1, addr2, size, true)
 #define ASSERT_DELTA(x, y, d)  __ASSERT_DELTA(x, y, d, true)
 
@@ -188,8 +188,8 @@ TESTNGPP_NS_START
 #define EXPECT_THROWS(expr, except) __ASSERT_THROWS(expr, except, false)
 #define EXPECT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, false)
 #define EXPECT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, false)
-#define EXPECT_THROWS_EQUALS(expr, except, expected, value) \
-   __ASSERT_THROWS_EQUALS(expr, except, expected, value, false)
+#define EXPECT_THROWS_EQ(expr, except, expected, value) \
+   __ASSERT_THROWS_EQ(expr, except, expected, value, false)
 #define EXPECT_SAME_DATA(addr1, addr2, size) __ASSERT_SAME_DATA(addr1, addr2, size, false)
 #define EXPECT_DELTA(x, y, d)  __ASSERT_DELTA(x, y, d, false)
 

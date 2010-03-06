@@ -117,6 +117,8 @@ class TestCaseDefGenerator:
       self.suite = suite 
    #############################################
    def __generate(self):
+      if self.testcase.is_p_test(): return
+
       testcase_def = testcase_template % ( \
          get_testcase_class_name(self.fixture, self.testcase), \
          get_testcase_class_name(self.fixture, self.testcase), \

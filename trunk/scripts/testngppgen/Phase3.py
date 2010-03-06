@@ -40,40 +40,55 @@ def is_fixture_def(line):
 class GlobalParser:
    def __init__(self, file):
       self.file = file
-      self.tag = None
+      self.annotations = []
 
    #######################################################
-   def is_elem_def(self, content):
-      return is_fixture_def(content)
+   def should_parse_sub_scopes(self):
+      return True
 
    #######################################################
-   def __is_fixture_tag(self, tag):
-      return tag.get_tag() == "fixture"
+   def get_elem_parser(self, container, file, line):
+      name = is_fixture_def(line.get_content())
+      if name == None:
+        return None
+
+      return self.__create_fixture_parser(name, container.get_scope(), file, line.get_line_number())
 
    #######################################################
-   def handle_tag(self, tag):
-      self.__report_useless_tag()
-      if self.__is_fixture_tag(tag):
-         self.tag = tag
+   def __check_dup_annotation(self, new_anno):
+      for anno in self.annotations:
+         if anno.get_tag() == new_anno.get_tag():
+            fatal(self.file, new_anno, "duplicated annotation is not allowed, @" + new_anno.get_tag())
+         
+   #######################################################
+   def __is_fixture_annotation(self, anno):
+      self.__check_dup_annotation(anno)
+      return anno.get_tag() in ["fixture"]
+
+   #######################################################
+   def handle_tag(self, anno):
+      if self.__is_fixture_annotation(anno):
+         self.annotations.append(anno)
       else:
-         warning(self.file, tag, "unknown annotation @" + tag.get_tag())
+         warning(self.file, anno, "unknown annotation @" + anno.get_tag())
 
    #######################################################
-   def __report_useless_tag(self):
-      if self.tag != None:
-         warning(self.file, self.tag, "useless annotation @" + self.tag.get_tag())
+   def __report_useless_annotations(self):
+      if len(self.annotations) > 0:
+         for anno in self.annotations:
+            warning(self.file, anno, "useless annotation @" + anno.get_tag())
 
-      self.tag = None
+      self.annotations = []
 
    #######################################################
    def verify_scope(self, tag):
       return True
 
    #######################################################
-   def create_elem_parser(self, elem_name, scope, file, line):
-      tag = self.tag
-      self.tag = None
-      return FixtureParser(elem_name, file, line, tag)
+   def __create_fixture_parser(self, elem_name, scope, file, line):
+      annos = self.annotations
+      self.annotations = []
+      return FixtureParser(elem_name, file, line, annos)
 
    #######################################################
    def get_type_name(self):
@@ -81,7 +96,7 @@ class GlobalParser:
 
    #######################################################
    def parse_line(self, line):
-      self.__report_useless_tag()
+      self.__report_useless_annotations()
       return None
 
    #######################################################

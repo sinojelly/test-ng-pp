@@ -16,25 +16,33 @@
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef __TESTNGPP_TEST_DEF_MACROS_H
-#define __TESTNGPP_TEST_DEF_MACROS_H
+#ifndef __TESTNGPP_MODULE_H
+#define __TESTNGPP_MODULE_H
+
+#include <string>
 
 #include <testngpp/testngpp.h>
-#include <testngpp/TestModule.h>
 
-#define __TESTNGPP_LINENAME_CAT( name, line ) name##line
-#define __LINENAME( name, line ) __TESTNGPP_LINENAME_CAT( name, line )
-#define __TESTNGPP_LINENAME( name ) __LINENAME( name, __LINE__ )
+TESTNGPP_NS_START
 
-#define TEST(name, ...)            void __TESTNGPP_LINENAME(test_) (void)
-#define PTEST(paralist, name, ...) void __TESTNGPP_LINENAME(test_) paralist
-#define FIXTURE(cut, ...) struct Test##cut: public TESTNGPP_NS::TestFixture
+struct TestCaseInfoReader;
+struct TestCaseResultCollector;
 
-#define SETUP() void setUp()
-#define TEARDOWN() void tearDown()
+template <typename ClassUnderTest>
+struct TestModule : public TestFixture
+{
+   void setCUT(ClassUnderTest* cut)
+   { classUnderTest = cut; }
 
-#define MODULE(module, type, ...) struct Module##module : public TESTNGPP_NS::TestModule<type>
-#define IMPORT(module, instance, tests) Module##module module##instance
+   ClassUnderTest* CUT() const
+   { return classUnderTest; }
+
+private:
+
+   ClassUnderTest * classUnderTest;
+};
+
+TESTNGPP_NS_END
 
 #endif
 

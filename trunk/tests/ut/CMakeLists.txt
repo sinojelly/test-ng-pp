@@ -28,6 +28,7 @@ SET(UT_CASES
   TestTestFixtureDesc.h
   TestTestSuiteDesc.h
   TestXMLBuilder.h
+  TestDataDriven.h
 )
 
 SET(UT_CASES_WITH_MOCK

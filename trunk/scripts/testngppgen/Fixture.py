@@ -11,7 +11,7 @@ from Name import *
 ###########################################
 class Fixture:
    ########################################
-   def __init__(self, name, file, line, tag):
+   def __init__(self, name, file, line, annotations):
       self.prefix = name[0]
       self.id   = name[1]
       self.name = name[2]
@@ -20,7 +20,11 @@ class Fixture:
       self.scope = TestScope("::", None, None)
       self.file = file
       self.line = line
-      self.annotations = AnnotationParser(tag, {"tags":[]}).parse()
+      annotation = None
+      if len(annotations) > 0 :
+         annotation = annotations[0]
+
+      self.annotations = AnnotationParser(annotation, {"tags":[]}).parse()
       self.annotations['tags'] = TagsParser(self.annotations['tags']).parse()
 
    ########################################
