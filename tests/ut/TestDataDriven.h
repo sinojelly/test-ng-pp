@@ -83,11 +83,11 @@ FIXTURE(DataDriven)
    {
       DataProvider* dataProvider = &fixture.dataProvider2;
 
-     // ASSERT_THROWS(
+      ASSERT_THROWS(
             runParameterizedTest
                ( &fixture, &MyTestFixture::testcase1
                , dataProvider, 2);
-     //       , TESTNGPP_NS::Error);
+            , TESTNGPP_NS::Error);
 
       ASSERT_THROWS(runParameterizedTest
             ( &fixture, &MyTestFixture::testcase1
