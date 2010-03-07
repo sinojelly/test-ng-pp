@@ -41,29 +41,46 @@ struct DataProvider
 #define DATA_PROVIDER(name, items, data1, ...)\
 struct __TESTNGPP_DataProvider_##name : public TESTNGPP_NS::DataProvider \
 { \
+public: \
+   __TESTNGPP_DataProvider_##name() \
+   { \
+      TESTNGPP_NS::any dataProvider[][items+1] = { data1, ##__VA_ARGS__ }; \
+      numberOfGroups = sizeof(dataProvider)/sizeof(dataProvider[0]); \
+      datum = new TESTNGPP_NS::any[numberOfGroups][items+1]; \
+      for(size_t i=0; i<numberOfGroups; i++) \
+      { \
+           for(unsigned int j=0; j<items+1; j++) \
+           { \
+              datum[i][j] = dataProvider[i][j]; \
+           } \
+      } \
+   } \
+   ~__TESTNGPP_DataProvider_##name() \
+   { \
+       delete [] datum; \
+   } \
    const unsigned int size() const\
    { \
-      const TESTNGPP_NS::any name[][items+1] = {data1, ##__VA_ARGS__ }; \
-      return sizeof(name)/sizeof(name[0]); \
+      return numberOfGroups; \
    } \
    const unsigned int numberOfItems() const \
    { \
       return items; \
    } \
-   \
    TESTNGPP_NS::any data(unsigned int index, unsigned int item) const \
    { \
-      const TESTNGPP_NS::any name[][items+1] = {data1, ##__VA_ARGS__ }; \
-      return name[index][item+1]; \
+      return datum[index][item+1]; \
    } \
-   \
    const char* toString(unsigned int index) const  \
    { \
-      const TESTNGPP_NS::any name[][items+1] = {data1, ##__VA_ARGS__ }; \
-      return TESTNGPP_NS::any_cast<const char*>(name[index][0]); \
+      return TESTNGPP_NS::any_cast<const char*>(datum[index][0]); \
    } \
    const char * getName() const \
    { return #name; } \
+   \
+private: \
+   TESTNGPP_NS::any (*datum)[items+1]; \
+   size_t numberOfGroups; \
 } name
 
 TESTNGPP_NS_END
