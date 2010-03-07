@@ -32,6 +32,10 @@ class TestCase:
       self.generated        = None
 
    ########################################
+   def get_data_provider_name(self):
+      return self.annotations['data']
+
+   ########################################
    def is_p_test(self):
       return self.p_test
 
@@ -54,6 +58,10 @@ class TestCase:
    ########################################
    def matches_id(self, id):
       return id != None and self.annotations["id"] == id
+
+   ########################################
+   def report_non_existing_data_provider(self):
+      raw_fatal(self.file, self.line, "data provider \"" + self.get_data_provider_name() + "\" does not exist.")
 
    ########################################
    def report_cyclic_depend_error(self):

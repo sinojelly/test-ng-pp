@@ -118,7 +118,12 @@ struct TestBar1 : public TESTNGPP_NS::TestFixture
 class TestBar2 : public TestFixture
 {
 public:
-    // @test
+    DATA_PROVIDER( names, 1
+                 , DATA_GROUP((const char*)"darwin") 
+                 , DATA_GROUP((const char*)"arthur") 
+                 , DATA_GROUP((const char*)"steven"));
+                 
+    // @test(id=1)
     void case20()
     {
       WARN("this test is gonna crash 'coz of invalid memory access");
@@ -127,12 +132,11 @@ public:
       TS_ASSERT(true);
     }
 
-#if 0
     // @test(data="names")
     PTEST( (const char* name), this is a parametered() test)
     {
+       INFO(name);
     }
-#endif
 };
 
 // @fixture(tags=succ)

@@ -28,6 +28,10 @@ class Fixture:
       self.annotations['tags'] = TagsParser(self.annotations['tags']).parse()
 
    ########################################
+   def find_data_provider(self, name):
+      return self.scope.find_data_provider(name)
+
+   ########################################
    def get_tags(self):
       return self.annotations['tags']
 

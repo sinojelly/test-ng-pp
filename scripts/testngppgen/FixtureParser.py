@@ -13,6 +13,7 @@ from Fixture import Fixture
 from TestCaseParser import TestCaseParser
 from PreprocessScopeParser import *
 from ClassDeclParser import ClassDeclParser
+from DataProviderParser import DataProviderParser
 
 from Message import *
 
@@ -25,6 +26,8 @@ testcase_re3 = re.compile( r'^\s*void\s+(?P<testcaseId>[A-Za-z_][A-Za-z0-9_]*)\s
 p_testcase_re1 = re.compile( r'^\s*PTEST\s*\(\s*.+\)\s*,\s*(?P<testcaseName>.+)\s*\)\s*$', re.UNICODE)
 
 class_decl_re = re.compile(r'^\s*(struct|class)\s+[A-Za-z0-9_]+\s*(?P<rest>.*)$')
+
+data_provider_re = re.compile(r'^\s*DATA_PROVIDER\s*\(\s*(?P<name>[A-Za-z0-9_]+)\s*,\s*(?P<items>[1-9][0-9]*)(?P<rest>(.*))\s*$')
 
 ##########################################################
 def is_testcase_def(line):
@@ -42,6 +45,13 @@ def is_testcase_def(line):
 
    return None
 
+##########################################################
+def is_data_provider(line):
+   matched = data_provider_re.match(line)
+   if matched:
+      return matched.group("name"), matched.group("items"), matched.group("rest")
+  
+   return None
 
 ##########################################################
 def is_class_decl(line):
@@ -132,6 +142,10 @@ class FixtureParser:
       if rest != None:
          return self.__create_class_decl_parser(rest, file, line.get_line_number())
       
+      data_provider = is_data_provider(line.get_content())
+      if data_provider != None:
+         return DataProviderParser(data_provider, file, line.get_line_number())
+
       return None
          
    #######################################################

@@ -19,6 +19,8 @@
 #ifndef __TESTNGPP_DATA_DRIVEN_H
 #define __TESTNGPP_DATA_DRIVEN_H
 
+#include <sstream>
+
 #include <testngpp/testngpp.h>
 #include <testngpp/Any.h>
 #include <testngpp/DataDrivenDef.h>
