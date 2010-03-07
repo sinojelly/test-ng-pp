@@ -5,6 +5,9 @@ import codecs
 from Message import *
 
 from Phase1Result import *
+from TestCase import TestCase
+from Fixture import Fixture
+from Name import *
 
 ################################################
 def output(content, file):
@@ -17,17 +20,27 @@ def output(content, file):
 def get_base_name(file):
     return os.path.basename(file).split('.')[0]
 
-def get_testcase_name(testcase):
+def get_testcase_method_name(testcase):
    if testcase.get_traditional_name():
       return testcase.get_traditional_name()
 
    return "test_" + str(testcase.get_line_number())
 
-def get_testcase_class_name(fixture, testcase):
-   return "TESTCASE_" + get_fixture_id(fixture) + "_" + get_testcase_name(testcase)
+def get_testcase_display_name(testcase, group=None):
+   if group == None: return testcase.get_name()
+   return testcase.get_name() + escape_name("("+group+")")
 
-def get_testcase_instance_name(fixture, testcase):
-   return "testcase_instance_" + get_fixture_id(fixture) + "_" + get_testcase_name(testcase)
+def get_testcase_class_name(fixture, testcase, index=None):
+   name = "TESTCASE_" + get_fixture_id(fixture) + "_" + get_testcase_method_name(testcase)
+   if index == None: return name
+
+   return name + "_" + str(index)
+
+def get_testcase_instance_name(fixture, testcase, provider=None, index=None):
+   name = "testcase_instance_" + get_fixture_id(fixture) + "_" + get_testcase_method_name(testcase)
+   if provider == None: return name
+
+   return name + "_" + provider + str(index)
 
 def get_fixture_desc_class():
    return "TESTNGPP_NS::TestFixtureDesc"
@@ -82,7 +95,7 @@ static struct %s
 
    void runTest()
    {
-      belongedFixture->%s();
+      %s;
    }
 
    TESTNGPP_NS::TestFixture* getFixture() const
@@ -107,6 +120,14 @@ private:
 
 '''
 
+testcase_invocation_template = '''
+belongedFixture->%s()
+'''
+
+p_test_invocation_template='''
+runParameterizedTest(belongedFixture, &%s::%s, &belongedFixture->%s, %s)
+'''
+
 ################################################
 class TestCaseDefGenerator:
    #############################################
@@ -115,14 +136,24 @@ class TestCaseDefGenerator:
       self.testcase = testcase
       self.file = file
       self.suite = suite 
-   #############################################
-   def __generate(self):
-      if self.testcase.is_p_test(): return
 
+   #############################################
+   def __generate_p_test(self, name, index, group):
+      p_test_invocation = p_test_invocation_template % ( \
+           get_fixture_id(self.fixture), \
+           get_testcase_method_name(self.testcase), \
+           name, \
+           index \
+         )
+
+      self.__generate_test_def(p_test_invocation, name, index, group)
+
+   #############################################
+   def __generate_test_def(self, test_invocation, name=None, index=None, group=None):
       testcase_def = testcase_template % ( \
-         get_testcase_class_name(self.fixture, self.testcase), \
-         get_testcase_class_name(self.fixture, self.testcase), \
-         self.testcase.get_name(), \
+         get_testcase_class_name(self.fixture, self.testcase, index), \
+         get_testcase_class_name(self.fixture, self.testcase, index), \
+         get_testcase_display_name(self.testcase, group), \
          self.fixture.get_name(), \
          self.suite, \
          get_depends_var(self.fixture, self.testcase), \
@@ -130,13 +161,33 @@ class TestCaseDefGenerator:
          self.testcase.get_line_number(), \
          get_fixture_id(self.fixture), \
          get_fixture_id(self.fixture), \
-         get_testcase_name(self.testcase), \
+         test_invocation, \
          len(self.testcase.get_tags() + self.fixture.get_tags()), \
          get_testcase_tags(self.testcase, self.fixture), \
          get_fixture_id(self.fixture), \
-         get_testcase_instance_name(self.fixture, self.testcase) \
-         )
+         get_testcase_instance_name(self.fixture, self.testcase, name, index) \
+      )
       output(testcase_def, self.file)
+
+   #############################################
+   def __generate_p_tests(self):
+      name = self.testcase.get_data_provider_name()
+      provider = self.fixture.find_data_provider(name)
+      groups = provider.get_data_groups()
+      for index in range(0, len(groups)):
+         self.__generate_p_test(name, index, groups[index])
+
+   #############################################
+   def __generate(self):
+      if self.testcase.is_p_test(): 
+         self.__generate_p_tests()
+         return
+
+      testcase_invocation = testcase_invocation_template % ( \
+           get_testcase_method_name(self.testcase) \
+         )
+
+      self.__generate_test_def(testcase_invocation)
 
    #############################################
    def generate(self):
@@ -163,15 +214,33 @@ class TestCaseArrayGenerator:
       self.fixture = fixture
 
    #############################################
-   def generate(self):
-      testcase_in_array = '''&%s,''' % (get_testcase_instance_name(self.fixture, self.testcase))
+   def __generate_p_tests(self):
+      name = self.testcase.get_data_provider_name()
+      provider = self.fixture.find_data_provider(name)
+      groups = provider.get_data_groups()
+      for index in range(0, len(groups)):
+         self.__generate(name, index)
+
+   #############################################
+   def __generate(self, name=None, index=None):
+      testcase_in_array = '''&%s,''' % (get_testcase_instance_name(self.fixture, self.testcase, name, index))
       output(testcase_in_array, self.file)
+
+   #############################################
+   def generate(self):
+      if self.testcase.is_p_test(): 
+         self.__generate_p_tests()
+         return
+
+      self.__generate()
+
 
 ################################################
 class TestCaseDependsVerifier:
    #############################################
-   def __init__(self, testcase):
+   def __init__(self, testcase, fixture):
       self.testcase = testcase
+      self.fixture = fixture
 
    #############################################
    def generate(self):
@@ -181,7 +250,13 @@ class TestCaseDependsVerifier:
         temp = temp.get_depends()
         if temp == depends:
            self.testcase.report_cyclic_depend_error()
+     
+      if not self.testcase.is_p_test(): 
+         return
 
+      data_provider = self.fixture.find_data_provider(self.testcase.get_data_provider_name())
+      if data_provider == None:
+         self.testcase.report_non_existing_data_provider()
 
 ################################################
 class TestCaseSeeker:
@@ -191,8 +266,8 @@ class TestCaseSeeker:
 
    #############################################
    def generate(self):
-      ScopesGenerator([self.fixture.get_scope()], None) \
-         .generate(lambda file, elem: TestCaseDependsVerifier(elem))
+      ScopesGenerator([self.fixture.get_scope()], None, TestCase) \
+         .generate(lambda file, elem: TestCaseDependsVerifier(elem, self.fixture))
 
 
 ################################################
@@ -216,12 +291,12 @@ class FixtureGenerator:
 
    #############################################
    def generate_testcases(self):
-      ScopesGenerator([self.fixture.get_scope()], self.file) \
+      ScopesGenerator([self.fixture.get_scope()], self.file, TestCase) \
          .generate(lambda file, elem: TestCaseDefGenerator(file, self.suite, elem, self.fixture))
 
    #############################################
    def generate_testcase_array_content(self):
-      ScopesGenerator([self.fixture.get_scope()], self.file) \
+      ScopesGenerator([self.fixture.get_scope()], self.file, TestCase) \
          .generate(lambda file, elem: TestCaseArrayGenerator(file, elem, self.fixture))
 
    #############################################
@@ -282,9 +357,10 @@ class FixtureDescArrayGenerator:
 ################################################
 class ScopeGenerator:
    #############################################
-   def __init__(self, scope, file, generator_getter):
+   def __init__(self, scope, file, cls, generator_getter):
       self.scope = scope
       self.file = file
+      self.cls = cls
       self.get_generator = generator_getter
 
    #############################################
@@ -300,7 +376,7 @@ class ScopeGenerator:
 
    #############################################
    def generate_scopes(self, scopes):
-      ScopesGenerator(scopes, self.file) \
+      ScopesGenerator(scopes, self.file, self.cls) \
          .generate(self.get_generator)
 
    #############################################
@@ -314,7 +390,8 @@ class ScopeGenerator:
    #############################################
    def generate_content(self):
       for elem in self.scope.get_elements():
-         self.get_generator(self.file, elem).generate()
+         if self.cls == elem.__class__:
+            self.get_generator(self.file, elem).generate()
 
    #############################################
    def generate(self):
@@ -328,14 +405,15 @@ class ScopeGenerator:
 ################################################
 class ScopesGenerator:
    #############################################
-   def __init__(self, scopes, file):
+   def __init__(self, scopes, file, cls):
      self.scopes = scopes
      self.file = file
+     self.cls = cls
 
    #############################################
    def generate(self, generator_getter):
       for scope in self.scopes:
-         ScopeGenerator(scope, self.file, generator_getter).generate()
+          ScopeGenerator(scope, self.file, self.cls, generator_getter).generate()
      
 ################################################
 def get_suite_desc_name(suite):
@@ -351,7 +429,8 @@ def get_suite_getter_name():
 dep_headers = [
    "internal/TestCase.h",
    "internal/TestFixtureDesc.h",
-   "internal/TestSuiteDesc.h"
+   "internal/TestSuiteDesc.h",
+   "internal/DataDriven.h"
 ]
 
 ################################################
@@ -387,17 +466,17 @@ class SuiteGenerator:
 
    #############################################
    def generate_fixtures(self):
-      ScopesGenerator(self.scopes, self.file) \
+      ScopesGenerator(self.scopes, self.file, Fixture) \
          .generate(lambda file, elem: FixtureGenerator(file, self.suite, elem) )
 
    #############################################
    def generate_fixture_descs(self):
-      ScopesGenerator(self.scopes, self.file) \
+      ScopesGenerator(self.scopes, self.file, Fixture) \
          .generate(lambda file, elem: FixtureDescGenerator(file, elem) )
 
    #############################################
    def generate_fixture_desc_array(self):
-      ScopesGenerator(self.scopes, self.file) \
+      ScopesGenerator(self.scopes, self.file, Fixture) \
          .generate(lambda file, elem: FixtureDescArrayGenerator(file, elem) )
 
    #############################################
@@ -447,7 +526,7 @@ class SuiteGenerator:
 
 ################################################
 def verify_testcase_deps(scopes):
-   ScopesGenerator(scopes, None) \
+   ScopesGenerator(scopes, None, Fixture) \
          .generate(lambda file, elem: TestCaseSeeker(elem) )
 
 ################################################
