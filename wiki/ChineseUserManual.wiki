@@ -693,8 +693,8 @@ TestNG++的运行时机制要求，每个测试套件源代码文件需要被编
 比如:
 
 {{{
-arthur> gcc -fPIC -o MyTestSuite.o -c MyTestSuite.cpp -I/usr/local/include 
-arthur> gcc -shared -Wl,--no-undefined -o libMyTestSuite.so -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
+arthur> g++ -fPIC -o MyTestSuite.o -c MyTestSuite.cpp -I/usr/local/include 
+arthur> g++ -shared -Wl,--no-undefined -o libMyTestSuite.so -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
 }}}
 
 ===3.3.2 Mac OS===
@@ -706,8 +706,8 @@ arthur> gcc -shared -Wl,--no-undefined -o libMyTestSuite.so -L/usr/local/lib -lt
 比如:
 
 {{{
-arthur> gcc -fPIC -o MyTestSuite.o -c MyTestSuite.cpp -I/usr/local/include 
-arthur> gcc -bundle -o libMyTestSuite.so -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
+arthur> g++ -fPIC -o MyTestSuite.o -c MyTestSuite.cpp -I/usr/local/include 
+arthur> g++ -bundle -o libMyTestSuite.so -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
 }}}
 
 ===3.3.3 Windows===
