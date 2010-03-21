@@ -716,6 +716,11 @@ arthur> g++ -fPIC -o MyTestSuite.o -c MyTestSuite.cpp -I/usr/local/include
 arthur> g++ -bundle -o libMyTestSuite.so -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
 }}}
 
+或者将编译和链接过程合二为一：
+{{{
+arthur> g++ -fPIC -bundle -o  libMyTestSuite.so MyTestSuite.cpp -I/usr/local/include -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
+}}}
+
 ===3.3.3 Windows===
 
 在Windows上，在链接DLL的时候，需要与*testngpp.lib* 链接。
