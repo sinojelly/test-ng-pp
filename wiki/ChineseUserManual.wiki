@@ -697,6 +697,12 @@ arthur> g++ -fPIC -o MyTestSuite.o -c MyTestSuite.cpp -I/usr/local/include
 arthur> g++ -shared -Wl,--no-undefined -o libMyTestSuite.so -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
 }}}
 
+或者将编译和链接合并为一个命令行：
+
+{{{
+arthur> g++ -fPIC -shared -Wl,--no-undefined -o libMyTestSuite.so MyTestSuite.cpp -I/usr/local/include -L/usr/local/lib -ltestngpp -L/home/arthur/MyProject -lMyProject
+}}}
+
 ===3.3.2 Mac OS===
 
 在Linux上，为了将一个目标文件链接成共享库，在编译的时候，需要使用选项 *"-fPIC"* 。
