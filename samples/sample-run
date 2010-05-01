@@ -1,8 +1,0 @@
-#!/bin/bash
-
-../src/runner/testngpp-runner libsample \
-   -L../src/listeners \
-   -l"testngppstdoutlistener -c -l0" \
-   -l"testngppxmllistener result.xml" \
-   -t"* > succ > nothing" -c10 $@
-
