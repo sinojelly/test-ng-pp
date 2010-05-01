@@ -21,6 +21,7 @@
 #include <new>
 #include <stdlib.h>
 #include <stdio.h>
+#include <inttypes.h>
 
 // for error string
 #include <sstream>
@@ -159,7 +160,7 @@ static void freeMemory(void* p)
    if(header->magic != magicNumber)
    {
       char buf[100];
-      snprintf(buf, sizeof(buf), "memory corruption occurred at %x", (unsigned int)p);
+      snprintf(buf, sizeof(buf), "memory corruption occurred at %#"PRIxPTR, (uintptr_t) p);
       throw Error(buf);
    }
 
