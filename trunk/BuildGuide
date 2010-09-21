@@ -1,0 +1,26 @@
+
+as a user
+=========
+	Linux
+	------
+
+	
+	Windows
+	-------
+	Run cmake-gui.exe, choose the test-ng-pp root dir as source dir, and any other (nonexist) dir as binaries dir.
+	Then hit configure button, it will show you some variables that should be set, you can modify them or let it be default, hit configure again.
+	And then hit the generate button.
+	At last, open the vcproj with Visual Studio and compile.
+	
+		
+as a testngpp maintainer
+=======================
+	Linux
+	------
+	run build.sh .
+	
+	Windows
+	-------
+	run the PowerShell script build.ps1 .
+	maybe you should modify some variables defined in the script first, such as the path of vcbuild/cmake, etc.
+	

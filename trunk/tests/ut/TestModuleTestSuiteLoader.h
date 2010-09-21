@@ -37,7 +37,8 @@ public:
    void testShouldNotHaveMemoryLeakage()
    {
       StringList searchingPaths;
-      desc = loader->load(searchingPaths, "../../samples/libsample", 0);
+      //desc = loader->load(searchingPaths, "../../samples/libsample", 0);
+      desc = loader->load(searchingPaths, "../../build_testngpp/samples/libsample", 0);
       loader->unload();
    }
 };
