@@ -16,6 +16,9 @@
 #include <testngpp/comm/PipeReadableChannel.h>
 #include <testngpp/comm/PipeWrittableChannel.h>
 
+//FIXME: avoid linux load error, undefined symbol: _ZN8testngpp11StupidTimer4stopEv
+#include "../../src/utils/StupidTimer.cpp"
+
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 

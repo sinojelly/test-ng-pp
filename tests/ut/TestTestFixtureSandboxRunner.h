@@ -13,6 +13,9 @@
 #include <testngpp/listener/TestFixtureResultCollector.h>
 #include <testngpp/runner/TestCaseFilter.h>
 
+//FIXME: avoid linux load error, undefined symbol: _ZN8testngpp11StupidTimer4stopEv
+#include "../../src/utils/StupidTimer.cpp"
+
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 

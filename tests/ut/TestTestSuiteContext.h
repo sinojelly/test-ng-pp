@@ -53,7 +53,7 @@ public:
 
       context = new TestSuiteContext
          ( new ModuleTestSuiteLoader(new DLModuleLoader())
-         , "../../samples/libsample"
+         , "../../build_testngpp/samples/libsample"
          , collector
          , tagsFilter
          , filter);
