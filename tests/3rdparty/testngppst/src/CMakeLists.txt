@@ -39,6 +39,12 @@ SET(TESTNGPPST_SRCS
   StringToOptions.cpp
   ConsoleState.cpp
   StupidTimer.cpp
+  TestCase.cpp
+  mem_checker/bool_array.cpp       
+  mem_checker/mem_pool_base.cpp
+  mem_checker/debug_new.cpp        
+  mem_checker/static_mem_pool.cpp
+  mem_checker/interface_4xunit.cpp
 )
 
 IF(NOT TESTNGPPST_DISABLE_RC)

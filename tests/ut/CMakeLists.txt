@@ -29,6 +29,7 @@ SET(UT_CASES
   TestTestSuiteDesc.h
   TestXMLBuilder.h
   TestDataDriven.h
+  TestMemChecker.h
 )
 
 SET(UT_CASES_WITH_MOCK

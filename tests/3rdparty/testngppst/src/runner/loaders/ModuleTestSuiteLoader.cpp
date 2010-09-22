@@ -7,6 +7,11 @@
 
 #include <testngppst/runner/TestSuiteDescEntryNameGetter.h>
 
+#include <testngppst/internal/TestSuiteDesc.h>
+#include <testngppst/internal/TestFixtureDesc.h>
+#include <testngppst/internal/TestCase.h>
+
+
 TESTNGPPST_NS_START
 
 struct ModuleTestSuiteLoaderImpl
@@ -77,6 +82,19 @@ load( const StringList& searchingPaths
       throw Error("Invalid test suite shared object");
    }
 
+   //set loader to testcase
+   unsigned int testFixtureNumInSuite = desc->getNumberOfTestFixtures();
+   for (unsigned int indexOfFixture = 0; indexOfFixture < testFixtureNumInSuite; indexOfFixture++)
+   {
+      TestFixtureDesc* fixture = desc->getTestFixture(indexOfFixture);
+      unsigned int testCaseNumInFixture = fixture->getNumberOfTestCases();
+      for (unsigned int indexOfTestCase = 0; indexOfTestCase < testCaseNumInFixture; indexOfTestCase++)
+      {
+          TestCase* testcase = fixture->getTestCase(indexOfTestCase);
+          testcase->setModuleLoader(loader);
+      }
+   }
+
    return desc;
 }
 
@@ -109,6 +127,7 @@ void ModuleTestSuiteLoader::unload()
 }
 
 /////////////////////////////////////////////////////////////////
+
 
 TESTNGPPST_NS_END
 

@@ -27,12 +27,14 @@
 
 TESTNGPPST_NS_START
 
+struct ModuleLoader;
+
 struct TestCase
    : public TestCaseInfoReader
 {
 	TestCase( const std::string& nameOfCase
            , const std::string& nameOfFixture
-		     , const std::string& nameOfSuite
+		   , const std::string& nameOfSuite
            , TESTNGPPST_NS::TestCase* testcase
            , const std::string& file
            , unsigned int line)
@@ -70,7 +72,8 @@ struct TestCase
 
    void setUp()
    {
-      getFixture()->setUp();
+       startMemChecker();
+       getFixture()->setUp();
    }
 
    void tearDown()
@@ -78,6 +81,7 @@ struct TestCase
       TestFixture * fixture = getFixture();
       fixture->tearDown();
       delete fixture;
+      verifyMemChecker();	  
    }
 
    void run()
@@ -95,6 +99,15 @@ struct TestCase
      static const char* tags[1] = {0};
      return tags;
    }
+   
+   void setModuleLoader(ModuleLoader* _loader)
+   {
+       loader = _loader;
+   }
+
+private:
+   void startMemChecker();   
+   void verifyMemChecker();
 
 private:
 
@@ -111,9 +124,10 @@ private:
 	std::string name;
 	std::string fixtureName;
 	std::string suiteName;
-   TESTNGPPST_NS::TestCase* depends;
-   std::string fileName;
+    TESTNGPPST_NS::TestCase* depends;
+    std::string fileName;
 	unsigned int lineOfFile;
+	ModuleLoader* loader;
 };
 
 TESTNGPPST_NS_END
