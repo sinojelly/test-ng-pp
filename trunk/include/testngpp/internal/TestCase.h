@@ -27,6 +27,8 @@
 
 TESTNGPP_NS_START
 
+struct ModuleLoader;
+
 struct TestCase
    : public TestCaseInfoReader
 {
@@ -70,12 +72,16 @@ struct TestCase
 
    void setUp()
    {
-      getFixture()->setUp();
+       startMemChecker();
+       getFixture()->setUp();
    }
 
    void tearDown()
    {
-      getFixture()->tearDown();
+      TestFixture * fixture = getFixture();
+      fixture->tearDown();
+      delete fixture;
+      verifyMemChecker();	  
    }
 
    void run()
@@ -93,6 +99,15 @@ struct TestCase
      static const char* tags[1] = {0};
      return tags;
    }
+   
+   void setModuleLoader(ModuleLoader* _loader)
+   {
+       loader = _loader;
+   }
+
+private:
+   void startMemChecker();   
+   void verifyMemChecker();
 
 private:
 
@@ -112,6 +127,7 @@ private:
    TESTNGPP_NS::TestCase* depends;
    std::string fileName;
 	unsigned int lineOfFile;
+	ModuleLoader* loader;
 };
 
 TESTNGPP_NS_END

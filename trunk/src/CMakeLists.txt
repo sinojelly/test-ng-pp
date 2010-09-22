@@ -10,6 +10,12 @@ SET(TESTNGPP_SRCS
   TestSuiteDesc.cpp 
   TypeString.cpp 
   Formatter.cpp 
+  TestCase.cpp
+  mem_checker/bool_array.cpp       
+  mem_checker/mem_pool_base.cpp
+  mem_checker/debug_new.cpp        
+  mem_checker/static_mem_pool.cpp
+  mem_checker/interface_4xunit.cpp
 )
 
 IF(MSVC)
@@ -18,7 +24,7 @@ ELSE(MSVC)
   ADD_LIBRARY(testngpp SHARED ${TESTNGPP_SRCS})
 ENDIF(MSVC)
 
-INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/3rdparty)
 
 IF(MSVC)
   INSTALL(
