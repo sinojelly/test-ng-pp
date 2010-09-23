@@ -884,6 +884,16 @@ void operator delete[](void* pointer, const std::nothrow_t&) throw()
 }
 #endif // HAVE_PLACEMENT_DELETE
 
+extern "C" void *debug_malloc(char *file, unsigned int line, unsigned int size)
+{
+    return alloc_mem(size, get_file_name(file), line, false);
+}
+
+extern "C" void debug_free(void* p)
+{
+    free_pointer(p, _DEBUG_NEW_CALLER_ADDRESS, false);
+}
+
 int __debug_new_counter::_S_count = 0;
 
 /**
