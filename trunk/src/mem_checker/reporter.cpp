@@ -20,11 +20,12 @@
 static mem_checker::Reporter *mem_checker_info_reporter = 0;
 static mem_checker::Reporter *mem_checker_failure_reporter = 0;
 
+extern bool needToReport();
 extern void file_output_func(const char * file, unsigned int line, const char* message);
 
 mem_checker::Reporter *get_info_reporter()
 {
-    if (0 != mem_checker_info_reporter)
+    if ((needToReport()) && (0 != mem_checker_info_reporter))
     {
         return mem_checker_info_reporter;
     }
@@ -36,7 +37,7 @@ mem_checker::Reporter *get_info_reporter()
 
 mem_checker::Reporter *get_failure_reporter()
 {
-    if (0 != mem_checker_failure_reporter)
+    if ((needToReport()) && (0 != mem_checker_failure_reporter))
     {
         return mem_checker_failure_reporter;
     }
