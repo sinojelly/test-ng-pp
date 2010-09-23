@@ -1,6 +1,11 @@
 #include <testngppst/testngppst.hpp>
 #include <mem_checker/interface_4user.h>
 
+struct Dummy 
+{
+    Dummy(){}
+};
+
 
 FIXTURE(TestMemChecker)
 {
@@ -17,6 +22,12 @@ FIXTURE(TestMemChecker)
     {
         char *p = new char[55];
         delete [] p;
+    }
+
+    TEST(should not report memory leak when using placement new)
+    {
+        char a[10];
+        Dummy *p = new(a) Dummy(); // not report memory leak, only show message :warning: debug_new used with placement new (D:/.../TestMemChecker.h:30)
     }
 
     TEST(can detect memory leak caused by malloc)
