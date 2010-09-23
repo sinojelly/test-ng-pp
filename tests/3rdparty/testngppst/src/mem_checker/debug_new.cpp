@@ -51,6 +51,13 @@
 #include <mem_checker/fast_mutex.h>
 #include <mem_checker/static_assert.h>
 #include <mem_checker/interface_4xunit.h>
+#include <mem_checker/reporter.h>
+#include <mem_checker/format.h>
+
+
+
+#define USED_IN_XUNIT  
+
 
 #if !_FAST_MUTEX_CHECK_INITIALIZATION && !defined(_NOTHREADS)
 #error "_FAST_MUTEX_CHECK_INITIALIZATION not set: check_leaks may not work"
@@ -294,12 +301,30 @@ const char* new_progname = _DEBUG_NEW_PROGNAME;
 
 extern bool g_need_check;
 
-void default_reporter(const char* message)
+
+void file_output_func(const char * file, unsigned int line, const char* message)
 {
-    fprintf(new_output_fp, "%s\n", message);
+    fprintf(new_output_fp, "%s(%u) : %s\n", file, line, message);
 }
 
-report_t memory_leak_reporter = default_reporter;
+const char * get_file_name(const char * file)
+{
+   if (0 == file)
+   {
+       return "NULL";
+   }
+   const char * p = strrchr(file, '\\');
+   const char * q = strrchr(file, '/');
+   unsigned int max_ptr = ((unsigned int)p) > ((unsigned int)q) ? (unsigned int)p : (unsigned int)q;
+
+   if (max_ptr > 0)
+   {
+       return (const char *)(max_ptr + 1);
+   }
+
+   return file;
+}
+
 
 #if _DEBUG_NEW_USE_ADDR2LINE
 /**
@@ -311,7 +336,7 @@ report_t memory_leak_reporter = default_reporter;
  *              the result is printed); \c false if no useful
  *              information is got (and nothing is printed)
  */
-static bool print_position_from_addr(const void* addr)
+static bool print_position_from_addr(const void* addr, unsigned int &line, char *file_buf, unsigned int file_buf_size)
 {
     static const void* last_addr = NULL;
     static char last_info[256] = "";
@@ -319,7 +344,11 @@ static bool print_position_from_addr(const void* addr)
     {
         if (last_info[0] == '\0')
             return false;
+        #ifndef USED_IN_XUNIT
         fprintf(new_output_fp, "%s", last_info);
+        #else
+        strncpy(file_buf, file_buf_size, last_info);
+        #endif
         return true;
     }
     if (new_progname)
@@ -380,8 +409,13 @@ static bool print_position_from_addr(const void* addr)
                     last_info[0] = '\0';
                 else
                 {
+#ifndef USED_IN_XUNIT
                     fprintf(new_output_fp, "%s", buffer);
-                    strcpy(last_info, buffer);
+#else
+                    strncpy(file_buf, file_buf_size, buffer);
+#endif                   
+                    strncpy(last_info, sizeof(last_info), buffer);
+              
                     return true;
                 }
             }
@@ -396,7 +430,7 @@ static bool print_position_from_addr(const void* addr)
  *
  * @return      \c false always
  */
-static bool print_position_from_addr(const void*)
+static bool print_position_from_addr(const void* addr, unsigned int &line, char *file_buf, unsigned int file_buf_size)
 {
     return false;
 }
@@ -421,7 +455,9 @@ static void print_position(const void* ptr, int line)
     }
     else if (ptr != NULL)   // Is caller address present?
     {
-        if (!print_position_from_addr(ptr)) // Fail to get source position?
+        unsigned int dummy_line;
+        char last_info[256];
+        if (!print_position_from_addr(ptr, dummy_line, last_info, sizeof(last_info))) // Fail to get source position?
             fprintf(new_output_fp, "%p", ptr);
     }
     else                    // No information is present
@@ -474,11 +510,19 @@ static void* alloc_mem(size_t size, const char* file, int line, bool is_array)
         return NULL;
 #else
         fast_mutex_autolock lock(new_output_lock);
+        #ifndef USED_IN_XUNIT
         fprintf(new_output_fp,
                 "Out of memory when allocating %u bytes\n",
                 size);
         fflush(new_output_fp);
         _DEBUG_NEW_ERROR_ACTION;
+        #else
+        // Just report as info, maybe user has mocked malloc 
+        std::ostringstream info;
+        info << "Out of memory when allocating " << size << " bytes.";
+        get_info_reporter()->report(get_file_name(file), line, info.str().c_str());
+        return NULL;
+        #endif
 #endif
     }
     void* pointer = (char*)ptr + ALIGNED_LIST_ITEM_SIZE;
@@ -524,6 +568,7 @@ static void* alloc_mem(size_t size, const char* file, int line, bool is_array)
     return pointer;
 }
 
+
 /**
  * Frees memory and adjusts pointers.
  *
@@ -542,10 +587,21 @@ static void free_pointer(void* pointer, void* addr, bool is_array)
     {
         {
             fast_mutex_autolock lock(new_output_lock);
+            #ifndef USED_IN_XUNIT
             fprintf(new_output_fp, "delete%s: invalid pointer %p (",
                     is_array ? "[]" : "", pointer);
             print_position(addr, 0);
             fprintf(new_output_fp, ")\n");
+            #else
+            std::ostringstream info;
+            info << "delete"
+                 << (is_array ? "[]" : "")
+                 << ": invalid pointer"
+                 << MemAddr(pointer)
+                 << SrcAddr(0, 0, addr)
+                 << ".";
+            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str());
+            #endif
         }
         check_mem_corruption();
         fflush(new_output_fp);
@@ -558,9 +614,10 @@ static void free_pointer(void* pointer, void* addr, bool is_array)
             msg = "delete[] after new";
         else
             msg = "delete after new[]";
-        fast_mutex_autolock lock(new_output_lock);
+        fast_mutex_autolock lock(new_output_lock);        
+#ifndef USED_IN_XUNIT
         fprintf(new_output_fp,
-                "%s: pointer %p (size %u)\n\tat ",
+                "%s: pointer %p (%u bytes)\n\tat ",
                 msg,
                 (char*)ptr + ALIGNED_LIST_ITEM_SIZE,
                 ptr->size);
@@ -573,6 +630,17 @@ static void free_pointer(void* pointer, void* addr, bool is_array)
         fprintf(new_output_fp, "\n");
         fflush(new_output_fp);
         _DEBUG_NEW_ERROR_ACTION;
+#else
+        std::ostringstream info;
+        info << msg << ": pointer"
+             << MemAddr((void *)((char*)ptr + ALIGNED_LIST_ITEM_SIZE))
+             << MemSize((unsigned int)ptr->size)
+             << " at"
+             << SrcAddr(0, 0, ptr->addr)
+             << ". Originally allocated at"
+             << SrcAddr(ptr->file, ptr->line, ptr->addr) << ".";
+        get_failure_reporter()->report(ptr->file,ptr->line,info.str().c_str());        
+#endif
     }
 #if _DEBUG_NEW_TAILCHECK
     if (!check_tail(ptr))
@@ -632,24 +700,6 @@ void clear_all_allocate_info()
 }
 #endif
 
-const char * get_file_name(const char * file)
-{
-   if (0 == file)
-   {
-       return "NULL";
-   }
-   const char * p = strrchr(file, '\\');
-   const char * q = strrchr(file, '/');
-   unsigned int max_ptr = ((unsigned int)p) > ((unsigned int)q) ? (unsigned int)p : (unsigned int)q;
-
-   if (max_ptr > 0)
-   {
-       return (const char *)(max_ptr + 1);
-   }
-
-   return file;
-}
-
 /**
  * Checks for memory leaks.
  *
@@ -666,21 +716,37 @@ int check_leaks()
         const char* const pointer = (char*)ptr + ALIGNED_LIST_ITEM_SIZE;
         if (ptr->magic != MAGIC)
         {
+            #ifndef USED_IN_XUNIT
             fprintf(new_output_fp,
                     "warning: heap data corrupt near %p\n",
                     pointer);
+            #else
+            std::ostringstream info;
+            info << "warning: heap data corrupt near"
+                 << MemAddr((void *)pointer)
+                 << ".";            
+            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str()); 
+            #endif
         }
 #if _DEBUG_NEW_TAILCHECK
         if (!check_tail(ptr))
         {
+            #ifndef USED_IN_XUNIT
             fprintf(new_output_fp,
                     "warning: overwritten past end of object at %p\n",
                     pointer);
+            #else
+            std::ostringstream info;
+            info << "warning: overwritten past end of object at"
+                 << MemAddr((void *)pointer)
+                 << ".";            
+            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str()); 
+            #endif
         }
 #endif
 #ifndef USED_IN_XUNIT
         fprintf(new_output_fp,
-                "Leaked object at %p (size %u, ",
+                "Leaked object at %p (%u bytes, ",
                 pointer,
                 ptr->size);
         if (ptr->line != 0)
@@ -693,11 +759,12 @@ int check_leaks()
         {
             ptr->need_check = false; // it's no need to report the second time.
 
-            char message[100];
-            sprintf_s(message, sizeof(message), 
-                "Leaked object at %p (size %u, allocated at file %s, line %u)", 
-                pointer, ptr->size, get_file_name(ptr->file), ptr->line);
-            memory_leak_reporter(message);                    
+            std::ostringstream info;
+            info << "Leaked object at"
+                 << MemAddr((void *)pointer)
+                 << MemSize(ptr->size)
+                 << ".";            
+            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str());                    
         }        
 #endif
         ptr = ptr->next;
@@ -772,9 +839,10 @@ void __debug_new_recorder::_M_process(void* pointer)
     if (ptr->magic != MAGIC || ptr->line != 0)
     {
         fast_mutex_autolock lock(new_output_lock);
-        fprintf(new_output_fp,
-                "warning: debug_new used with placement new (%s:%d)\n",
-                _M_file, _M_line);
+        get_info_reporter()->report(
+		        _M_file, _M_line,
+                "warning: debug_new used with placement new."
+                );
         return;
     }
 #if _DEBUG_NEW_FILENAME_LEN == 0
@@ -911,6 +979,8 @@ __debug_new_counter::__debug_new_counter()
 __debug_new_counter::~__debug_new_counter()
 {
     if (--_S_count == 0 && new_autocheck_flag)
+    {
+        clr_reporter();
         if (check_leaks())
         {
             new_verbose_flag = true;
@@ -923,4 +993,6 @@ __debug_new_counter::~__debug_new_counter()
 "    README file for details.\n");
 #endif
         }
+    }
 }
+

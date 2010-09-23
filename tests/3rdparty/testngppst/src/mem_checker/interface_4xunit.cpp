@@ -13,26 +13,25 @@
  */
  
 #include <mem_checker/interface_4xunit.h>
+#include <mem_checker/reporter.h>
 
-extern report_t memory_leak_reporter;
 extern int check_leaks();
 
 bool g_need_check = false; // let debug_new.cpp call this file , avoid it not linked into dll.
 
-extern "C" __declspec(dllexport) void startMemChecker(report_t reporter)
+extern "C" __declspec(dllexport) void startMemChecker
+    ( mem_checker::Reporter *infoReporter
+    , mem_checker::Reporter *failureReporter)
 {
-    if (0 != reporter)
-	{
-		memory_leak_reporter = reporter;
-	}
-
+	set_reporter(infoReporter, failureReporter);
     g_need_check = true;
 }
 
 extern "C" __declspec(dllexport) void verifyMemChecker()
-{
+{    
+    g_need_check = false; // check_leaks may throw exception, so must set g_need_check first.
 	check_leaks();
-    g_need_check = false;
+    clr_reporter();
 }
 
 extern "C" void stopMemChecker()

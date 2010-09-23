@@ -34,6 +34,9 @@ extern "C" {
 
 void stopMemChecker();
 
+#define STOP_MEM_CHECKER()  stopMemChecker()
+
+
 #ifdef __cplusplus
 }
 #endif

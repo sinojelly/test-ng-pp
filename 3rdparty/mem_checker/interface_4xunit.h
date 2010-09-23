@@ -22,15 +22,7 @@
 #ifndef __INTERFACE_4XUNIT_H__
 #define __INTERFACE_4XUNIT_H__
 
-
-/**
- * If used in xunit, not notify other things except report memory leak.
- */
-#define USED_IN_XUNIT
-
-
-typedef void (*report_t)(const char* message);
-
+#include <mem_checker/reporter.h>
 
 
 #endif

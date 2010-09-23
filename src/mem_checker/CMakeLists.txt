@@ -6,7 +6,8 @@ SET(SRC_LIST
 	mem_pool_base.cpp
 	debug_new.cpp        
 	static_mem_pool.cpp
-	interface_4xunit.cpp)
+	interface_4xunit.cpp
+	reporter.cpp)
 
 	
 

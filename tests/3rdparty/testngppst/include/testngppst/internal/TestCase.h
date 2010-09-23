@@ -80,8 +80,8 @@ struct TestCase
    {
       TestFixture * fixture = getFixture();
       fixture->tearDown();
-      delete fixture;
-      verifyMemChecker();	  
+      verifyMemChecker(); // must before delete fixture	  
+      delete fixture;	  
    }
 
    void run()
