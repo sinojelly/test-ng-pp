@@ -299,8 +299,7 @@ FILE* new_output_fp = stderr;
  */
 const char* new_progname = _DEBUG_NEW_PROGNAME;
 
-extern bool g_need_check;
-
+extern bool needToCheck();
 
 void file_output_func(const char * file, unsigned int line, const char* message)
 {
@@ -539,7 +538,7 @@ static void* alloc_mem(size_t size, const char* file, int line, bool is_array)
     ptr->is_array = is_array;
     ptr->size = size;
     ptr->magic = MAGIC;
-    ptr->need_check = g_need_check;
+    ptr->need_check = needToCheck();
     {
         fast_mutex_autolock lock(new_ptr_lock);
         ptr->prev = new_ptr_list.prev;

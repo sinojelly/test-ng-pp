@@ -43,8 +43,16 @@ FIXTURE(TestMemChecker)
 
     TEST(can stop memory checker in a testcase)
     {
-        stopMemChecker();
+        STOP_MEM_CHECKER(); //stopMemChecker();
         char *p = new char[3]; // should not report memory leak
+    }
+
+    TEST(user can reopen memory checker in a testcase)
+    {
+        STOP_MEM_CHECKER(); //stopMemChecker();
+        char *p = new char[4]; // should not report memory leak
+        OPEN_MEM_CHECKER();
+        p = new char[5];
     }
 
     TEST(support checking memory leak in c file when interface_4user.h included in the c file)
