@@ -22,6 +22,8 @@
 #include <sstream>
 #include <iomanip>
 
+// safe strncpy, padding a nul at the end of to string, even from is longger than count.
+#define strncpy_n(to, from, count) strncpy(to, from, count - 1)[count - 1] = '\0'
 
 #define POINTER(pointer) \
 			" 0x"  \
@@ -69,12 +71,12 @@ struct SrcAddr
 	SrcAddr(const char *_file, unsigned int _line, void *_instruction)
 		: file(_file), line(_line)
 	{
-	    if (file == 0)
+	    if (line == 0) 
 	    {
 	        file = last_info;
 	        if (!print_position_from_addr(_instruction, line, last_info, sizeof(last_info))) // fail to get source location
 	        {
-	        	sprintf(last_info, "instruction 0x%08X", _instruction);
+	        	sprintf(last_info, "instruction 0x%08X", (unsigned int)_instruction);
 	        }
 	    }
 	}

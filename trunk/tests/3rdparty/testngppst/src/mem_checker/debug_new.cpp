@@ -306,9 +306,9 @@ void file_output_func(const char * file, unsigned int line, const char* message)
     fprintf(new_output_fp, "%s(%u) : %s\n", file, line, message);
 }
 
-const char * get_file_name(const char * file)
+const char * get_file_name(const char * file, unsigned int line)
 {
-   if (0 == file)
+   if ((0 == file) || (0 == line))
    {
        return "NULL";
    }
@@ -335,7 +335,7 @@ const char * get_file_name(const char * file)
  *              the result is printed); \c false if no useful
  *              information is got (and nothing is printed)
  */
-static bool print_position_from_addr(const void* addr, unsigned int &line, char *file_buf, unsigned int file_buf_size)
+bool print_position_from_addr(const void* addr, unsigned int &line, char *file_buf, unsigned int file_buf_size)
 {
     static const void* last_addr = NULL;
     static char last_info[256] = "";
@@ -346,7 +346,7 @@ static bool print_position_from_addr(const void* addr, unsigned int &line, char 
         #ifndef USED_IN_XUNIT
         fprintf(new_output_fp, "%s", last_info);
         #else
-        strncpy(file_buf, file_buf_size, last_info);
+        strncpy_n(file_buf, last_info, file_buf_size);
         #endif
         return true;
     }
@@ -408,13 +408,12 @@ static bool print_position_from_addr(const void* addr, unsigned int &line, char 
                     last_info[0] = '\0';
                 else
                 {
+					strncpy_n(last_info, buffer, sizeof(last_info));
 #ifndef USED_IN_XUNIT
-                    fprintf(new_output_fp, "%s", buffer);
+                    fprintf(new_output_fp, "%s", last_info);
 #else
-                    strncpy(file_buf, file_buf_size, buffer);
+                    strncpy_n(file_buf, last_info, file_buf_size);
 #endif                   
-                    strncpy(last_info, sizeof(last_info), buffer);
-              
                     return true;
                 }
             }
@@ -429,7 +428,7 @@ static bool print_position_from_addr(const void* addr, unsigned int &line, char 
  *
  * @return      \c false always
  */
-static bool print_position_from_addr(const void* addr, unsigned int &line, char *file_buf, unsigned int file_buf_size)
+bool print_position_from_addr(const void* addr, unsigned int &line, char *file_buf, unsigned int file_buf_size)
 {
     return false;
 }
@@ -519,7 +518,7 @@ static void* alloc_mem(size_t size, const char* file, int line, bool is_array)
         // Just report as info, maybe user has mocked malloc 
         std::ostringstream info;
         info << "Out of memory when allocating " << size << " bytes.";
-        get_info_reporter()->report(get_file_name(file), line, info.str().c_str());
+        get_info_reporter()->report(get_file_name(file, line), line, info.str().c_str());
         return NULL;
         #endif
 #endif
@@ -529,8 +528,7 @@ static void* alloc_mem(size_t size, const char* file, int line, bool is_array)
     ptr->file = file;
 #else
     if (line)
-        strncpy(ptr->file, file, _DEBUG_NEW_FILENAME_LEN - 1)
-                [_DEBUG_NEW_FILENAME_LEN - 1] = '\0';
+        strncpy_n(ptr->file, file, _DEBUG_NEW_FILENAME_LEN);
     else
         ptr->addr = (void*)file;
 #endif
@@ -599,7 +597,7 @@ static void free_pointer(void* pointer, void* addr, bool is_array)
                  << MemAddr(pointer)
                  << SrcAddr(0, 0, addr)
                  << ".";
-            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str());
+            get_failure_reporter()->report(get_file_name(ptr->file, ptr->line), ptr->line, info.str().c_str());
             #endif
         }
         check_mem_corruption();
@@ -724,7 +722,7 @@ int check_leaks()
             info << "warning: heap data corrupt near"
                  << MemAddr((void *)pointer)
                  << ".";            
-            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str()); 
+            get_failure_reporter()->report(get_file_name(ptr->file, ptr->line), ptr->line, info.str().c_str()); 
             #endif
         }
 #if _DEBUG_NEW_TAILCHECK
@@ -739,21 +737,10 @@ int check_leaks()
             info << "warning: overwritten past end of object at"
                  << MemAddr((void *)pointer)
                  << ".";            
-            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str()); 
+            get_failure_reporter()->report(get_file_name(ptr->file, ptr->line), ptr->line, info.str().c_str()); 
             #endif
         }
 #endif
-#ifndef USED_IN_XUNIT
-        fprintf(new_output_fp,
-                "Leaked object at %p (%u bytes, ",
-                pointer,
-                ptr->size);
-        if (ptr->line != 0)
-            print_position(ptr->file, ptr->line);
-        else
-            print_position(ptr->addr, ptr->line);
-        fprintf(new_output_fp, ")\n");
-#else
         if (ptr->need_check)
         {
             ptr->need_check = false; // it's no need to report the second time.
@@ -762,10 +749,11 @@ int check_leaks()
             info << "Leaked object at"
                  << MemAddr((void *)pointer)
                  << MemSize(ptr->size)
-                 << ".";            
-            get_failure_reporter()->report(get_file_name(ptr->file), ptr->line, info.str().c_str());                    
+                 << " [at"
+				 << SrcAddr(ptr->file, ptr->line, ptr->addr)
+                 << "].";            
+            get_failure_reporter()->report(get_file_name(ptr->file, ptr->line), ptr->line, info.str().c_str());                    
         }        
-#endif
         ptr = ptr->next;
         ++leak_cnt;
     }
@@ -847,8 +835,7 @@ void __debug_new_recorder::_M_process(void* pointer)
 #if _DEBUG_NEW_FILENAME_LEN == 0
     ptr->file = _M_file;
 #else
-    strncpy(ptr->file, get_file_name(_M_file), _DEBUG_NEW_FILENAME_LEN - 1)
-            [_DEBUG_NEW_FILENAME_LEN - 1] = '\0';
+    strncpy_n(ptr->file, get_file_name(_M_file, _M_line), _DEBUG_NEW_FILENAME_LEN);
 #endif
     ptr->line = _M_line;
 }
@@ -953,7 +940,7 @@ void operator delete[](void* pointer, const std::nothrow_t&) throw()
 
 extern "C" void *debug_malloc(char *file, unsigned int line, unsigned int size)
 {
-    return alloc_mem(size, get_file_name(file), line, false);
+    return alloc_mem(size, get_file_name(file, line), line, false);
 }
 
 extern "C" void debug_free(void* p)

@@ -14,6 +14,7 @@
  
 #include <mem_checker/interface_4xunit.h>
 #include <mem_checker/reporter.h>
+#include <testngpp/testngpp.h>
 
 extern int check_leaks();
 
@@ -42,7 +43,7 @@ bool needToReport()
     return report_to_xunit;
 }
 
-extern "C" __declspec(dllexport) void startMemChecker
+extern "C" DLL_EXPORT void startMemChecker
     ( mem_checker::Reporter *infoReporter
     , mem_checker::Reporter *failureReporter)
 {
@@ -50,7 +51,7 @@ extern "C" __declspec(dllexport) void startMemChecker
     openMemChecker();
 }
 
-extern "C" __declspec(dllexport) void verifyMemChecker()
+extern "C" DLL_EXPORT void verifyMemChecker()
 {    
     // avoid next testcase report lastcase's mem leaks
     g_need_check = false; // check_leaks may throw exception, so must set g_need_check first.
