@@ -23,7 +23,11 @@
 #ifndef __INTERFACE_4CUSER_H__
 #define __INTERFACE_4CUSER_H__
 
-// TODO: not implement yet
+void *debug_malloc(char *file, unsigned int line, unsigned int size);
+void debug_free(void* p);
+
+#define malloc(size) debug_malloc(__FILE__, __LINE__, size)
+#define free(p)      debug_free(p)
 
 #endif
 

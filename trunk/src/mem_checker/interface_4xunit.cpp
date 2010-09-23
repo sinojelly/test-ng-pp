@@ -35,4 +35,8 @@ extern "C" __declspec(dllexport) void verifyMemChecker()
     g_need_check = false;
 }
 
+extern "C" void stopMemChecker()
+{
+    g_need_check = false;
+}
 

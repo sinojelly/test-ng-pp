@@ -28,6 +28,15 @@
 #include <mem_checker/interface_4cuser.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void stopMemChecker();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
