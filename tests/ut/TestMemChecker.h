@@ -1,9 +1,13 @@
 #include <testngppst/testngppst.hpp>
+#include <mockcpp/mokc.h>
 
 // without this header, can only check memory leak caused by new, and can not specify the allocate file/line.
 // with this header included, can check memory leak caused by new or malloc, and can specify the allocate file/line.
 // maybe test file do not need this file, but including it in files to be tested is very important, especially for c files.
 #include <mem_checker/interface_4user.h>
+
+// mockcpp.lib has been already included in project.
+//#pragma comment(lib, "../3rdparty/mockcpp/src/Debug/mockcpp.lib")
 
 struct Dummy 
 {
@@ -68,6 +72,23 @@ FIXTURE(TestMemChecker)
     {
         //char *p = (char*)mallocInCFile(7);   // should not report memory leak, i have not found a way to implement this testcase yet, but i test in another project.
         //freeInCFile(p);
+    }
+
+    TEST(user can mock malloc)
+    {
+#if 0
+#undef  malloc
+        // TODO: why link error???
+        MOCKER(malloc)
+            .stubs()
+            .will(returnValue(0));
+        ASSERT_EQ((void *)0, malloc(123));
+
+        GlobalMockObject::verify(); // TODO: link error! LNK2019: undefined symbol
+        GlobalMockObject::reset();
+
+#define malloc(size) debug_malloc(__FILE__, __LINE__, size)
+#endif
     }
 };
 

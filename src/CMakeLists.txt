@@ -19,6 +19,11 @@ SET(TESTNGPP_SRCS
   mem_checker/reporter.cpp
 )
 
+# include debug info in testngpp.lib
+IF(MSVC)
+	ADD_DEFINITIONS( /Z7 )
+ENDIF(MSVC)
+
 IF(MSVC)
   ADD_LIBRARY(testngpp STATIC ${TESTNGPP_SRCS})
 ELSE(MSVC)  

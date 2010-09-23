@@ -11,6 +11,7 @@ function export_subdir($subdir)
 }
 
 export_subdir 3rdparty\msinttypes
+export_subdir 3rdparty\mem_checker
 export_subdir include
 export_subdir samples
 export_subdir scripts
