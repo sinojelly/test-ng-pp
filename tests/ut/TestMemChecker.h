@@ -1,4 +1,8 @@
 #include <testngppst/testngppst.hpp>
+
+// without this header, can only check memory leak caused by new, and can not specify the allocate file/line.
+// with this header included, can check memory leak caused by new or malloc, and can specify the allocate file/line.
+// maybe test file do not need this file, but including it in files to be tested is very important, especially for c files.
 #include <mem_checker/interface_4user.h>
 
 struct Dummy 
@@ -27,7 +31,7 @@ FIXTURE(TestMemChecker)
     TEST(should not report memory leak when using placement new)
     {
         char a[10];
-        Dummy *p = new(a) Dummy(); // not report memory leak, only show message :warning: debug_new used with placement new (D:/.../TestMemChecker.h:30)
+        Dummy *p = new(a) Dummy(); // not report memory leak, only show info message :warning: debug_new used with placement new.
     }
 
     TEST(can detect memory leak caused by malloc)
@@ -52,7 +56,7 @@ FIXTURE(TestMemChecker)
         STOP_MEM_CHECKER(); //stopMemChecker();
         char *p = new char[4]; // should not report memory leak
         OPEN_MEM_CHECKER();
-        p = new char[5];
+        p = new char[5];  // should report memory leak
     }
 
     TEST(support checking memory leak in c file when interface_4user.h included in the c file)
@@ -66,3 +70,4 @@ FIXTURE(TestMemChecker)
         //freeInCFile(p);
     }
 };
+

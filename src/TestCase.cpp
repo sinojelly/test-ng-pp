@@ -2,24 +2,55 @@
 #include <testngpp/internal/TestCase.h>
 #include <testngpp/runner/loaders/ModuleLoader.h>
 
-#include <testngpp/internal/Error.h>
 #include <mem_checker/interface_4xunit.h>
+
 
 TESTNGPP_NS_START
 
 namespace
 {
-void reportMemoryLeak(const char *message)
+
+struct Reporter
 {
-    throw Error(message);
-}
+    Reporter(TestFixture *_fixture)
+        : fixture(_fixture)
+    {
+    }
+
+protected:
+    TestFixture *fixture;
+};
+
+struct InfoReporter : public Reporter
+{
+    InfoReporter(TestFixture *_fixture) : Reporter(_fixture) {}
+    
+    void operator ()(const char *file, unsigned int line, const char *message)
+    {
+        fixture->reportInfo(file, line, message);
+    }
+};
+
+struct FailureReporter : public Reporter
+{
+    FailureReporter(TestFixture *_fixture) : Reporter(_fixture) {}
+
+    void operator ()(const char *file, unsigned int line, const char *message)
+    {
+        fixture->reportFailure(file, line, message);
+    }
+};
+
 }
 
 void TestCase::startMemChecker()
 {
-    typedef void (*start_t)(report_t);
+    typedef void (*start_t)(mem_checker::Reporter *, mem_checker::Reporter *);
     start_t starter = (start_t)loader->findSymbol("startMemChecker");
-    starter(reportMemoryLeak);
+
+    TestFixture* fixture = getFixture();
+    starter( mem_checker::createReporter(InfoReporter(fixture))
+           , mem_checker::createReporter(FailureReporter(fixture))); // TODO: Reporter is new in runner.exe, and used in .dll. is this ok?
 }
 
 void TestCase::verifyMemChecker()
