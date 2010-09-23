@@ -40,7 +40,7 @@ struct TestFixture
    //////////////////////////////////////////////
    void reportInfo(const char* file, unsigned int line, const std::string& info);
    void reportWarning(const char* file, unsigned int line, const std::string& warning);
-   void reportFailure(const char* file, unsigned int line, const std::string& failure);
+   void reportFailure(const char* file, unsigned int line, const std::string& failure, bool throwException=true);
 
    //////////////////////////////////////////////
    void setCurrentTestCase(const TestCaseInfoReader*, TestCaseResultCollector*);
