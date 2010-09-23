@@ -40,6 +40,9 @@ INSTALL(DIRECTORY include/testngpp DESTINATION include
           PATTERN "runner" EXCLUDE
           PATTERN "win32" EXCLUDE)
 
+INSTALL(DIRECTORY 3rdparty/mem_checker DESTINATION 3rdparty
+          PATTERN ".svn" EXCLUDE)		  
+		  
 IF(MSVC)
 INSTALL(DIRECTORY 3rdparty/boost DESTINATION 3rdparty
           PATTERN ".svn" EXCLUDE)
