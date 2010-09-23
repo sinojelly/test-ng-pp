@@ -1,5 +1,5 @@
 #include <testngppst/testngppst.hpp>
-//#include <mem_checker/interface_4user.h>
+#include <mem_checker/interface_4user.h>
 
 
 FIXTURE(TestMemChecker)

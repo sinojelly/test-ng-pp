@@ -638,16 +638,16 @@ const char * get_file_name(const char * file)
    {
        return "NULL";
    }
-   const char * p = strstr(file, "\\");
-   const char * q = strstr(file, "/");
+   const char * p = strrchr(file, '\\');
+   const char * q = strrchr(file, '/');
    unsigned int max_ptr = ((unsigned int)p) > ((unsigned int)q) ? (unsigned int)p : (unsigned int)q;
 
    if (max_ptr > 0)
    {
-       return (const char *)max_ptr;
+       return (const char *)(max_ptr + 1);
    }
 
-   return "NULL";
+   return file;
 }
 
 /**
@@ -691,13 +691,13 @@ int check_leaks()
 #else
         if (ptr->need_check)
         {
+            ptr->need_check = false; // it's no need to report the second time.
+
             char message[100];
             sprintf_s(message, sizeof(message), 
                 "Leaked object at %p (size %u, allocated at file %s, line %u)", 
                 pointer, ptr->size, get_file_name(ptr->file), ptr->line);
-            memory_leak_reporter(message);        
-
-            ptr->need_check = false; // it's no need to report the second time.
+            memory_leak_reporter(message);                    
         }        
 #endif
         ptr = ptr->next;
@@ -780,7 +780,7 @@ void __debug_new_recorder::_M_process(void* pointer)
 #if _DEBUG_NEW_FILENAME_LEN == 0
     ptr->file = _M_file;
 #else
-    strncpy(ptr->file, _M_file, _DEBUG_NEW_FILENAME_LEN - 1)
+    strncpy(ptr->file, get_file_name(_M_file), _DEBUG_NEW_FILENAME_LEN - 1)
             [_DEBUG_NEW_FILENAME_LEN - 1] = '\0';
 #endif
     ptr->line = _M_line;
