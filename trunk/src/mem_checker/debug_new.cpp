@@ -300,6 +300,7 @@ FILE* new_output_fp = stderr;
 const char* new_progname = _DEBUG_NEW_PROGNAME;
 
 extern bool needToCheck();
+extern "C" void stopMemChecker();
 
 void file_output_func(const char * file, unsigned int line, const char* message)
 {
@@ -743,7 +744,7 @@ int check_leaks()
 #endif
         if (ptr->need_check)
         {
-            ptr->need_check = false; // it's no need to report the second time.
+            ptr->need_check = false; // it's no need to report the second time.            
 
             std::ostringstream info;
             info << "Leaked object at"
@@ -753,6 +754,9 @@ int check_leaks()
 				 << SrcAddr(ptr->file, ptr->line, ptr->addr)
                  << "].";            
             get_failure_reporter()->report(get_file_name(ptr->file, ptr->line), ptr->line, info.str().c_str());                    
+
+            stopMemChecker(); //after report failure, close reporter, close new mem allocate checker.
+            return (leak_cnt + 1);
         }        
         ptr = ptr->next;
         ++leak_cnt;

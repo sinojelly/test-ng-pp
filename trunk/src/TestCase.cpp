@@ -37,7 +37,7 @@ struct FailureReporter : public Reporter
 
     void operator ()(const char *file, unsigned int line, const char *message)
     {
-        fixture->reportFailure(file, line, message);
+        fixture->reportFailure(file, line, message, false);
     }
 };
 
