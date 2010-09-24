@@ -8,6 +8,6 @@ FIXTURE(MemLeak)
 {
 	TEST(new mem leak)
 	{
-		new char;
+		char *p = new char;
 	}
 };
