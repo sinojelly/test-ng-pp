@@ -126,8 +126,9 @@ std::ostream & operator<<(std::ostream &oss, const MemContent &addr)
 	unsigned int size = addr.maxSize < 10 ? addr.maxSize : 10; // output 10 bytes at most
 	for (unsigned int i = 0; i < size; i++)
 	{
+        unsigned int temp = (((unsigned int)(*((const char *)addr.pointer + i))) & 0xff);
 		oss << std::setw(2) << std::setfill('0') 
-		    << (((unsigned int)(*((const char *)addr.pointer + i))) && 0xff) << " ";
+		    << temp << " ";
 	}
 
 	oss << std::dec << std::resetiosflags(std::ios::uppercase); 

@@ -178,6 +178,7 @@ bool SimpleTestCaseRunner::run
    timeval e = timer.stop();
    smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;
+   delete testcase->getFixture();
 
    __TESTNGPPST_DONE
 
