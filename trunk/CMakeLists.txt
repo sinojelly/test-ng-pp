@@ -39,7 +39,10 @@ INSTALL(DIRECTORY include/testngpp DESTINATION include
           PATTERN "comm" EXCLUDE
           PATTERN "runner" EXCLUDE
           PATTERN "win32" EXCLUDE)
-
+		  
+INSTALL(FILES include/testngpp/runner/loaders/ModuleLoader.h 
+		  DESTINATION include/testngpp/runner/loaders)
+		  
 INSTALL(DIRECTORY 3rdparty/mem_checker DESTINATION 3rdparty
           PATTERN ".svn" EXCLUDE)		  
 		  
