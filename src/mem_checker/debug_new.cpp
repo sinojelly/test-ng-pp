@@ -494,7 +494,7 @@ static bool check_tail(new_ptr_list_t* ptr)
  * @return          pointer to the user-requested memory area; \c NULL
  *                  if memory allocation is not successful
  */
-static void* alloc_mem(size_t size, const char* file, int line, bool is_array)
+/*static*/ void* alloc_mem(size_t size, const char* file, int line, bool is_array)
 {
     assert(line >= 0);
     STATIC_ASSERT((_DEBUG_NEW_ALIGNMENT & (_DEBUG_NEW_ALIGNMENT - 1)) == 0,
@@ -602,9 +602,7 @@ static void free_pointer(void* pointer, void* addr, bool is_array)
         }
         check_mem_corruption();
         fflush(new_output_fp);
-#ifndef USED_IN_XUNIT
         _DEBUG_NEW_ERROR_ACTION;
-#endif
     }
     if (is_array != ptr->is_array)
     {
@@ -754,6 +752,7 @@ int check_leaks()
                 info << "Leaked object at"
                      << MemAddr((void *)pointer)
                      << MemSize(ptr->size)
+                     << " [content " << MemContent(pointer, ptr->size) << "]"
                      << " [at"
     				 << SrcAddr(ptr->file, ptr->line, ptr->addr)
                      << "].";            

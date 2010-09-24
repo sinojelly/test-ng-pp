@@ -23,7 +23,7 @@ FIXTURE(TestMemChecker)
 
 	TEST(can detect memory leak caused by new operator)
 	{
-		char *p = new char[10]; // should report memory leak
+		unsigned char *p = new unsigned char[10]; // should report memory leak
 		
 		*p = 0xff;
         *(p+1) = 0xfe;
