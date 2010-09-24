@@ -602,7 +602,9 @@ static void free_pointer(void* pointer, void* addr, bool is_array)
         }
         check_mem_corruption();
         fflush(new_output_fp);
+#ifndef USED_IN_XUNIT
         _DEBUG_NEW_ERROR_ACTION;
+#endif
     }
     if (is_array != ptr->is_array)
     {
@@ -826,7 +828,8 @@ int check_mem_corruption()
             corrupt_cnt);
     return corrupt_cnt;
 }
-
+//#define NOT_USE_MEM_CHECKER
+#ifndef NOT_USE_MEM_CHECKER 
 void __debug_new_recorder::_M_process(void* pointer)
 {
     if (pointer == NULL)
@@ -957,6 +960,8 @@ extern "C" void debug_free(void* p)
 {
     free_pointer(p, _DEBUG_NEW_CALLER_ADDRESS, false);
 }
+
+#endif //NOT_USE_MEM_CHECKER
 
 int __debug_new_counter::_S_count = 0;
 

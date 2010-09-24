@@ -67,7 +67,7 @@ public:
 
       TESTNGPPST_VERIFY_RESOURCE_CHECK_POINT(checkpoint);
    }
-/*
+
    void testShouldMatchesAFixutreIfAnyOfAddedFiltersMatchesIt()
    {
       filter2.METHOD(TestFilter::isFixtureMatch)
@@ -93,7 +93,7 @@ public:
 
       TS_ASSERT(filter->isCaseMatch(tc));
    }
-*/
+
    void testShouldNotMatchATestcaseIfAllAddedFiltersClaimsNotMatch()
    {
       const TestCase* tc = (const TestCase*)(const TestCaseInfoReader*)testcase;
