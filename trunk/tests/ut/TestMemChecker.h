@@ -24,6 +24,14 @@ FIXTURE(TestMemChecker)
 	TEST(can detect memory leak caused by new operator)
 	{
 		char *p = new char[10]; // should report memory leak
+		
+		*p = 0xff;
+        *(p+1) = 0xfe;
+        *(p+2) = 0x13;
+        *(p+3) = 0x21;
+        *(p+4) = 0x00;
+        *(p+5) = 0x01;
+        *(p+6) = 0x08;
 	}
 
     TEST(no memory leaked after delete)
