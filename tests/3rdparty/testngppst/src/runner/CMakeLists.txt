@@ -176,3 +176,6 @@ INSTALL(
    TARGETS testngppst-runner
    RUNTIME DESTINATION bin)
 
+IF(UNIX)
+ADD_DEFINITIONS(-g -ggdb)
+ENDIF(UNIX)

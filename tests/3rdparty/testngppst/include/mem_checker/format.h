@@ -88,6 +88,19 @@ private:
 	char last_info[256];
 };
 
+struct MemContent
+{
+	explicit MemContent(const void* _pointer, unsigned int _maxSize)
+		: pointer(_pointer), maxSize(_maxSize)
+	{
+	}
+
+	friend std::ostream & operator<<(std::ostream &oss, const MemContent &pointer);
+private:
+	const void* pointer;
+	unsigned int maxSize;
+};
+
 std::ostream & operator<<(std::ostream &oss, const MemAddr &pointer)
 {
 	oss << POINTER(pointer.pointer);
@@ -103,6 +116,22 @@ std::ostream & operator<<(std::ostream &oss, const MemSize &size)
 std::ostream & operator<<(std::ostream &oss, const SrcAddr &addr)
 {
 	oss << FILE_LINE(addr.file, addr.line);
+	return oss;
+}
+
+std::ostream & operator<<(std::ostream &oss, const MemContent &addr)
+{
+	oss << std::hex << std::setiosflags(std::ios::uppercase);
+	
+	unsigned int size = addr.maxSize < 10 ? addr.maxSize : 10; // output 10 bytes at most
+	for (unsigned int i = 0; i < size; i++)
+	{
+		oss << std::setw(2) << std::setfill('0') 
+		    << (((unsigned int)(*((const char *)addr.pointer + i))) && 0xff) << " ";
+	}
+
+	oss << std::dec << std::resetiosflags(std::ios::uppercase); 
+
 	return oss;
 }
 
