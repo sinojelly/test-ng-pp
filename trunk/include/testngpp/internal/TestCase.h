@@ -82,7 +82,7 @@ struct TestCase
       TestFixture * fixture = getFixture();
       fixture->tearDown();
       verifyMemChecker(); // must before delete fixture	  
-      delete fixture;	  
+      //delete fixture;	  // when test case run finish, there is a delete, this is duplicate.
    }
 
    void run()
