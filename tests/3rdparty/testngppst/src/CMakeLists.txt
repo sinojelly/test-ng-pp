@@ -46,6 +46,7 @@ SET(TESTNGPPST_SRCS
   mem_checker/static_mem_pool.cpp
   mem_checker/interface_4xunit.cpp
   mem_checker/reporter.cpp
+  mem_checker/check_status.cpp
 )
 
 IF(NOT TESTNGPPST_DISABLE_RC)

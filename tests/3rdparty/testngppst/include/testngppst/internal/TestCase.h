@@ -24,10 +24,12 @@
 
 #include <testngppst/internal/TestCaseInfoReader.h>
 #include <testngppst/TestFixture.h>
+#include <testngppst/runner/loaders/ModuleLoader.h>
+
 
 TESTNGPPST_NS_START
 
-struct ModuleLoader;
+//struct ModuleLoader;
 
 struct TestCase
    : public TestCaseInfoReader
@@ -106,8 +108,14 @@ struct TestCase
    }
 
 private:
-   void startMemChecker();   
-   void verifyMemChecker();
+   void startMemChecker();  
+public:
+   void verifyMemChecker()
+   {    
+     	typedef void (*verify_t)(void);    
+    	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
+    	verifier(); 
+   }
 
 private:
 

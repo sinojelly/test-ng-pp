@@ -121,6 +121,24 @@ namespace
       std::string suite;
       StateTitle result;
    };
+
+    const char * get_file_name(const char * file)
+    {
+        if (0 == file)
+        {
+           return "NULL";
+        }
+        const char * p = strrchr(file, '\\');
+        const char * q = strrchr(file, '/');
+        unsigned int max_ptr = ((unsigned int)p) > ((unsigned int)q) ? (unsigned int)p : (unsigned int)q;
+
+        if (max_ptr > 0)
+        {
+           return (const char *)(max_ptr + 1);
+        }
+
+        return file;
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -185,6 +203,7 @@ private:
          ( const TestCaseInfoReader* testcase
          , const State& state
          , StateTitle result
+         , const std::string& file
          , unsigned int line
          , const std::string& msg);
 
@@ -203,6 +222,7 @@ private:
    void reportCaseFailure
             ( const TestCaseInfoReader* testcase
             , StateTitle title
+            , const std::string& file
             , unsigned int line
             , const std::string& msg);
 
@@ -356,6 +376,7 @@ reportCaseMessage
       ( const TestCaseInfoReader* testcase
       , const State& state
       , StateTitle title
+      , const std::string& file
       , unsigned int line
       , const std::string& msg)
 {
@@ -386,7 +407,7 @@ reportCaseMessage
       }
 
       std::cout
-         << testcase->getFileName()
+         << get_file_name(file.c_str())  //testcase->getFileName()
          << ":"
          << line
          << ": "
@@ -409,6 +430,7 @@ outputCaseState
          ( testcase
          , state
          , title
+         , ""
          , 0
          , "");
 }
@@ -447,7 +469,7 @@ reportCaseMessage
       , StateTitle title
       , const std::string& msg)
 {
-   reportCaseMessage(testcase, state, title, testcase->getLineOfFile(), msg);
+   reportCaseMessage(testcase, state, title, testcase->getFileName(), testcase->getLineOfFile(), msg);
 }
 
 ///////////////////////////////////////////////////////////
@@ -467,6 +489,7 @@ StdoutTestListener::
 reportCaseFailure
       ( const TestCaseInfoReader* testcase
       , StateTitle title
+      , const std::string& file
       , unsigned int line
       , const std::string& msg)
 {
@@ -474,6 +497,7 @@ reportCaseFailure
          ( testcase
          , fail
          , title
+         , file
          , line
          , msg);
 }
@@ -525,6 +549,7 @@ addCaseFailure
    reportCaseFailure
       ( testcase
       , ST_FAILED
+      , failure.getFileName()
       , failure.getLineOfFile()
       , failure.what());
 }
@@ -541,6 +566,7 @@ addCaseWarning(const TestCaseInfoReader* testcase, const Warning& warning)
       ( testcase
       , warn
       , ST_WARNING
+      , warning.getFileName()
       , warning.getLineOfFile()
       , warning.what());
 }
@@ -557,6 +583,7 @@ addCaseInfo(const TestCaseInfoReader* testcase, const Info& msg)
       ( testcase
       , debug
       , ST_INFO
+      , msg.getFileName()
       , msg.getLineOfFile()
       , msg.what());
 }
