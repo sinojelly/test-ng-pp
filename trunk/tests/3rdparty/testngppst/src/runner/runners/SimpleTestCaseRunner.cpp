@@ -119,7 +119,7 @@ int win32TryToRunTest
 		return runTest(testcase, collector) ? 0:1;
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
-	{
+	{        
 		return ::GetExceptionCode();
 	}
 
@@ -174,6 +174,7 @@ bool SimpleTestCaseRunner::run
 
    __TESTNGPPST_CLEANUP
 
+   testcase->verifyMemChecker(); // avoid affecting the following testcase.
    timeval e = timer.stop();
    smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;

@@ -32,9 +32,9 @@ build ..\build_tests ..\trunk\tests
 #---------------------------------
 # run all tests
 cd ..\build_tests\ut\Debug
-cp ..\..\..\build_testngpp\src\listeners\Debug\testngppstdoutlistener.dll .
-$ALL_DLL=(ls *.dll -name)-replace ".dll" | where {$_ -ne "testngppstdoutlistener"}
-..\..\..\build_testngppst\src\runner\Debug\testngppst-runner.exe $ALL_DLL -L"..\..\..\build_testngpp\src\listeners\Debug" -l"testngppstdoutlistener -c -f" -s
+cp ..\..\..\build_testngppst\src\listeners\Debug\testngppststdoutlistener.dll .
+$ALL_DLL=(ls *.dll -name)-replace ".dll" | where {$_ -ne "testngppststdoutlistener"}
+..\..\..\build_testngppst\src\runner\Debug\testngppst-runner.exe $ALL_DLL -L"..\..\..\build_testngppst\src\listeners\Debug" -l"testngppststdoutlistener -c -f" -s
 cd ..\..\..\trunk
 
 

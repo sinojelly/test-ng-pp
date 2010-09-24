@@ -53,6 +53,7 @@
 #include <mem_checker/interface_4xunit.h>
 #include <mem_checker/reporter.h>
 #include <mem_checker/format.h>
+#include <mem_checker/check_status.h>
 
 
 
@@ -224,7 +225,7 @@ struct new_ptr_list_t
     unsigned            line      :31;
     unsigned            is_array  :1;
     unsigned            magic;
-    bool                need_check;
+    unsigned int        check_status;
 };
 
 /**
@@ -299,8 +300,6 @@ FILE* new_output_fp = stderr;
  */
 const char* new_progname = _DEBUG_NEW_PROGNAME;
 
-extern bool needToCheck();
-extern "C" void stopMemChecker();
 
 void file_output_func(const char * file, unsigned int line, const char* message)
 {
@@ -537,7 +536,7 @@ static void* alloc_mem(size_t size, const char* file, int line, bool is_array)
     ptr->is_array = is_array;
     ptr->size = size;
     ptr->magic = MAGIC;
-    ptr->need_check = needToCheck();
+    ptr->check_status = getCheckStatus();
     {
         fast_mutex_autolock lock(new_ptr_lock);
         ptr->prev = new_ptr_list.prev;
@@ -706,6 +705,7 @@ void clear_all_allocate_info()
 int check_leaks()
 {
     int leak_cnt = 0;
+    unsigned int print_count_this_time = 0;
     fast_mutex_autolock lock_ptr(new_ptr_lock);
     fast_mutex_autolock lock_output(new_output_lock);
     new_ptr_list_t* ptr = new_ptr_list.next;
@@ -742,29 +742,35 @@ int check_leaks()
             #endif
         }
 #endif
-        if (ptr->need_check)
+        if (matchCheckStatus(ptr->check_status))
         {
-            ptr->need_check = false; // it's no need to report the second time.            
+            ptr->check_status = nullCheckStatus(); // it's no need to report the second time.            
 
-            std::ostringstream info;
-            info << "Leaked object at"
-                 << MemAddr((void *)pointer)
-                 << MemSize(ptr->size)
-                 << " [at"
-				 << SrcAddr(ptr->file, ptr->line, ptr->addr)
-                 << "].";            
-            get_failure_reporter()->report(get_file_name(ptr->file, ptr->line), ptr->line, info.str().c_str());                    
-
-            stopMemChecker(); //after report failure, close reporter, close new mem allocate checker.
-            return (leak_cnt + 1);
+            if (print_count_this_time++ < 10) // only print 10 leaks one time
+            {
+                std::ostringstream info;
+                info << "Leaked object at"
+                     << MemAddr((void *)pointer)
+                     << MemSize(ptr->size)
+                     << " [at"
+    				 << SrcAddr(ptr->file, ptr->line, ptr->addr)
+                     << "].";            
+                get_failure_reporter()->report(get_file_name(ptr->file, ptr->line), ptr->line, info.str().c_str()); 
+            }
+            ++leak_cnt;            
         }        
         ptr = ptr->next;
-        ++leak_cnt;
     }
-#ifndef USED_IN_XUNIT
+
     if (new_verbose_flag || leak_cnt)
-        fprintf(new_output_fp, "*** %d leaks found\n", leak_cnt);
-#endif
+    {
+        std::ostringstream info;
+        info << leak_cnt << " leak(s) found.";
+        get_info_reporter()->report(get_file_name(__FILE__, __LINE__), __LINE__, info.str().c_str());
+    }
+    
+    clearCheckStatus();
+    
     return leak_cnt;
 }
 

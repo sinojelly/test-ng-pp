@@ -24,10 +24,11 @@
 
 #include <testngpp/internal/TestCaseInfoReader.h>
 #include <testngpp/TestFixture.h>
+#include <testngpp/runner/loaders/ModuleLoader.h>
 
 TESTNGPP_NS_START
 
-struct ModuleLoader;
+//struct ModuleLoader;
 
 struct TestCase
    : public TestCaseInfoReader
@@ -80,8 +81,8 @@ struct TestCase
    {
       TestFixture * fixture = getFixture();
       fixture->tearDown();
-      delete fixture;
-      verifyMemChecker();	  
+      verifyMemChecker(); // must before delete fixture	  
+      delete fixture;	  
    }
 
    void run()
@@ -106,8 +107,14 @@ struct TestCase
    }
 
 private:
-   void startMemChecker();   
-   void verifyMemChecker();
+   void startMemChecker();  
+public:
+   void verifyMemChecker()
+   {    
+     	typedef void (*verify_t)(void);    
+    	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
+    	verifier(); 
+   }
 
 private:
 

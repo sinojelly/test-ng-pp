@@ -63,6 +63,12 @@ FIXTURE(TestMemChecker)
         p = new char[5];  // should report memory leak
     }
 
+    TEST(can report more than one leak)
+    {
+        char *p = new char[4]; // should not report memory leak     
+        p = new char[5];  // should report memory leak
+    }
+
     TEST(support checking memory leak in c file when interface_4user.h included in the c file)
     {
         //char *p = (char*)mallocInCFile(7);   // should report memory leak, i have not found a way to implement this testcase yet, but i test in another project.

@@ -32,8 +32,8 @@ struct HwExceptionEntry
 static HwExceptionEntry hwExceptionTable[] =
 {
 	HW_EXCEPTION(STATUS_GUARD_PAGE_VIOLATION),
-   HW_EXCEPTION(STATUS_ACCESS_VIOLATION),
-   HW_EXCEPTION(STATUS_IN_PAGE_ERROR),
+    HW_EXCEPTION(STATUS_ACCESS_VIOLATION),
+    HW_EXCEPTION(STATUS_IN_PAGE_ERROR),
 	HW_EXCEPTION(STATUS_INVALID_HANDLE),
 	HW_EXCEPTION(STATUS_NO_MEMORY),
 	HW_EXCEPTION(STATUS_ILLEGAL_INSTRUCTION),
@@ -119,7 +119,7 @@ int win32TryToRunTest
 		return runTest(testcase, collector) ? 0:1;
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
-	{
+	{        
 		return ::GetExceptionCode();
 	}
 
@@ -174,6 +174,7 @@ bool SimpleTestCaseRunner::run
 
    __TESTNGPP_CLEANUP
 
+   testcase->verifyMemChecker(); // avoid affecting the following testcase.
    timeval e = timer.stop();
    smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;

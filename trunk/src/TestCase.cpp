@@ -53,12 +53,12 @@ void TestCase::startMemChecker()
            , mem_checker::createReporter(FailureReporter(fixture))); // TODO: Reporter is new in runner.exe, and used in .dll. is this ok?
 }
 
-void TestCase::verifyMemChecker()
-{
-    typedef void (*verify_t)(void);
-    verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");
-    verifier(); 
-}
+//void TestCase::verifyMemChecker()
+//{
+//    typedef void (*verify_t)(void);
+//    verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");
+//    verifier(); 
+//}
 
 
 TESTNGPP_NS_END
