@@ -86,7 +86,8 @@ def generate(argv):
    if target_dir != None:
       if not os.path.exists(target_dir) :
          os.makedirs(target_dir)
-      for fixture in fixtures:
+      while (fixtures != []) :
+         fixture = fixtures.pop()
          absFixtures = []
          h_file_path=fixture
          if not os.path.isabs(fixture):
@@ -97,7 +98,7 @@ def generate(argv):
          cpp_file_path = os.path.join(target_dir, cpp_file)
          if newerThan(cpp_file_path, h_file_path) :
             continue
-         process(cpp_file_path, absFixtures, inputEncoding, encoding)
+         process(cpp_file_path, absFixtures, inputEncoding, encoding, fixtures != [])
       return
 
    if target == None:
