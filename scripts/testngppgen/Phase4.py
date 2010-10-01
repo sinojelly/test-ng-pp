@@ -9,6 +9,10 @@ from TestCase import TestCase
 from Fixture import Fixture
 from Name import *
 
+
+################################################
+fixtureDescs = []
+
 ################################################
 def output(content, file):
    if file == None:
@@ -68,7 +72,7 @@ def get_testcase_tags(testcase, fixture):
 
 ################################################
 testcase_template = '''
-static struct %s 
+static struct %s
    : public TESTNGPP_NS::TestCase
 {
    %s()
@@ -115,7 +119,7 @@ static struct %s
    }
 
 private:
-   %s* belongedFixture; 
+   %s* belongedFixture;
 } %s ;
 
 '''
@@ -135,7 +139,7 @@ class TestCaseDefGenerator:
       self.fixture = fixture
       self.testcase = testcase
       self.file = file
-      self.suite = suite 
+      self.suite = suite
 
    #############################################
    def __generate_p_test(self, name, index, group):
@@ -179,7 +183,7 @@ class TestCaseDefGenerator:
 
    #############################################
    def __generate(self):
-      if self.testcase.is_p_test(): 
+      if self.testcase.is_p_test():
          self.__generate_p_tests()
          return
 
@@ -200,7 +204,7 @@ class TestCaseDefGenerator:
 
       self.__generate()
       self.testcase.mark_as_generated()
-         
+
 ################################################
 def get_testcase_array_var(fixture):
    return "g_TESTCASEARRAY_" + get_fixture_id(fixture)
@@ -228,7 +232,7 @@ class TestCaseArrayGenerator:
 
    #############################################
    def generate(self):
-      if self.testcase.is_p_test(): 
+      if self.testcase.is_p_test():
          self.__generate_p_tests()
          return
 
@@ -250,8 +254,8 @@ class TestCaseDependsVerifier:
         temp = temp.get_depends()
         if temp == depends:
            self.testcase.report_cyclic_depend_error()
-     
-      if not self.testcase.is_p_test(): 
+
+      if not self.testcase.is_p_test():
          return
 
       data_provider = self.fixture.find_data_provider(self.testcase.get_data_provider_name())
@@ -313,10 +317,10 @@ class FixtureGenerator:
    def generate(self):
       self.generate_testcases()
       self.generate_testcase_array()
-      
+
 ################################################
 fixture_desc_template = '''
-static TESTNGPP_NS::TestFixtureDesc %s
+/*static*/ TESTNGPP_NS::TestFixtureDesc %s
    ( "%s"
    , "%s"
    , %s
@@ -327,10 +331,11 @@ static TESTNGPP_NS::TestFixtureDesc %s
 ################################################
 class FixtureDescGenerator:
    #############################################
-   def __init__(self, file, fixture):
+   def __init__(self, file, fixture, recordFixture = False):
       self.fixture = fixture
       self.file = file
-   
+      self.recordFixture = recordFixture
+
    #############################################
    def generate(self):
       fixture_desc_def = fixture_desc_template % ( \
@@ -342,6 +347,10 @@ class FixtureDescGenerator:
           get_testcase_array_var(self.fixture) )
 
       output(fixture_desc_def, self.file)
+
+      if self.recordFixture :
+          global fixtureDescs
+          fixtureDescs.append(get_fixture_desc_var(self.fixture))
 
 ################################################
 class FixtureDescArrayGenerator:
@@ -414,7 +423,7 @@ class ScopesGenerator:
    def generate(self, generator_getter):
       for scope in self.scopes:
           ScopeGenerator(scope, self.file, self.cls, generator_getter).generate()
-     
+
 ################################################
 def get_suite_desc_name(suite):
    return "test_suite_desc_instance_" + suite
@@ -458,11 +467,12 @@ extern "C" DLL_EXPORT TESTNGPP_NS::TestSuiteDesc* %s() {
 ################################################
 class SuiteGenerator:
    #############################################
-   def __init__(self, scopes, file, suite, fixture_files):
+   def __init__(self, scopes, file, suite, fixture_files, recordFixture = False):
       self.scopes = scopes
       self.suite = suite
       self.file = file
       self.fixture_files = fixture_files
+      self.recordFixture = recordFixture
 
    #############################################
    def generate_fixtures(self):
@@ -472,7 +482,7 @@ class SuiteGenerator:
    #############################################
    def generate_fixture_descs(self):
       ScopesGenerator(self.scopes, self.file, Fixture) \
-         .generate(lambda file, elem: FixtureDescGenerator(file, elem) )
+         .generate(lambda file, elem: FixtureDescGenerator(file, elem, self.recordFixture) )
 
    #############################################
    def generate_fixture_desc_array(self):
@@ -481,9 +491,17 @@ class SuiteGenerator:
 
    #############################################
    def generate_fixture_array(self):
+      global fixtureDescs
+      if not self.recordFixture :
+          for fixtureDesc in fixtureDescs :
+             output("extern TESTNGPP_NS::TestFixtureDesc "+fixtureDesc+";", self.file)
       fixture_array_def = fixture_array_template_begin % (get_fixture_array_name(self.suite))
       output(fixture_array_def, self.file)
       self.generate_fixture_desc_array()
+      if not self.recordFixture :
+          # output recorded fixture descs
+          for fixtureDesc in fixtureDescs :
+             output("&"+fixtureDesc+",", self.file)
       output(array_template_end, self.file)
 
    #############################################
@@ -522,7 +540,8 @@ class SuiteGenerator:
       self.generate_fixture_descs()
       self.generate_fixture_array()
       self.generate_suite_desc()
-      self.generate_suite_getter()
+      if not self.recordFixture :
+          self.generate_suite_getter()
 
 ################################################
 def verify_testcase_deps(scopes):
@@ -530,7 +549,7 @@ def verify_testcase_deps(scopes):
          .generate(lambda file, elem: TestCaseSeeker(elem) )
 
 ################################################
-def phase4(fixture_files, target, scopes, encoding):
+def phase4(fixture_files, target, scopes, encoding, recordFixture = False):
    verify_testcase_deps(scopes)
 
    try:
@@ -543,8 +562,9 @@ def phase4(fixture_files, target, scopes, encoding):
    global output_encoding
    output_encoding = encoding
 
-   SuiteGenerator(scopes, file, get_base_name(target), fixture_files).generate()
+   SuiteGenerator(scopes, file, get_base_name(target), fixture_files, recordFixture).generate()
 
    file.close()
+
 
 ################################################
