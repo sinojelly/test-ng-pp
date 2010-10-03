@@ -13,6 +13,7 @@ $env:path=$env:path+";D:\Tools\CMD\cmake-2.8.1-win32-x86\bin"
 
 # specify the Visual Studio Version, not set to use default
 $VC_VER="-G `"Visual Studio 9 2008`""
+#$VC_VER="-G `"Visual Studio 10`""
 
 # build Debug only
 $env:VCBUILD_DEFAULT_CFG="Debug|Win32"
@@ -25,8 +26,8 @@ function build($build_dir, $src_dir) {
 	vcbuild INSTALL.vcproj
 }
 
-build ..\build_testngpp_to_install ..\trunk
+build ..\build_testngpp_to_install ..\test-ng-pp
 
-cd ..\trunk
+cd ..\test-ng-pp
 
 
