@@ -22,11 +22,11 @@ function build($build_dir, $src_dir) {
 	ls *.sln -name | vcbuild
 }
 
-build ..\build_testngpp ..\trunk
+build ..\build_testngpp ..\test-ng-pp
 
-build ..\build_testngppst ..\trunk\tests\3rdparty\testngppst
+build ..\build_testngppst ..\test-ng-pp\tests\3rdparty\testngppst
 
-build ..\build_tests ..\trunk\tests
+build ..\build_tests ..\test-ng-pp\tests
 
 
 #---------------------------------
@@ -35,6 +35,6 @@ cd ..\build_tests\ut\Debug
 cp ..\..\..\build_testngppst\src\listeners\Debug\testngppststdoutlistener.dll .
 $ALL_DLL=(ls *.dll -name)-replace ".dll" | where {$_ -ne "testngppststdoutlistener"}
 ..\..\..\build_testngppst\src\runner\Debug\testngppst-runner.exe $ALL_DLL -L"..\..\..\build_testngppst\src\listeners\Debug" -l"testngppststdoutlistener -c -f" -s
-cd ..\..\..\trunk
+cd ..\..\..\test-ng-pp
 
 

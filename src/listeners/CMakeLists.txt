@@ -8,7 +8,7 @@ ADD_DEFINITIONS(
     -DVERSION=${VERSION}
 )
 
-SET(TESTNGPP_LIBRARY testngpp-except testngpp-utils)
+SET(TESTNGPP_LIBRARY testngpp-except testngpp-utils mem-checker)
 
 IF(CMAKE_SYSTEM_NAME MATCHES Linux)
   IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -25,7 +25,7 @@ SET(XMLLISTENER_SRCS
   XMLBuilder.cpp
 )
 
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src ${CMAKE_BINARY_DIR}/src/utils)
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src ${CMAKE_BINARY_DIR}/src/utils ${CMAKE_BINARY_DIR}/src/mem_checker)
 
 ADD_LIBRARY(testngppstdoutlistener MODULE ${STDOUTLISTENER_SRCS})
 ADD_LIBRARY(testngppxmllistener MODULE ${XMLLISTENER_SRCS})
