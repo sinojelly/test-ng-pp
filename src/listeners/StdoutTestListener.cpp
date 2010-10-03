@@ -1,5 +1,4 @@
 
-#include <string.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -123,23 +122,15 @@ namespace
       StateTitle result;
    };
 
-    const char * get_file_name(const char * file)
-    {
-        if (0 == file)
-        {
-           return "NULL";
-        }
-        const char * p = strrchr(file, '\\');
-        const char * q = strrchr(file, '/');
-        unsigned int max_ptr = ((unsigned int)p) > ((unsigned int)q) ? (unsigned int)p : (unsigned int)q;
-
-        if (max_ptr > 0)
-        {
-           return (const char *)(max_ptr + 1);
-        }
-
-        return file;
-    }
+   std::string getFileName(std::string file)
+   {
+       if (file == "")
+       {
+          return "NULL";
+       }
+   
+       return file.substr(file.find_last_of("/\\")  + 1);
+   }
 }
 
 ///////////////////////////////////////////////////////////
@@ -408,7 +399,7 @@ reportCaseMessage
       }
 
       std::cout
-         << get_file_name(file.c_str())  //testcase->getFileName()
+         << getFileName(file)  //testcase->getFileName()
          << ":"
          << line
          << ": "
