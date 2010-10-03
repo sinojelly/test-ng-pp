@@ -222,7 +222,10 @@
 #       endif
             ::EnterCriticalSection(&_M_mtx_impl);
 #       ifdef _DEBUG
+			// VS2010 not check locked, or else throw exception in check_leaks()
+            #if !(defined(_MSC_VER) && _MSC_VER >= 1600)
             _FAST_MUTEX_ASSERT(!_M_locked, "lock(): already locked");
+			#endif
             _M_locked = true;
 #       endif
         }
@@ -233,7 +236,10 @@
                 return;
 #       endif
 #       ifdef _DEBUG
+			// VS2010 not check locked, or else throw exception in check_leaks()
+            #if !(defined(_MSC_VER) && _MSC_VER >= 1600)
             _FAST_MUTEX_ASSERT(_M_locked, "unlock(): not locked");
+			#endif
             _M_locked = false;
 #       endif
             ::LeaveCriticalSection(&_M_mtx_impl);
