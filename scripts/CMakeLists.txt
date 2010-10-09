@@ -44,6 +44,7 @@ SET(PYC_FILES
   ${THIS_DIR}/testngppgen/TestCase.pyc
   ${THIS_DIR}/testngppgen/TestCaseParser.pyc
   ${THIS_DIR}/testngppgen/TestScope.pyc
+  ${THIS_DIR}/testngppgen/Output.pyc
   ${THIS_DIR}/testngppgen/__init__.pyc)
 
 FILE(REMOVE ${PYC_FILES})
