@@ -5,6 +5,8 @@ import os
 
 from Process import process
 
+import Output
+
 ##########################################################
 class LongOptString:
    def __init__(self, optString, example):
@@ -63,6 +65,40 @@ def newerThan(file1, file2):
              return True
     return False
 
+
+##########################################################
+# because of adding fixture to exist file, so the last file must be always updated
+# or else you may detect that when you add a new file, and it may be the new end file by chance, but the last end file not updated.
+# so you'll get link error, because of the duplication of ___testngpp_test_suite_desc_getter.
+def processEndFile(target_dir, cpp_file, isEnd):
+    if isEnd :
+        cpp_file_path = os.path.join(target_dir, cpp_file)
+        if os.path.exists(cpp_file_path):
+            os.remove(cpp_file_path)  # remove old .cpp file (not end file)
+        cpp_file = cpp_file.replace('.cpp', '.cxx')
+        cpp_file_path = os.path.join(target_dir, cpp_file)
+        if os.path.exists(cpp_file_path):
+            os.remove(cpp_file_path)  # new end file meets old end file, still remove old end file
+    else :
+        cpp_file_temp = cpp_file.replace('.cpp', '.cxx')
+        cpp_file_path = os.path.join(target_dir, cpp_file_temp)
+        if os.path.exists(cpp_file_path):
+            os.remove(cpp_file_path)  # remove old .cxx file (end file)
+        cpp_file_path = os.path.join(target_dir, cpp_file)
+
+    return cpp_file_path
+
+#           new.cpp   new.cxx
+# old.cpp     1         23
+# old.cxx     13        23
+
+#  1 -- return cpp
+#  2 -- return cxx
+#  3 -- remove old
+
+# now, there is only one testcase not processed, that is remove a test.h, the tool will not remove test.cpp
+
+
 ##########################################################
 def generate(argv):
    optlist, fixtures = getOpt(longOpts, argv)
@@ -95,10 +131,18 @@ def generate(argv):
          absFixtures.append(h_file_path)
          h_file = os.path.basename(fixture)
          cpp_file = h_file.replace('.h', '.cpp')
-         cpp_file_path = os.path.join(target_dir, cpp_file)
-         if newerThan(cpp_file_path, h_file_path) :
-            continue
-         process(cpp_file_path, absFixtures, inputEncoding, encoding, fixtures != [])
+
+         theEnd = (fixtures == [])
+         if cpp_file == '':
+             continue
+         cpp_file_path = processEndFile(target_dir, cpp_file, theEnd)
+
+         if newerThan(cpp_file_path, h_file_path) and (not theEnd):
+            Output.output = Output.output2null   # output nothing, but record fixtureDescs.
+         else :
+            Output.output = Output.output2file
+
+         process(cpp_file_path, absFixtures, inputEncoding, encoding, not theEnd)
       return
 
    if target == None:
