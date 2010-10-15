@@ -746,7 +746,7 @@ int check_leaks()
         {
             ptr->check_status = nullCheckStatus(); // it's no need to report the second time.            
 
-            if (print_count_this_time++ < 10) // only print 10 leaks one time
+            if (print_count_this_time++ < REPORT_MEM_LEAK_NUM) 
             {
                 std::ostringstream info;
                 info << "Leaked object at"

@@ -178,7 +178,7 @@ bool SimpleTestCaseRunner::run
    timeval e = timer.stop();
    smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;
-   delete testcase->getFixture();
+   //delete testcase->getFixture(); // when test case run finish, there is a delete in tearDown, this is duplicate.
 
    __TESTNGPP_DONE
 

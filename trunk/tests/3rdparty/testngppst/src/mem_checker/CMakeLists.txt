@@ -1,14 +1,25 @@
 
-#this file is not used, these files are included in testngpp.lib CMakeLists.txt directily.
+IF(MSVC)
+  ADD_DEFINITIONS( -D_CRT_SECURE_NO_WARNINGS )
+ENDIF(MSVC)
 
-SET(SRC_LIST	
-	bool_array.cpp       
-	mem_pool_base.cpp
-	debug_new.cpp        
-	static_mem_pool.cpp
-	interface_4xunit.cpp
-	reporter.cpp)
+SET(TESTNGPP_SRCS
+  bool_array.cpp       
+  mem_pool_base.cpp
+  debug_new.cpp        
+  static_mem_pool.cpp
+  interface_4xunit.cpp
+  reporter.cpp
+  check_status.cpp
+)
 
-	
+# include debug info in testngpp.lib
+IF(MSVC)
+	ADD_DEFINITIONS( /Z7 )
+ENDIF(MSVC)
 
-ADD_LIBRARY(mem_checker ${SRC_LIST})
+ADD_LIBRARY(mem-checker STATIC ${TESTNGPP_SRCS})
+
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/3rdparty)
+
+

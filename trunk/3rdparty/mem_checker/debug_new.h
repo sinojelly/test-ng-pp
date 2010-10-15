@@ -85,6 +85,13 @@
 #define _DEBUG_NEW_REDEFINE_NEW 1
 #endif
 
+/*
+ * the num of mem leaks to report each time.
+*/
+#ifndef REPORT_MEM_LEAK_NUM
+#define REPORT_MEM_LEAK_NUM     1
+#endif
+
 /* Prototypes */
 int check_leaks();
 int check_mem_corruption();
