@@ -81,8 +81,8 @@ struct TestCase
    {
       TestFixture * fixture = getFixture();
       fixture->tearDown();
-      verifyMemChecker(); // must before delete fixture	  
-      //delete fixture;	  // when test case run finish, there is a delete, this is duplicate.
+      verifyMemChecker(); // must before delete fixture, because it need fixture to report failures	  
+      delete fixture;	  
    }
 
    void run()
@@ -107,7 +107,7 @@ struct TestCase
    }
 
 private:
-   void startMemChecker();  
+   void startMemChecker();   
 public:
    void verifyMemChecker()
    {    
