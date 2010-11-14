@@ -88,7 +88,8 @@ TESTNGPP_NS_START
    } catch(...) {\
 	  __TESTNGPP_REPORT_FAILURE( \
          "expected " #expr " will throw an exception of type " #except \
-         ", but actually raised a different kind of exception.", failfast); \
+         ", but actually raised a different kind of exception.", false); \
+      throw; /*let user know which exception was throwed.*/\
    } \
    if(!testngpp_caught_exception) { \
       __TESTNGPP_REPORT_FAILURE( \

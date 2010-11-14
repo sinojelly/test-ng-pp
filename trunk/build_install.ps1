@@ -12,8 +12,8 @@ $env:path=$env:path+";C:\Program Files\Microsoft Visual Studio 9.0\VC\vcpackages
 $env:path=$env:path+";D:\Tools\CMD\cmake-2.8.1-win32-x86\bin"
 
 # specify the Visual Studio Version, not set to use default
-#$VC_VER="-G `"Visual Studio 9 2008`""
-$VC_VER="-G `"Visual Studio 10`""
+$VC_VER="-G `"Visual Studio 9 2008`""
+#$VC_VER="-G `"Visual Studio 10`""
 
 # build Debug only
 $env:VCBUILD_DEFAULT_CFG="Debug|Win32"

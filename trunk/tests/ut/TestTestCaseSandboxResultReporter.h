@@ -3,7 +3,8 @@
 #include <testngppst/ResourceCheckPoint.h>
 
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
+#include <portable/portable_socket.h>
 #include <sstream>
 #include <errno.h>
 
