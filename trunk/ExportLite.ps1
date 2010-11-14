@@ -2,7 +2,7 @@
 
 $env:path=$env:path+";D:\Tools\CMD\SubversionClient"
 
-$dest_dir="D:\testngpp_exported_new"
+$dest_dir="D:\tools_release\testngpp_exported"
 
 function export_subdir($subdir) 
 {
@@ -12,6 +12,7 @@ function export_subdir($subdir)
 
 export_subdir 3rdparty\msinttypes
 export_subdir 3rdparty\mem_checker
+export_subdir 3rdparty\portable
 export_subdir include
 export_subdir samples
 export_subdir scripts
