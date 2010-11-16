@@ -4,7 +4,7 @@
 # Build mockcpp and it's tests, and at last run all tests.
 
 # You can change this testngpp install dir by yourself, it must be an absolute path.
-$TESTNGPP_INSTALL_DIR="D:\testngpp_installed2"
+$TESTNGPP_INSTALL_DIR="D:\tools_release\cpp-ut-project-release\tools\testngpp"
 
 # add vcbuild path  and cmake path
 # It's better to add to your computer's path environment variable, than to modify $env:path below.
@@ -30,4 +30,12 @@ build ..\build_testngpp_to_install ..\test-ng-pp
 
 cd ..\test-ng-pp
 
+move $TESTNGPP_INSTALL_DIR\3rdparty $TESTNGPP_INSTALL_DIR\.. -force
 
+# On Windows, to avoid install python, you can make the python scripts to be an .exe, you should install py2exe first.(www.py2exe.org)
+# cd testngpp\scripts, run premake4 install, then copy testngppgen.exe to tools\testngpp\bin\ dir.
+cd scripts
+Invoke-Expression "premake4 install"
+cp dist\testngppgen.exe $TESTNGPP_INSTALL_DIR\bin
+
+cd ..

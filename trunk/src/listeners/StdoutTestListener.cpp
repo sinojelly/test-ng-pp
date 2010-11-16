@@ -691,8 +691,10 @@ endTestFixture(TestFixtureInfoReader*)
 ///////////////////////////////////////////////////////////
 void
 StdoutTestListener::
-addFixtureError(TestFixtureInfoReader*, const std::string&)
+addFixtureError(TestFixtureInfoReader *fixture, const std::string &msg)
 {
+    // TODO: just out put the error info when test case not run. it should be refactored later.
+    std::cout << "ERROR: " << msg << " in file (" << fixture->getFileName() << ") fixture (" << fixture->getName() << ")" << std::endl;
 }
 
 ///////////////////////////////////////////////////////////
