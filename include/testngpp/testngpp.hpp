@@ -25,6 +25,7 @@
 #include <testngpp/TestDefMacros.h>
 #include <testngpp/DataDrivenDef.h>
 #include <testngpp/Backward.h>
+#include <mem_checker/NoThrowsReporter.h>
 
 #endif
 
