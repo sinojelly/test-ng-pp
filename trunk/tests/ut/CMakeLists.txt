@@ -17,9 +17,7 @@ ADD_DEFINITIONS(
 )
 
 SET(UT_CASES
-  TestAssertionFailure.h  
-  TestPipeReadableChannel.h
-  TestPipeWrittableChannel.h
+  TestAssertionFailure.h    
   TestPosixFNMatcher.h
   TestStringToOptions.h
   TestTagsParser.h
@@ -29,21 +27,19 @@ SET(UT_CASES
   TestXMLBuilder.h
   TestDataDriven.h
   TestMemChecker.h
-  TestAssertThrows.h
 )
 
 IF(UNIX)
   SET(UT_CASES
   ${UT_CASES}
   TestModuleTestSuiteLoader.h
+  TestPipeReadableChannel.h
+  TestPipeWrittableChannel.h
   )
 ENDIF(UNIX)
 
 SET(UT_CASES_WITH_MOCK
-  TestTestFixtureSandboxRunner.h
   TestTestCaseHierarchy.h
-  TestTestSuiteContext.h
-  TestTestCaseSandboxResultReporter.h
   TestXMLTestListener.h
   TestTestFilterFactory.h
   TestOrCompositeTestFilter.h
@@ -56,6 +52,9 @@ IF(UNIX)
   ${UT_CASES_WITH_MOCK}
   TestSandbox.h
   TestSandboxProcessor.h
+  TestTestCaseSandboxResultReporter.h
+  TestTestFixtureSandboxRunner.h
+  TestTestSuiteContext.h  
   )
 ENDIF(UNIX)
 
