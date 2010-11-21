@@ -11,7 +11,6 @@
 #include <testngppst/internal/TestFixtureDesc.h>
 #include <testngppst/internal/TestCase.h>
 
-
 TESTNGPPST_NS_START
 
 struct ModuleTestSuiteLoaderImpl
@@ -127,7 +126,6 @@ void ModuleTestSuiteLoader::unload()
 }
 
 /////////////////////////////////////////////////////////////////
-
 
 TESTNGPPST_NS_END
 

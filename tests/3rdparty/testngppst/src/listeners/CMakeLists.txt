@@ -8,13 +8,13 @@ ADD_DEFINITIONS(
     -DVERSION=${VERSION}
 )
 
-SET(TESTNGPPST_LIBRARY testngppst)
+SET(TESTNGPPST_LIBRARY testngppst-except testngppst-utils mem-checker)
 
 IF(CMAKE_SYSTEM_NAME MATCHES Linux)
   IF(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined")
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-ENDIF(CMAKE_SYSTEM_NAME MATCHES Linux)
+ENDIF()
 
 SET(STDOUTLISTENER_SRCS
   StdoutTestListener.cpp
@@ -25,7 +25,13 @@ SET(XMLLISTENER_SRCS
   XMLBuilder.cpp
 )
 
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
+IF(UNIX)
+ADD_DEFINITIONS(
+    -g -ggdb
+)
+ENDIF(UNIX)
+
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src ${CMAKE_BINARY_DIR}/src/utils ${CMAKE_BINARY_DIR}/src/mem_checker)
 
 ADD_LIBRARY(testngppststdoutlistener MODULE ${STDOUTLISTENER_SRCS})
 ADD_LIBRARY(testngppstxmllistener MODULE ${XMLLISTENER_SRCS})
@@ -47,5 +53,5 @@ TARGET_LINK_LIBRARIES(testngppstxmllistener ${TESTNGPPST_LIBRARY})
 
 INSTALL(
    TARGETS testngppststdoutlistener testngppstxmllistener
-   LIBRARY DESTINATION lib)
+   LIBRARY DESTINATION testngppst/listener)
 

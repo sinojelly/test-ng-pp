@@ -36,20 +36,20 @@
 TESTNGPPST_NS_START
 
 //////////////////////////////////////////////////////////////////
-#define __TESTNGPPST_REPORT_FAILURE(what) \
-      reportFailure(__FILE__, __LINE__, what)
+#define __TESTNGPPST_REPORT_FAILURE(what, failfast) \
+      reportFailure(__FILE__, __LINE__, what, failfast)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_TRUE(expr) do { \
+#define __ASSERT_TRUE(expr, failfast) do { \
    if(!(expr)) {\
-      __TESTNGPPST_REPORT_FAILURE("expected (" #expr ") being TRUE, but it's actually FALSE"); \
+      __TESTNGPPST_REPORT_FAILURE("expected (" #expr ") being TRUE, but it's actually FALSE", failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_FALSE(expr) do { \
+#define __ASSERT_FALSE(expr, failfast) do { \
    if(expr) {\
-      __TESTNGPPST_REPORT_FAILURE("expected (" #expr ") being FALSE, but it's actually TRUE"); \
+      __TESTNGPPST_REPORT_FAILURE("expected (" #expr ") being FALSE, but it's actually TRUE", failfast); \
    } \
 }while(0)
 
@@ -57,30 +57,29 @@ TESTNGPPST_NS_START
 #define __TESTNGPPST_MAKE_STR(expr) " " #expr " "
 
 //////////////////////////////////////////////////////////////////
-#define __TESTNGPPST_ASSERT_EQUALITY(expected, expected_equality, wrong_equality, value) do {\
-   TESTNGPPST_TYPEOF(expected) __testngppst_expected = (expected); \
+#define __TESTNGPPST_ASSERT_EQUALITY(expected_value, expected_equality, wrong_equality, value, failfast) do {\
    TESTNGPPST_TYPEOF(value) __testngppst_value = (value); \
-   if(__testngppst_expected wrong_equality __testngppst_value) { \
+   if(expected_value wrong_equality __testngppst_value) { \
       std::stringstream ss; \
-      ss << "expected (" #expected __TESTNGPPST_MAKE_STR(expected_equality) #value "), found (" \
-         << TESTNGPPST_NS::toTypeAndValueString(__testngppst_expected) \
+      ss << "expected (" #expected_value __TESTNGPPST_MAKE_STR(expected_equality) #value "), found (" \
+         << TESTNGPPST_NS::toTypeAndValueString(expected_value) \
          << __TESTNGPPST_MAKE_STR(wrong_equality) \
          << TESTNGPPST_NS::toTypeAndValueString(__testngppst_value) \
          << ")"; \
-      __TESTNGPPST_REPORT_FAILURE(ss.str()); \
+      __TESTNGPPST_REPORT_FAILURE(ss.str(), failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_EQ(expected, value) \
-   __TESTNGPPST_ASSERT_EQUALITY(expected, ==, !=, value)
+#define __ASSERT_EQ(expected, value, failfast) \
+   __TESTNGPPST_ASSERT_EQUALITY(expected, ==, !=, value, failfast)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_NE(expected, value) \
-   __TESTNGPPST_ASSERT_EQUALITY(expected, !=, ==, value)
+#define __ASSERT_NE(expected, value, failfast) \
+   __TESTNGPPST_ASSERT_EQUALITY(expected, !=, ==, value, failfast)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_THROWS(expr, except) do { \
+#define __ASSERT_THROWS(expr, except, failfast) do { \
    bool testngppst_caught_exception = false; \
    try { \
       expr; \
@@ -88,16 +87,18 @@ TESTNGPPST_NS_START
       testngppst_caught_exception = true; \
    } catch(...) {\
 	  __TESTNGPPST_REPORT_FAILURE( \
-         "expected " #expr " will throw an exception of type " #except ", but actually raised a different kind of exception."); \
+         "expected " #expr " will throw an exception of type " #except \
+         ", but actually raised a different kind of exception.", false); \
+      throw; /*let user know which exception was throwed.*/\
    } \
    if(!testngppst_caught_exception) { \
       __TESTNGPPST_REPORT_FAILURE( \
-         "expected " #expr " will throw an exception of type " #except ", but actually not."); \
+         "expected " #expr " will throw an exception of type " #except ", but actually not.", failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_THROWS_ANYTHING(expr) do { \
+#define __ASSERT_THROWS_ANYTHING(expr, failfast) do { \
    bool __testngppst_caught_exception = false; \
    try { \
       expr; \
@@ -106,33 +107,33 @@ TESTNGPPST_NS_START
    } \
    if(!__testngppst_caught_exception) { \
       __TESTNGPPST_REPORT_FAILURE ( \
-         "expected " #expr " will throw an exception of any type, but actually not."); \
+         "expected " #expr " will throw an exception of any type, but actually not.", failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_THROWS_NOTHING(expr) do { \
+#define __ASSERT_THROWS_NOTHING(expr, failfast) do { \
    try { \
       expr; \
    }catch(...){ \
       __TESTNGPPST_REPORT_FAILURE ( \
-          "expected " #expr " will not throw any exceptions, but it actually did."); \
+          "expected " #expr " will not throw any exceptions, but it actually did.", failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_THROWS_EQ(expr, except, expected, value) do { \
+#define __ASSERT_THROWS_EQ(expr, except, expected, value, failfast) do { \
    try { \
       expr; \
       __TESTNGPPST_REPORT_FAILURE ( \
-          "expected " #expr " will throw an exception of type " #except ", but actually not."); \
+          "expected " #expr " will throw an exception of type " #except ", but actually not.", failfast); \
    }catch(except){ \
-      ASSERT_EQ(expected, value); \
+      __ASSERT_EQ(expected, value, failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define ASSERT_SAME_DATA(addr1, addr2, size) do { \
+#define __ASSERT_SAME_DATA(addr1, addr2, size, failfast) do { \
    void* p1 = reinterpret_cast<void*>(addr1); \
    void* p2 = reinterpret_cast<void*>(addr2); \
    if(::memcmp((void*)p1, (void*)p2, size)) \
@@ -143,14 +144,14 @@ TESTNGPPST_NS_START
          << ", " \
          << TESTNGPPST_NS::toBufferString(p2, size) \
          << ")"; \
-      __TESTNGPPST_REPORT_FAILURE(ss.str()); \
+      __TESTNGPPST_REPORT_FAILURE(ss.str(), failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
 #define __TESTNGPPST_ABS(value) ((value) > 0?(value):-(value))
 //////////////////////////////////////////////////////////////////
-#define ASSERT_DELTA(x, y, d) do { \
+#define __ASSERT_DELTA(x, y, d, failfast) do { \
    TESTNGPPST_TYPEOF(x) value1 = x; \
    TESTNGPPST_TYPEOF(y) value2 = y; \
    TESTNGPPST_TYPEOF(d) delta  = __TESTNGPPST_ABS(d); \
@@ -163,13 +164,39 @@ TESTNGPPST_NS_START
          << "), actual delta: (" \
          << TESTNGPPST_NS::toTypeAndValueString(actual_delta) \
          << ")"; \
-      __TESTNGPPST_REPORT_FAILURE(ss.str()); \
+      __TESTNGPPST_REPORT_FAILURE(ss.str(), failfast); \
    } \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
+#define ASSERT_TRUE(expr) __ASSERT_TRUE(expr, true)
+#define ASSERT_FALSE(expr) __ASSERT_FALSE(expr, true)
+#define ASSERT_EQ(expected, value) __ASSERT_EQ(expected, value, true)
+#define ASSERT_NE(expected, value) __ASSERT_NE(expected, value, true)
+#define ASSERT_THROWS(expr, except) __ASSERT_THROWS(expr, except, true)
+#define ASSERT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, true)
+#define ASSERT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, true)
+#define ASSERT_THROWS_EQ(expr, except, expected, value) \
+   __ASSERT_THROWS_EQ(expr, except, expected, value, true)
+#define ASSERT_SAME_DATA(addr1, addr2, size) __ASSERT_SAME_DATA(addr1, addr2, size, true)
+#define ASSERT_DELTA(x, y, d)  __ASSERT_DELTA(x, y, d, true)
+
+//////////////////////////////////////////////////////////////////
+#define EXPECT_TRUE(expr) __ASSERT_TRUE(expr, false)
+#define EXPECT_FALSE(expr) __ASSERT_FALSE(expr, false)
+#define EXPECT_EQ(expected, value) __ASSERT_EQ(expected, value, false)
+#define EXPECT_NE(expected, value) __ASSERT_NE(expected, value, false)
+#define EXPECT_THROWS(expr, except) __ASSERT_THROWS(expr, except, false)
+#define EXPECT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, false)
+#define EXPECT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, false)
+#define EXPECT_THROWS_EQ(expr, except, expected, value) \
+   __ASSERT_THROWS_EQ(expr, except, expected, value, false)
+#define EXPECT_SAME_DATA(addr1, addr2, size) __ASSERT_SAME_DATA(addr1, addr2, size, false)
+#define EXPECT_DELTA(x, y, d)  __ASSERT_DELTA(x, y, d, false)
+
+//////////////////////////////////////////////////////////////////
 #define FAIL(msg) do { \
-    __TESTNGPPST_REPORT_FAILURE(msg); \
+    __TESTNGPPST_REPORT_FAILURE(msg, true); \
 }while(0)
 
 //////////////////////////////////////////////////////////////////
@@ -181,6 +208,13 @@ TESTNGPPST_NS_START
 #define INFO(msg) do { \
     reportInfo(__FILE__, __LINE__, msg); \
 }while(0)
+
+
+//////////////////////////////////////////////////////////////////
+struct DoingWell {};
+#define __DO__        try {
+#define __CLEANUP__   throw TESTNGPPST_NS::DoingWell(); } catch(...) {
+#define __DONE__      try {throw;}catch(TESTNGPPST_NS::DoingWell&){}} 
 
 //////////////////////////////////////////////////////////////////
 

@@ -1,5 +1,5 @@
 
-#include <testngppst/ExceptionKeywords.h>
+#include <testngppst/comm/ExceptionKeywords.h>
 
 #include <testngppst/utils/InternalError.h>
 
@@ -87,6 +87,10 @@ run( TestFixtureContext* context
    {
       collector->addFixtureError(context->getFixture(), e.what());
    }
+   __TESTNGPPST_CATCH(std::exception& e)
+   {
+       collector->addFixtureError(context->getFixture(), e.what());
+   }   
    __TESTNGPPST_CATCH_ALL
    {
       collector->addFixtureError(context->getFixture(), "Unknown Error");

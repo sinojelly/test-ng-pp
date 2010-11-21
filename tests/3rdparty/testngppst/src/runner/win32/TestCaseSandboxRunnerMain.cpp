@@ -4,7 +4,7 @@
 
 #include <windows.h>
 
-#include <testngppst/ExceptionKeywords.h>
+#include <testngppst/comm/ExceptionKeywords.h>
 #include <testngppst/comm/Win32PipeWrittableChannel.h>
 #include <testngppst/runner/TestCaseSandboxResultReporter.h>
 #include <testngppst/runner/loaders/ModuleTestSuiteLoaderFactory.h>

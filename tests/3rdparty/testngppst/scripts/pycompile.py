@@ -1,7 +1,12 @@
 #!/usr/bin/python
 
+import sys
 import py_compile
 import compileall
 
-py_compile.compile(r'testngppstgen.py')
-compileall.compile_dir(r'./testngppstgen', 0)
+if __name__ == '__main__':
+   path = sys.argv[1]
+   file = path + '/testngppstgen.py'
+   package = path + '/testngppstgen'
+   py_compile.compile(file)
+   compileall.compile_dir(package, 0)

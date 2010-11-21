@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <testngppst/internal/Error.h>
-#include <testngppst/ExceptionKeywords.h>
+#include <testngppst/comm/ExceptionKeywords.h>
 
 #include <testngppst/win32/Win32Sandbox.h>
 #include <testngppst/win32/Win32ThrowLastError.h>

@@ -5,7 +5,7 @@
 #include <windows.h>
 #endif
 
-#include <testngppst/ExceptionKeywords.h>
+#include <testngppst/comm/ExceptionKeywords.h>
 
 #include <testngppst/utils/StupidTimer.h>
 
@@ -91,7 +91,7 @@ std::string exceptionCodeToStr(unsigned int code)
 
 namespace
 {
-bool runTest
+bool beginTest
       ( TestCase* testcase
       , TestCaseResultCollector* collector)
 {
@@ -102,28 +102,73 @@ bool runTest
       testcase->run();
    });
 
+   return hasFailure;
+}
+
+bool endTest
+      ( TestCase* testcase
+      , TestCaseResultCollector* collector)
+{
+   bool hasFailure = false;
+
    __RUN({
       testcase->tearDown();
    });
+
+   return hasFailure;
+}
+
+bool runTest
+      ( TestCase* testcase
+      , TestCaseResultCollector* collector)
+{
+   bool hasFailure = false;
+
+   hasFailure = beginTest(testcase, collector);
+   hasFailure = endTest(testcase, collector);
 
    return !hasFailure;
 }
 
 #if defined(_MSC_VER)
-int win32TryToRunTest
+void addHardwareError
+      ( TestCase* testcase
+      , TestCaseResultCollector* collector    
+      , int exceptionCode
+      , const char *str)
+{
+    std::ostringstream oss;
+    oss << "hardware exception " << exceptionCodeToStr(exceptionCode) << " raised "<< str;
+    collector->addCaseError(testcase, oss.str());
+}
+
+bool win32TryToRunTest
       ( TestCase* testcase
       , TestCaseResultCollector* collector)
 {
+    bool hasFailure = false;
+
 	__try
 	{
-		return runTest(testcase, collector) ? 0:1;
+        hasFailure = beginTest(testcase, collector);
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
-	{        
-		return ::GetExceptionCode();
+	{   
+        hasFailure = true;
+        addHardwareError(testcase, collector, ::GetExceptionCode(), "in setup or running test");
 	}
 
-	return 0;
+    __try
+	{
+        hasFailure = endTest(testcase, collector);
+	}
+	__except(EXCEPTION_EXECUTE_HANDLER)
+	{   
+        hasFailure = true;
+        addHardwareError(testcase, collector, ::GetExceptionCode(), "in teardown");
+	}
+
+	return !hasFailure;
 }
 #endif
 
@@ -133,15 +178,7 @@ bool doRun
    , TestCaseResultCollector* collector)
 {
 #if defined(_MSC_VER)
-   int result = win32TryToRunTest( testcase, collector);
-   if(result < 0)
-   {
-	  std::ostringstream oss;
-      oss << "exception " << exceptionCodeToStr(result) << " raised";
-      collector->addCaseError(testcase, oss.str());
-   }
-
-   return result == 0;
+   return win32TryToRunTest(testcase, collector);
 #else
    return runTest(testcase, collector);
 #endif
@@ -178,7 +215,7 @@ bool SimpleTestCaseRunner::run
    timeval e = timer.stop();
    smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;
-   delete testcase->getFixture();
+   //delete testcase->getFixture(); // when test case run finish, there is a delete in tearDown, this is duplicate.
 
    __TESTNGPPST_DONE
 
