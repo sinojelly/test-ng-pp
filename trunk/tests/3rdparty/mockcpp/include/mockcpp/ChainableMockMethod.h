@@ -26,6 +26,7 @@
 #include <mockcpp/Invokable.h>
 #include <mockcpp/Result.h>
 #include <mockcpp/Asserter.h>
+#include <mockcpp/ReportFailure.h>
 
 MOCKCPP_NS_START
 
@@ -54,15 +55,22 @@ public:
                  , const RefAny& p12 = RefAny()
     )
     {
-       SelfDescribe* resultProvider = 0;
+	SelfDescribe* resultProvider = 0;
 
-       const Any& result = \
-           invokable->invoke( nameOfCaller
+	try {
+		const Any& result = \
+		invokable->invoke( nameOfCaller
                             , p01, p02, p03, p04, p05, p06
                             , p07, p08, p09, p10, p11, p12
                             , resultProvider);
-
-       return getResult(result, resultProvider);
+		return getResult(result, resultProvider);
+        }
+        catch(std::exception& ex)
+        {
+           MOCKCPP_REPORT_FAILURE(ex.what());
+        }
+		const Any& dummyResult = Any();
+		return getResult(dummyResult, resultProvider);
     }
 
     virtual ~ChainableMockMethodBase() {}

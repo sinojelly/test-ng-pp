@@ -29,6 +29,8 @@
 #include <mockcpp/DestructorChecker.h>
 #include <mockcpp/OutputStringStream.h>
 #include <mockcpp/Asserter.h>
+#include <mockcpp/ReportFailure.h>
+#include <mockcpp/utils.h>
 
 MOCKCPP_NS_START
 
@@ -80,7 +82,7 @@ struct MockObject : public MockObjectBase
              << TypeString<TargetInterface>::value()
              << ".";
 
-         MOCKCPP_FAIL(oss.str());
+         MOCKCPP_REPORT_FAILURE(oss.str());
       }
 
       identifyDestructor<TargetInterface, Interface>();
@@ -96,6 +98,25 @@ struct MockObject : public MockObjectBase
    void willKeepAlive()
    {
       expectsKeepAlive();
+   }
+   
+   void verify()
+   {   
+      try
+      {
+         MockObjectBase::verify();
+      }
+      catch(...)
+      {
+          __RUN_NOTHROW({
+              reset();
+          });
+          throw;
+      }
+   
+      __RUN_THROW({
+          reset();
+      });      
    }
 
    void reset()

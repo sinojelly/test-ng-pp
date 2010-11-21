@@ -35,8 +35,20 @@ MOCKCPP_NS_START
 
 namespace {
 
+IgnoreResultHandlerFactory ignoreResultHandlerFactory;
+VoidResultHandlerFactory voidResultHandlerFactory;
+NormalResultHandlerFactory normalResultHandlerFactory;
+MismatchResultHandlerFactory mismatchResultHandlerFactory;
 
+ResultHandlerFactory* const resultHandlerFactorys[] =
+{
+   &ignoreResultHandlerFactory,
+   &voidResultHandlerFactory,
+   &normalResultHandlerFactory,
+   &mismatchResultHandlerFactory
+};
 
+const unsigned int numberOfResultHandlerFactorys = 4;
 	//sizeof(resultHandlerFactorys)/sizeof(resultHandlerFactorys[0]);
 }
 
@@ -62,20 +74,7 @@ ResultImpl::ResultImpl(
 	 , const std::string& typeString
 	 , const SelfDescribe* selfDescriber)
 {
-   IgnoreResultHandlerFactory ignoreResultHandlerFactory;
-   VoidResultHandlerFactory voidResultHandlerFactory;
-   NormalResultHandlerFactory normalResultHandlerFactory;
-   MismatchResultHandlerFactory mismatchResultHandlerFactory;
-
-   ResultHandlerFactory* const resultHandlerFactorys[] =
-   {
-      &ignoreResultHandlerFactory,
-      &voidResultHandlerFactory,
-      &normalResultHandlerFactory,
-      &mismatchResultHandlerFactory
-   };
-
-   for(unsigned int i=0; i < 4; i++)
+   for(unsigned int i=0; i < numberOfResultHandlerFactorys; i++)
    {
       handlers.push_back(
                   resultHandlerFactorys[i]->create( isCastable

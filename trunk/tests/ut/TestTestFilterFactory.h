@@ -3,7 +3,7 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <testngpp/runner/TestFilterFactory.h>
 #include <testngpp/runner/TestFilter.h>

@@ -4,7 +4,7 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <testngpp/runner/TestSuiteContext.h>
 #include <testngpp/runner/TestFilter.h>

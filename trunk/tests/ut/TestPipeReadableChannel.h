@@ -1,6 +1,6 @@
 
 #include <cxxtest/TestSuite.h> 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>

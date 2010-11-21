@@ -3,7 +3,7 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <testngpp/runner/loaders/ModuleTestSuiteLoader.h>
 #include <testngpp/runner/loaders/DLModuleLoader.h>

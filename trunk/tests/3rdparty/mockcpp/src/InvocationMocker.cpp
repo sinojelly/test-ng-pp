@@ -253,8 +253,7 @@ Any& InvocationMocker::invoke(const Invocation& inv)
     }
     catch (Exception& ex)
     {
-      MOCKCPP_FAIL(ex.getMessage() + "\n" +
-                    This->toString());
+      MOCKCPP_FAIL(ex.getMessage() + "\n" + This->toString());
     }
 
 	return getEmptyAny();
@@ -269,8 +268,7 @@ void InvocationMocker::verify()
     }
     catch (Exception& ex)
     {
-      MOCKCPP_FAIL(ex.getMessage() + "\n" +
-                    This->toString());
+      MOCKCPP_FAIL(ex.getMessage() + "\n" + This->toString());
     }
 }
 
