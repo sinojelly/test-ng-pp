@@ -695,10 +695,8 @@ void
 StdoutTestListener::
 addFixtureError(TestFixtureInfoReader *fixture, const std::string &msg)
 {
-    // TODO: just out put the error info when test case not run. it should be refactored later.
     std::ostringstream oss;
     oss << msg << " in file (" << fixture->getFileName() << ") fixture (" << fixture->getName() << ").";
-    //std::cout << "ERROR: " << msg << " in file (" << fixture->getFileName() << ") fixture (" << fixture->getName() << ")" << std::endl;
     addError(oss.str());
 }
 
