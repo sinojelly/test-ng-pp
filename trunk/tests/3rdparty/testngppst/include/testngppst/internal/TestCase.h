@@ -26,7 +26,6 @@
 #include <testngppst/TestFixture.h>
 #include <testngppst/runner/loaders/ModuleLoader.h>
 
-
 TESTNGPPST_NS_START
 
 //struct ModuleLoader;
@@ -36,7 +35,7 @@ struct TestCase
 {
 	TestCase( const std::string& nameOfCase
            , const std::string& nameOfFixture
-		   , const std::string& nameOfSuite
+		     , const std::string& nameOfSuite
            , TESTNGPPST_NS::TestCase* testcase
            , const std::string& file
            , unsigned int line)
@@ -82,8 +81,8 @@ struct TestCase
    {
       TestFixture * fixture = getFixture();
       fixture->tearDown();
-      verifyMemChecker(); // must before delete fixture	  
-      //delete fixture;	  // when test case run finish, there is a delete, this is duplicate.
+      verifyMemChecker(); // must before delete fixture, because it need fixture to report failures	  
+      delete fixture;	  
    }
 
    void run()
@@ -108,7 +107,7 @@ struct TestCase
    }
 
 private:
-   void startMemChecker();  
+   void startMemChecker();   
 public:
    void verifyMemChecker()
    {    
@@ -132,8 +131,8 @@ private:
 	std::string name;
 	std::string fixtureName;
 	std::string suiteName;
-    TESTNGPPST_NS::TestCase* depends;
-    std::string fileName;
+   TESTNGPPST_NS::TestCase* depends;
+   std::string fileName;
 	unsigned int lineOfFile;
 	ModuleLoader* loader;
 };

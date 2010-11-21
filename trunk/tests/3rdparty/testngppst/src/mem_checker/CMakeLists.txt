@@ -3,7 +3,7 @@ IF(MSVC)
   ADD_DEFINITIONS( -D_CRT_SECURE_NO_WARNINGS )
 ENDIF(MSVC)
 
-SET(TESTNGPP_SRCS
+SET(TESTNGPPST_SRCS
   bool_array.cpp       
   mem_pool_base.cpp
   debug_new.cpp        
@@ -11,14 +11,15 @@ SET(TESTNGPP_SRCS
   interface_4xunit.cpp
   reporter.cpp
   check_status.cpp
+  NoThrowsReporter.cpp
 )
 
-# include debug info in testngpp.lib
+# include debug info in testngppst.lib
 IF(MSVC)
 	ADD_DEFINITIONS( /Z7 )
 ENDIF(MSVC)
 
-ADD_LIBRARY(mem-checker STATIC ${TESTNGPP_SRCS})
+ADD_LIBRARY(mem-checker STATIC ${TESTNGPPST_SRCS})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/3rdparty)
 

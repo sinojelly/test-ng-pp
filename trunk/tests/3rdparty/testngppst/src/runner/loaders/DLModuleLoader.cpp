@@ -3,7 +3,6 @@
 #include <dlfcn.h>
 
 #include <testngppst/internal/Error.h>
-#include <testngppst/ExceptionKeywords.h>
 
 #include <testngppst/runner/loaders/DLModuleLoader.h>
 

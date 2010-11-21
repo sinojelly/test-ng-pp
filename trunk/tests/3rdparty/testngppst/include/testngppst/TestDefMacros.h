@@ -20,16 +20,21 @@
 #define __TESTNGPPST_TEST_DEF_MACROS_H
 
 #include <testngppst/testngppst.h>
+#include <testngppst/TestModule.h>
 
 #define __TESTNGPPST_LINENAME_CAT( name, line ) name##line
 #define __LINENAME( name, line ) __TESTNGPPST_LINENAME_CAT( name, line )
 #define __TESTNGPPST_LINENAME( name ) __LINENAME( name, __LINE__ )
 
-#define TEST(...) void __TESTNGPPST_LINENAME(test_) (void)
+#define TEST(name, ...)            void __TESTNGPPST_LINENAME(test_) (void)
+#define PTEST(paralist, name, ...) void __TESTNGPPST_LINENAME(test_) paralist
 #define FIXTURE(cut, ...) struct Test##cut: public TESTNGPPST_NS::TestFixture
 
 #define SETUP() void setUp()
 #define TEARDOWN() void tearDown()
+
+#define MODULE(module, type, ...) struct Module##module : public TESTNGPPST_NS::TestModule<type>
+#define IMPORT(module, instance, tests) Module##module module##instance
 
 #endif
 

@@ -2,7 +2,7 @@
 #include <ltdl.h>
 
 #include <testngppst/Error.h>
-#include <testngppst/ExceptionKeywords.h>
+#include <testngppst/comm/ExceptionKeywords.h>
 
 #include <testngppst/runner/LTModuleLoader.h>
 

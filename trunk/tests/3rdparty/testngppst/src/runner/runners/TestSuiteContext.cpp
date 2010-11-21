@@ -1,7 +1,7 @@
 
 #include <vector>
 
-#include <testngppst/ExceptionKeywords.h>
+#include <testngppst/comm/ExceptionKeywords.h>
 
 #include <testngppst/utils/InternalError.h>
 
