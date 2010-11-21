@@ -18,6 +18,7 @@ SET(TESTNGPP_SRCS
   mem_checker/interface_4xunit.cpp
   mem_checker/reporter.cpp
   mem_checker/check_status.cpp
+  mem_checker/NoThrowsReporter.cpp
 )
 
 # include debug info in testngpp.lib

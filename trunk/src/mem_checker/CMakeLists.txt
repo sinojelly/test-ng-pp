@@ -11,6 +11,7 @@ SET(TESTNGPP_SRCS
   interface_4xunit.cpp
   reporter.cpp
   check_status.cpp
+  NoThrowsReporter.cpp
 )
 
 # include debug info in testngpp.lib
