@@ -14,7 +14,7 @@ SET(PACKAGE_STRING \"mockcpp\")
 SET(PACKAGE_BUGREPORT \"dev.mockcpp@gmail.com\")
 SET(PACKAGE_URL \"http://code.google.com/p/mockcpp\")
 SET(PACKAGE \"mockcpp\")
-SET(VERSION \"2.4\")
+SET(VERSION \"2.5\")
 
 IF(NOT DEFINED MOCKCPP_ALLOW_MI)
   SET(MOCKCPP_ALLOW_MI TRUE)
@@ -22,6 +22,12 @@ ENDIF(NOT DEFINED MOCKCPP_ALLOW_MI)
 
 SET(MOCKCPP_SRC_ROOT ${CMAKE_SOURCE_DIR}/3rdparty/mockcpp)
 
+IF(NOT DEFINED MOCKCPP_XUNIT)
+   SET(MOCKCPP_XUNIT STDEXCEPT)
+ENDIF()
+
+
+   
 # Set MOCKCPP_MAX_INHERITANCE
 #
 IF(MOCKCPP_ALLOW_MI)
@@ -36,16 +42,14 @@ ENDIF(MOCKCPP_ALLOW_MI)
 
 IF(MOCKCPP_NO_NAMESPACE)
    SET(MOCKCPP_NO_NAMESPACE 1)
-   MESSAGE(STATUS "MOCKCPP_NO_NAMESPACE...yes")
 ELSE(MOCKCPP_NO_NAMESPACE)
    SET(MOCKCPP_NO_NAMESPACE 0)
-   MESSAGE(STATUS "MOCKCPP_NO_NAMESPACE...no")
 ENDIF(MOCKCPP_NO_NAMESPACE)
 #
 # Set MOCKCPP_MAX_VTBL_SIZE
 #
 IF(NOT MOCKCPP_MAX_VTBL_SIZE)
-    SET(MOCKCPP_MAX_VTBL_SIZE 30)
+    SET(MOCKCPP_MAX_VTBL_SIZE 20)
 ENDIF(NOT MOCKCPP_MAX_VTBL_SIZE)
 
 IF(NOT MOCKCPP_MAX_PARAMETERS)
@@ -67,8 +71,15 @@ ADD_DEFINITIONS(
 )
 
 IF(MSVC)
-    ADD_DEFINITIONS(-DMSVC_VMG_ENABLED)
+    ADD_DEFINITIONS(-DMSVC_VMG_ENABLED  /Z7)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /vmg")
 ENDIF(MSVC)
+
+IF(UNIX)
+ADD_DEFINITIONS(
+    -g -ggdb
+)
+ENDIF(UNIX)
 
 SET(MOCKCPP_SRCS 
     AfterMatcher.cpp
@@ -91,12 +102,11 @@ SET(MOCKCPP_SRCS
     DefaultMatcher.cpp
     DefaultStub.cpp
     DelegatedMethodGetter.cpp
-    DestructorChecker.cpp
+    MethodIndiceChecker.cpp
     DieStub.cpp
     Exception.cpp
     ExpectsMatcher.cpp
     Formatter.cpp
-    GenericMethodIndicesChecker.cpp
     IdentityBuilder.cpp
     IgnoreResultHandler.cpp
     IgnoreResultHandlerFactory.cpp
@@ -145,12 +155,87 @@ SET(MOCKCPP_SRCS
     VoidResultHandlerFactory.cpp
     WillStub.cpp
     HookMockObject.cpp
-    CApiHookKey.cpp)
+    CApiHookKey.cpp
+    GlobalMockObject.cpp
+    BlockAllocator.cpp
+    Arch32ApiHook.cpp
+	AllocatorContainer.cpp
+)
+
+IF(${MOCKCPP_XUNIT} STREQUAL "GTEST" OR ${MOCKCPP_XUNIT} STREQUAL "gtest")
+
+   IF(NOT DEFINED MOCKCPP_XUNIT_HOME)
+      MESSAGE(FATAL_ERROR "Please specify MOCKCPP_XUNIT_HOME as the home path of googletest")
+   ENDIF()
+   FIND_FILE(GTEST_HEADER
+             gtest.h 
+             PATHS ${MOCKCPP_XUNIT_HOME}/include/gtest 
+             NO_DEFAULT_PATH 
+             NO_CMAKE_ENVIRONMENT_PATH 
+             NO_CMAKE_PATH 
+             NO_SYSTEM_ENVIRONMENT_PATH 
+             NO_CMAKE_SYSTEM_PATH)
+   IF(NOT GTEST_HEADER)
+      MESSAGE(FATAL_ERROR "gtest.h not found in ${MOCKCPP_XUNIT_HOME}/include/gtest, please specify MOCKCPP_XUNIT_HOME as the home path of googletest correctly.")
+   ENDIF()
+   INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_XUNIT_HOME}/include)
+   SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} ports/failure/gtest_report_failure.cpp)
+
+ELSEIF(${MOCKCPP_XUNIT} STREQUAL "CppUTest" OR ${MOCKCPP_XUNIT} STREQUAL "cpputest")
+
+   IF(NOT DEFINED MOCKCPP_XUNIT_HOME)
+      MESSAGE(FATAL_ERROR "Please specify MOCKCPP_XUNIT_HOME as the home path of googletest")
+   ENDIF()
+   FIND_FILE(CPPUTEST_HEADER
+             TestHarness.h 
+             PATHS ${MOCKCPP_XUNIT_HOME}/include/CppUTest
+             NO_DEFAULT_PATH 
+             NO_CMAKE_ENVIRONMENT_PATH 
+             NO_CMAKE_PATH 
+             NO_SYSTEM_ENVIRONMENT_PATH 
+             NO_CMAKE_SYSTEM_PATH)
+   IF(NOT CPPUTEST_HEADER)
+      MESSAGE(FATAL_ERROR "TestHarness.h not found in ${MOCKCPP_XUNIT_HOME}/include/CppUTest, please specify MOCKCPP_XUNIT_HOME as the home path of CppUTest correctly.")
+   ENDIF()
+   INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_XUNIT_HOME}/include ${MOCKCPP_XUNIT_HOME}/include/Platforms/VisualCpp)
+   SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} ports/failure/cpputest_report_failure.cpp)   
+   
+ELSEIF(${MOCKCPP_XUNIT} STREQUAL "CPPUNIT" OR ${MOCKCPP_XUNIT} STREQUAL "cppunit")
+   IF(NOT DEFINED MOCKCPP_XUNIT_HOME)
+      MESSAGE(FATAL_ERROR "Please specify MOCKCPP_XUNIT_HOME as the home path of cppunit")
+   ENDIF()
+   FIND_FILE(CPPUNIT_HEADER Exception.h 
+             PATHS ${MOCKCPP_XUNIT_HOME}/include/cppunit
+             NO_DEFAULT_PATH 
+             NO_CMAKE_ENVIRONMENT_PATH 
+             NO_CMAKE_PATH 
+             NO_SYSTEM_ENVIRONMENT_PATH 
+             NO_CMAKE_SYSTEM_PATH)
+   IF(NOT ${GTEST_HEADER})
+      MESSAGE(FATAL_ERROR "Can't find file Exception.h, please specify MOCKCPP_XUNIT_HOME as the home path of cppunit correctly.")
+   ENDIF()
+   INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_XUNIT_HOME}/include)
+   SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} ports/failure/cppunit_report_failure.cpp)
+ELSE()
+   SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} ports/failure/stdexcept_report_failure.cpp)
+ENDIF()
 
 IF(MSVC)
-   SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} Win32CApiHook.cpp)
+   SET(MOCKCPP_SRCS 
+	   ${MOCKCPP_SRCS} 
+	   Win32CApiHook.cpp 
+	   Win32PageAllocator.cpp 
+	   Win32ProtectPageAllocator.cpp 
+	   Win32CodeModifier.cpp
+   ) 
 ELSE(MSVC)
-   SET(MOCKCPP_SRCS ${MOCKCPP_SRCS} DummyApiHook.cpp)
+   SET(MOCKCPP_SRCS 
+       ${MOCKCPP_SRCS} 
+       Linux32ApiHook.cpp
+       Linux32PageAllocator.cpp
+       Linux32ProtectPageAllocator.cpp
+       Linux32CodeModifier.cpp
+   )
 ENDIF(MSVC)
 ######################################################
 SET(MOCKCPP_HEADERS_PATH ${MOCKCPP_SRC_ROOT}/include/mockcpp)
@@ -158,9 +243,8 @@ SET(MOCKCPP_HEADERS_PATH ${MOCKCPP_SRC_ROOT}/include/mockcpp)
 SET(MOCKCPP_VTBL_RELATED_HEADERS 
     ${MOCKCPP_HEADERS_PATH}/DelegatedMethodGetDef.h 
     ${MOCKCPP_HEADERS_PATH}/DelegatedMethodGetByVptrDef.h 
-    ${MOCKCPP_HEADERS_PATH}/GenericMethodCheckerDef.h 
     ${MOCKCPP_HEADERS_PATH}/DestructorAddrGetterDef.h 
-    ${MOCKCPP_HEADERS_PATH}/DestructorCheckerDef.h
+    ${MOCKCPP_HEADERS_PATH}/MethodIndiceCheckerDef.h
     ${MOCKCPP_HEADERS_PATH}/DefaultMethodAddrGetterDef.h
 )
 
@@ -207,7 +291,7 @@ FOREACH(HEADER ${MOCKCPP_ARG_RELATED_HEADER_FILES})
 ENDFOREACH()
 
 ######################################################
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src ${CMAKE_BINARY_DIR}/tests/3rdparty/testngpp/src)
 
 ADD_LIBRARY(mockcpp STATIC ${MOCKCPP_SRCS})
 
@@ -217,3 +301,7 @@ ADD_CUSTOM_TARGET(vtbl_related_headers DEPENDS ${MOCKCPP_VTBL_RELATED_HEADERS})
 ADD_CUSTOM_TARGET(arg_related_headers DEPENDS ${MOCKCPP_ARG_RELATED_HEADER_FILES})
 
 ADD_DEPENDENCIES(mockcpp vtbl_related_headers arg_related_headers)
+
+INSTALL(
+   TARGETS mockcpp
+   ARCHIVE DESTINATION lib)

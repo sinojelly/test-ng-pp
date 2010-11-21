@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include <cxxtest/TestSuite.h> 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <testngpp/comm/PipeWrittableChannel.h>
 

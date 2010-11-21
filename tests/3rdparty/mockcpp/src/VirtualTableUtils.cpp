@@ -1,5 +1,7 @@
 
+#include <iostream>
 #include <typeinfo>
+#include <string.h>
 
 #include <mockcpp/mockcpp.h>
 
@@ -18,12 +20,16 @@ namespace
    const unsigned int EXTRA_VTBL_SLOT = 1;
 #endif
    const unsigned int SLOTS_PER_VTBL = MOCKCPP_MAX_VTBL_SIZE + EXTRA_VTBL_SLOT;
+
+   unsigned int times = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////
 void** createVtbls(unsigned int numberOfVptr)
 {
-	return new void*[numberOfVptr * SLOTS_PER_VTBL];
+	void **p = new void*[numberOfVptr * SLOTS_PER_VTBL];
+	(void)memset(p, 0, sizeof(void *) * numberOfVptr * SLOTS_PER_VTBL);
+	return p;
 }
 
 void freeVtbls(void** vtbl, unsigned int numberOfVptr)

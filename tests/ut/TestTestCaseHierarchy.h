@@ -8,7 +8,7 @@
 
 #include <mockcpp/mockcpp.hpp>
 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <testngpp/internal/TestCase.h>
 

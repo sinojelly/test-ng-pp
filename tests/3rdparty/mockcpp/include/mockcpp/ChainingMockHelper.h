@@ -1,5 +1,5 @@
 /***
-    mockcpp is a generic C/C++ mock framework.
+	mockcpp is a generic C/C++ mock framework.
     Copyright (C) <2009>  <Darwin Yuan: darwin.yuan@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -19,10 +19,15 @@
 #ifndef __MOCKCPP_CHAINING_MOCK_HELPER_H
 #define __MOCKCPP_CHAINING_MOCK_HELPER_H
 
+#include <boost/typeof/typeof.hpp>
 #include <mockcpp/mockcpp.h>
 #include <mockcpp/IsEqual.h>
 #include <mockcpp/IsNotEqual.h>
+#include <mockcpp/IsGreaterThan.h>
+#include <mockcpp/IsLessThan.h>
 #include <mockcpp/IsMirror.h>
+#include <mockcpp/Spy.h>
+#include <mockcpp/Check.h>
 #include <mockcpp/OutBound.h>
 #include <mockcpp/OutBoundPointer.h>
 #include <mockcpp/IncrementStub.h>
@@ -53,6 +58,18 @@ Constraint* neq(const T& val)
 	return new IsNotEqual<T>(val);
 }
 
+template <typename T>
+Constraint* gt(const T& val)
+{
+   return new IsGreaterThan<T>(val);
+}
+
+template <typename T>
+Constraint* lt(const T& val)
+{
+   return new IsLessThan<T>(val);
+}
+
 ////////////////////////////////////////////////////////////////
 #if 0
 static inline Constraint* eq(const char* s)
@@ -60,6 +77,40 @@ static inline Constraint* eq(const char* s)
    return new IsEqual<const char*>(s);
 }
 #endif
+
+template <typename T>
+Constraint* spy(T& val)
+{
+   return new Spy<T>(val);
+}
+
+template <typename Predict>
+struct PredictTypeTraits
+{
+};
+
+template <typename Predict, typename T>
+struct PredictTypeTraits<bool (Predict::*)(T)>
+{
+    typedef T ParaType;
+};
+
+template <typename Predict>
+Constraint* check(Predict pred)
+{
+#ifdef _MSC_VER
+    typedef typename PredictTypeTraits<BOOST_TYPEOF(&Predict::operator())>::ParaType T; //GCC: error: '&' cannot appear in a constant-expression
+#else
+    typedef typename PredictTypeTraits<typeof(&Predict::operator())>::ParaType T;
+#endif
+    return new Check<T, Predict>(pred);
+}
+
+template <typename T>
+Constraint* check(bool (*pred)(T))
+{
+    return new Check<T, bool (*)(T)>(pred);
+}
 
 ////////////////////////////////////////////////////////////////
 template <typename T>

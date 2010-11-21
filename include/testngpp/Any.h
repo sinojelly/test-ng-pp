@@ -1,6 +1,6 @@
 
-#ifndef BOOST_ANY_INCLUDED
-#define BOOST_ANY_INCLUDED
+#ifndef TESTNGPP_BOOST_ANY_INCLUDED
+#define TESTNGPP_BOOST_ANY_INCLUDED
 
 // what:  variant type boost::any
 // who:   contributed by Kevlin Henney,

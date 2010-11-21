@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 #include <cxxtest/TestSuite.h> 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <mockcpp/mockcpp.hpp>
 

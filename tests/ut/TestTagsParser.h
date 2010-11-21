@@ -2,7 +2,7 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include <testngppst/ResourceCheckPoint.h>
+#include <testngppst/runner/ResourceCheckPoint.h>
 
 #include <testngpp/internal/Error.h>
 #include <testngpp/runner/TagsFilters.h>
