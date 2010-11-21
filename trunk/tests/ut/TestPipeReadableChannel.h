@@ -3,7 +3,7 @@
 #include <testngppst/ResourceCheckPoint.h>
 
 #include <sys/types.h>
-#include <portable/portable_socket.h>
+#include <sys/socket.h>
 #include <string.h>
 
 #include <testngpp/comm/PipeReadableChannel.h>

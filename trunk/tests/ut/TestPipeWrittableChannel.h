@@ -1,6 +1,5 @@
 
-//#include <sys/socket.h>
-#include <portable/portable_socket.h>
+#include <sys/socket.h>
 #include <string.h>
 
 #include <cxxtest/TestSuite.h> 
