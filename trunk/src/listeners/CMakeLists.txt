@@ -25,6 +25,12 @@ SET(XMLLISTENER_SRCS
   XMLBuilder.cpp
 )
 
+IF(UNIX)
+ADD_DEFINITIONS(
+    -g -ggdb
+)
+ENDIF(UNIX)
+
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src ${CMAKE_BINARY_DIR}/src/utils ${CMAKE_BINARY_DIR}/src/mem_checker)
 
 ADD_LIBRARY(testngppstdoutlistener MODULE ${STDOUTLISTENER_SRCS})

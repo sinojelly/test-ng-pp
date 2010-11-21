@@ -32,6 +32,12 @@ ELSE(MSVC)
   ADD_LIBRARY(testngpp SHARED ${TESTNGPP_SRCS})
 ENDIF(MSVC)
 
+IF(UNIX)
+ADD_DEFINITIONS(
+    -g -ggdb
+)
+ENDIF(UNIX)
+
 # can not link to other lib in cmake 
 #TARGET_LINK_LIBRARIES(mem-checker)
 #LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src/mem_checker)
