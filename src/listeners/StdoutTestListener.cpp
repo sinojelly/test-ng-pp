@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include <testngpp/internal/Error.h>
 #include <testngpp/internal/AssertionFailure.h>
@@ -183,6 +184,7 @@ private:
 
    void reportSuitesResult();
    void reportCasesResult();
+   void reportFixturesResult();
 
    template <typename State>
    void reportNumber
@@ -694,7 +696,10 @@ StdoutTestListener::
 addFixtureError(TestFixtureInfoReader *fixture, const std::string &msg)
 {
     // TODO: just out put the error info when test case not run. it should be refactored later.
-    std::cout << "ERROR: " << msg << " in file (" << fixture->getFileName() << ") fixture (" << fixture->getName() << ")" << std::endl;
+    std::ostringstream oss;
+    oss << msg << " in file (" << fixture->getFileName() << ") fixture (" << fixture->getName() << ").";
+    //std::cout << "ERROR: " << msg << " in file (" << fixture->getFileName() << ") fixture (" << fixture->getName() << ")" << std::endl;
+    addError(oss.str());
 }
 
 ///////////////////////////////////////////////////////////
@@ -855,6 +860,24 @@ reportSuitesResult()
       << normal
       << std::endl;     
 }
+
+void
+StdoutTestListener::     
+reportFixturesResult()
+{
+   if(bookKeeper->getNumberOfErrorFixtures() == 0)
+   {
+      return;
+   }
+
+   std::cout 
+      << " error fixtures: " 
+      << fail
+      << bookKeeper->getNumberOfErrorFixtures()
+      << normal
+      << std::endl;   
+}
+
      
 void
 StdoutTestListener::
@@ -899,7 +922,8 @@ endTest(unsigned int secs, unsigned int usecs)
    reportAllUnsuccessfulTests();
 
    if( ( bookKeeper->getNumberOfUnloadableSuites() 
-       + bookKeeper->getNumberOfUnsuccessfulTestCases()) == 0)
+       + bookKeeper->getNumberOfUnsuccessfulTestCases()
+       + bookKeeper->getNumberOfErrorFixtures()) == 0)
    {
       std::cout
          << succ
@@ -915,6 +939,8 @@ endTest(unsigned int secs, unsigned int usecs)
    }
      
    reportSuitesResult();
+
+   reportFixturesResult();
 
    reportCasesResult();
 
