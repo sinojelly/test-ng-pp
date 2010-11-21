@@ -98,13 +98,23 @@ FIXTURE(DataDriven)
    TEST($> convert data group to string)
    {
       DataProvider* dataProvider = &fixture.dataProvider1;
-
-      ASSERT_EQ((const char*)"10", dataProvider->toString(0));
-      ASSERT_EQ((const char*)"15", dataProvider->toString(1));
+      
+	  #ifdef _MSC_VER
+      ASSERT_EQ((char const *)"10,", dataProvider->toString(0));
+	  ASSERT_EQ((char const *)"15,", dataProvider->toString(1));
+	  #else
+      ASSERT_EQ((const char*)"10", dataProvider->toString(0));	  
+	  ASSERT_EQ((const char*)"15", dataProvider->toString(1));
+	  #endif     
 
       dataProvider = &fixture.dataProvider2;
 
+	  #ifdef _MSC_VER
+	  ASSERT_EQ((char const *)"10.0,12l", dataProvider->toString(0));
+      ASSERT_EQ((char const *)"15.1,23l", dataProvider->toString(1));
+	  #else
       ASSERT_EQ((const char*)"10.0, 12l", dataProvider->toString(0));
       ASSERT_EQ((const char*)"15.1, 23l", dataProvider->toString(1));
+	  #endif
    }
 };

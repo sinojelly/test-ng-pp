@@ -14,6 +14,7 @@ struct Dummy
     Dummy(){}
 };
 
+#define AVOID_MEM_LEAKS
 
 FIXTURE(TestMemChecker)
 {
@@ -32,6 +33,10 @@ FIXTURE(TestMemChecker)
         *(p+4) = 0x00;
         *(p+5) = 0x01;
         *(p+6) = 0x08;
+		
+		#ifdef AVOID_MEM_LEAKS
+		delete [] p;
+		#endif
 	}
 
     TEST(no memory leaked after delete)
@@ -49,6 +54,10 @@ FIXTURE(TestMemChecker)
     TEST(can detect memory leak caused by malloc)
     {
         char* p = (char *)malloc(33); // should report memory leak
+		
+		#ifdef AVOID_MEM_LEAKS
+		free(p);
+		#endif
     }
 
     TEST(no memory leaked after free)
@@ -69,12 +78,21 @@ FIXTURE(TestMemChecker)
         char *p = new char[4]; // should not report memory leak
         OPEN_MEM_CHECKER();
         p = new char[5];  // should report memory leak
+		
+		#ifdef AVOID_MEM_LEAKS
+		delete [] p;
+		#endif
     }
 
     TEST(can report more than one leak)
     {
-        char *p = new char[4]; // should not report memory leak     
-        p = new char[5];  // should report memory leak
+        char *p1 = new char[4];  // should report memory leak     
+        char *p2 = new char[5];  // should report memory leak
+		
+		#ifdef AVOID_MEM_LEAKS
+		delete [] p1;
+		delete [] p2;
+		#endif
     }
 
     TEST(support checking memory leak in c file when interface_4user.h included in the c file)
