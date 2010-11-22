@@ -143,38 +143,3 @@ public:
 		TS_ASSERT_EQUALS(expected, os->str());
 	}
 };
-
-//#include <testngpp/testngpp.hpp>
-
-struct Interface
-{
-	virtual int method() = 0;
-	static int func() { return 0; }
-	virtual ~Interface(){}
-};
-
-#include <mockcpp/mokc.h>
-
-//FIXTURE(mockcpp_sample, sinojelly's test)
-class TestMockcppSample: public CxxTest::TestSuite
-{
-public:	
-	void test_method_mocker()
-	{
-		MockObject<Interface> mocker;
-		MOCK_METHOD(mocker, method)
-		    .expects(once())
-		    .will(returnValue(10));
-		ASSERT_EQ(10, mocker->method());
-		mocker.verify();
-	}
-	
-	void test_func_mocker()
-	{
-		MOCKER(Interface::func)
-		    .expects(once())
-		    .will(returnValue(10));
-		ASSERT_EQ(10, Interface::func());
-		GlobalMockObject::verify();
-	}
-};
