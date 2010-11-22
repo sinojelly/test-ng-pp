@@ -574,7 +574,7 @@ static bool check_tail(new_ptr_list_t* ptr)
  * @param is_array  flag indicating whether it is invoked by a
  *                  <code>delete[]</code> call
  */
-static void free_pointer(void* pointer, void* addr, bool is_array)
+/*static*/ void free_pointer(void* pointer, void* addr, bool is_array)
 {
     if (pointer == NULL)
         return;
