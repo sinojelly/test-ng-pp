@@ -4,6 +4,7 @@
 
 #include <testngpp/internal/AssertionFailure.h>
 
+
 using namespace testngpp;
 
 class TestAssertionFailure: public CxxTest::TestSuite

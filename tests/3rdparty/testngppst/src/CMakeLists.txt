@@ -19,6 +19,7 @@ SET(TESTNGPPST_SRCS
   mem_checker/reporter.cpp
   mem_checker/check_status.cpp
   mem_checker/NoThrowsReporter.cpp
+  runner/ResourceCheckPoint.cpp
 )
 
 # include debug info in testngppst.lib
@@ -42,7 +43,7 @@ ENDIF(UNIX)
 #TARGET_LINK_LIBRARIES(mem-checker)
 #LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src/mem_checker)
 
-INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/3rdparty)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/3rdparty ${CMAKE_SOURCE_DIR}/../../../3rdparty/msinttypes)
 
 IF(MSVC)
   INSTALL(
