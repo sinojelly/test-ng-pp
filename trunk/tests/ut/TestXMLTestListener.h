@@ -36,7 +36,7 @@ public:
 		listener = new XMLTestListener(NULL, testSuiteResultReporter, testCaseResultReporter, *os);
 	}
 
-	void tearDonw() {
+	void tearDown() {
 		delete listener;
 		delete os;
 		
@@ -45,12 +45,6 @@ public:
 		testCaseInfoReader.verify();
 		testSuiteResultReporter.verify();
 		testCaseResultReporter.verify();
-		
-		testSuiteInfoReader.reset();
-		testFixtureInfoReader.reset();
-		testCaseInfoReader.reset();
-		testSuiteResultReporter.reset();
-		testCaseResultReporter.reset();
 	}
 
 	void testXMLTestListener(void) {
