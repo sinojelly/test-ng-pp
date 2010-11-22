@@ -45,9 +45,10 @@ struct TestCase
       , depends(testcase)
       , fileName(file)
       , lineOfFile(line)
+      , fixtureCloneAsReporter(0)
    {}
 
-	virtual ~TestCase() {}
+	virtual ~TestCase() { delete fixtureCloneAsReporter; }
 
 	const std::string& getName() const
 	{ return name; }
@@ -80,9 +81,9 @@ struct TestCase
    void tearDown()
    {
       TestFixture * fixture = getFixture();
-      fixture->tearDown();
-      verifyMemChecker(); // must before delete fixture, because it need fixture to report failures	  
-      delete fixture;	  
+      fixture->tearDown(); 
+      delete fixture;
+      verifyMemChecker();      
    }
 
    void run()
@@ -135,6 +136,7 @@ private:
    std::string fileName;
 	unsigned int lineOfFile;
 	ModuleLoader* loader;
+    TestFixture *fixtureCloneAsReporter;
 };
 
 TESTNGPP_NS_END

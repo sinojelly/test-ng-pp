@@ -49,6 +49,16 @@ setCurrentTestCase(const TestCaseInfoReader* currentCase, TestCaseResultCollecto
    collector = resultCollector;
 }
 
+//////////////////////////////////////////////////////////////////////////
+TestFixture *TestFixture::
+clone()
+{
+    TestFixture *tempFixture = new TestFixture;
+    tempFixture->setCurrentTestCase(testcase, collector);
+    return tempFixture;
+}
+
+
 TESTNGPP_NS_END
 
 

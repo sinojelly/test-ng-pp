@@ -44,6 +44,7 @@ struct TestFixture
 
    //////////////////////////////////////////////
    void setCurrentTestCase(const TestCaseInfoReader*, TestCaseResultCollector*);
+   TestFixture *clone();
 
 private:
 
