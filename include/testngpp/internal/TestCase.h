@@ -28,8 +28,6 @@
 
 TESTNGPP_NS_START
 
-//struct ModuleLoader;
-
 struct TestCase
    : public TestCaseInfoReader
 {
