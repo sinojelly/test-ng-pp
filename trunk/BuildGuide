@@ -1,9 +1,9 @@
 
-as a user
+as an user
 =========
-	Linux
+	Linux(cygwin included)
 	------
-
+    run build_install.sh . (maybe you need to modify some variable in the script first)
 	
 	Windows
 	-------
@@ -16,9 +16,9 @@ as a user
 	At last, open the vcproj with Visual Studio and compile.
 	
 		
-as a testngpp maintainer
+as a testngpp developer
 =======================
-	Linux
+	Linux(cygwin included)
 	------
 	run build.sh .
 	
