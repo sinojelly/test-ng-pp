@@ -2,7 +2,11 @@
 
 #include <iostream>
 
-#include <testngppst/testngppst.hpp>
+//#include <testngppst/testngppst.hpp>
+#include <testngppst/testngppst.h>
+#include <testngppst/Asserter.h>
+#include <testngppst/TestFixture.h>
+#include <testngppst/TestDefMacros.h>
 
 #include <testngpp/DataDrivenDef.h>
 #include <testngpp/internal/DataDriven.h>

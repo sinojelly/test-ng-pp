@@ -20,5 +20,10 @@ cd ../build_testngpp/samples
 
 #run ut
 cd ../../build_tests/ut
-../../build_testngppst/src/runner/testngppst-runner $(ls *.so) -L"../../build_testngpp/src/listeners" -l"testngppstdoutlistener -c -f"
+
+if [ "$OSTYPE" = "cygwin" ]; then
+  ../../build_testngppst/src/runner/testngppst-runner $(ls *.dll) -L"../../build_testngpp/src/listeners" -l"testngppstdoutlistener -c -f"
+else
+  ../../build_testngppst/src/runner/testngppst-runner $(ls *.so) -L"../../build_testngpp/src/listeners" -l"testngppstdoutlistener -c -f"
+fi
 
