@@ -57,9 +57,9 @@ TESTNGPP_NS_START
 #define __TESTNGPP_MAKE_STR(expr) " " #expr " "
 
 //////////////////////////////////////////////////////////////////
-#define __TESTNGPP_ASSERT_EQUALITY(expected_value, expected_equality, wrong_equality, value, failfast) do {\
+#define __TESTNGPP_ASSERT_EQUALITY(expected_value, not_equals, expected_equality, wrong_equality, value, failfast) do {\
    TESTNGPP_TYPEOF(value) __testngpp_value = (value); \
-   if(expected_value wrong_equality __testngpp_value) { \
+   if(not_equals(expected_value == __testngpp_value)) { \
       std::stringstream ss; \
       ss << "expected (" #expected_value __TESTNGPP_MAKE_STR(expected_equality) #value "), found (" \
          << TESTNGPP_NS::toTypeAndValueString(expected_value) \
@@ -72,11 +72,11 @@ TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////////
 #define __ASSERT_EQ(expected, value, failfast) \
-   __TESTNGPP_ASSERT_EQUALITY(expected, ==, !=, value, failfast)
+   __TESTNGPP_ASSERT_EQUALITY(expected, !, ==, !=, value, failfast)
 
 //////////////////////////////////////////////////////////////////
 #define __ASSERT_NE(expected, value, failfast) \
-   __TESTNGPP_ASSERT_EQUALITY(expected, !=, ==, value, failfast)
+   __TESTNGPP_ASSERT_EQUALITY(expected, , !=, ==, value, failfast)
 
 //////////////////////////////////////////////////////////////////
 #define __ASSERT_THROWS(expr, except, failfast) do { \
