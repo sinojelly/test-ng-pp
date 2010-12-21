@@ -26,9 +26,13 @@
 #define __LINENAME( name, line ) __TESTNGPP_LINENAME_CAT( name, line )
 #define __TESTNGPP_LINENAME( name ) __LINENAME( name, __LINE__ )
 
+#define __TESTNGPP_FIXTURE_NAME(name) Test##name
+
 #define TEST(name, ...)            void __TESTNGPP_LINENAME(test_) (void)
 #define PTEST(paralist, name, ...) void __TESTNGPP_LINENAME(test_) paralist
-#define FIXTURE(cut, ...) struct Test##cut: public TESTNGPP_NS::TestFixture
+#define FIXTURE(cut, ...) struct __TESTNGPP_FIXTURE_NAME(cut) : public TESTNGPP_NS::TestFixture
+
+#define CONS(name) __TESTNGPP_FIXTURE_NAME(name)()
 
 #define SETUP() void setUp()
 #define TEARDOWN() void tearDown()
