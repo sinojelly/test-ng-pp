@@ -134,24 +134,40 @@ static vector<int> global;
 
 FIXTURE(GlocalVectorMemLeak, global vector)
 {
-	string str;
-
 	TEARDOWN()
 	{
-		global.clear();
-	}
-
-	TEST(empty)
-	{
+		global.clear(); // must clear after test. because you should reset all the data changed by test.
 	}
 
 	TEST(global vector should not cause report memleak by mistake)
 	{
 		global.push_back(1);
 	}
+};
 
-	TEST(if a string var in FIXTURE)
+// global or fixture member var are all the same.
+
+FIXTURE(MemberStringMemLeak1, member/global string 1)
+{
+    string str;
+	
+	TEST(only assign value to str, not str += something. no need to clear string in teardown)
 	{
-		str += "1"; // Note: not need to use str=""; in TEARDOWN.
+	    str = "1";
+	}
+};
+
+FIXTURE(MemberStringMemLeak2, member/global string 2)
+{
+    string str;
+	
+	TEARDOWN()
+	{
+	    str.clear(); // or: str = "";   (in VC2008, not need this line.)
+	}
+	
+	TEST(there is str += something. need to clear string in teardown)
+	{
+	    str += "1";
 	}
 };
