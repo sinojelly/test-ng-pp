@@ -151,7 +151,7 @@ FIXTURE(MemberStringMemLeak1, member/global string 1)
 {
     string str;
 	
-	TEST(only assign value to str, not str += something. no need to clear string in teardown)
+	TEST(only assign value to str, not str += something. no need to clear string in teardown) // ofcourse, you can use a str.clear in teardown, this is a good habit.
 	{
 	    str = "1";
 	}
