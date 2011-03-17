@@ -43,10 +43,9 @@ struct TestCase
       , depends(testcase)
       , fileName(file)
       , lineOfFile(line)
-      , fixtureCloneAsReporter(0)
    {}
 
-	virtual ~TestCase() { delete fixtureCloneAsReporter; }
+	virtual ~TestCase() { }
 
 	const std::string& getName() const
 	{ return name; }
@@ -80,8 +79,7 @@ struct TestCase
    {
       TestFixture * fixture = getFixture();
       fixture->tearDown(); 
-      delete fixture;
-      verifyMemChecker();      
+      verifyMemChecker();   
    }
 
    void run()
@@ -107,13 +105,9 @@ struct TestCase
 
 private:
    void startMemChecker();   
+
 public:
-   void verifyMemChecker()
-   {    
-     	typedef void (*verify_t)(void);    
-    	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
-    	verifier(); 
-   }
+   void verifyMemChecker();
 
 private:
 
@@ -134,7 +128,6 @@ private:
    std::string fileName;
 	unsigned int lineOfFile;
 	ModuleLoader* loader;
-    TestFixture *fixtureCloneAsReporter;
 };
 
 TESTNGPP_NS_END

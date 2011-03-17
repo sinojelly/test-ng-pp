@@ -28,8 +28,6 @@
 
 TESTNGPPST_NS_START
 
-//struct ModuleLoader;
-
 struct TestCase
    : public TestCaseInfoReader
 {
@@ -47,7 +45,7 @@ struct TestCase
       , lineOfFile(line)
    {}
 
-	virtual ~TestCase() {}
+	virtual ~TestCase() { }
 
 	const std::string& getName() const
 	{ return name; }
@@ -80,9 +78,8 @@ struct TestCase
    void tearDown()
    {
       TestFixture * fixture = getFixture();
-      fixture->tearDown();
-      verifyMemChecker(); // must before delete fixture, because it need fixture to report failures	  
-      delete fixture;	  
+      fixture->tearDown(); 
+      verifyMemChecker();   
    }
 
    void run()
@@ -108,13 +105,9 @@ struct TestCase
 
 private:
    void startMemChecker();   
+
 public:
-   void verifyMemChecker()
-   {    
-     	typedef void (*verify_t)(void);    
-    	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
-    	verifier(); 
-   }
+   void verifyMemChecker();
 
 private:
 

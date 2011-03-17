@@ -41,21 +41,41 @@ reportFailure(const char* file, unsigned int line, const std::string& what, bool
 
    if(throwException) throw failure;
 }
-//////////////////////////////////////////////////////////////////////////
-void TestFixture::
-setCurrentTestCase(const TestCaseInfoReader* currentCase, TestCaseResultCollector* resultCollector)
-{
-   testcase = currentCase;
-   collector = resultCollector;
-}
 
 //////////////////////////////////////////////////////////////////////////
-TestFixture *TestFixture::
-clone()
+void TestFixture::
+reportMemLeakInfo
+      ( const char* file
+      , unsigned int line
+      , const std::string& info)
 {
-    TestFixture *tempFixture = new TestFixture;
-    tempFixture->setCurrentTestCase(testcase, collector);
-    return tempFixture;
+   if(memLeakCollector == 0 || testcase == 0) return;
+   memLeakCollector->addCaseInfo(testcase, Info(file, line, info));
+}
+
+void TestFixture::
+reportMemLeakFailure(const char* file, unsigned int line, const std::string& what, bool throwException)
+{
+   if(memLeakCollector == 0 || testcase == 0) return;
+
+   AssertionFailure failure(file, line, what);
+
+   memLeakCollector->addCaseFailure(testcase, failure);
+
+   if(throwException) throw failure;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////
+void TestFixture::
+setCurrentTestCase( const TestCaseInfoReader* currentCase
+	                  , TestCaseResultCollector* resultCollector
+	                  , TestCaseResultCollector* memLeakCollector)
+{
+   this->testcase = currentCase;
+   this->collector = resultCollector;
+   this->memLeakCollector = memLeakCollector;
 }
 
 

@@ -27,7 +27,7 @@ struct InfoReporter : public Reporter
     
     void operator ()(const char *file, unsigned int line, const char *message)
     {
-        fixture->reportInfo(file, line, message);
+        fixture->reportMemLeakInfo(file, line, message);
     }
 };
 
@@ -37,10 +37,15 @@ struct FailureReporter : public Reporter
 
     void operator ()(const char *file, unsigned int line, const char *message)
     {
-        fixture->reportFailure(file, line, message, false);
+        fixture->reportMemLeakFailure(file, line, message, false);
     }
 };
 
+}
+
+namespace {
+mem_checker::Reporter * info;
+mem_checker::Reporter * failure;
 }
 
 void TestCase::startMemChecker()
@@ -48,21 +53,24 @@ void TestCase::startMemChecker()
     typedef void (*start_t)(mem_checker::Reporter *, mem_checker::Reporter *);
     start_t starter = (start_t)loader->findSymbol("startMemChecker");
 
-    if (fixtureCloneAsReporter == 0)
-    {
-        fixtureCloneAsReporter = getFixture()->clone();
-    }
-    starter( mem_checker::createReporter(InfoReporter(fixtureCloneAsReporter))
-           , mem_checker::createReporter(FailureReporter(fixtureCloneAsReporter))); // TODO: Reporter is new in runner.exe, and used in .dll. is this ok?
+	TestFixture *fixture = getFixture();
+	
+	info = mem_checker::createReporter(InfoReporter(fixture));
+	failure = mem_checker::createReporter(FailureReporter(fixture)); // Note: Reporter is new in runner.exe, and used in .dll. is this ok?
+	starter(info, failure);
 }
 
-//void TestCase::verifyMemChecker()
-//{
-//    typedef void (*verify_t)(void);
-//    verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");
-//    verifier(); 
-//}
+void TestCase::verifyMemChecker()
+{    
+	typedef void (*verify_t)(void);    
+	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
+	verifier(); 
 
+	delete info;
+	delete failure;
+	info = 0;
+	failure = 0;
+}
 
 TESTNGPP_NS_END
 
