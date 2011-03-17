@@ -13,6 +13,7 @@
 #include <testngpp/internal/TestFixtureDesc.h>
 
 #include <testngpp/listener/TestCaseResultCollector.h>
+#include <testngpp/listener/MemLeakCountCollector.h>
 
 #include <testngpp/runner/SimpleTestCaseRunner.h>
 #include <testngpp/runner/SmartTestCaseResultCollector.h>
@@ -186,6 +187,7 @@ bool doRun
 
 }
 
+
 //////////////////////////////////////////
 bool SimpleTestCaseRunner::run
       ( TestCase* testcase
@@ -197,8 +199,14 @@ bool SimpleTestCaseRunner::run
    TestCaseResultCollector* smartCollector =
          new SmartTestCaseResultCollector(collector, reportSuccess);
 
+   TestCaseResultCollector* memLeakCountCollector =
+         new MemLeakCountCollector();
+
+   TestCaseResultCollector* emptyCollector =
+         new EmptyCollector();
+
    testcase->setFixture();
-   testcase->getFixture()->setCurrentTestCase(testcase, smartCollector);
+   testcase->getFixture()->setCurrentTestCase(testcase, smartCollector, memLeakCountCollector);
 
    smartCollector->startTestCase(testcase);
 
@@ -209,18 +217,29 @@ bool SimpleTestCaseRunner::run
    timer.start();
    success = doRun(testcase, smartCollector);
 
+   if ((dynamic_cast<MemLeakCountCollector*>(memLeakCountCollector))->getMemLeakCount() > 0)
+   {
+	   testcase->getFixture()->setCurrentTestCase(testcase, emptyCollector, smartCollector);
+	   
+       timer.start();
+       success = doRun(testcase, smartCollector);     
+   }
+
    __TESTNGPP_CLEANUP
 
-   testcase->verifyMemChecker(); // avoid affecting the following testcase.
+   testcase->verifyMemChecker(); // avoid affecting the following testcase. maybe some testcase's teardown not run.
    timeval e = timer.stop();
    smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;
-   //delete testcase->getFixture(); // when test case run finish, there is a delete in tearDown, this is duplicate.
+   delete memLeakCountCollector;
+   delete emptyCollector;
+   delete testcase->getFixture(); 
 
    __TESTNGPP_DONE
 
    return success;
 }
+
 
 TESTNGPP_NS_END
 

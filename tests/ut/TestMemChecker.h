@@ -6,6 +6,11 @@
 // maybe test file do not need this file, but including it in files to be tested is very important, especially for c files.
 #include <mem_checker/interface_4user.h>
 
+#include <vector>
+#include <string>
+using namespace std;
+
+
 // mockcpp.lib has been already included in project.
 //#pragma comment(lib, "../3rdparty/mockcpp/src/Debug/mockcpp.lib")
 
@@ -124,3 +129,29 @@ FIXTURE(TestMemChecker)
     }
 };
 
+
+static vector<int> global;
+
+FIXTURE(GlocalVectorMemLeak, global vector)
+{
+	string str;
+
+	TEARDOWN()
+	{
+		global.clear();
+	}
+
+	TEST(empty)
+	{
+	}
+
+	TEST(global vector should not cause report memleak by mistake)
+	{
+		global.push_back(1);
+	}
+
+	TEST(if a string var in FIXTURE)
+	{
+		str += "1"; // Note: not need to use str=""; in TEARDOWN.
+	}
+};
