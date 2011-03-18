@@ -16,4 +16,4 @@ build ../build_testngpp_to_install ../test-ng-pp
 
 cd ../test-ng-pp
 
-
+mv -f $install_dir/3rdparty $install_dir/..
