@@ -4,7 +4,7 @@
 # Build mockcpp and it's tests, and at last run all tests.
 
 # You can change this testngpp install dir by yourself, it must be an absolute path.
-$TESTNGPP_INSTALL_DIR="D:\tools_release\cpp-ut-project-release\tools\testngpp"
+$TESTNGPP_INSTALL_DIR="D:\Projects\Google\cpp-ut-project\cpp-ut-project\tools\testngpp"
 
 # add vcbuild path  and cmake path
 # It's better to add to your computer's path environment variable, than to modify $env:path below.
