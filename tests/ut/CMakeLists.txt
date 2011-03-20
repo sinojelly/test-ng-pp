@@ -27,6 +27,7 @@ SET(UT_CASES
   TestXMLBuilder.h
   TestDataDriven.h
   TestMemChecker.h
+  TestAsserter.h
 )
 
 IF(UNIX)

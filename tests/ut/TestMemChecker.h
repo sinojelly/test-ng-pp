@@ -171,3 +171,4 @@ FIXTURE(MemberStringMemLeak2, member/global string 2)
 	    str += "1";
 	}
 };
+

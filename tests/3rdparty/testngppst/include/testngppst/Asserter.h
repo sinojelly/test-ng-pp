@@ -21,10 +21,11 @@
 
 #include <sstream>
 #include <string.h>
+#include <float.h>
+#include <math.h>
 
 #include <testngppst/testngppst.h>
 #include <testngppst/utils/Formatter.h>
-
 
 #if defined(__GNUC__)
 #define TESTNGPPST_TYPEOF(expr) typeof(expr)
@@ -71,12 +72,34 @@ TESTNGPPST_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
+#define __TESTNGPPST_ASSERT_DOUBLE_EQUALITY(expected_value, not_equals, expected_equality, wrong_equality, value, failfast) do {\
+  TESTNGPPST_TYPEOF(value) __testngppst_value = (value); \
+  if(not_equals(fabs(expected_value - __testngppst_value) < FLT_EPSILON)) { \
+	 std::stringstream ss; \
+	 ss << "expected (" #expected_value __TESTNGPPST_MAKE_STR(expected_equality) #value "), found (" \
+		<< TESTNGPPST_NS::toTypeAndValueString(expected_value) \
+		<< __TESTNGPPST_MAKE_STR(wrong_equality) \
+		<< TESTNGPPST_NS::toTypeAndValueString(__testngppst_value) \
+		<< ")"; \
+	 __TESTNGPPST_REPORT_FAILURE(ss.str(), failfast); \
+  } \
+}while(0)
+
+//////////////////////////////////////////////////////////////////
 #define __ASSERT_EQ(expected, value, failfast) \
    __TESTNGPPST_ASSERT_EQUALITY(expected, ==, !=, value, failfast)
 
 //////////////////////////////////////////////////////////////////
 #define __ASSERT_NE(expected, value, failfast) \
    __TESTNGPPST_ASSERT_EQUALITY(expected, !=, ==, value, failfast)
+
+//////////////////////////////////////////////////////////////////
+#define __ASSERT_DBL_EQ(expected, value, failfast) \
+   __TESTNGPPST_ASSERT_DOUBLE_EQUALITY(expected, !, ==, !=, value, failfast)
+
+//////////////////////////////////////////////////////////////////
+#define __ASSERT_DBL_NE(expected, value, failfast) \
+   __TESTNGPPST_ASSERT_DOUBLE_EQUALITY(expected, , !=, ==, value, failfast)
 
 //////////////////////////////////////////////////////////////////
 #define __ASSERT_THROWS(expr, except, failfast) do { \
@@ -173,6 +196,8 @@ TESTNGPPST_NS_START
 #define ASSERT_FALSE(expr) __ASSERT_FALSE(expr, true)
 #define ASSERT_EQ(expected, value) __ASSERT_EQ(expected, value, true)
 #define ASSERT_NE(expected, value) __ASSERT_NE(expected, value, true)
+#define ASSERT_DBL_EQ(expected, value) __ASSERT_DBL_EQ(expected, value, true)
+#define ASSERT_DBL_NE(expected, value) __ASSERT_DBL_NE(expected, value, true)
 #define ASSERT_THROWS(expr, except) __ASSERT_THROWS(expr, except, true)
 #define ASSERT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, true)
 #define ASSERT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, true)
