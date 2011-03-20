@@ -23,5 +23,13 @@ FIXTURE(TestAsserter)
 
 		ASSERT_DBL_EQ(d + f, double(0.7));	  // if use DBL_EPSILON in ASSERT macro, it print:  found ((double)0.7 != (double)0.7), it's very strange.
     }	
+
+	TEST(float 0.6 add float 0.1 should equal to float 0.7)
+    {
+		float f1 = (float)0.6;
+		float f2 = (float)0.1;
+
+		ASSERT_DBL_EQ(f1 + f2, float(0.7));	  // if use ASSERT_EQ, it's fail.
+    }		
 };
 
