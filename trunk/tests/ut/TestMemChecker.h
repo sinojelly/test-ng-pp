@@ -4,12 +4,11 @@
 // without this header, can only check memory leak caused by new, and can not specify the allocate file/line.
 // with this header included, can check memory leak caused by new or malloc, and can specify the allocate file/line.
 // maybe test file do not need this file, but including it in files to be tested is very important, especially for c files.
-#include <mem_checker/interface_4user.h>
+//#include <mem_checker/interface_4user.h>
 
 #include <vector>
 #include <string>
 using namespace std;
-
 
 // mockcpp.lib has been already included in project.
 //#pragma comment(lib, "../3rdparty/mockcpp/src/Debug/mockcpp.lib")
@@ -71,12 +70,14 @@ FIXTURE(TestMemChecker)
         free(p);
     }
 
+	// @test (tags="nomemcheck")
     TEST(can stop memory checker in a testcase)
     {
-        STOP_MEM_CHECKER(); //stopMemChecker();
         char *p = new char[3]; // should not report memory leak
     }
 
+#if 0
+	// after use tags="nomemcheck", this was not supported. ofcourse, if still open STOP/OPEN_MEM_CHECKER api, it works.
     TEST(user can reopen memory checker in a testcase)
     {
         STOP_MEM_CHECKER(); //stopMemChecker();
@@ -88,6 +89,7 @@ FIXTURE(TestMemChecker)
 		delete [] p;
 		#endif
     }
+#endif
 
     TEST(can report more than one leak)
     {
@@ -170,5 +172,30 @@ FIXTURE(MemberStringMemLeak2, member/global string 2)
 	{
 	    str += "1";
 	}
+};
+
+
+FIXTURE(TestNoMemCheckTag)
+{
+	// @test (tags="nomemcheck")
+	TEST(case 1: a testcase with nomemcheck tag should not report mem leaks)
+	{
+		int *p = new int;
+	}
+
+    // @test (tags="ut nomemcheck it")
+	TEST(case 2: a testcase with nomemcheck tag should not report mem leaks)
+	{
+	    int *p = new int;
+	}
+
+    TEST(a testcase without nomemcheck tag should report mem leaks)
+    {
+    	int *p = new int;
+
+		#ifdef AVOID_MEM_LEAKS
+		delete p;
+		#endif
+    }
 };
 

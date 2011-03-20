@@ -105,6 +105,7 @@ struct TestCase
 
 private:
    void startMemChecker();   
+   bool noMemCheck();
 
 public:
    void verifyMemChecker();
