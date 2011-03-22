@@ -216,6 +216,9 @@ FIXTURE(TestFixtureNoMemCheckTag)
    TEST(fixture has been set to fnomemcheck, its test can use memcheck to open mem leak check)
    {
    	   char *p = new char;  // should fail
+       #ifdef AVOID_MEM_LEAKS
+       delete p;
+       #endif   	   
    }
 
 };
@@ -226,6 +229,9 @@ FIXTURE(TestFixtureMemCheckTag)
    TEST(fixture has been set to fmemcheck, its tests all memcheck)
    {
        char *p = new char; // should fail
+       #ifdef AVOID_MEM_LEAKS
+       delete p;
+       #endif       
    }
 
    //@test(tags="nomemcheck")
