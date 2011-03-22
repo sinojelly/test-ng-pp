@@ -24,15 +24,14 @@
 
 注意：判断时使用的fabs(a-b)<FLT_EPSILON，不能用DBL_EPSILON，否则有float参与运算时，精度达不到，就会出现0.7 != 0.7的情况。
 
-~~
+
 2、增加关闭用例内存泄露检查的方法：tags = "nomemcheck" 。
 
 注意：
-  # 内存泄露检查是默认开启的，暂时无法在命令行关闭（还没想到简单办法实现它，也不想破坏了现在软件的结构^_^）
-  # 暂时不支持FIXTURE的内存泄露检查控制。
-  # 针对用例，也无法打开内存泄露。（暂时用不着）
+~~  # 内存泄露检查是默认开启的，暂时无法在命令行关闭（还没想到简单办法实现它，也不想破坏了现在软件的结构^_^）~~
+~~  # 暂时不支持FIXTURE的内存泄露检查控制。~~
+~~  # 针对用例，也无法打开内存泄露。（暂时用不着）~~
   # 去掉了STOP/OPEN_MEM_CHECKER两个接口。
-~~
 
 
 == 2011.3.22 ==
@@ -41,5 +40,5 @@
 
   # 如果命令行加了-m选项，则该次执行不再检查内存泄露（即使在Fixture/TestCase级别打开也没用）。
   # 如果命令行没有-m选项，默认是会进行内存泄露检查的，具体的Fixture/TestCase的内存泄露是否检查由它们的tags确定。
-  # Fixture/TestCase的tags中控制是否内存泄露检查的方法：[f]nomemcheck 表示不检查，[f]memcheck表示检查，两者都没有也表示检查。（Fixture的tags需要在前面加f）
+  # Fixture/TestCase的tags中控制是否内存泄露检查的方法：{f}nomemcheck 表示不检查，{f}memcheck表示检查，两者都没有也表示检查。（Fixture的tags需要在前面加f）
   # Fixture设置的tags，会影响到它的每一个用例，但Fixture的tags设置优先级比TestCase的要低。（可以在Fixture级别关闭，再在TestCase级别打开）
