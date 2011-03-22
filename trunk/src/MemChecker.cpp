@@ -1,0 +1,163 @@
+/**
+    TestNG++ is a practical, easy-to-use C/C++ xUnit framework.
+    Copyright (C) <2011>  <Chen Guodong: sinojelly@gmail.com>
+
+    TestNG++ is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    TestNG++ is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
+**/
+#include <testngpp/internal/TestCase.h>
+#include <testngpp/internal/MemChecker.h>
+
+#include <testngpp/runner/loaders/ModuleLoader.h>
+
+#include <mem_checker/interface_4xunit.h>
+
+
+TESTNGPP_NS_START
+
+bool MemChecker::isGlobalOpen = true;
+
+namespace
+{
+
+struct Reporter
+{
+    Reporter(TestFixture *_fixture)
+        : fixture(_fixture)
+    {
+    }
+
+protected:
+    TestFixture *fixture;
+};
+
+struct InfoReporter : public Reporter
+{
+    InfoReporter(TestFixture *_fixture) : Reporter(_fixture) {}
+    
+    void operator ()(const char *file, unsigned int line, const char *message)
+    {
+        fixture->reportMemLeakInfo(file, line, message);
+    }
+};
+
+struct FailureReporter : public Reporter
+{
+    FailureReporter(TestFixture *_fixture) : Reporter(_fixture) {}
+
+    void operator ()(const char *file, unsigned int line, const char *message)
+    {
+        fixture->reportMemLeakFailure(file, line, message, false);
+    }
+};
+
+}
+
+
+namespace {
+mem_checker::Reporter * info;
+mem_checker::Reporter * failure;
+}
+
+bool MemChecker::isOpenInTags()
+{
+    bool isOpen = true;
+	
+    const char ** tags = testcase->getTags();
+
+	// fixture's tags
+    for(unsigned int i = 0; i < testcase->numberOfTags() ; i++) 
+    {
+       if(strcmp("fnomemcheck", tags[i]) == 0)
+       {
+          isOpen = false;
+       }
+       else if(strcmp("fmemcheck", tags[i]) == 0)
+       {
+          isOpen = true;
+       }
+    }
+
+	// testcase's tags
+	for(unsigned int i = 0; i < testcase->numberOfTags() ; i++) 
+	{
+		if(strcmp("nomemcheck", tags[i]) == 0)
+		{
+			isOpen = false;
+		}
+		else if(strcmp("memcheck", tags[i]) == 0)
+		{
+			isOpen = true;
+		}
+	}
+
+	return isOpen;
+}
+
+bool MemChecker::needMemCheck()
+{
+    return isGlobalOpen && isTestOpen;
+}
+
+MemChecker::MemChecker(TestCase *testcase) : testcase(testcase)
+{ 
+    isTestOpen = isOpenInTags();
+}
+
+void MemChecker::start()
+{
+    if (!needMemCheck())
+    {
+        return;
+    }
+
+	ModuleLoader *loader = testcase->getLoader();
+
+	typedef void (*start_t)(mem_checker::Reporter *, mem_checker::Reporter *);
+    start_t starter = (start_t)loader->findSymbol("startMemChecker");
+
+	TestFixture *fixture = testcase->getFixture();
+	
+	info = mem_checker::createReporter(InfoReporter(fixture));
+	failure = mem_checker::createReporter(FailureReporter(fixture)); // Note: Reporter is new in runner.exe, and used in .dll. is this ok?
+	starter(info, failure);
+}
+
+void MemChecker::verify()
+{
+    if (!needMemCheck())
+    {
+        return;
+    }
+
+	ModuleLoader *loader = testcase->getLoader();
+	
+	typedef void (*verify_t)(void);    
+	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
+	verifier(); 
+
+	delete info;
+	delete failure;
+	info = 0;
+	failure = 0;
+}
+
+void MemChecker::setGlobalOpen(bool globalOpen)
+{
+    isGlobalOpen = globalOpen;
+}
+
+
+TESTNGPP_NS_END
+
+

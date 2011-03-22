@@ -71,7 +71,7 @@ struct TestCase
 
    void setUp()
    {
-       startMemChecker();
+       getFixture()->startMemChecker();
        getFixture()->setUp();
    }
 
@@ -79,7 +79,7 @@ struct TestCase
    {
       TestFixture * fixture = getFixture();
       fixture->tearDown(); 
-      verifyMemChecker();   
+      getFixture()->verifyMemChecker();   
    }
 
    void run()
@@ -103,12 +103,10 @@ struct TestCase
        loader = _loader;
    }
 
-private:
-   void startMemChecker();   
-   bool noMemCheck();
-
-public:
-   void verifyMemChecker();
+   ModuleLoader *getLoader()
+   {
+       return loader;
+   }
 
 private:
 

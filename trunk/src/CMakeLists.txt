@@ -10,7 +10,7 @@ SET(TESTNGPP_SRCS
   TestSuiteDesc.cpp 
   TypeString.cpp 
   Formatter.cpp 
-  TestCase.cpp
+  MemChecker.cpp
   mem_checker/bool_array.cpp       
   mem_checker/mem_pool_base.cpp
   mem_checker/debug_new.cpp        
