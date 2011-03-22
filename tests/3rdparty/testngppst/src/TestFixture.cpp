@@ -3,6 +3,7 @@
 #include <testngppst/internal/TestCaseInfoReader.h>
 #include <testngppst/internal/Warning.h>
 #include <testngppst/internal/Info.h>
+#include <testngppst/internal/MemChecker.h>
 
 #include <testngppst/listener/TestCaseResultCollector.h>
 
@@ -71,18 +72,30 @@ reportMemLeakFailure(const char* file, unsigned int line, const std::string& wha
 void TestFixture::
 setCurrentTestCase( const TestCaseInfoReader* currentCase
 	                  , TestCaseResultCollector* resultCollector
-	                  , TestCaseResultCollector* memLeakCollector)
+	                  , TestCaseResultCollector* memLeakCollector
+	                  , MemChecker* memChecker)
 {
    this->testcase = currentCase;
    this->collector = resultCollector;
    this->memLeakCollector = memLeakCollector;
+   this->memChecker = memChecker;
+}
+
+//////////////////////////////////////////////////////////////////////////
+void TestFixture::
+startMemChecker()
+{
+   memChecker->start();
+}
+
+void TestFixture::
+verifyMemChecker()
+{
+   memChecker->verify();
 }
 
 
 TESTNGPPST_NS_END
-
-
-
 
 
 

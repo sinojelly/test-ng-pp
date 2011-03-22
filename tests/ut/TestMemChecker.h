@@ -199,3 +199,41 @@ FIXTURE(TestNoMemCheckTag)
     }
 };
 
+//@fixture(tags = "fnomemcheck")
+FIXTURE(TestFixtureNoMemCheckTag)
+{
+   TEST(fixture has been set to fnomemcheck, its tests all nomemcheck)
+   {
+       char *p = new char;
+   }
+
+   TEST(fixture has been set to fnomemcheck, its tests all nomemcheck 2)
+   {
+   	   char *p = new char;
+   }
+
+   //@test(tags="memcheck")
+   TEST(fixture has been set to fnomemcheck, its test can use memcheck to open mem leak check)
+   {
+   	   char *p = new char;  // should fail
+   }
+
+};
+
+//@fixture(tags = "fmemcheck")
+FIXTURE(TestFixtureMemCheckTag)
+{
+   TEST(fixture has been set to fmemcheck, its tests all memcheck)
+   {
+       char *p = new char; // should fail
+   }
+
+   //@test(tags="nomemcheck")
+   TEST(fixture has been set to fmemcheck, its test can use nomemcheck to close mem leak check)
+   {
+   	   char *p = new char;
+   }
+
+};
+
+

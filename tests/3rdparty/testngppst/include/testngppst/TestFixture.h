@@ -27,6 +27,7 @@ TESTNGPPST_NS_START
 
 struct TestCaseInfoReader;
 struct TestCaseResultCollector;
+struct MemChecker;
 
 struct TestFixture
 {
@@ -47,13 +48,18 @@ struct TestFixture
    void reportMemLeakFailure(const char* file, unsigned int line, const std::string& failure, bool throwException=true);
 
    //////////////////////////////////////////////
-   void setCurrentTestCase(const TestCaseInfoReader*, TestCaseResultCollector*, TestCaseResultCollector*);
+   void setCurrentTestCase(const TestCaseInfoReader*, TestCaseResultCollector*, TestCaseResultCollector*, MemChecker*);
+
+   //////////////////////////////////////////////
+   void startMemChecker();
+   void verifyMemChecker();
 
 private:
 
    const TestCaseInfoReader* testcase;
    TestCaseResultCollector* collector;
-   TestCaseResultCollector* memLeakCollector;   
+   TestCaseResultCollector* memLeakCollector; 
+   MemChecker* memChecker;
 };
 
 TESTNGPPST_NS_END

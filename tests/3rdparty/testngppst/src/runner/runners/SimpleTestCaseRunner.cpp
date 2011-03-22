@@ -11,6 +11,7 @@
 
 #include <testngppst/internal/TestCase.h>
 #include <testngppst/internal/TestFixtureDesc.h>
+#include <testngppst/internal/MemChecker.h>
 
 #include <testngppst/listener/TestCaseResultCollector.h>
 #include <testngppst/listener/MemLeakCountCollector.h>
@@ -205,8 +206,10 @@ bool SimpleTestCaseRunner::run
    TestCaseResultCollector* emptyCollector =
          new EmptyCollector();
 
+   MemChecker* memChecker = new MemChecker(testcase);
+
    testcase->setFixture();
-   testcase->getFixture()->setCurrentTestCase(testcase, smartCollector, memLeakCountCollector);
+   testcase->getFixture()->setCurrentTestCase(testcase, smartCollector, memLeakCountCollector, memChecker);
 
    smartCollector->startTestCase(testcase);
 
@@ -219,7 +222,7 @@ bool SimpleTestCaseRunner::run
 
    if ((dynamic_cast<MemLeakCountCollector*>(memLeakCountCollector))->getMemLeakCount() > 0)
    {
-	   testcase->getFixture()->setCurrentTestCase(testcase, emptyCollector, smartCollector);
+	   testcase->getFixture()->setCurrentTestCase(testcase, emptyCollector, smartCollector, memChecker);
 	   
        timer.start();
        success = doRun(testcase, smartCollector);     
@@ -227,12 +230,13 @@ bool SimpleTestCaseRunner::run
 
    __TESTNGPPST_CLEANUP
 
-   testcase->verifyMemChecker(); // avoid affecting the following testcase. maybe some testcase's teardown not run.
+   testcase->getFixture()->verifyMemChecker(); // avoid affecting the following testcase. maybe some testcase's teardown not run.
    timeval e = timer.stop();
    smartCollector->endTestCase(testcase, e.tv_sec, e.tv_usec);
    delete smartCollector;
    delete memLeakCountCollector;
    delete emptyCollector;
+   delete memChecker;
    delete testcase->getFixture(); 
 
    __TESTNGPPST_DONE
