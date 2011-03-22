@@ -143,7 +143,7 @@ SET(TESTNGRUNNER_LIB_SRCS
      ${TESTNGRUNNER_LIB_SRCS}
      ../TestSuiteDesc.cpp
 	 ../TestFixture.cpp
-	 ../TestCase.cpp
+	 ../MemChecker.cpp
   )
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/3rdparty)
 ENDIF(CYGWIN)

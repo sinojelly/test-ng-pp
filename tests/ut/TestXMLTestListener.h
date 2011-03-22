@@ -13,8 +13,6 @@
 #include <cxxtest/TestSuite.h>
 #include <string>
 
-#include <mem_checker/interface_4user.h>
-
 USING_MOCKCPP_NS
 USING_TESTNGPP_NS
 
@@ -50,7 +48,9 @@ public:
 	void testXMLTestListener(void) {
 		#ifdef __GNUC__
 		// TODO: there is a 15 bytes mem leak on linux, but it runs ok on windows. the reason is unknown.
-		STOP_MEM_CHECKER();
+		//STOP_MEM_CHECKER();
+		extern void pauseCheckStatus();
+		pauseCheckStatus();		
 		#endif
 		testSuiteInfoReader
 			.METHOD(TestSuiteInfoReader::getName)

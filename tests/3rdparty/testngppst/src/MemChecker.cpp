@@ -15,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with TestNG++.  If not, see <http://www.gnu.org/licenses/>.
 **/
+#include <string.h>
+
 #include <testngppst/internal/TestCase.h>
 #include <testngppst/internal/MemChecker.h>
 

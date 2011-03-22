@@ -1,4 +1,4 @@
-#include <mem_checker/interface_4user.h>
+
 #include <string>
 #include <sstream>
 #include <string>
@@ -19,7 +19,9 @@ public:
 	{
 		#ifdef __GNUC__
 		// TODO: there is a 15 bytes mem leak on linux, but it runs ok on windows. the reason is unknown.
-		STOP_MEM_CHECKER();
+		//STOP_MEM_CHECKER();
+		extern void pauseCheckStatus();
+		pauseCheckStatus();
 		#endif
 		std::string expected =
 "<?xml version=\"1.0\"?>\n\
