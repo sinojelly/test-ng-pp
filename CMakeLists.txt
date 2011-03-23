@@ -47,11 +47,11 @@ INSTALL(FILES include/testngpp/runner/loaders/ModuleLoader.h
 INSTALL(DIRECTORY 3rdparty/mem_checker DESTINATION 3rdparty
           PATTERN ".svn" EXCLUDE)		  
 		  
-IF(MSVC)
+#IF(MSVC)
 INSTALL(DIRECTORY 3rdparty/boost DESTINATION 3rdparty
           PATTERN ".svn" EXCLUDE)
    
-ENDIF(MSVC)
+#ENDIF(MSVC)
 		  
 IF(USING_AS_TESTCPP)
   INSTALL(DIRECTORY include/testcpp DESTINATION include
