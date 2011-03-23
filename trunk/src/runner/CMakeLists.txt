@@ -168,6 +168,7 @@ ELSE(TESTNGPP_USE_DLOPEN)
 ENDIF(TESTNGPP_USE_DLOPEN)
 
 IF(UNIX)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/3rdparty)
 ADD_DEFINITIONS(
     -g -ggdb
 )
@@ -177,7 +178,13 @@ ADD_LIBRARY(testngpp-runner-lib STATIC ${TESTNGRUNNER_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 
+IF(UNIX)
+ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp ../MemChecker.cpp ../TestFixture.cpp) 
+ENDIF(UNIX)
+
+IF(NOT UNIX)
 ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp) 
+ENDIF(NOT UNIX)
 
 IF(MSVC)
    ADD_EXECUTABLE(testngpp-win32-testcase-runner win32/TestCaseSandboxRunnerMain.cpp)
