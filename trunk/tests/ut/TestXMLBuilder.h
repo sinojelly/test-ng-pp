@@ -17,7 +17,8 @@ private:
 public:
 	void testXMLBuilder()
 	{
-		#ifdef __GNUC__
+		#if 0
+		//def __GNUC__
 		// TODO: there is a 15 bytes mem leak on linux, but it runs ok on windows. the reason is unknown.
 		//STOP_MEM_CHECKER();
 		extern void pauseCheckStatus();

@@ -77,31 +77,18 @@ bool MemChecker::isOpenInTags()
 	
     const char ** tags = testcase->getTags();
 
-	// fixture's tags
+	// fixture's tags + testcase's tags
     for(unsigned int i = 0; i < testcase->numberOfTags() ; i++) 
     {
-       if(strcmp("fnomemcheck", tags[i]) == 0)
+       if(strcmp("nomemcheck", tags[i]) == 0)
        {
           isOpen = false;
        }
-       else if(strcmp("fmemcheck", tags[i]) == 0)
+       else if(strcmp("memcheck", tags[i]) == 0)
        {
           isOpen = true;
        }
     }
-
-	// testcase's tags
-	for(unsigned int i = 0; i < testcase->numberOfTags() ; i++) 
-	{
-		if(strcmp("nomemcheck", tags[i]) == 0)
-		{
-			isOpen = false;
-		}
-		else if(strcmp("memcheck", tags[i]) == 0)
-		{
-			isOpen = true;
-		}
-	}
 
 	return isOpen;
 }

@@ -199,7 +199,7 @@ FIXTURE(TestNoMemCheckTag)
     }
 };
 
-//@fixture(tags = "fnomemcheck")
+//@fixture(tags = "nomemcheck")
 FIXTURE(TestFixtureNoMemCheckTag)
 {
    TEST(fixture has been set to fnomemcheck, its tests all nomemcheck)
@@ -223,7 +223,7 @@ FIXTURE(TestFixtureNoMemCheckTag)
 
 };
 
-//@fixture(tags = "fmemcheck")
+//@fixture(tags = "memcheck")
 FIXTURE(TestFixtureMemCheckTag)
 {
    TEST(fixture has been set to fmemcheck, its tests all memcheck)
