@@ -8,6 +8,7 @@ from Phase1Result import *
 from TestCase import TestCase
 from Fixture import Fixture
 from Name import *
+from Utils import rm_dup
 
 import Output
 
@@ -59,7 +60,8 @@ def get_fixture_id(fixture):
    return fixture.get_id()
 
 def get_testcase_tags(testcase, fixture):
-   tags = list(set(testcase.get_tags()) | set(fixture.get_tags()))
+   #tags = list(set(testcase.get_tags()) | set(fixture.get_tags()))
+   tags = rm_dup(fixture.get_tags() + testcase.get_tags())  # fixture's tags + testcase's tags
    result = ",".join(tags)
    if result == "":
       return "0"
