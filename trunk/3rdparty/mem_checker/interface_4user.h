@@ -22,6 +22,19 @@
 #ifndef __INTERFACE_4USER_H__
 #define __INTERFACE_4USER_H__
 
+/**
+ * NOTE: If some system header cause compiling error, include it(only the header user needed is enough).
+ *       So as to avoid include them after new/malloc was replaced by macro, and avoid compiling error.
+ */
+#ifdef _MSC_VER
+#include <crtdbg.h>
+#include <xdebug>
+#include <xlocale>
+#else
+#include <string>
+#include <algorithm>
+#endif
+
 #ifdef __cplusplus
 #include <mem_checker/interface_4cxxuser.h>
 #else
