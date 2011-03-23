@@ -554,7 +554,7 @@ static bool check_tail(new_ptr_list_t* ptr)
         fprintf(new_output_fp,
                 "new%s: allocated %p (size %lu, ",
                 is_array ? "[]" : "",
-                pointer, size);
+                pointer, (unsigned long)size);
         if (line != 0)
             print_position(ptr->file, ptr->line);
         else
@@ -661,7 +661,7 @@ static bool check_tail(new_ptr_list_t* ptr)
                 "delete%s: freed %p (size %lu, %lu bytes still allocated)\n",
                 is_array ? "[]" : "",
                 (char*)ptr + ALIGNED_LIST_ITEM_SIZE,
-                ptr->size, total_mem_alloc);
+                (unsigned long)ptr->size, (unsigned long)total_mem_alloc);
     }
     free(ptr);
     return;
@@ -805,7 +805,7 @@ int check_mem_corruption()
             fprintf(new_output_fp,
                     "Heap data corrupt near %p (size %lu, ",
                     pointer,
-                    ptr->size);
+                    (unsigned long)ptr->size);
 #if _DEBUG_NEW_TAILCHECK
         }
         else
