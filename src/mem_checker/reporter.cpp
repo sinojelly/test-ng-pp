@@ -50,14 +50,33 @@ void set_reporter
     ( mem_checker::Reporter *infoReporter
     , mem_checker::Reporter *failureReporter)
 {
+    if (0 != mem_checker_info_reporter)
+    {
+        delete mem_checker_info_reporter;
+    }
+
+    if (0 != mem_checker_failure_reporter)
+    {
+        delete mem_checker_failure_reporter;
+    }
+
     mem_checker_info_reporter = infoReporter;
     mem_checker_failure_reporter = failureReporter;
 }
 
 void clr_reporter()
 {
-	mem_checker_info_reporter = 0;
-	mem_checker_failure_reporter = 0;
+    if (0 != mem_checker_info_reporter)
+    {
+        delete mem_checker_info_reporter;
+        mem_checker_info_reporter = 0;
+    }
+
+    if (0 != mem_checker_failure_reporter)
+    {
+        delete mem_checker_failure_reporter;
+        mem_checker_failure_reporter = 0;
+    }
 }
 
 #if 0

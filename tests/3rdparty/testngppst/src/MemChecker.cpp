@@ -135,10 +135,10 @@ void MemChecker::verify()
 	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
 	verifier(); 
 
-	delete info;
-	delete failure;
-	info = 0;
-	failure = 0;
+	//delete info;  // Note: this will cause linux run exception
+	//delete failure;
+	//info = 0;
+	//failure = 0;
 }
 
 void MemChecker::setGlobalOpen(bool globalOpen)
