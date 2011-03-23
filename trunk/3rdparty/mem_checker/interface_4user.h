@@ -27,12 +27,21 @@
  *       So as to avoid include them after new/malloc was replaced by macro, and avoid compiling error.
  */
 #ifdef _MSC_VER
+
 #include <crtdbg.h>
+
+#ifdef __cplusplus
 #include <xdebug>
 #include <xlocale>
+#endif
+
 #else
+
+#ifdef __cplusplus
 #include <string>
 #include <algorithm>
+#endif
+
 #endif
 
 #ifdef __cplusplus
