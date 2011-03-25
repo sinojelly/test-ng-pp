@@ -2,8 +2,11 @@ testngpp使用简明指导
 
 = 基本原理 =
 testngpp的用例写在.h文件中，
+
 编译前，自动根据.h生成用例辅助文件.cpp/.cxx，（调用testngppgen.exe或者python脚本完成）
+
 编译后，生成.dll/.so文件，
+
 运行时，由testngpp-runner.exe加载并执行。（如果用了sandbox，则是由testngpp-win32-testcase-runner.exe加载执行）
 
 = 命令行 =
