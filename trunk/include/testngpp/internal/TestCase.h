@@ -98,6 +98,12 @@ struct TestCase
      return tags;
    }
    
+   virtual const char* getMemCheckSwitch() const
+   {
+     static const char* memCheckSwitch = "none";
+     return memCheckSwitch;
+   }
+
    void setModuleLoader(ModuleLoader* _loader)
    {
        loader = _loader;

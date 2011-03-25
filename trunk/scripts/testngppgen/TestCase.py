@@ -21,8 +21,8 @@ class TestCase:
       annotation = None
       if len(annotations) > 0:
         annotation = annotations[0]
-     
-      self.annotations      = AnnotationParser(annotation, {"id":None, "depends":None, "data":None, "tags":[]}).parse()
+
+      self.annotations      = AnnotationParser(annotation, {"id":None, "depends":None, "memcheck":None, "data":None, "tags":[]}).parse()
       if self.p_test and self.annotations["data"] == None:
          raw_fatal(file, line, "parameterized test should have data provider")
 
@@ -42,7 +42,11 @@ class TestCase:
    ########################################
    def get_tags(self):
       return self.annotations['tags']
-      
+
+   ########################################
+   def get_memcheck_switch(self):
+      return self.annotations['memcheck']
+
    ########################################
    def set_scope(self, scope):
       self.scope = scope
@@ -73,7 +77,7 @@ class TestCase:
       if self.annotations["depends"] == None:
          return None
 
-      depends = self.scope.find_testcase_with_id(self.annotations["depends"]) 
+      depends = self.scope.find_testcase_with_id(self.annotations["depends"])
       if depends == None:
          raw_fatal(self.file, self.line, "no testcase was specified with id=" + self.annotations["depends"])
 
@@ -85,7 +89,7 @@ class TestCase:
          self.depends = self.__get_depends()
 
       return self.depends
-     
+
    ########################################
    def show(self):
        content = "TEST(" + self.get_name() + ")"

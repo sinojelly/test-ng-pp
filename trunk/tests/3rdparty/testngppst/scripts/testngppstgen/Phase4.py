@@ -67,6 +67,18 @@ def get_testcase_tags(testcase, fixture):
       return "0"
    return result
 
+def get_testcase_memcheck_switch(testcase, fixture):
+   testcase_switch = testcase.get_memcheck_switch()
+   fixture_switch = fixture.get_memcheck_switch()
+
+   if testcase_switch == "on" or testcase_switch == "off" :   # testcase first
+      return testcase_switch
+
+   if fixture_switch == "on" or fixture_switch == "off" :
+      return fixture_switch
+
+   return "none"
+
 ################################################
 testcase_template = '''
 static struct %s
@@ -113,6 +125,12 @@ static struct %s
    {
       static const char* tags[] = {%s};
       return tags;
+   }
+
+   const char* getMemCheckSwitch() const
+   {
+      static const char* memCheckSwitch = "%s";
+      return memCheckSwitch;
    }
 
 private:
@@ -165,6 +183,7 @@ class TestCaseDefGenerator:
          test_invocation, \
          len(self.testcase.get_tags() + self.fixture.get_tags()), \
          get_testcase_tags(self.testcase, self.fixture), \
+         get_testcase_memcheck_switch(self.testcase, self.fixture), \
          get_fixture_id(self.fixture), \
          get_testcase_instance_name(self.fixture, self.testcase, name, index) \
       )

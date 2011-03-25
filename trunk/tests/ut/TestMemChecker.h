@@ -70,7 +70,7 @@ FIXTURE(TestMemChecker)
         free(p);
     }
 
-	// @test (tags="nomemcheck")
+	// @test (memcheck=off)
     TEST(can stop memory checker in a testcase)
     {
         char *p = new char[3]; // should not report memory leak
@@ -175,23 +175,17 @@ FIXTURE(MemberStringMemLeak2, member/global string 2)
 };
 
 
-FIXTURE(TestNoMemCheckTag)
+FIXTURE(TestMemCheckOffAnnotation)
 {
-	// @test (tags="nomemcheck")
-	TEST(case 1: a testcase with nomemcheck tag should not report mem leaks)
+	// @test (memcheck=off)
+	TEST(a testcase with memcheck off should not report mem leaks)
 	{
 		int *p = new int;
 	}
 
-    // @test (tags="ut nomemcheck it")
-	TEST(case 2: a testcase with nomemcheck tag should not report mem leaks)
-	{
-	    int *p = new int;
-	}
-
-    TEST(a testcase without nomemcheck tag should report mem leaks)
+    TEST(a testcase without memcheck annotation should report mem leaks)
     {
-    	int *p = new int;
+    	int *p = new int;  // should fail
 
 		#ifdef AVOID_MEM_LEAKS
 		delete p;
@@ -199,21 +193,21 @@ FIXTURE(TestNoMemCheckTag)
     }
 };
 
-//@fixture(tags = "nomemcheck")
-FIXTURE(TestFixtureNoMemCheckTag)
+//@fixture(memcheck=off)
+FIXTURE(TestFixtureMemCheckOffAnnotation)
 {
-   TEST(fixture has been set to fnomemcheck, its tests all nomemcheck)
+   TEST(fixture has been set to memcheck off, its tests all memcheck off)
    {
        char *p = new char;
    }
 
-   TEST(fixture has been set to fnomemcheck, its tests all nomemcheck 2)
+   TEST(fixture has been set to memcheck off, its tests all memcheck off 2)
    {
    	   char *p = new char;
    }
 
-   //@test(tags="memcheck")
-   TEST(fixture has been set to fnomemcheck, its test can use memcheck to open mem leak check)
+   //@test(memcheck=on)
+   TEST(fixture has been set to memcheck off, its test can use memcheck on to open mem leak check)
    {
    	   char *p = new char;  // should fail
        #ifdef AVOID_MEM_LEAKS
@@ -223,10 +217,10 @@ FIXTURE(TestFixtureNoMemCheckTag)
 
 };
 
-//@fixture(tags = "memcheck")
-FIXTURE(TestFixtureMemCheckTag)
+//@fixture(memcheck=on)
+FIXTURE(TestFixtureMemCheckOnAnnotation)
 {
-   TEST(fixture has been set to fmemcheck, its tests all memcheck)
+   TEST(fixture has been set to memcheck on, its tests all memcheck on)
    {
        char *p = new char; // should fail
        #ifdef AVOID_MEM_LEAKS
@@ -234,8 +228,8 @@ FIXTURE(TestFixtureMemCheckTag)
        #endif       
    }
 
-   //@test(tags="nomemcheck")
-   TEST(fixture has been set to fmemcheck, its test can use nomemcheck to close mem leak check)
+   //@test(memcheck=off)
+   TEST(fixture has been set to memcheck on, its test can use memcheck off to close mem leak check)
    {
    	   char *p = new char;
    }
