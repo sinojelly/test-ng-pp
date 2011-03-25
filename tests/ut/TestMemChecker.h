@@ -214,7 +214,6 @@ FIXTURE(TestFixtureMemCheckOffAnnotation)
        delete p;
        #endif   	   
    }
-
 };
 
 //@fixture(memcheck=on)
@@ -233,7 +232,6 @@ FIXTURE(TestFixtureMemCheckOnAnnotation)
    {
    	   char *p = new char;
    }
-
 };
 
 

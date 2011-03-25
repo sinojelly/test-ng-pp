@@ -33,7 +33,7 @@ void usage(const char * program)
              << std::endl
              << "   -s               using sandbox runner"
              << std::endl
-             << "   -m			     not use memory leak checker"
+             << "   -m               not use memory leak checker"
              << std::endl
              << std::endl;
    exit(1);
