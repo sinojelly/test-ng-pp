@@ -211,6 +211,8 @@ TESTNGPP_NS_START
 #define EXPECT_FALSE(expr) __ASSERT_FALSE(expr, false)
 #define EXPECT_EQ(expected, value) __ASSERT_EQ(expected, value, false)
 #define EXPECT_NE(expected, value) __ASSERT_NE(expected, value, false)
+#define EXPECT_DBL_EQ(expected, value) __ASSERT_DBL_EQ(expected, value, false)
+#define EXPECT_DBL_NE(expected, value) __ASSERT_DBL_NE(expected, value, false)
 #define EXPECT_THROWS(expr, except) __ASSERT_THROWS(expr, except, false)
 #define EXPECT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, false)
 #define EXPECT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, false)
