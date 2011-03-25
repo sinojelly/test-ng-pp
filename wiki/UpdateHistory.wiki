@@ -31,14 +31,36 @@
 ~~  # 内存泄露检查是默认开启的，暂时无法在命令行关闭（还没想到简单办法实现它，也不想破坏了现在软件的结构^_^）~~
 ~~  # 暂时不支持FIXTURE的内存泄露检查控制。~~
 ~~  # 针对用例，也无法打开内存泄露。（暂时用不着）~~
-  # 去掉了STOP/OPEN_MEM_CHECKER两个接口。
 
 
-== 2011.3.23 ==
+
+== 2011.3.25 ==
 
 1、内存泄露检查开关完善。
 
   # 如果命令行加了-m选项，则该次执行不再检查内存泄露（即使在Fixture/TestCase级别打开也没用）。
   # 如果命令行没有-m选项，默认是会进行内存泄露检查的，具体的Fixture/TestCase的内存泄露是否检查由它们的tags确定。
-  # Fixture/TestCase的tags中控制是否内存泄露检查的方法：nomemcheck 表示不检查，memcheck表示检查，两者都没有也表示检查。
-  # Fixture设置的tags，会影响到它的每一个用例，但Fixture的tags设置优先级比TestCase的要低。（可以在Fixture级别关闭，再在TestCase级别打开）
+  # Fixture/TestCase的Annotation中增加memcheck开关，用于控制是否进行内存泄露检查：memcheck = on 表示检查，off表示不检查，两者都没有也表示检查。
+  # Fixture设置的memcheck开关，会影响到它的每一个用例，但Fixture的设置优先级比TestCase的要低。（可以在Fixture级别关闭，再在TestCase级别打开）
+
+  使用示例如下：
+
+{{{
+//@fixture(memcheck=on)
+FIXTURE(TestFixtureMemCheckOnAnnotation)
+{
+   TEST(fixture has been set to memcheck on, its tests all memcheck on)
+   {
+       char *p = new char; // should fail       
+   }
+
+   //@test(memcheck=off)
+   TEST(fixture has been set to memcheck on, its test can use memcheck off to close mem leak check)
+   {
+   	   char *p = new char;
+   }
+};
+}}}
+
+注意：
+  # 去掉了STOP/OPEN_MEM_CHECKER两个接口。
