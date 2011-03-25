@@ -7,7 +7,7 @@ testngpp的用例写在.h文件中，
 运行时，由testngpp-runner.exe加载并执行。（如果用了sandbox，则是由testngpp-win32-testcase-runner.exe加载执行）
 
 = 命令行 =
-== testngpp-runner 命令行 ==
+=== testngpp-runner 命令行 ===
 {{{
 usage: testngpp-runner [options] testsuites ...
 
@@ -20,7 +20,7 @@ usage: testngpp-runner [options] testsuites ...
    -m                not use memory leak checker
 }}}
 
-== stdoutlistener 命令行参数 ==
+=== stdoutlistener 命令行参数 ===
 {{{
    -c                colourful
    -s                show suite name
@@ -38,7 +38,7 @@ warning         -    level 1   (output when level <= 1)
 skipped         -    level 2   (output when level <= 2)
 }}}
 
-== 典型应用 ==
+=== 典型应用 ===
 {{{
 testngppst-runner.exe 用例Suite名称.dll -L"listener_path" -l"testngppststdoutlistener -c -v"
 }}}
@@ -51,7 +51,7 @@ testngppst-runner.exe 用例Suite名称.dll -L"listener_path" -l"testngppststdou
 
 = 样例 =
 
-== 简单样例 ==
+=== 简单样例 ===
 {{{
     TEST(测试: 1+1 = 2)
     {
@@ -75,7 +75,7 @@ ASSERT_DELTA(x, y, d) // x与y的差小于d
 }}}
 这些宏都有对应的EXPECT版本（把ASSERT改为EXPECT即可），它与ASSERT版本的差异是：判断失败，该用例仍然继续执行。
 
-== 使用Do-Cleanup避免资源泄漏 ==
+=== 使用Do-Cleanup避免资源泄漏 ===
 把资源清理代码写在Cleanup中。
 {{{
     TEST(__DO__/__CLEANUP__/__DONE__)
@@ -89,8 +89,8 @@ ASSERT_DELTA(x, y, d) // x与y的差小于d
     }
 }}}
 
-== 使用Annotation ==
-=== 使用id给用例起名字 ===
+=== 使用Annotation ===
+===== 使用id给用例起名字 =====
 {{{
     // @test(id=face-to-south)
     TEST(robot should face to south after turn right)
@@ -100,7 +100,7 @@ ASSERT_DELTA(x, y, d) // x与y的差小于d
     }
 }}}
 
-=== 使用depends设置用例的依赖关系 ===
+===== 使用depends设置用例的依赖关系 =====
 {{{
     // @test(id=face-to-west, depends=face-to-south)
     TEST(robot should face to west after another turn right)
@@ -110,7 +110,7 @@ ASSERT_DELTA(x, y, d) // x与y的差小于d
     }
 }}}
 
-=== 使用tags设置Fixture/TestCase的标签 ===
+===== 使用tags设置Fixture/TestCase的标签 =====
     标签的作用：在testngpp-runner.exe运行命令行中，通过-f pattern来指定运行哪些用例。
     多个标签用空格隔开。
 {{{
@@ -126,7 +126,7 @@ ASSERT_DELTA(x, y, d) // x与y的差小于d
     };
 }}}
 
-=== 使用memcheck设置Fixture/TestCase是否进行内存泄漏检查 ===
+===== 使用memcheck设置Fixture/TestCase是否进行内存泄漏检查 =====
 {{{
 //@fixture(memcheck=on)
 FIXTURE(TestFixtureMemCheckOnAnnotation)
@@ -144,7 +144,7 @@ FIXTURE(TestFixtureMemCheckOnAnnotation)
 };
 }}}
 
-=== 使用data进行参数化测试 ===
+===== 使用data进行参数化测试 =====
 参数化测试，是通过DATA_PROVIDER提供多组参数，每一组参数传入用例，就成了一个可运行的用例。
 下面这个简单的用例，因为有三组数据，所以它执行时会运行三个用例。
 这种测试方法非常适合于 一个测试方法，有多组输入时，可以构成多个用例的情况。
