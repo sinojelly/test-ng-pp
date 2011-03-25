@@ -36,7 +36,7 @@ struct MemChecker
 	static void setGlobalOpen(bool globalOpen);
 
 private:
-	bool isOpenInTags();
+	bool isOpenInAnnotation();
 	bool needMemCheck();
 	
 private:

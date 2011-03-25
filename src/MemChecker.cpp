@@ -71,26 +71,14 @@ mem_checker::Reporter * info;
 mem_checker::Reporter * failure;
 }
 
-bool MemChecker::isOpenInTags()
+bool MemChecker::isOpenInAnnotation()
 {
-    bool isOpen = true;
-	
-    const char ** tags = testcase->getTags();
+	if (strcmp(testcase->getMemCheckSwitch(), "off") == 0)
+	{
+	    return false;
+	}
 
-	// fixture's tags + testcase's tags
-    for(unsigned int i = 0; i < testcase->numberOfTags() ; i++) 
-    {
-       if(strcmp("nomemcheck", tags[i]) == 0)
-       {
-          isOpen = false;
-       }
-       else if(strcmp("memcheck", tags[i]) == 0)
-       {
-          isOpen = true;
-       }
-    }
-
-	return isOpen;
+	return true; // default is true
 }
 
 bool MemChecker::needMemCheck()
@@ -100,7 +88,7 @@ bool MemChecker::needMemCheck()
 
 MemChecker::MemChecker(TestCase *testcase) : testcase(testcase)
 { 
-    isTestOpen = isOpenInTags();
+    isTestOpen = isOpenInAnnotation();
 }
 
 void MemChecker::start()
