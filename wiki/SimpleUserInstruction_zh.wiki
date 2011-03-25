@@ -1,3 +1,4 @@
+#labels Featured,Chinese
 testngpp使用简明指导
 
 = 基本原理 =
@@ -43,12 +44,12 @@ skipped         -    level 2   (output when level <= 2)
 
 === 典型应用 ===
 {{{
-testngppst-runner.exe 用例Suite名称.dll -L"listener_path" -l"testngppststdoutlistener -c -v"
+testngpp-runner.exe 用例Suite名称.dll -L"listener_path" -l"testngppstdoutlistener -c -v"
 }}}
 其中：listener的-v 参数表示输出最详细的信息，包括用例名称。
 
 {{{
-testngppst-runner.exe 用例Suite名称.dll -L"listener_path" -l"testngppststdoutlistener -c -f"
+testngpp-runner.exe 用例Suite名称.dll -L"listener_path" -l"testngppstdoutlistener -c -f"
 }}}
 其中：listener的-f 参数表示输出Fixture名字，用例简化为一个点。
 
