@@ -25,15 +25,6 @@
 注意：判断时使用的fabs(a-b)<FLT_EPSILON，不能用DBL_EPSILON，否则有float参与运算时，精度达不到，就会出现0.7 != 0.7的情况。
 
 
-2、增加关闭用例内存泄露检查的方法：tags = "nomemcheck" 。
-
-注意：
-~~  # 内存泄露检查是默认开启的，暂时无法在命令行关闭（还没想到简单办法实现它，也不想破坏了现在软件的结构^_^）~~
-~~  # 暂时不支持FIXTURE的内存泄露检查控制。~~
-~~  # 针对用例，也无法打开内存泄露。（暂时用不着）~~
-
-
-
 == 2011.3.25 ==
 
 1、内存泄露检查开关完善。
@@ -57,7 +48,7 @@ FIXTURE(TestFixtureMemCheckOnAnnotation)
    //@test(memcheck=off)
    TEST(fixture has been set to memcheck on, its test can use memcheck off to close mem leak check)
    {
-   	   char *p = new char;
+       char *p = new char; // should success
    }
 };
 }}}
