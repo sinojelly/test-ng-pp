@@ -150,10 +150,13 @@ FIXTURE(TestFixtureMemCheckOnAnnotation)
 
 ===== 使用data进行参数化测试 =====
 参数化测试，是通过DATA_PROVIDER提供多组参数，每一组参数传入用例，就成了一个可运行的用例。
+
 下面这个简单的用例，因为有三组数据，所以它执行时会运行三个用例。
+
 这种测试方法非常适合于 一个测试方法，有多组输入时，可以构成多个用例的情况。
+
 {{{
-FIXTURE(参数化测试)
+FIXTURE(DataDrivenTest)
 {
     DATA_PROVIDER( names, 1
                  , DATA_GROUP((const char*)"darwin") 
