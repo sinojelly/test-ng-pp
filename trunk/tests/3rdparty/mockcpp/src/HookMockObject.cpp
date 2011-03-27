@@ -22,8 +22,9 @@
 #include <mockcpp/ChainableMockMethodCore.h>
 #include <mockcpp/InvocationMockBuilderGetter.h>
 #include <mockcpp/InvocationMockerNamespace.h>
-#include <mockcpp/CApiHookKey.h>
+#include <mockcpp/ApiHookKey.h>
 #include <mockcpp/ReportFailure.h>
+#include <mockcpp/ApiHookHolder.h>
 
 MOCKCPP_NS_START
 
@@ -35,8 +36,10 @@ struct HookMockObjectImpl
    {}
 
    ChainableMockMethodCore*
-   getMethod(const std::string& name, const void* api, 
-         const void* stub, InvocationMockerNamespace* ns);
+   getMethod( const std::string& name
+            , const void* api
+            , ApiHookHolder* hookHolder
+            , InvocationMockerNamespace* ns);
    
    ChainableMockMethodCore*
    getMethod(const void* api);
@@ -48,10 +51,10 @@ struct HookMockObjectImpl
 private:
 
    ChainableMockMethodCore* 
-   addMethod(const std::string& name, 
-       const void* api, 
-	   const void* stub,
-	   InvocationMockerNamespace* ns); 
+   addMethod( const std::string& name
+            , const void* api
+	    , ApiHookHolder* hookHolder
+	    , InvocationMockerNamespace* ns); 
 
 };
 
@@ -65,12 +68,12 @@ HookMockObjectImpl::reset()
 //////////////////////////////////////////////////////////////
 ChainableMockMethodCore*
 HookMockObjectImpl::
-addMethod(const std::string& name, 
-    const void* api, 
-	const void* stub,
-	InvocationMockerNamespace* ns) 
+addMethod( const std::string& name 
+         , const void* api
+	 , ApiHookHolder* hookHolder
+	 , InvocationMockerNamespace* ns) 
 {
-    CApiHookKey* key = new CApiHookKey(api, stub);
+    ApiHookKey* key = new ApiHookKey(api, hookHolder);
     ChainableMockMethodCore* method = new ChainableMockMethodCore(name, ns);
 
     container->addMethod(key, method);
@@ -80,16 +83,18 @@ addMethod(const std::string& name,
 //////////////////////////////////////////////////////////////
 ChainableMockMethodCore*
 HookMockObjectImpl::
-getMethod(const std::string& name, const void* api, 
-         const void* stub, InvocationMockerNamespace* ns)
+getMethod(const std::string& name, const void* api
+         , ApiHookHolder* hookHolder
+         , InvocationMockerNamespace* ns)
 {
     ChainableMockMethodCore* method = getMethod(api);
     if (method != 0)
     {
+      delete hookHolder;
       return method;
     }
 
-    return addMethod(name, api, stub, ns);
+    return addMethod(name, api, hookHolder, ns);
 }
 
 //////////////////////////////////////////////////////////////
@@ -97,7 +102,7 @@ ChainableMockMethodCore*
 HookMockObjectImpl::
 getMethod(const void* api) 
 {
-    CApiHookKey key(api);
+    ApiHookKey key(api);
     return container->getMethod(&key);
 }
 
@@ -105,7 +110,7 @@ getMethod(const void* api)
 HookMockObject::HookMockObject(const std::string& name)
    : ChainableMockObjectBase(name)
 {
-	This = new HookMockObjectImpl(this->getMethodContainer());
+   This = new HookMockObjectImpl(this->getMethodContainer());
 }
 
 //////////////////////////////////////////////////////////////
@@ -116,9 +121,9 @@ HookMockObject::~HookMockObject()
 
 //////////////////////////////////////////////////////////////
 InvocationMockBuilderGetter
-HookMockObject::method(const std::string& name, const void* api, const void* stub)
+HookMockObject::method(const std::string& name, const void* api, ApiHookHolder* hookHolder)
 {
-    ChainableMockMethodCore* core = This->getMethod(name, api, stub, this);
+    ChainableMockMethodCore* core = This->getMethod(name, api, hookHolder, this);
     return InvocationMockBuilderGetter(core, core);
 }
 
@@ -129,7 +134,7 @@ HookMockObject::getInvokable(const void* api)
 {
    ChainableMockMethodCore* method = This->getMethod(api);
    MOCKCPP_ASSERT_TRUE(
-	   "mockcpp internal error",
+	   "mockcpp internal error (3001): unable to get api pointer",
 	   method != 0);
    return method;
 }

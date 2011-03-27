@@ -19,6 +19,7 @@
 #ifndef __MOCKCPP_H
 #define __MOCKCPP_H
 
+
 #if !defined(MOCKCPP_NO_NAMESPACE) || (MOCKCPP_NO_NAMESPACE == 0)
 # define MOCKCPP_NS mockcpp
 # define MOCKCPP_NS_START namespace MOCKCPP_NS {
@@ -36,6 +37,30 @@
 #else
 # define MOCKCPP_EXPORT 
 #endif
+
+
+#if  ( defined (__LP64__) \
+    || defined (__64BIT__) \
+    || defined (_LP64) \
+    || ((defined(__WORDSIZE)) && (__WORDSIZE == 64)) \
+	|| defined(WIN64))
+
+#define BUILD_FOR_X64 1
+#define BUILD_FOR_X86 0
+
+#else	
+
+#define BUILD_FOR_X64 0
+#define BUILD_FOR_X86 1
+
+#endif
+
+template <bool condition>
+struct static_assert
+{
+    typedef int static_assert_failure[condition ? 1 : -1];
+};
+
 
 #endif // __MOCKCPP_H
 

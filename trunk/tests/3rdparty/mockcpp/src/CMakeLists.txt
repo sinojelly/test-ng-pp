@@ -7,20 +7,11 @@ ELSE()
     MESSAGE(FATAL_ERROR "No Python interpreter found")
 ENDIF(PYTHONINTERP_FOUND)
 
-LINK_DIRECTORIES(${PROJECT_HOME}/src)
-
-SET(PACKAGE_NAME \"mockcpp\")
-SET(PACKAGE_STRING \"mockcpp\")
-SET(PACKAGE_BUGREPORT \"dev.mockcpp@gmail.com\")
-SET(PACKAGE_URL \"http://code.google.com/p/mockcpp\")
-SET(PACKAGE \"mockcpp\")
-SET(VERSION \"2.5\")
-
 IF(NOT DEFINED MOCKCPP_ALLOW_MI)
   SET(MOCKCPP_ALLOW_MI TRUE)
 ENDIF(NOT DEFINED MOCKCPP_ALLOW_MI)
 
-SET(MOCKCPP_SRC_ROOT ${CMAKE_SOURCE_DIR}/3rdparty/mockcpp)
+SET(MOCKCPP_SRC_ROOT ${CMAKE_SOURCE_DIR})
 
 IF(NOT DEFINED MOCKCPP_XUNIT)
    SET(MOCKCPP_XUNIT STDEXCEPT)
@@ -73,13 +64,25 @@ ADD_DEFINITIONS(
 IF(MSVC)
     ADD_DEFINITIONS(-DMSVC_VMG_ENABLED  /Z7)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /vmg")
+	INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_SRC_ROOT}/3rdparty/msinttypes)
 ENDIF(MSVC)
 
 IF(UNIX)
+MESSAGE("UNIX")
 ADD_DEFINITIONS(
     -g -ggdb
 )
 ENDIF(UNIX)
+
+IF(UNIX)
+ADD_DEFINITIONS(
+    -fPIC
+)
+ENDIF(UNIX)
+
+IF(CMAKE_CL_64)
+    ADD_DEFINITIONS(-DWIN64)
+ENDIF(CMAKE_CL_64)
 
 SET(MOCKCPP_SRCS 
     AfterMatcher.cpp
@@ -155,11 +158,12 @@ SET(MOCKCPP_SRCS
     VoidResultHandlerFactory.cpp
     WillStub.cpp
     HookMockObject.cpp
-    CApiHookKey.cpp
+    ApiHookKey.cpp
     GlobalMockObject.cpp
-    BlockAllocator.cpp
-    Arch32ApiHook.cpp
-	AllocatorContainer.cpp
+    JmpOnlyApiHook.cpp
+    JmpCode.cpp
+    ApiHook.cpp
+
 )
 
 IF(${MOCKCPP_XUNIT} STREQUAL "GTEST" OR ${MOCKCPP_XUNIT} STREQUAL "gtest")
@@ -223,18 +227,12 @@ ENDIF()
 IF(MSVC)
    SET(MOCKCPP_SRCS 
 	   ${MOCKCPP_SRCS} 
-	   Win32CApiHook.cpp 
-	   Win32PageAllocator.cpp 
-	   Win32ProtectPageAllocator.cpp 
-	   Win32CodeModifier.cpp
+	   WinCodeModifier.cpp
    ) 
 ELSE(MSVC)
    SET(MOCKCPP_SRCS 
        ${MOCKCPP_SRCS} 
-       Linux32ApiHook.cpp
-       Linux32PageAllocator.cpp
-       Linux32ProtectPageAllocator.cpp
-       Linux32CodeModifier.cpp
+       UnixCodeModifier.cpp
    )
 ENDIF(MSVC)
 ######################################################
@@ -295,7 +293,7 @@ LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src ${CMAKE_BINARY_DIR}/tests/3rdparty/test
 
 ADD_LIBRARY(mockcpp STATIC ${MOCKCPP_SRCS})
 
-INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_SRC_ROOT}/include ${PROJECT_HOME}/3rdparty)
+INCLUDE_DIRECTORIES(BEFORE ${MOCKCPP_SRC_ROOT}/include ${MOCKCPP_SRC_ROOT}/3rdparty)
 
 ADD_CUSTOM_TARGET(vtbl_related_headers DEPENDS ${MOCKCPP_VTBL_RELATED_HEADERS})
 ADD_CUSTOM_TARGET(arg_related_headers DEPENDS ${MOCKCPP_ARG_RELATED_HEADER_FILES})
