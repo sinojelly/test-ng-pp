@@ -33,7 +33,7 @@ void usage(const char * program)
              << std::endl
              << "   -s               using sandbox runner"
              << std::endl
-             << "   -m               not use memory leak checker"
+             << "   -m               not checking memory leakage"
              << std::endl
              << std::endl;
    exit(1);
@@ -180,7 +180,7 @@ int real_main(int argc, char* argv[])
    getSearchingPathsOfListeners(searchingPathsOfListeners, options);   
 
    StringList fixtures;
-	getSpecifiedFixtures(fixtures, options);
+   getSpecifiedFixtures(fixtures, options);
 
    MemChecker::setGlobalOpen(useMemChecker(options));
 
