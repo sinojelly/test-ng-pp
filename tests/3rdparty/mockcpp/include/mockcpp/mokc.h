@@ -25,16 +25,10 @@
 
 #  if defined(MOCKCPP_USE_MOCKABLE) 
 #    include <mockcpp/Functor.h>
-#    define MOCKER(function) MOCKCPP_NS::GlobalMockObject::instance.method(#function)
+#    define MOCKER(api) MOCKCPP_NS::GlobalMockObject::instance.method(#api)
 #  else
-#    include <mockcpp/CApiHookFunctor.h>
-#    include <boost/typeof/typeof.hpp>
-#    define MOCKER(function) \
-         MOCKCPP_NS::GlobalMockObject:: \
-             instance.method \
-                 ( #function \
-                 , (const void *)function \
-                 , (const void *)CApiHookFunctor<BOOST_TYPEOF(function)>::hook)
+#    include <mockcpp/ApiHookMocker.h>
+#    define MOCKER(api) MOCKCPP_NS::mockAPI(#api, api)
 #  endif
 
 USING_MOCKCPP_NS

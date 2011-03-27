@@ -21,13 +21,14 @@
 
 #include <mockcpp/mockcpp.h>
 
-#include <mockcpp/WorkingBuilder.h>
+#include <mockcpp/MockBuilder.h>
+#include <mockcpp/StubsBuilder.h>
 #include <mockcpp/DefaultBuilder.h>
 
 MOCKCPP_NS_START
 
 ///////////////////////////////////////////////
-class Matcher;
+struct Matcher;
 struct InvocationMockerContainer;
 struct Method;
 
@@ -37,8 +38,8 @@ struct InvocationMockBuilderGetter
     InvocationMockBuilderGetter(InvocationMockerContainer* container, Method* method);
     ~InvocationMockBuilderGetter();
 
-    WorkingBuilder stubs(); 
-    WorkingBuilder expects(Matcher* matcher); 
+    StubsBuilder stubs(); 
+    MockBuilder expects(Matcher* matcher); 
     DefaultBuilder defaults();
 
 private:
