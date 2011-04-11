@@ -29,6 +29,7 @@
 #ifdef _MSC_VER
 
 #include <crtdbg.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus
 #include <xdebug>
