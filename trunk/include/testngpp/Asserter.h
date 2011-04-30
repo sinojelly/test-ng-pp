@@ -72,9 +72,9 @@ TESTNGPP_NS_START
 }while(0)
 
 //////////////////////////////////////////////////////////////////
-#define __TESTNGPP_ASSERT_DOUBLE_EQUALITY(expected_value, not_equals, expected_equality, wrong_equality, value, failfast) do {\
+#define __TESTNGPP_ASSERT_FLOAT_EQUALITY(eps, expected_value, not_equals, expected_equality, wrong_equality, value, failfast) do {\
   TESTNGPP_TYPEOF(value) __testngpp_value = (value); \
-  if(not_equals(fabs(expected_value - __testngpp_value) < FLT_EPSILON)) { \
+  if(not_equals(fabs(expected_value - __testngpp_value) < eps)) { \
 	 std::stringstream ss; \
 	 ss << "expected (" #expected_value __TESTNGPP_MAKE_STR(expected_equality) #value "), found (" \
 		<< TESTNGPP_NS::toTypeAndValueString(expected_value) \
@@ -94,13 +94,29 @@ TESTNGPP_NS_START
    __TESTNGPP_ASSERT_EQUALITY(expected, , !=, ==, value, failfast)
 
 //////////////////////////////////////////////////////////////////
+#define __ASSERT_FLT_EQ(expected, value, failfast) \
+   __TESTNGPP_ASSERT_FLOAT_EQUALITY(FLT_EPSILON, expected, !, ==, !=, value, failfast)
+
+//////////////////////////////////////////////////////////////////
+#define __ASSERT_FLT_NE(expected, value, failfast) \
+   __TESTNGPP_ASSERT_FLOAT_EQUALITY(FLT_EPSILON, expected, , !=, ==, value, failfast)   
+   
+//////////////////////////////////////////////////////////////////
 #define __ASSERT_DBL_EQ(expected, value, failfast) \
-   __TESTNGPP_ASSERT_DOUBLE_EQUALITY(expected, !, ==, !=, value, failfast)
+   __TESTNGPP_ASSERT_FLOAT_EQUALITY(DBL_EPSILON, expected, !, ==, !=, value, failfast)
 
 //////////////////////////////////////////////////////////////////
 #define __ASSERT_DBL_NE(expected, value, failfast) \
-   __TESTNGPP_ASSERT_DOUBLE_EQUALITY(expected, , !=, ==, value, failfast)
+   __TESTNGPP_ASSERT_FLOAT_EQUALITY(DBL_EPSILON, expected, , !=, ==, value, failfast)
 
+//////////////////////////////////////////////////////////////////
+#define __ASSERT_LDBL_EQ(expected, value, failfast) \
+   __TESTNGPP_ASSERT_FLOAT_EQUALITY(LDBL_EPSILON, expected, !, ==, !=, value, failfast)
+
+//////////////////////////////////////////////////////////////////
+#define __ASSERT_LDBL_NE(expected, value, failfast) \
+   __TESTNGPP_ASSERT_FLOAT_EQUALITY(LDBL_EPSILON, expected, , !=, ==, value, failfast)   
+   
 //////////////////////////////////////////////////////////////////
 #define __ASSERT_THROWS(expr, except, failfast) do { \
    bool testngpp_caught_exception = false; \
@@ -196,8 +212,12 @@ TESTNGPP_NS_START
 #define ASSERT_FALSE(expr) __ASSERT_FALSE(expr, true)
 #define ASSERT_EQ(expected, value) __ASSERT_EQ(expected, value, true)
 #define ASSERT_NE(expected, value) __ASSERT_NE(expected, value, true)
+#define ASSERT_FLT_EQ(expected, value) __ASSERT_FLT_EQ(expected, value, true)
+#define ASSERT_FLT_NE(expected, value) __ASSERT_FLT_NE(expected, value, true)
 #define ASSERT_DBL_EQ(expected, value) __ASSERT_DBL_EQ(expected, value, true)
 #define ASSERT_DBL_NE(expected, value) __ASSERT_DBL_NE(expected, value, true)
+#define ASSERT_LDBL_EQ(expected, value) __ASSERT_LDBL_EQ(expected, value, true)
+#define ASSERT_LDBL_NE(expected, value) __ASSERT_LDBL_NE(expected, value, true)
 #define ASSERT_THROWS(expr, except) __ASSERT_THROWS(expr, except, true)
 #define ASSERT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, true)
 #define ASSERT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, true)
@@ -211,8 +231,12 @@ TESTNGPP_NS_START
 #define EXPECT_FALSE(expr) __ASSERT_FALSE(expr, false)
 #define EXPECT_EQ(expected, value) __ASSERT_EQ(expected, value, false)
 #define EXPECT_NE(expected, value) __ASSERT_NE(expected, value, false)
+#define EXPECT_FLT_EQ(expected, value) __ASSERT_FLT_EQ(expected, value, false)
+#define EXPECT_FLT_NE(expected, value) __ASSERT_FLT_NE(expected, value, false)
 #define EXPECT_DBL_EQ(expected, value) __ASSERT_DBL_EQ(expected, value, false)
 #define EXPECT_DBL_NE(expected, value) __ASSERT_DBL_NE(expected, value, false)
+#define EXPECT_LDBL_EQ(expected, value) __ASSERT_LDBL_EQ(expected, value, false)
+#define EXPECT_LDBL_NE(expected, value) __ASSERT_LDBL_NE(expected, value, false)
 #define EXPECT_THROWS(expr, except) __ASSERT_THROWS(expr, except, false)
 #define EXPECT_THROWS_ANYTHING(expr) __ASSERT_THROWS_ANYTHING(expr, false)
 #define EXPECT_THROWS_NOTHING(expr) __ASSERT_THROWS_NOTHING(expr, false)
