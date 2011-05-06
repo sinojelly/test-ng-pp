@@ -211,3 +211,8 @@ INSTALL(
    TARGETS testngpp-runner
    RUNTIME DESTINATION bin)
 
+IF(MSVC)
+  INSTALL(
+   FILES ${CMAKE_BINARY_DIR}/src/runner/Debug/testngpp-runner.pdb ${CMAKE_BINARY_DIR}/src/runner/Debug/testngpp-win32-testcase-runner.pdb
+   DESTINATION bin)
+ENDIF(MSVC)   
