@@ -25,11 +25,11 @@ SET(XMLLISTENER_SRCS
   XMLBuilder.cpp
 )
 
-IF(UNIX)
-ADD_DEFINITIONS(
-    -g -ggdb
-)
-ENDIF(UNIX)
+#IF(UNIX)
+#ADD_DEFINITIONS(
+#    -g -ggdb
+#)
+#ENDIF(UNIX)
 
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src ${CMAKE_BINARY_DIR}/src/utils ${CMAKE_BINARY_DIR}/src/mem_checker)
 

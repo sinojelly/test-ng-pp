@@ -32,11 +32,11 @@ ELSE(WIN32)
   ADD_LIBRARY(testngpp SHARED ${TESTNGPP_SRCS})
 ENDIF(WIN32)
 
-IF(UNIX)
-ADD_DEFINITIONS(
-    -g -ggdb
-)
-ENDIF(UNIX)
+#IF(UNIX)
+#ADD_DEFINITIONS(
+#    -g -ggdb
+#)
+#ENDIF(UNIX)
 
 # can not link to other lib in cmake 
 #TARGET_LINK_LIBRARIES(mem-checker)
