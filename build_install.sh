@@ -20,6 +20,6 @@ mv -f -u $install_dir/3rdparty $install_dir/..
 
 cd scripts
 python setup_linux.py build
-cp build/exe.linux-i686-2.6/testngppgen $install_dir/bin
+cp build/exe.linux-i686-2.6/* $install_dir/bin
 
 cd ..
