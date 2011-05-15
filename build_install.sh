@@ -2,7 +2,7 @@
 # build and install
 
 # You can change this testngpp install dir by yourself, it must be an absolute path.
-install_dir=/home/jelly/Programming/cpp-ut-project/cpp-ut-project/tools/testngpp
+install_dir=/home/jelly/Programming/testngpp/install/testngpp
 
 
 function build() {
@@ -17,3 +17,9 @@ build ../build_testngpp_to_install ../test-ng-pp
 cd ../test-ng-pp
 
 mv -f -u $install_dir/3rdparty $install_dir/..
+
+cd scripts
+python setup_linux.py build
+cp build/exe.linux-i686-2.6/testngppgen $install_dir/bin
+
+cd ..
