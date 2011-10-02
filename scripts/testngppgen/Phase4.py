@@ -455,7 +455,6 @@ dep_headers = [
    "internal/TestCase.h",
    "internal/TestFixtureDesc.h",
    "internal/TestSuiteDesc.h",
-   "internal/DataDriven.h"
 ]
 
 ################################################

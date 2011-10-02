@@ -13,14 +13,6 @@ struct CFoo
    virtual ~CFoo() {}
 };
 
-MODULE(CFoo, CFoo)
-{
-   TEST(case0)
-   {
-      ASSERT_FALSE(true);
-   }
-};
-
 struct Hell : public CFoo
 {
    Hell() { p = new char[10]; }
@@ -45,8 +37,6 @@ struct TestBar1 : public TESTNGPP_NS::TestFixture
     struct CBar;
     struct CBar cbar;
     struct CBar cbars[2][5];
-
-    IMPORT(CFoo, hellInstance, ALL); // TODO: not work yet.
 
     SETUP()
     {
@@ -118,11 +108,6 @@ struct TestBar1 : public TESTNGPP_NS::TestFixture
 class TestBar2 : public TestFixture
 {
 public:
-    DATA_PROVIDER( names, 1
-                 , DATA_GROUP((const char*)"darwin") 
-                 , DATA_GROUP((const char*)"arthur") 
-                 , DATA_GROUP((const char*)"steven"));
-                 
     // @test(id=1)
     void case20()
     {
@@ -132,11 +117,6 @@ public:
       TS_ASSERT(true);
     }
 
-    // @test(data="names")
-    PTEST( (const char* name), this is a parametered() test)
-    {
-       INFO(name);
-    }
 };
 
 // @fixture(tags=succ)
