@@ -23,7 +23,6 @@
 #include <testngpp/Asserter.h>
 #include <testngpp/TestFixture.h>
 #include <testngpp/TestDefMacros.h>
-#include <testngpp/DataDrivenDef.h>
 #include <testngpp/Backward.h>
 #include <testngpp/NoThrowsReporter.h>
 

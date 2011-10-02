@@ -20,7 +20,6 @@
 #define __TESTNGPP_TEST_DEF_MACROS_H
 
 #include <testngpp/testngpp.h>
-#include <testngpp/TestModule.h>
 
 #define __TESTNGPP_LINENAME_CAT( name, line ) name##line
 #define __LINENAME( name, line ) __TESTNGPP_LINENAME_CAT( name, line )
@@ -29,16 +28,12 @@
 #define __TESTNGPP_FIXTURE_NAME(name) Test##name
 
 #define TEST(name, ...)            void __TESTNGPP_LINENAME(test_) (void)
-#define PTEST(paralist, name, ...) void __TESTNGPP_LINENAME(test_) paralist
 #define FIXTURE(cut, ...) struct __TESTNGPP_FIXTURE_NAME(cut) : public TESTNGPP_NS::TestFixture
 
 #define CONS(name) __TESTNGPP_FIXTURE_NAME(name)()
 
 #define SETUP() void setUp()
 #define TEARDOWN() void tearDown()
-
-#define MODULE(module, type, ...) struct Module##module : public TESTNGPP_NS::TestModule<type>
-#define IMPORT(module, instance, tests) Module##module module##instance
 
 #endif
 
