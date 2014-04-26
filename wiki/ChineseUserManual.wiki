@@ -797,3 +797,40 @@ xmllistener只有一个参数，即xml报告的输出文件名。比如：
 ==4.4 Tag Specification==
 
 ==4.5 Test Filter==
+Testngpp可以通过-f选项指定过滤规则，其规则为：
+
+{{{
+-f fixturePattern:testPattern
+}}}
+
+如果想过滤符合某种fixturePattern的所有测试，则可以通过如下的过滤规则：
+
+{{{
+-f fixturePattern
+}}}
+
+如果想过滤符合某种testPattern的所有测试，则可以通过如下的过滤规则：
+
+{{{
+-f :fixturePattern
+}}}
+
+testngpp支持根据多种规则过滤，这些过滤规则之间是“或”的关系：
+
+{{{
+-f fixturePattern1:testPattern1 -ffixturePattern2:testPattern2
+}}}
+
+而过滤规则符合Posix文件名匹配规则。比如，想过滤fixture名字以abc开头的所有用例，则可以使用如下规则：
+
+{{{
+   -f abc*
+}}}
+
+
+而过滤规则符合Posix文件名匹配规则。比如，想过滤fixture名字由三个字母组成，其中第一个字母为a，第三个字母为c的所有用例，则可以使用如下规则：
+
+
+{{{
+   -f a?c
+}}}
