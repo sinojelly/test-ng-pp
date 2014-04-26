@@ -818,7 +818,7 @@ Testngpp可以通过-f选项指定过滤规则，其规则为：
 testngpp支持根据多种规则过滤，这些过滤规则之间是“或”的关系：
 
 {{{
--f fixturePattern1:testPattern1 -ffixturePattern2:testPattern2
+-f fixturePattern1:testPattern1 -f fixturePattern2:testPattern2
 }}}
 
 而过滤规则符合Posix文件名匹配规则。比如，想过滤fixture名字以abc开头的所有用例，则可以使用如下规则：
@@ -833,4 +833,11 @@ testngpp支持根据多种规则过滤，这些过滤规则之间是“或”的
 
 {{{
    -f a?c
+}}}
+
+
+而过滤规则符合Posix文件名匹配规则。比如，想过滤fixture名字以abc开头，而test名字里包含efg的所有用例，则可以使用如下规则：
+
+{{{
+   -f abc*:*efg*
 }}}
