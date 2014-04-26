@@ -803,6 +803,8 @@ Testngpp可以通过-f选项指定过滤规则，其规则为：
 -f fixturePattern:testPattern
 }}}
 
+在fixturePattern和testPattern之间以冒号":"进行分割。
+
 如果想过滤符合某种fixturePattern的所有测试，则可以通过如下的过滤规则：
 
 {{{
@@ -812,8 +814,10 @@ Testngpp可以通过-f选项指定过滤规则，其规则为：
 如果想过滤符合某种testPattern的所有测试，则可以通过如下的过滤规则：
 
 {{{
--f :fixturePattern
+-f :testPattern
 }}}
+
+分号“:”前面为空，则说明fixture可以为任意名字。
 
 testngpp支持根据多种规则过滤，这些过滤规则之间是“或”的关系：
 
